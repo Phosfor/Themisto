@@ -1,0 +1,36 @@
+cmake_minimum_required(VERSION 2.8.0)
+
+project(Themisto)
+
+set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake-extras/")
+
+set(Boost_USE_STATIC_LIBS ON)
+set(Boost_USE_MULTITHREADED ON)
+
+find_package(X11 REQUIRED)
+find_package(Freetype REQUIRED)
+find_package(Clanlib 2.2 REQUIRED)
+find_package(Boost COMPONENTS filesystem system date_time REQUIRED)
+
+find_package(FreeImage REQUIRED)
+find_package(OpenGL REQUIRED)
+find_package(ZLIB REQUIRED)
+
+find_package(PNG REQUIRED)
+find_package(JPEG REQUIRED)
+
+add_definitions(-Wall -pg)
+set(CMAKE_BUILD_TYPE "Debug")
+
+message( ${FREEIMAGE_LIBRARY} )
+
+set(EXECUTABLE_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/bin)
+set(LIBRARY_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/lib)
+
+include_directories(
+	"${CMAKE_SOURCE_DIR}/include/"
+	${Boost_INCLUDE_DIRS}
+	${ClanLib_INCLUDE_DIRS}
+)
+
+add_subdirectory("${CMAKE_SOURCE_DIR}/src/")
