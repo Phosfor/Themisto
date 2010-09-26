@@ -27,10 +27,15 @@ class GameApplication
             CL_GraphicContext gc = window.get_gc();
             CL_InputDevice keyboard = window.get_ic().get_keyboard();
 
+            CL_Font_System::register_font("media/pneumatics.ttf", "Pneumatics");
+            CL_Font font(gc, "Pneumatics", 60);
+
             while (!keyboard.get_keycode(CL_KEY_ESCAPE))
             {
                 gc.clear(CL_Colorf::gray);
+                font.draw_text(gc, 10, 70, "Themisto project", CL_Colorf::black);
 
+                /*TODO: Framerate counter http://www.rtsoft.com/forums/showthread.php?3411-Calaculating-FPS&highlight=Font */
                 window.flip();
                 CL_KeepAlive::process();
                 CL_System::sleep(10);
