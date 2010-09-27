@@ -5,6 +5,7 @@
 
 #include "Managers/ConfigManager.hpp"
 #include "Managers/LogManager.hpp"
+#include "Managers/FrameManager.hpp"
 
 class GameApplication
 {
@@ -31,32 +32,18 @@ class GameApplication
             CL_GraphicContext gc = window.get_gc();
             CL_InputDevice keyboard = window.get_ic().get_keyboard();
 
+            /*TODO: Move to resoruce loader */
             CL_Font_System::register_font("media/pneumatics.ttf", "Pneumatics");
-            CL_Font font(gc, "Pneumatics", 60);
+            CL_Font font(gc, "Pneumatics", 40);
 
-            int fps, startTime, frames;
-            fps = startTime = frames = 0;
-
+            /*TODO: Change app exit code */
             while (!keyboard.get_keycode(CL_KEY_ESCAPE))
             {
-                // FPS Counter stuff here
-                frames++;
-                int currentTime = CL_System::get_time();
-                if (startTime == 0) {
-                    startTime = currentTime;
-                } else {
-                    int delta = currentTime - startTime;
-                    if (delta < 0 || delta > 2000)
-                    {
-                        if (delta > 0) fps = (frames*1000) / delta;
-                        frames = 0;
-                        startTime = currentTime;
-                    }
-                }
-                // FPS Counter stuff ENDS here
-
+                frameManager.frameStarted();
                 gc.clear(CL_Colorf::gray);
-                font.draw_text(gc, 10, 70, CL_String(cl_format("fps: %1", fps)), CL_Colorf::black);
+
+                font.draw_text(gc, 10, 70, CL_String(cl_format("fps: %1", frameManager.getFps())), CL_Colorf::black);
+                font.draw_text(gc, 10, 140, CL_String(cl_format("elapsed: %1", frameManager.getElapsed())), CL_Colorf::black);
 
                 CL_KeepAlive::process();
                 /*TODO: wtf! (check vsync) */
