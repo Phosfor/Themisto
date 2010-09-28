@@ -8,4 +8,5 @@ window
 application
 {
     debug "true"
+    media-folder "media"
 }

@@ -1,5 +1,15 @@
 #include "Core/Utils.hpp"
 
+void Utils::setMediaFolder(const string &path)
+{
+    mMediaFolder = path;
+}
+
+string Utils::getMediaFolder()
+{
+    return mMediaFolder;
+}
+
 ptime Utils::getCurrentTime() const
 {
     return microsec_clock::local_time();

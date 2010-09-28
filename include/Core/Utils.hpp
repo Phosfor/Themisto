@@ -27,9 +27,13 @@ class Utils : public singleton<Utils>
 {
     protected:
         ptime mTimeStamp;
+        string mMediaFolder;
 
     public:
         string checkLocation(const string &path);
+
+        void setMediaFolder(const string &path);
+        string getMediaFolder();
 
         // For time measuring
         ptime getCurrentTime() const;

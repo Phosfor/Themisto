@@ -15,6 +15,7 @@ int GameApplication::main(const std::vector<CL_String> &args)
         short width = configManager.getValue<int>("window.width", 640);
         short height = configManager.getValue<int>("window.height", 480);
         bool fullscreen = configManager.getValue<bool>("window.fullscreen", false);
+        utils.setMediaFolder(configManager.getValue<string>("application.media-folder", "media"));
 
         CL_DisplayWindow window("Themisto", width, height, fullscreen);
         LOG("The window has been created!");
@@ -26,17 +27,16 @@ int GameApplication::main(const std::vector<CL_String> &args)
         CL_Slot slotInput = keyboard.sig_key_up().connect(GameApplication::onInput);
 
         /*TODO: Move to resoruce loader */
-        CL_Font_System::register_font("media/pneumatics.ttf", "Pneumatics");
-        CL_Font font(gc, "Pneumatics", 40);
+        //CL_Font_System::register_font("media/pneumatics.ttf", "Pneumatics");
+        //CL_Font font(gc, "Pneumatics", 40);
 
-        /*TODO: Change app exit code */
         while (frameManager.getRunning())
         {
             frameManager.frameStarted();
             gc.clear(CL_Colorf::gray);
 
-            font.draw_text(gc, 10, 70, CL_String(cl_format("fps: %1", frameManager.getFps())), CL_Colorf::black);
-            font.draw_text(gc, 10, 140, CL_String(cl_format("elapsed: %1", frameManager.getElapsed())), CL_Colorf::black);
+            //font.draw_text(gc, 10, 70, CL_String(cl_format("fps: %1", frameManager.getFps())), CL_Colorf::black);
+            //font.draw_text(gc, 10, 140, CL_String(cl_format("elapsed: %1", frameManager.getElapsed())), CL_Colorf::black);
 
             CL_KeepAlive::process();
             /*TODO: wtf! (check vsync) */
