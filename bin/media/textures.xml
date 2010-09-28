@@ -1,0 +1,5 @@
+<resources>
+	<section name="Statistic">
+		<font name="Pneumatics" file="fonts/pneumatics.ttf" />
+	</section>
+</resources>

@@ -1,0 +1,11 @@
+<resources>
+	<section name="Statistic">
+		<font name="Pneumatics" file="fonts/pneumatics.ttf" />
+		<font name="MailRay" file="fonts/mailrays.ttf" />
+		<font name="Third" file="fonts/Ololo.ttf" />
+	</section>
+	<section name="MenuState">
+		<font name="Menu1" file="fonts/frommenu1.ttf" />
+		<font name="Menu2" file="fonts/frommenu2.ttf" />
+	</section>
+</resources>
