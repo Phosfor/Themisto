@@ -7,6 +7,7 @@
 #include "Managers/LogManager.hpp"
 #include "Managers/FrameManager.hpp"
 #include "Managers/ResourceManager.hpp"
+#include "Managers/StateManager.hpp"
 #include "Core/Utils.hpp"
 
 class GameApplication

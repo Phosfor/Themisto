@@ -3,6 +3,7 @@ set(Themisto_srcs
     Managers/LogManager.cpp
     Managers/FrameManager.cpp
     Managers/ResourceManager.cpp
+    Managers/StateManager.cpp
     Core/Utils.cpp
     main.cpp
 )
