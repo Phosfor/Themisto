@@ -2,6 +2,7 @@ set(Themisto_srcs
     Managers/ConfigManager.cpp
     Managers/LogManager.cpp
     Managers/FrameManager.cpp
+    Managers/ResourceManager.cpp
     Core/Utils.cpp
     main.cpp
 )

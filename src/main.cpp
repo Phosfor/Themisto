@@ -15,10 +15,14 @@ int GameApplication::main(const std::vector<CL_String> &args)
         short width = configManager.getValue<int>("window.width", 640);
         short height = configManager.getValue<int>("window.height", 480);
         bool fullscreen = configManager.getValue<bool>("window.fullscreen", false);
-        utils.setMediaFolder(configManager.getValue<string>("application.media-folder", "media"));
+        string mediaPath = configManager.getValue<string>("application.media-folder", "media");
+        utils.setMediaFolder(mediaPath);
 
         CL_DisplayWindow window("Themisto", width, height, fullscreen);
         LOG("The window has been created!");
+
+        /*TODO: Load all another resources stuff */
+        resourceManager.loadFonts();
 
         CL_GraphicContext gc = window.get_gc();
         CL_InputDevice keyboard = window.get_ic().get_keyboard();
@@ -26,17 +30,15 @@ int GameApplication::main(const std::vector<CL_String> &args)
         CL_Slot slotQuit = window.sig_window_close().connect(GameApplication::onWindowClose);
         CL_Slot slotInput = keyboard.sig_key_up().connect(GameApplication::onInput);
 
-        /*TODO: Move to resoruce loader */
-        //CL_Font_System::register_font("media/pneumatics.ttf", "Pneumatics");
-        //CL_Font font(gc, "Pneumatics", 40);
+        CL_Font font(gc, "MailRay", 30);
 
         while (frameManager.getRunning())
         {
             frameManager.frameStarted();
             gc.clear(CL_Colorf::gray);
 
-            //font.draw_text(gc, 10, 70, CL_String(cl_format("fps: %1", frameManager.getFps())), CL_Colorf::black);
-            //font.draw_text(gc, 10, 140, CL_String(cl_format("elapsed: %1", frameManager.getElapsed())), CL_Colorf::black);
+            font.draw_text(gc, 10, 25, CL_String(cl_format("fps: %1", frameManager.getFps())), CL_Colorf::black);
+            font.draw_text(gc, 10, 50, CL_String(cl_format("elapsed: %1", frameManager.getElapsed())), CL_Colorf::black);
 
             CL_KeepAlive::process();
             /*TODO: wtf! (check vsync) */
