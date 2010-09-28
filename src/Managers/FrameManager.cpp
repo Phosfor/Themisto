@@ -1,7 +1,7 @@
 #include "Managers/FrameManager.hpp"
 
 FrameManager::FrameManager():
-    mFps(0), mStartTime(CL_System::get_time()), mFrames(0), mElapsed(0) { }
+    mFps(0), mStartTime(CL_System::get_time()), mFrames(0), mElapsed(0), mRunning(true) { }
 
 void FrameManager::frameStarted()
 {
@@ -29,4 +29,14 @@ int FrameManager::getFps()
 float FrameManager::getElapsed()
 {
     return mElapsed;
+}
+
+bool FrameManager::getRunning()
+{
+    return mRunning;
+}
+
+void FrameManager::setRunning(bool state)
+{
+    mRunning = state;
 }

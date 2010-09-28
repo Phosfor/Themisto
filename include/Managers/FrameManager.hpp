@@ -12,6 +12,7 @@ class FrameManager : public boost::serialization::singleton<FrameManager>
     private:
         int mFps, mStartTime, mFrames;
         float mElapsed;
+        bool mRunning;
 
     public:
         FrameManager();
@@ -19,6 +20,9 @@ class FrameManager : public boost::serialization::singleton<FrameManager>
 
         int getFps();
         float getElapsed();
+
+        bool getRunning();
+        void setRunning(bool state);
 };
 
 #endif /* _FRAME_MANAGER_H_ */
