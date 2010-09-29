@@ -23,28 +23,25 @@ int GameApplication::main(const std::vector<CL_String> &args)
         desc.set_fullscreen(fullscreen);
         desc.set_size(CL_Size(width, height), false);
         appManager.initWindow(desc);
-        //CL_DisplayWindow window("Themisto", width, height, fullscreen);
         LOG("The window has been created!");
 
         /*TODO: Load all another resources stuff */
         resourceManager.loadFonts();
 
-        CL_DisplayWindow *window = appManager.getWindow();
-        CL_GraphicContext *gc = appManager.getGraphic();
-        CL_InputDevice *keyboard = appManager.getKeyboard();
+        CL_Slot slotQuit = appManager.getWindow().sig_window_close().connect(GameApplication::onWindowClose);
+        CL_Slot slotInput = appManager.getKeyboard().sig_key_up().connect(GameApplication::onInput);
 
-        CL_Slot slotQuit = window->sig_window_close().connect(GameApplication::onWindowClose);
-        CL_Slot slotInput = keyboard->sig_key_up().connect(GameApplication::onInput);
-
-        CL_Font font(*gc, "MailRay", 30);
+        CL_Font font(appManager.getGraphic(), "MailRay", 30);
 
         while (appManager.getRunning())
         {
             appManager.frameStarted();
-            gc->clear(CL_Colorf::gray);
+            appManager.getGraphic().clear(CL_Colorf::gray);
 
-            font.draw_text(*gc, 10, 25, CL_String(cl_format("fps: %1", appManager.getFps())), CL_Colorf::black);
-            font.draw_text(*gc, 10, 50, CL_String(cl_format("elapsed: %1", appManager.getElapsed())), CL_Colorf::black);
+            font.draw_text(appManager.getGraphic(), 10, 25, 
+                    CL_String(cl_format("fps: %1", appManager.getFps())), CL_Colorf::black);
+            font.draw_text(appManager.getGraphic(), 10, 50, 
+                    CL_String(cl_format("elapsed: %1", appManager.getElapsed())), CL_Colorf::black);
 
             CL_KeepAlive::process();
             /*TODO: wtf! (check vsync) */
@@ -55,7 +52,7 @@ int GameApplication::main(const std::vector<CL_String> &args)
              * CL_Display::flip(1)  - Sync to every frame
              * CL_Display::flip(2)  - Sync to every 2nd frame
             */
-            window->flip(1);
+            appManager.getWindow().flip(1);
             CL_System::sleep(10);
         }
     }

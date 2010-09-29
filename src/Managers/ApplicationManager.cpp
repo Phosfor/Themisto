@@ -41,19 +41,19 @@ void ApplicationManager::setRunning(bool state)
     mRunning = state;
 }
 
-CL_GraphicContext *ApplicationManager::getGraphic()
+CL_GraphicContext &ApplicationManager::getGraphic()
 {
-    return &mWindow->get_gc();
+    return mWindow->get_gc();
 }
 
-CL_InputDevice *ApplicationManager::getKeyboard()
+CL_InputDevice &ApplicationManager::getKeyboard()
 {
-    return &mWindow->get_ic().get_keyboard();
+    return mWindow->get_ic().get_keyboard();
 }
 
-CL_DisplayWindow *ApplicationManager::getWindow()
+CL_DisplayWindow &ApplicationManager::getWindow()
 {
-    return mWindow.get();
+    return *mWindow.get();
 }
 
 void ApplicationManager::initWindow(const CL_DisplayWindowDescription &desc)

@@ -8,14 +8,14 @@
 #define appManager (ApplicationManager::get_mutable_instance())
 #define appManagerConst (applicationManager::get_const_instance())
 
+typedef CL_SharedPtr<CL_DisplayWindow> CL_DisplayWindowShared;
 class ApplicationManager : public boost::serialization::singleton<ApplicationManager>
 {
     private:
         int mFps, mStartTime, mFrames;
         float mElapsed;
         bool mRunning;
-
-        CL_SharedPtr<CL_DisplayWindow> mWindow;
+        CL_DisplayWindowShared mWindow;
 
     public:
         ApplicationManager();
@@ -28,9 +28,9 @@ class ApplicationManager : public boost::serialization::singleton<ApplicationMan
         bool getRunning();
         void setRunning(bool state);
 
-        CL_GraphicContext *getGraphic();
-        CL_InputDevice *getKeyboard();
-        CL_DisplayWindow *getWindow();
+        CL_GraphicContext &getGraphic();
+        CL_InputDevice &getKeyboard();
+        CL_DisplayWindow &getWindow();
 };
 
 #endif /* _FRAME_MANAGER_H_ */
