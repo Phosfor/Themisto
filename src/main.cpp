@@ -31,7 +31,7 @@ int GameApplication::main(const std::vector<CL_String> &args)
         CL_Slot slotQuit = appManager.getWindow().sig_window_close().connect(GameApplication::onWindowClose);
         CL_Slot slotInput = appManager.getKeyboard().sig_key_up().connect(GameApplication::onInput);
 
-        CL_Font font(appManager.getGraphic(), "MailRay", 30);
+        CL_Font font(appManager.getGraphic(), "Ubuntu", 30);
 
         while (appManager.getRunning())
         {

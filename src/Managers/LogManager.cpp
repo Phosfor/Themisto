@@ -61,7 +61,7 @@ void LogManager::write(const string& message, const string logFile, const string
         }
         else
         {
-            comand += time + "\t: " + message + "\n";
+            comand += time + " : " + message + "\n";
         }
     }
     else
