@@ -1,9 +1,10 @@
 set(Themisto_srcs
     Managers/ConfigManager.cpp
     Managers/LogManager.cpp
-    Managers/FrameManager.cpp
+    Managers/ApplicationManager.cpp
     Managers/ResourceManager.cpp
     Managers/StateManager.cpp
+    Managers/GuiManager.cpp
     Core/Utils.cpp
     main.cpp
 )
