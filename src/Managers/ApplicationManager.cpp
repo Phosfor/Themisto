@@ -1,24 +1,23 @@
 #include "Managers/ApplicationManager.hpp"
 
 ApplicationManager::ApplicationManager():
-    mFps(0), mStartTime(CL_System::get_time()), mFrames(0), mElapsed(0), mRunning(true) { }
+    mLastTime(CL_System::get_time()), mCurrentTime(0), mTimeDifference(0), mDeltaTimeMs(0), mRunning(true)  {}
 
 void ApplicationManager::frameStarted()
 {
-    mElapsed = CL_System::get_time() - mStartTime;
-    mFrames++;
-    int currentTime = CL_System::get_time();
-    if (mStartTime == 0) {
-        mStartTime = currentTime;
-    } else {
-        int delta = currentTime - mStartTime;
-        if (delta < 0 || delta > 2000)
-        {
-            if (delta > 0) mFps = (mFrames*1000) / delta;
-            mFrames = 0;
-            mStartTime = currentTime;
-        }
-    }
+    mCurrentTime = CL_System::get_time();
+    mTimeDifference = mCurrentTime - mLastTime;
+    if (mTimeDifference > 1000) mTimeDifference = 1000;
+    mDeltaTimeMs = static_cast<float>(mTimeDifference);
+    mLastTime = mCurrentTime;
+}
+
+void ApplicationManager::frameEnded()
+{
+    mCurrentTime = CL_System::get_time();
+    const int mainLoopRate = 10; // 100 hz
+    int sleepTime = mainLoopRate - (mCurrentTime - mLastTime);
+    if (sleepTime > 0) CL_System::sleep(sleepTime);
 }
 
 int ApplicationManager::getFps()
@@ -28,7 +27,7 @@ int ApplicationManager::getFps()
 
 float ApplicationManager::getElapsed()
 {
-    return mElapsed;
+    return mDeltaTimeMs;
 }
 
 bool ApplicationManager::getRunning()

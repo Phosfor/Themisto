@@ -17,11 +17,17 @@ class ApplicationManager : public boost::serialization::singleton<ApplicationMan
         bool mRunning;
         CL_DisplayWindowShared mWindow;
 
+        unsigned int mLastTime, mCurrentTime;
+        int mTimeDifference;
+        float mDeltaTimeMs;
+        
     public:
         ApplicationManager();
         void initWindow(const CL_DisplayWindowDescription &desc);
 
         void frameStarted();
+        void frameEnded();
+
         int getFps();
         float getElapsed();
 

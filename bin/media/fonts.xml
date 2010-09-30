@@ -2,7 +2,7 @@
 	<section name="Statistic">
 		<font name="Pneumatics" file="fonts/pneumatics.ttf" />
 		<font name="MailRay" file="fonts/mailrays.ttf" />
-		<font name="Third" file="fonts/Ololo.ttf" />
+		<font name="Ubuntu" file="fonts/ubuntu.ttf" />
 	</section>
 	<section name="MenuState">
 		<font name="Menu1" file="fonts/frommenu1.ttf" />

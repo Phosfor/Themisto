@@ -55,9 +55,9 @@ void LogManager::write(const string& message, const string logFile, const string
         {
             string signature = _cleanSignature(metaSignature);
             comand += time + " : ";
-            comand += signature;
-            comand += "\n\tMessage: ";
-            comand += message + "\n\n";
+            comand += "[" + signature;
+            comand += "] Message: ";
+            comand += message + "\n";
         }
         else
         {

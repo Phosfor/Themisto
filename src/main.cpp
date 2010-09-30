@@ -31,29 +31,16 @@ int GameApplication::main(const std::vector<CL_String> &args)
         CL_Slot slotQuit = appManager.getWindow().sig_window_close().connect(GameApplication::onWindowClose);
         CL_Slot slotInput = appManager.getKeyboard().sig_key_up().connect(GameApplication::onInput);
 
-        CL_Font font(appManager.getGraphic(), "Ubuntu", 30);
+        // Queueing the states
+        stateManager.push(new MenuState);
 
         while (appManager.getRunning())
         {
             appManager.frameStarted();
-            appManager.getGraphic().clear(CL_Colorf::gray);
-
-            font.draw_text(appManager.getGraphic(), 10, 25, 
-                    CL_String(cl_format("fps: %1", appManager.getFps())), CL_Colorf::black);
-            font.draw_text(appManager.getGraphic(), 10, 50, 
-                    CL_String(cl_format("elapsed: %1", appManager.getElapsed())), CL_Colorf::black);
-
-            CL_KeepAlive::process();
-            /*TODO: wtf! (check vsync) */
-            /*
-             * CL_Display::flip()   - Locks to the default frame rate
-             * CL_Display::flip(-1) - Locks to the default frame rate
-             * CL_Display::flip(0)  - Do not lock to the frame rate
-             * CL_Display::flip(1)  - Sync to every frame
-             * CL_Display::flip(2)  - Sync to every 2nd frame
-            */
+            stateManager.update();
             appManager.getWindow().flip(1);
-            CL_System::sleep(10);
+            CL_KeepAlive::process(0);
+            appManager.frameEnded();
         }
     }
     catch(CL_Exception &error)

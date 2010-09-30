@@ -11,6 +11,7 @@
 #include "Managers/StateManager.hpp"
 #include "Managers/GuiManager.hpp"
 #include "Core/Utils.hpp"
+#include "Managers/States/MenuState.hpp"
 
 class GameApplication
 {
