@@ -19,8 +19,9 @@ find_package(ZLIB REQUIRED)
 find_package(PNG REQUIRED)
 find_package(JPEG REQUIRED)
 
-add_definitions(-Wall -pg)
+add_definitions(-Wall -pg -g)
 set(CMAKE_BUILD_TYPE "Debug")
+set(CMAKE_EXE_LINKER_FLAGS "-pg")
 
 message( ${FREEIMAGE_LIBRARY} )
 
