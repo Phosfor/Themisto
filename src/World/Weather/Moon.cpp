@@ -43,7 +43,7 @@ void Moon::update()
     mGlobalTime += appManager.getElapsed();
 
     // Increase angle each 200 ms
-    if (mGlobalTime >= 200)
+    if (mGlobalTime >= 75)
     {
         mGlobalTime = 0;
         if (mAngle <= Deg2Rad(0)) mAngle+=0.0005;

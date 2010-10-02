@@ -14,7 +14,7 @@
 #define kDropPerFrame 2
 #define min(a, b) ((a) < (b) ? (a) : (b))
 
-struct drop
+/*struct drop
 {
     private:
         float x, y;
@@ -26,15 +26,25 @@ struct drop
 
         void update(float elapsed, float windPower);
         float getY();
-};
+};*/
 
 class Rain
 {
     private:
-        vector<drop> mDrops;
-        unsigned int mMaxDrops;
+        //vector<drop> mDrops;
 
-        void processDrops(float _windPower);
+        float *x, *y;
+        float *x_speed, *y_speed;
+
+        int *timeout;
+
+        unsigned int mMaxDrops;
+        int mWidth, mHeight;
+
+        CL_Colorf mDropColor;
+        CL_GraphicContext mGC;
+
+        void processDrops(float _windPower, int i);
 
     public:
         Rain(int maxDrops = 150);
