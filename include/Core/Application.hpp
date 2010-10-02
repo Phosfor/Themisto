@@ -1,19 +1,20 @@
-#include <ClanLib/core.h>
+#ifndef _APPLICATION_HPP_
+#define _APPLICATION_HPP_
+
 #include <ClanLib/display.h>
+#include <ClanLib/core.h>
 #include <ClanLib/gl.h>
 #include <ClanLib/application.h>
 #include <ClanLib/gui.h>
 
-#include "Managers/ConfigManager.hpp"
-#include "Managers/LogManager.hpp"
-#include "Managers/ApplicationManager.hpp"
-#include "Managers/ResourceManager.hpp"
-#include "Managers/StateManager.hpp"
-#include "Managers/GuiManager.hpp"
+#include "Core/LogManager.hpp"
+#include "Core/ConfigManager.hpp"
+#include "Core/ResourceManager.hpp"
+#include "Core/StateManager.hpp"
+#include "World/States/MenuState.hpp"
 #include "Core/Utils.hpp"
-#include "Managers/States/MenuState.hpp"
 
-class GameApplication
+class Application
 {
     public:
         static int main(const std::vector<CL_String> &args);
@@ -23,3 +24,5 @@ class GameApplication
         static void onInput(const CL_InputEvent &key, const CL_InputState &state);
         static void onWindowClose();
 };
+
+#endif /* _APPLICATION_HPP_ */

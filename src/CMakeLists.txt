@@ -1,16 +1,21 @@
 set(Themisto_srcs
-    Managers/ConfigManager.cpp
-    Managers/LogManager.cpp
-    Managers/ApplicationManager.cpp
-    Managers/ResourceManager.cpp
-    Managers/StateManager.cpp
-    Managers/GuiManager.cpp
+    Core/ConfigManager.cpp
+    Core/LogManager.cpp
+    Core/ApplicationManager.cpp
+    Core/ResourceManager.cpp
+    Core/StateManager.cpp
+    Core/GuiManager.cpp
     Core/Utils.cpp
+
+    World/Weather/Rain.cpp
+    World/Weather/Moon.cpp
+    World/WorldManager.cpp
+
     main.cpp
 )
 
 add_executable(Themisto
-	${Themisto_srcs}
+    ${Themisto_srcs}
 )
 
 target_link_libraries(Themisto

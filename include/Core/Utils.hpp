@@ -7,7 +7,7 @@
 #include <boost/date_time/posix_time/posix_time_types.hpp>
 #include <boost/algorithm/string.hpp>
 
-#include "Managers/LogManager.hpp"
+#include "Core/LogManager.hpp"
 
 using namespace std;
 using namespace boost;
@@ -20,10 +20,25 @@ using namespace boost::posix_time;
 // Check the location exists
 #define LOCATION(path) Utils::get_mutable_instance().checkLocation(path)
 
+// 40 pixels ~ 1 meter
+#define Meters2Pixels(meters) meters*40
+
+// Pi number (took from google)
+#define Pi 3.14159265
+
+// Radian → Degree
+#define Rad2Deg(rad) rad * 180 / Pi
+
+// Degree → Radian
+#define Deg2Rad(deg) deg * Pi/180
+
+// The speed of free falling
+#define G Meters2Pixels(9.81)
+
 #define utils (Utils::get_mutable_instance())
 #define utilsConst (Utils::get_const_instance())
 
-class Utils : public singleton<Utils>
+class Utils : public boost::serialization::singleton<Utils>
 {
     protected:
         ptime mTimeStamp;
