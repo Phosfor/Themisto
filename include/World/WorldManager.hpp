@@ -1,0 +1,53 @@
+#ifndef _WORLD_MANAGER_HPP_
+#define _WORLD_MANAGER_HPP_
+
+#include <ClanLib/core.h>
+#include <ClanLib/display.h>
+
+#include "Core/Utils.hpp"
+#include "Core/Singleton.hpp"
+
+#include "World/Weather/Rain.hpp"
+#include "World/Weather/Moon.hpp"
+
+#include <vector>
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <math.h>
+using namespace std;
+
+#define worldManager (WorldManager::get_mutable_instance())
+#define worldManagerConst (WorldManager::get_const_instance())
+
+class WorldManager : public ISingleton<WorldManager>
+{
+    private:
+        float mWindPower;
+
+        bool mNight;
+        int mWorldTime[3]; // 0 - hours; 1 - minutes; 2 - seconds
+
+        Rain *mRainHandle;
+        Moon *mMoonHandle;
+
+        bool mRainEnabled;
+        bool mMoonEnabled;
+
+    public:
+        WorldManager();
+        ~WorldManager();
+
+        void setWindPower(float _power);
+        void setWorldTime(int _hours, int _minutes, int _seconds);
+
+        void enableRain(bool state, int _maxDrops = 150);
+        void enableMoon(bool state, float _scaleX = 1, float _scaleY = 1);
+
+        int *getWorldTime();
+        bool isNight();
+
+        void update();
+};
+
+#endif /* _WORLD_MANAGER_HPP_ */
