@@ -5,10 +5,11 @@
 #include <ClanLib/display.h>
 
 #include "Core/Utils.hpp"
-#include "Core/Singleton.hpp"
 
 #include "World/Weather/Rain.hpp"
 #include "World/Weather/Moon.hpp"
+
+#include <boost/serialization/singleton.hpp>
 
 #include <vector>
 #include <stdio.h>
@@ -20,7 +21,7 @@ using namespace std;
 #define worldManager (WorldManager::get_mutable_instance())
 #define worldManagerConst (WorldManager::get_const_instance())
 
-class WorldManager : public ISingleton<WorldManager>
+class WorldManager : public boost::serialization::singleton<WorldManager>
 {
     private:
         float mWindPower;
@@ -35,7 +36,7 @@ class WorldManager : public ISingleton<WorldManager>
         bool mMoonEnabled;
 
     public:
-        WorldManager();
+        void initWorld();
         ~WorldManager();
 
         void setWindPower(float _power);

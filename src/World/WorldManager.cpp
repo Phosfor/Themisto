@@ -1,8 +1,6 @@
 #include "World/WorldManager.hpp"
 
-template<> WorldManager* ISingleton<WorldManager>::mInstance = 0;
-
-WorldManager::WorldManager()
+void WorldManager::initWorld()
 {
     mWindPower = 0.0;
     memset(mWorldTime, 0, sizeof(mWorldTime));
