@@ -6,7 +6,7 @@ void Rain::processDrops(float _windPower, int i)
     left = right = 0;
 
     // Find the line(+offset) where drops fails
-    int x1 = (mHeight / G) * _windPower;
+    int x1 = ( mHeight / G ) * _windPower;
 
     if (_windPower < 0)
     {
@@ -27,8 +27,8 @@ void Rain::processDrops(float _windPower, int i)
     x_speed[i] = 0;
     y_speed[i] = 0;
 
-    //x_speed[i] = _windPower*40*0.1;
-    //y_speed[i] = G*0.1;
+    x_speed[i] = _windPower*0.1;
+    y_speed[i] = G*0.1;
 }
 
 Rain::Rain(int maxDrops):

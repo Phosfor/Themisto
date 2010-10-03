@@ -21,7 +21,7 @@ class Rain
         int *timeout;
 
         unsigned int mMaxDrops;
-        int mWidth, mHeight;
+        float mWidth, mHeight;
 
         CL_Colorf mDropColor;
         CL_GraphicContext mGC;

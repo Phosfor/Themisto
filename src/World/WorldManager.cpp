@@ -21,12 +21,12 @@ WorldManager::~WorldManager()
 
 void WorldManager::setWindPower(float _power)
 {
-    mWindPower = _power;
+    mWindPower = Meters2Pixels(_power);
 }
 
 float WorldManager::getWindPower()
 {
-    return mWindPower;
+    return Pixels2Meters(mWindPower);
 }
 
 int *WorldManager::getWorldTime()

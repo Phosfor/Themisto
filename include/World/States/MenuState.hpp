@@ -26,8 +26,8 @@ class MenuState : public State
 
         worldManager.initWorld();
         worldManager.enableMoon(true, 0.2, 0.2);
-        worldManager.enableRain(true, 100);
-        worldManager.setWindPower(40);
+        worldManager.enableRain(true, 150);
+        worldManager.setWindPower(-2.0);
     }
 
     void shutdown() {}
