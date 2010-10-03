@@ -15,24 +15,27 @@ using namespace std;
 
 class MenuState : public State
 {
-    CL_Font mStatFont;
+    CL_Font *mStatFont;
     CL_Image mBackground;
 
-    void init() 
+    void init()
     {
-        mStatFont = CL_Font(appManager.getGraphic(), "Ubuntu", 30);
+        mStatFont = new CL_Font(appManager.getGraphic(), "Ubuntu", 30);
 
         mBackground = CL_Image(appManager.getGraphic(), "media/tree.png");
 
         worldManager.initWorld();
         worldManager.enableMoon(true, 0.2, 0.2);
-        worldManager.enableRain(true, 150);
-        worldManager.setWindPower(-2.0);
+        worldManager.enableRain(true, 400);
+        worldManager.setWindPower(-5.0);
     }
 
-    void shutdown() {}
+    void shutdown()
+    {
+        delete mStatFont;
+    }
 
-    void update() 
+    void update()
     {
         appManager.getGraphic().clear(CL_Colorf::gray);
         mBackground.draw(appManager.getGraphic(), 0, 0);
@@ -40,11 +43,11 @@ class MenuState : public State
         worldManager.update();
 
         int *time = worldManager.getWorldTime();
-        mStatFont.draw_text(appManager.getGraphic(), 10, 25, 
+        mStatFont->draw_text(appManager.getGraphic(), 10, 25,
                 CL_String(cl_format("world time: %1:%2:%3", time[0], time[1], time[2])), CL_Colorf::white);
-        mStatFont.draw_text(appManager.getGraphic(), 10, 50, 
+        mStatFont->draw_text(appManager.getGraphic(), 10, 50,
                 CL_String(cl_format("elapsed: %1", floor(appManager.getElapsed()+0.5))), CL_Colorf::white);
-        mStatFont.draw_text(appManager.getGraphic(), 10, 75, 
+        mStatFont->draw_text(appManager.getGraphic(), 10, 75,
                 CL_String(cl_format("wind: %1", floor(worldManager.getWindPower()))), CL_Colorf::white);
     }
 

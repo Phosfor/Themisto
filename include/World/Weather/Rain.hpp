@@ -15,12 +15,15 @@
 class Rain
 {
     private:
-        float *x, *y;
-        float *x_speed, *y_speed;
+        /*float *x, *y;
+        float *x_speed, *y_speed;*/
 
-        int *timeout;
+        vector<int> x, y, x_speed, y_speed, timeout;
+
+        //int *timeout;
 
         unsigned int mMaxDrops;
+
         float mWidth, mHeight;
 
         CL_Colorf mDropColor;
@@ -30,7 +33,7 @@ class Rain
 
     public:
         Rain(int maxDrops = 150);
-        void setDropLimit(int maxDrops = 150);
+        void setDropLimit(int maxDrops);
         void update(float _windPower);
 };
 

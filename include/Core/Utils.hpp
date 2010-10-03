@@ -24,8 +24,8 @@ using namespace boost::posix_time;
 #define PixelsPerMeter 40.0
 
 // 40 pixels ~ 1 meter
-#define Meters2Pixels(meters) ((float)meters*PixelsPerMeter)
-#define Pixels2Meters(pixels) ((float)pixels/PixelsPerMeter)
+#define Meters2Pixels(meters) ((float)(meters)*PixelsPerMeter)
+#define Pixels2Meters(pixels) ((float)(pixels)/PixelsPerMeter)
 
 // Pi number (took from google)
 #define Pi 3.14159265

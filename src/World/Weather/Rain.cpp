@@ -8,13 +8,10 @@ void Rain::processDrops(float _windPower, int i)
     // Find the line(+offset) where drops fails
     int x1 = ( mHeight / G ) * _windPower;
 
-    if (_windPower < 0)
-    {
+    if (_windPower < 0) {
         left = 0; 
         right = mWidth - x1;
-    }
-    else
-    {
+    } else {
         left = -x1;
         right = mWidth;
     }
@@ -36,15 +33,23 @@ Rain::Rain(int maxDrops):
 {
     srand(time(NULL));
 
-    x = new float[maxDrops]; y = new float[maxDrops];
-    x_speed = new float[maxDrops]; y_speed = new float[maxDrops];
-    timeout = new int[maxDrops];
+    x = vector<int>(maxDrops);
+    y = vector<int>(maxDrops);
+    x_speed = vector<int>(maxDrops);
+    y_speed = vector<int>(maxDrops);
+    timeout = vector<int>(maxDrops);
 
-    memset(x, 0, sizeof(x[0]) * maxDrops);
-    memset(y, 0, sizeof(y[0]) * maxDrops);
-    memset(x_speed, 0, sizeof(x_speed[0]) * maxDrops);
-    memset(y_speed, 0, sizeof(y_speed[0]) * maxDrops);
-    memset(timeout, 0, sizeof(timeout[0]) * maxDrops);
+    fill(x.begin(), x.end(), 0);
+    fill(y.begin(), y.end(), 0);
+    fill(x_speed.begin(), x_speed.end(), 0);
+    fill(y_speed.begin(), y_speed.end(), 0);
+    fill(timeout.begin(), timeout.end(), 0);
+
+    // For preventing possible reallocation
+    x.reserve(maxDrops*1.5);
+    y.reserve(maxDrops*1.5);
+    x_speed.reserve(maxDrops*1.5);
+    y_speed.reserve(maxDrops*1.5);
 
     mGC = appManager.getGraphic();
     mWidth = appManager.getWindow().get_geometry().get_width();
@@ -54,7 +59,7 @@ Rain::Rain(int maxDrops):
 
     for (int i=0; i < maxDrops; i++)
     {
-        timeout[i] = rand() % 100;
+        timeout[i] = rand() % 130;
     }
 }
 
@@ -70,20 +75,37 @@ void Rain::update(float _windPower)
         }
         else
         {
-            x_speed[i] += _windPower * elapsed;
             x[i] += x_speed[i] * elapsed;
-
-            y_speed[i] += G * elapsed;
             y[i] += y_speed[i] * elapsed;
 
-            CL_Draw::line(mGC, x[i], y[i], x[i] - x_speed[i] * kTail, y[i] - y_speed[i] * kTail, mDropColor);
+            x_speed[i] += _windPower * elapsed;
+            y_speed[i] += G * elapsed;
 
-            if (y[i] > mHeight - 100) processDrops(_windPower, i);
+            CL_Draw::line(mGC,
+                    x[i], y[i], 
+                    x[i] - x_speed[i] * kTail, y[i] - y_speed[i] * kTail, 
+                    mDropColor);
+
+            if (y[i] > mHeight) processDrops(_windPower, i);
         }
     }
 }
 
 void Rain::setDropLimit(int maxDrops)
 {
+    x.resize(maxDrops, 0);
+    y.resize(maxDrops, 0);
+    x_speed.resize(maxDrops, 0);
+    y_speed.resize(maxDrops, 0);
+    timeout.resize(maxDrops, 0);
+
+    if (maxDrops > mMaxDrops)
+    {
+        for (unsigned int i=0; i < maxDrops - mMaxDrops; i++)
+        {
+            timeout[mMaxDrops+i] = rand() % 100;
+        }
+    }
+
     mMaxDrops = maxDrops;
 }
