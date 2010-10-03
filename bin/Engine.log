@@ -1,10 +1,10 @@
-2010-Oct-02 16:40:14.884979 : Core handle is initialized
-2010-Oct-02 16:40:14.885360 : Display handle is initialized
-2010-Oct-02 16:40:14.885445 : GL handle is initialized
-2010-Oct-02 16:40:15.400419 : The window has been created!
-2010-Oct-02 16:40:15.400824 : The font path `media/fonts/frommenu1.ttf` is invalid, check your resources!
-2010-Oct-02 16:40:15.400943 : The font path `media/fonts/frommenu2.ttf` is invalid, check your resources!
-2010-Oct-02 16:40:15.401099 : Font with name `MailRay` is registered in the system.
-2010-Oct-02 16:40:15.401215 : Font with name `Pneumatics` is registered in the system.
-2010-Oct-02 16:40:15.401317 : Font with name `Ubuntu` is registered in the system.
-2010-Oct-02 16:40:15.401418 : [StateManager::pop()] Message:  Activating 'MenuState' game state.
+2010-Oct-03 14:20:04.904288 : Core handle is initialized
+2010-Oct-03 14:20:04.904647 : Display handle is initialized
+2010-Oct-03 14:20:04.904727 : GL handle is initialized
+2010-Oct-03 14:20:05.443758 : The window has been created!
+2010-Oct-03 14:20:05.444121 : The font path `media/fonts/frommenu1.ttf` is invalid, check your resources!
+2010-Oct-03 14:20:05.444231 : The font path `media/fonts/frommenu2.ttf` is invalid, check your resources!
+2010-Oct-03 14:20:05.444384 : Font with name `MailRay` is registered in the system.
+2010-Oct-03 14:20:05.444492 : Font with name `Pneumatics` is registered in the system.
+2010-Oct-03 14:20:05.444596 : Font with name `Ubuntu` is registered in the system.
+2010-Oct-03 14:20:05.444698 : [StateManager::pop()] Message:  Activating 'MenuState' game state.

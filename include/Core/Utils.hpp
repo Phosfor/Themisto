@@ -33,7 +33,8 @@ using namespace boost::posix_time;
 #define Deg2Rad(deg) deg * Pi/180
 
 // The speed of free falling
-#define G Meters2Pixels(9.81)
+//#define G Meters2Pixels(9.81)
+#define G 9.81
 
 #define utils (Utils::get_mutable_instance())
 #define utilsConst (Utils::get_const_instance())

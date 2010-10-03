@@ -55,7 +55,7 @@ CL_DisplayWindow &ApplicationManager::getWindow()
     return *mWindow.get();
 }
 
-void ApplicationManager::initWindow(const CL_DisplayWindowDescription &desc)
+void ApplicationManager::initWindow(const CL_DisplayWindowDescription &desc/*, CL_GUIManager &gui*/)
 {
-    mWindow = CL_SharedPtr<CL_DisplayWindow>(new CL_DisplayWindow(desc));
+    mWindow = CL_SharedPtr<CL_DisplayWindow>(new CL_DisplayWindow(/*gui,*/ desc));
 }

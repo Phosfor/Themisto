@@ -14,6 +14,7 @@
 #include "World/States/MenuState.hpp"
 #include "Core/Utils.hpp"
 
+// This is wrapper to make the Main function crossplatform
 class Application
 {
     public:

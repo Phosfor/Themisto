@@ -21,12 +21,13 @@ class MenuState : public State
     void init() 
     {
         mStatFont = CL_Font(appManager.getGraphic(), "Ubuntu", 30);
+
         mBackground = CL_Image(appManager.getGraphic(), "media/tree.png");
 
         worldManager.initWorld();
         worldManager.enableMoon(true, 0.2, 0.2);
-        worldManager.enableRain(true, 150);
-        worldManager.setWindPower(-5);
+        worldManager.enableRain(true, 100);
+        worldManager.setWindPower(40);
     }
 
     void shutdown() {}
@@ -36,13 +37,15 @@ class MenuState : public State
         appManager.getGraphic().clear(CL_Colorf::gray);
         mBackground.draw(appManager.getGraphic(), 0, 0);
 
+        worldManager.update();
+
         int *time = worldManager.getWorldTime();
         mStatFont.draw_text(appManager.getGraphic(), 10, 25, 
                 CL_String(cl_format("world time: %1:%2:%3", time[0], time[1], time[2])), CL_Colorf::white);
         mStatFont.draw_text(appManager.getGraphic(), 10, 50, 
                 CL_String(cl_format("elapsed: %1", floor(appManager.getElapsed()+0.5))), CL_Colorf::white);
-
-        worldManager.update();
+        mStatFont.draw_text(appManager.getGraphic(), 10, 75, 
+                CL_String(cl_format("wind: %1", floor(worldManager.getWindPower()))), CL_Colorf::white);
     }
 
     string type() { return "MenuState"; }

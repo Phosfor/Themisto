@@ -24,6 +24,11 @@ void WorldManager::setWindPower(float _power)
     mWindPower = _power;
 }
 
+float WorldManager::getWindPower()
+{
+    return mWindPower;
+}
+
 int *WorldManager::getWorldTime()
 {
     return mWorldTime;

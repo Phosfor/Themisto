@@ -26,7 +26,7 @@ class ApplicationManager : public boost::serialization::singleton<ApplicationMan
 
     public:
         ApplicationManager();
-        void initWindow(const CL_DisplayWindowDescription &desc);
+        void initWindow(const CL_DisplayWindowDescription &desc/*, CL_GUIManager &gui*/);
 
         void frameStarted();
         void frameEnded();
