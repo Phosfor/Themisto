@@ -42,6 +42,9 @@ class WorldManager : public boost::serialization::singleton<WorldManager>
         void setWindPower(float _power);
         float getWindPower();
 
+        void setDropLimit(float maxDrops);
+        float getDropLimit();
+
         void setWorldTime(int _hours, int _minutes, int _seconds);
 
         void enableRain(bool state, int _maxDrops = 150);

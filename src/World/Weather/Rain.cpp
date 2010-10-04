@@ -46,10 +46,10 @@ Rain::Rain(int maxDrops):
     fill(timeout.begin(), timeout.end(), 0);
 
     // For preventing possible reallocation
-    x.reserve(maxDrops*1.5);
-    y.reserve(maxDrops*1.5);
-    x_speed.reserve(maxDrops*1.5);
-    y_speed.reserve(maxDrops*1.5);
+    x.reserve(maxDrops*2);
+    y.reserve(maxDrops*2);
+    x_speed.reserve(maxDrops*2);
+    y_speed.reserve(maxDrops*2);
 
     mGC = appManager.getGraphic();
     mWidth = appManager.getWindow().get_geometry().get_width();
@@ -108,4 +108,9 @@ void Rain::setDropLimit(int maxDrops)
     }
 
     mMaxDrops = maxDrops;
+}
+
+float Rain::getDropLimit()
+{
+    return mMaxDrops;
 }

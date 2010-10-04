@@ -76,3 +76,13 @@ void WorldManager::update()
         }
     }
 }
+
+float WorldManager::getDropLimit()
+{
+    return mRainHandle->getDropLimit();
+}
+
+void WorldManager::setDropLimit(float maxDrops)
+{
+    mRainHandle->setDropLimit(maxDrops);
+}
