@@ -18,27 +18,52 @@ class MenuState : public State
     CL_Font *mStatFont;
     CL_Image mBackground;
 
+    CL_CheckBox *mRainState;
+    CL_PushButton *mSome;
+
+    CL_GraphicContext mGC;
+    CL_Rect mGeom;
+
+    void rainStateChanged()
+    {
+       worldManager.enableRain(mRainState->is_checked(), 150);
+    }
+
     void init()
     {
-        mStatFont = new CL_Font(appManager.getGraphic(), "Ubuntu", 30);
+        mGC = appManager.getGraphic();
+        mGeom = appManager.getWindow().get_geometry();
 
+        mStatFont = new CL_Font(appManager.getGraphic(), "Ubuntu", 30);
         mBackground = CL_Image(appManager.getGraphic(), "media/tree.png");
+
+        mRainState = new CL_CheckBox(&guiManager.getWrapper());
+        mRainState->set_geometry(CL_RectPS(mGeom.get_width() - 150 - 5, 5, 150, 30));
+        mRainState->set_text("Enable raining");
+        mRainState->func_state_changed().set(this, &MenuState::rainStateChanged);
+
+        mSome = new CL_PushButton(&guiManager.getWrapper());
+        mSome->set_geometry(CL_RectPS(mGeom.get_width() - 150 - 5, 40, 150, 30));
+        mSome->set_text("Some button");
+        //mSome->func_clicked().set(this, &MenuState::rainStateChanged);
 
         worldManager.initWorld();
         worldManager.enableMoon(true, 0.2, 0.2);
-        worldManager.enableRain(true, 150);
+        //worldManager.enableRain(true, 150);
         worldManager.setWindPower(-5.0);
     }
 
     void shutdown()
     {
         delete mStatFont;
+        delete mRainState;
+        delete mSome;
     }
 
     void update()
     {
-        appManager.getGraphic().clear(CL_Colorf::gray);
-        mBackground.draw(appManager.getGraphic(), 0, 0);
+        mGC.clear(CL_Colorf::gray);
+        mBackground.draw(mGC, 0, 0);
 
         worldManager.update();
 

@@ -8,6 +8,7 @@
 #include <ClanLib/gui.h>
 
 #include <boost/serialization/singleton.hpp>
+#include "Core/ConfigManager.hpp"
 
 #define appManager (ApplicationManager::get_mutable_instance())
 #define appManagerConst (applicationManager::get_const_instance())
@@ -18,15 +19,16 @@ class ApplicationManager : public boost::serialization::singleton<ApplicationMan
         int mFps, mStartTime, mFrames;
         float mElapsed;
         bool mRunning;
-        CL_SharedPtr<CL_DisplayWindow> mWindow;
+        CL_DisplayWindow *mWindow;
 
         unsigned int mLastTime, mCurrentTime;
         int mTimeDifference;
         float mDeltaTimeMs;
 
     public:
+        ~ApplicationManager();
         ApplicationManager();
-        void initWindow(const CL_DisplayWindowDescription &desc);
+        void initWindow(const string &title);
 
         void frameStarted();
         void frameEnded();

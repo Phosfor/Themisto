@@ -12,31 +12,20 @@ int Application::main(const std::vector<CL_String> &args)
 
     try
     {
-        // Initializating part
-        short width = configManager.getValue<int>("window.width", 640);
-        short height = configManager.getValue<int>("window.height", 480);
-        bool fullscreen = configManager.getValue<bool>("window.fullscreen", false);
         string mediaPath = configManager.getValue<string>("application.media-folder", "media");
-
         utils.setMediaFolder(mediaPath);
 
-        CL_DisplayWindowDescription desc("Themisto");
-        desc.set_fullscreen(fullscreen);
-        desc.set_size(CL_Size(width, height), false);
-        appManager.initWindow(desc);
+        appManager.initWindow("Themisto");
         LOG("The window has been created!");
 
-        CL_GUIWindowManagerTexture wm(appManager.getWindow());
-        guiManager.initGui(wm, "media/gui_basic/");
-        wm.func_repaint().set(Application::doNothing);
+        guiManager.initGui(appManager.getWindow(), "media/gui_basic/");
+        LOG("The gui has been initialized!");
 
-        CL_GraphicContext gc = appManager.getGraphic();
         CL_GUIManager gui = guiManager.getHandle();
+        CL_GraphicContext gc = appManager.getGraphic();
+        CL_GUIWindowManagerTexture wm = guiManager.getWM();
 
-        CL_GUIComponent area(&gui, CL_GUITopLevelDescription());
-        CL_PushButton button1(&area);
-        button1.set_geometry(CL_Rect(100, 100, 200, 120));
-        button1.set_text("Okay!");
+        wm.func_repaint().set(Application::doNothing);
 
         resourceManager.loadFonts();
 

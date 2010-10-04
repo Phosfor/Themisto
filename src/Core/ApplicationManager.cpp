@@ -1,5 +1,10 @@
 #include "Core/ApplicationManager.hpp"
 
+ApplicationManager::~ApplicationManager()
+{
+    delete mWindow;
+}
+
 ApplicationManager::ApplicationManager():
     mRunning(true), mLastTime(CL_System::get_time()), mCurrentTime(0), mTimeDifference(0), mDeltaTimeMs(0) {}
 
@@ -52,10 +57,18 @@ CL_InputDevice &ApplicationManager::getKeyboard()
 
 CL_DisplayWindow &ApplicationManager::getWindow()
 {
-    return *mWindow.get();
+    return *mWindow;
 }
 
-void ApplicationManager::initWindow(const CL_DisplayWindowDescription &desc)
+void ApplicationManager::initWindow(const string &title)
 {
-    mWindow = CL_SharedPtr<CL_DisplayWindow>(new CL_DisplayWindow(desc));
+    // Initializating part
+    short width = configManager.getValue<int>("window.width", 640);
+    short height = configManager.getValue<int>("window.height", 480);
+    bool fullscreen = configManager.getValue<bool>("window.fullscreen", false);
+
+    CL_DisplayWindowDescription desc(title);
+    desc.set_fullscreen(fullscreen);
+    desc.set_size(CL_Size(width, height), false);
+    mWindow = new CL_DisplayWindow(desc);
 }

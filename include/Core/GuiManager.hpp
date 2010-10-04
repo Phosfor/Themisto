@@ -15,16 +15,24 @@ class GuiManager : public boost::serialization::singleton<GuiManager>
 {
     private:
         CL_GUIManager *mGuiManager;
+        CL_GUIWindowManagerTexture *mWm;
+        CL_GUIComponent *mWrapper;
+
         string mThemeName;
+
+        void initGuiWrapper(float width, float height);
 
     public:
         ~GuiManager();
+
         CL_GUIManager getHandle();
+        CL_GUIWindowManagerTexture &getWM();
+        CL_GUIComponent &getWrapper();
 
         string getThemeName();
         void setThemeName(const string &name);
 
-        void initGui(CL_GUIWindowManagerTexture &wm, const string &theme);
+        void initGui(CL_DisplayWindow &window, const string &theme);
 };
 
 #endif /* _GUI_MANAGER_HPP_ */

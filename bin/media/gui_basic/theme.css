@@ -4,7 +4,8 @@ checkbox
 	text-gap:3;
 	padding-top:1;
 	padding-bottom:4;
-	text-color:black;
+	text-color:white;
+	font-size: 18;
 }
 
 checkbox:disabled
@@ -778,7 +779,8 @@ button
 	bg-image-sizing-top:6;
 	bg-image-sizing-bottom:6;
 	bg-image-sizing:default;
-	text-color:black;
+	text-color:white;
+	font-size: 18;
 	align:center;
 	vertical-align:center;
 }
