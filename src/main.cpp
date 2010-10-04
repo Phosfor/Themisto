@@ -26,7 +26,18 @@ int Application::main(const std::vector<CL_String> &args)
         appManager.initWindow(desc);
         LOG("The window has been created!");
 
-        /*TODO: Load all another resources stuff */
+        CL_GUIWindowManagerTexture wm(appManager.getWindow());
+        guiManager.initGui(wm, "media/gui_basic/");
+        wm.func_repaint().set(Application::doNothing);
+
+        CL_GraphicContext gc = appManager.getGraphic();
+        CL_GUIManager gui = guiManager.getHandle();
+
+        CL_GUIComponent area(&gui, CL_GUITopLevelDescription());
+        CL_PushButton button1(&area);
+        button1.set_geometry(CL_Rect(100, 100, 200, 120));
+        button1.set_text("Okay!");
+
         resourceManager.loadFonts();
 
         CL_Slot slotQuit = appManager.getWindow().sig_window_close().connect(Application::onWindowClose);
@@ -39,6 +50,11 @@ int Application::main(const std::vector<CL_String> &args)
         {
             appManager.frameStarted();
             stateManager.update();
+
+            gui.exec(false);
+            gui.process_messages(0);
+            wm.draw_windows(gc);
+
             appManager.getWindow().flip(1);
             CL_KeepAlive::process(0);
             appManager.frameEnded();
@@ -67,5 +83,7 @@ void Application::onWindowClose()
 {
     appManager.setRunning(false);
 }
+
+void Application::doNothing() { }
 
 CL_ClanApplication app(&Application::main);

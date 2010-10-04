@@ -11,6 +11,7 @@
 #include "Core/ConfigManager.hpp"
 #include "Core/ResourceManager.hpp"
 #include "Core/StateManager.hpp"
+#include "Core/GuiManager.hpp"
 #include "World/States/MenuState.hpp"
 #include "Core/Utils.hpp"
 
@@ -24,6 +25,7 @@ class Application
         // Slots
         static void onInput(const CL_InputEvent &key, const CL_InputState &state);
         static void onWindowClose();
+        static void doNothing();
 };
 
 #endif /* _APPLICATION_HPP_ */

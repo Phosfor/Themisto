@@ -1,9 +1,9 @@
 #include "Core/GuiManager.hpp"
 
-/*void GuiManager::~GuiManager()
+GuiManager::~GuiManager()
 {
     delete mGuiManager;
-}*/
+}
 
 void GuiManager::setThemeName(const string &name)
 {
@@ -15,12 +15,12 @@ string GuiManager::getThemeName()
     return mThemeName;
 }
 
-CL_GUIManager *GuiManager::getHandle()
+CL_GUIManager GuiManager::getHandle()
 {
-    return mGuiManager;
+    return *mGuiManager;
 }
 
-/*void GuiManager::initGui(const string &theme)
+void GuiManager::initGui(CL_GUIWindowManagerTexture &wm, const string &theme)
 {
-    mGuiManager = new mGuiManager(theme);
-}*/
+    mGuiManager = new CL_GUIManager(wm, theme);
+}
