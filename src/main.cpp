@@ -25,8 +25,6 @@ int Application::main(const std::vector<CL_String> &args)
         CL_GraphicContext gc = appManager.getGraphic();
         CL_GUIWindowManagerTexture wm = guiManager.getWM();
 
-        wm.func_repaint().set(Application::doNothing);
-
         resourceManager.loadFonts();
 
         CL_Slot slotQuit = appManager.getWindow().sig_window_close().connect(Application::onWindowClose);
@@ -40,8 +38,7 @@ int Application::main(const std::vector<CL_String> &args)
             appManager.frameStarted();
             stateManager.update();
 
-            gui.exec(false);
-            gui.process_messages(0);
+            wm.process();
             wm.draw_windows(gc);
 
             appManager.getWindow().flip(1);
