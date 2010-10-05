@@ -23,13 +23,15 @@ class MenuState : public State
     CL_Slider *mWindSlider;
     CL_Slider *mDropSlider;
 
+    CL_Label *mWindLabel;
+
     CL_GraphicContext mGC;
     CL_Rect mGeom;
 
     void rainStateChanged()
     {
        worldManager.enableRain(mRainState->is_checked(), 150);
-       mWindSlider->set_enabled(mRainState->is_checked());
+       //mWindSlider->set_enabled(mRainState->is_checked());
     }
 
     void windPowerChanged()
@@ -51,7 +53,7 @@ class MenuState : public State
         mBackground = CL_Image(appManager.getGraphic(), "media/tree.png");
 
         mRainState = new CL_CheckBox(&guiManager.getWrapper());
-        mRainState->set_geometry(CL_RectPS(mGeom.get_width() - 150 - 5, 5, 150, 30));
+        mRainState->set_geometry(CL_RectPS(mGeom.get_width() - 150 - 40, 5, 150, 30));
         mRainState->set_text("Enable raining");
         mRainState->func_state_changed().set(this, &MenuState::rainStateChanged);
 
@@ -59,14 +61,18 @@ class MenuState : public State
         mWindSlider->set_horizontal(true);
         mWindSlider->set_position(0);
         mWindSlider->set_ranges(-10, 10, 2, 1);
-        mWindSlider->set_geometry(CL_RectPS(mGeom.get_width() - 180 - 5, 40, 180, 30));
+        mWindSlider->set_geometry(CL_RectPS(mGeom.get_width() - 180 - 5, 35, 180, 30));
         mWindSlider->func_value_changed().set(this, &MenuState::windPowerChanged);
+
+        mWindLabel = new CL_Label(&guiManager.getWrapper());
+        mWindLabel->set_text("wind:");
+        mWindLabel->set_geometry(CL_RectPS(mGeom.get_width()-180-100, 35, 180, 30));
 
         mDropSlider = new CL_Slider(&guiManager.getWrapper());
         mDropSlider->set_horizontal(true);
         mDropSlider->set_position(150);
         mDropSlider->set_ranges(1, 1000, 50, 50);
-        mDropSlider->set_geometry(CL_RectPS(mGeom.get_width() - 180 - 5, 75, 180, 30));
+        mDropSlider->set_geometry(CL_RectPS(mGeom.get_width() - 180 - 5, 70, 180, 30));
         mDropSlider->func_value_changed().set(this, &MenuState::dropNumChanged);
 
         /*mSome = new CL_PushButton(&guiManager.getWrapper());
@@ -87,12 +93,22 @@ class MenuState : public State
         delete mSome;
         delete mWindSlider;
         delete mDropSlider;
+        delete mWindLabel;
     }
 
     void update()
     {
         mGC.clear(CL_Colorf::gray);
-        mBackground.draw(mGC, 0, 0);
+        //mBackground.draw(mGC, 0, 0);
+
+        CL_Pointf pos1(mGeom.get_width()/2, 0);
+        CL_Pointf pos2(mGeom.get_width()/2, mGeom.get_height());
+
+        CL_Colorf color1(14/255.0f, 33/255.0f, 78/255.0f);
+        CL_Colorf color2(83/255.0f, 178/255.0f, 234/255.0f);
+
+        CL_Draw::gradient_fill(mGC, CL_Rectf(0, 0, mGeom.get_width(), mGeom.get_height()),
+                CL_Gradient(color1, color2));
 
         worldManager.update();
 
@@ -100,11 +116,11 @@ class MenuState : public State
         mStatFont->draw_text(appManager.getGraphic(), 10, 25,
                 CL_String(cl_format("world time: %1:%2:%3", time[0], time[1], time[2])), CL_Colorf::white);
         mStatFont->draw_text(appManager.getGraphic(), 10, 50,
-                CL_String(cl_format("elapsed: %1", floor(appManager.getElapsed()+0.5))), CL_Colorf::white);
+                CL_String(cl_format("elapsed: %1", int(floor(appManager.getElapsed()+0.5)))), CL_Colorf::white);
         mStatFont->draw_text(appManager.getGraphic(), 10, 75,
-                CL_String(cl_format("wind: %1", worldManager.getWindPower())), CL_Colorf::white);
+                CL_String(cl_format("wind: %1", int(worldManager.getWindPower()))), CL_Colorf::white);
         mStatFont->draw_text(appManager.getGraphic(), 10, 100,
-                CL_String(cl_format("max drops: %1", worldManager.getDropLimit())), CL_Colorf::white);
+                CL_String(cl_format("max drops: %1", int(worldManager.getDropLimit()))), CL_Colorf::white);
     }
 
     string type() { return "MenuState"; }
