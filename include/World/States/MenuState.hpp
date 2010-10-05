@@ -31,7 +31,8 @@ class MenuState : public State
     void rainStateChanged()
     {
        worldManager.enableRain(mRainState->is_checked(), 150);
-       //mWindSlider->set_enabled(mRainState->is_checked());
+       mWindSlider->set_enabled(mRainState->is_checked());
+       mDropSlider->set_enabled(mRainState->is_checked());
     }
 
     void windPowerChanged()
@@ -60,6 +61,7 @@ class MenuState : public State
         mWindSlider = new CL_Slider(&guiManager.getWrapper());
         mWindSlider->set_horizontal(true);
         mWindSlider->set_position(0);
+        mWindSlider->set_enabled(false);
         mWindSlider->set_ranges(-10, 10, 2, 1);
         mWindSlider->set_geometry(CL_RectPS(mGeom.get_width() - 180 - 5, 35, 180, 30));
         mWindSlider->func_value_changed().set(this, &MenuState::windPowerChanged);
@@ -70,6 +72,7 @@ class MenuState : public State
 
         mDropSlider = new CL_Slider(&guiManager.getWrapper());
         mDropSlider->set_horizontal(true);
+        mDropSlider->set_enabled(false);
         mDropSlider->set_position(150);
         mDropSlider->set_ranges(1, 1000, 50, 50);
         mDropSlider->set_geometry(CL_RectPS(mGeom.get_width() - 180 - 5, 70, 180, 30));
