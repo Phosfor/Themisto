@@ -33,8 +33,8 @@ void main(void)
         {
             gl_FragColor = sum*sum*0.0075 + texture2D(Texture0, TexCoord);
         }
-    }
-*/
+    }*/
+
 /////////////////////// BLOOM 2
 
     vec2 dx1   = vec2 ( 1.0 / 512.0, 0.0 );
@@ -44,13 +44,11 @@ void main(void)
                 texture2D ( Texture0, TexCoord.xy + dy1 ) +
                 texture2D ( Texture0, TexCoord.xy + dx1 + dy1 );
 
-    base *= 0.35;
+    base *= 0.45;
 
     if ( length ( base.rgb ) < 0.8 )
         base.rgb = vec3 ( 0.0 );
 
   gl_FragColor = base;
-
-
 
 }
