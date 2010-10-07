@@ -49,6 +49,7 @@ void main(void)
     if ( length ( base.rgb ) < 0.8 )
         base.rgb = vec3 ( 0.0 );
 
+  base.a = 0.4;
   gl_FragColor = base;
 
 }

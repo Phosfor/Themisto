@@ -20,8 +20,14 @@ using namespace boost::posix_time;
 // Check the location exists
 #define LOCATION(path) Utils::get_mutable_instance().checkLocation(path)
 
-/*TODO: Calculate for different resolutions */
-#define PixelsPerMeter 40.0
+// Game window resolution (height)
+#define ScreenResolutionY appManager.getGraphic().get_height()
+
+// Don't ask me where did I take this
+#define MagicKoef 19.2
+
+//#define PixelsPerMeter 40.0
+#define PixelsPerMeter (ScreenResolutionY / MagicKoef)
 
 // 40 pixels ~ 1 meter
 #define Meters2Pixels(meters) ((float)(meters)*PixelsPerMeter)

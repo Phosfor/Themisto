@@ -29,7 +29,7 @@ class MenuState : public State
     CL_Rect mGeom;
 
     // Shader sample
-    CL_ProgramObject mProgramBlurH;
+    /*CL_ProgramObject mProgramBlurH;
     CL_ProgramObject mProgramBlurV;
     CL_ProgramObject mProgramBloom;
     CL_Image mMoon;
@@ -41,7 +41,7 @@ class MenuState : public State
     CL_FrameBuffer mBloomBuf;
 
     CL_Texture mSceneTexture;
-    CL_FrameBuffer mSceneBuf;
+    CL_FrameBuffer mSceneBuf;*/
 
     void rainStateChanged()
     {
@@ -60,7 +60,7 @@ class MenuState : public State
         worldManager.setDropLimit(mDropSlider->get_position());
     }
 
-    CL_ProgramObject createBloomHandle()
+    /*CL_ProgramObject createBloomHandle()
     {
         CL_ProgramObject program = CL_ProgramObject::load(mGC,
                     "media/shaders/bloom/vertext.glsl",
@@ -100,9 +100,9 @@ class MenuState : public State
         if (!program.link())
             throw CL_Exception("Unable to link shader!");
         return program;
-    }
+    }*/
 
-    void renderMoon(CL_ProgramObject &program)
+    /*void renderMoon(CL_ProgramObject &program)
     {
         CL_Rectf rect(0.0f, 0.0f, (float)mGC.get_width(), (float)mGC.get_height());
         CL_Rectf texture_unit1_coords(0.0f, 0.0f, 1.0f, 1.0f);
@@ -134,7 +134,7 @@ class MenuState : public State
         mGC.set_program_object(program, cl_program_matrix_modelview_projection);
         mGC.draw_primitives(cl_triangles, 6, primarray);
         mGC.reset_program_object();
-    }
+    }*/
 
     void init()
     {
@@ -175,14 +175,14 @@ class MenuState : public State
         //mSome->func_clicked().set(this, &MenuState::rainStateChanged);
 
         worldManager.initWorld();
-        //worldManager.enableMoon(true, 0.2, 0.2);
+        worldManager.enableMoon(true);
         //worldManager.enableRain(true, 150);
         //worldManager.setWindPower(-5.0);
 
         // Shaders part is here
-        mMoon = CL_Image(mGC, "media/moon_small.png");
+        //mMoon = CL_Image(mGC, "media/moon_small.png");
 
-        mBlurTexture = CL_Texture(mGC, mGC.get_width(), mGC.get_height());
+        /*mBlurTexture = CL_Texture(mGC, mGC.get_width(), mGC.get_height());
         mBloomTexture = CL_Texture(mGC, mGC.get_width(), mGC.get_height());
         mSceneTexture = CL_Texture(mGC, mGC.get_width(), mGC.get_height());
 
@@ -196,7 +196,7 @@ class MenuState : public State
 
         mProgramBloom = createBloomHandle();
         mProgramBlurH = createBlurHandleH();
-        mProgramBlurV = createBlurHandleV();
+        mProgramBlurV = createBlurHandleV();*/
     }
 
     void shutdown()
@@ -211,7 +211,7 @@ class MenuState : public State
 
     void update()
     {
-        mGC.clear(CL_Colorf::gray);
+        //mGC.clear(CL_Colorf::gray);
         //mBackground.draw(mGC, 0, 0);
 
         CL_Pointf pos1(mGeom.get_width()/2, 0);
@@ -223,7 +223,7 @@ class MenuState : public State
         CL_Draw::gradient_fill(mGC, CL_Rectf(0, 0, mGeom.get_width(), mGeom.get_height()),
                 CL_Gradient(color1, color2));
 
-        // Draw simple moon
+        /*// Draw simple moon
         mMoon.draw(mGC, 200, 200);
 
         //////// Shaders passes
@@ -250,7 +250,7 @@ class MenuState : public State
         // Vertical Blur pass
         mGC.set_texture(0, mBlurTexture);
         renderMoon(mProgramBlurV);
-        mGC.reset_texture(0);
+        mGC.reset_texture(0);*/
 
         worldManager.update();
 

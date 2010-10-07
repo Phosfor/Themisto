@@ -6,7 +6,7 @@ void WorldManager::initWorld()
     memset(mWorldTime, 0, sizeof(mWorldTime));
     mNight = false;
 
-    mMoonHandle = new Moon("moon.png", 0.4, 0.4);
+    mMoonHandle = new Moon("moon_small2.png", 1, 1);
     mRainHandle = new Rain();
 
     mMoonEnabled = false;
