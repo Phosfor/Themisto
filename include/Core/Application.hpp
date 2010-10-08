@@ -6,6 +6,7 @@
 #include <ClanLib/gl.h>
 #include <ClanLib/application.h>
 #include <ClanLib/gui.h>
+#include <ClanLib/sound.h>
 
 #include "Core/LogManager.hpp"
 #include "Core/ConfigManager.hpp"

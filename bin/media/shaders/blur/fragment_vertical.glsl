@@ -3,6 +3,7 @@ varying vec2 TexCoord;
 
 void main (void)
 {
+
    vec2 tx  = TexCoord.xy;
    vec2 dx  = vec2 (0.000000,0.001953);
    vec2 sdx = dx;
@@ -24,6 +25,15 @@ void main (void)
    sdx += dx;
    sum += (texture2D ( Texture0, tx + sdx ) + texture2D ( Texture0, tx - sdx ) )* 0.047893; 
    sdx += dx;
+
+/*
+   if (texture2D(Texture0, TexCoord).a != 0.0f)
+   {
+      sum.a = 0.4;
+   }
+*/
+
    sum.a = 0.4;
+
    gl_FragColor = sum;
 }

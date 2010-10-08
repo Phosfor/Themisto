@@ -15,8 +15,8 @@ Moon::Moon(const string &imagePath, float _scaleX, float _scaleY)
     mMoonCenterY = mMoon.get_height()*_scaleY / 2;
 
     mGlobalTime = 0;
-    mRadius = Meters2Pixels(15);           // The orbit radius is about 600 pixels
-    mAngle = Deg2Rad(-85);   // Start Moon position (85 degrees)
+    mRadius = Meters2Pixels(15); // The orbit radius is about 600 pixels
+    mAngle = Deg2Rad(-85);       // Start Moon position (85 degrees)
 
     // Center (x;y) of the Moon orbit
     mCenterX = 0;
@@ -39,6 +39,12 @@ Moon::Moon(const string &imagePath, float _scaleX, float _scaleY)
     makeBloomHandle();
     makeBlurHandleH();
     makeBlurHandleV();
+
+    blend_mode.set_blend_function(
+        cl_blend_one_minus_src_color, cl_blend_dest_alpha,
+        cl_blend_src_color, cl_blend_one_minus_dest_color);
+    blend_mode.enable_blending(true);
+
 }
 
 void Moon::setScale(float _scaleX, float _scaleY)
@@ -62,35 +68,41 @@ void Moon::update()
 
     //////// Shaders passes
 
-    // Render moon to own buffer
+    // Render moon to own buffer -------------------------
     mGC.set_frame_buffer(mSceneBuf);
-    mGC.clear();
+    //mGC.clear(CL_Colorf::transparent);
+    mGC.clear(CL_Colorf::black);
     mMoon.draw(mGC, moonX, moonY);
-    mGC.pop_modelview();
     mGC.reset_frame_buffer();
 
-    // Bloom pass
+    // Bloom pass ---------------------------------------
     mGC.set_frame_buffer(mBloomBuf);
     mGC.set_texture(0, mSceneTexture);
     renderMoon(mProgramBloom);
     mGC.reset_texture(0);
     mGC.reset_frame_buffer();
 
-    // Horizontal Blur pass
+    // Horizontal Blur pass -----------------------------
     mGC.set_frame_buffer(mBlurBuf);
     mGC.set_texture(0, mBloomTexture);
     renderMoon(mProgramBlurH);
     mGC.reset_texture(0);
     mGC.reset_frame_buffer();
 
-    // Vertical Blur pass
+    // Vertical Blur pass -------------------------------
+    mGC.set_blend_mode(blend_mode);
+
     mGC.set_texture(0, mBlurTexture);
     renderMoon(mProgramBlurV);
     mGC.reset_texture(0);
 
+    mGC.reset_blend_mode();
+
+    /////// End of shader passes
+
     mGlobalTime += appManager.getElapsed();
 
-    // Increase angle each 200 ms
+    // Increase angle each 75 ms
     if (mGlobalTime >= 75)
     {
         mGlobalTime = 0;

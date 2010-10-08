@@ -7,6 +7,7 @@
 #include "Core/Utils.hpp"
 
 #include "Core/ApplicationManager.hpp"
+#include "Core/GuiManager.hpp"
 #include <boost/foreach.hpp>
 
 using namespace std;
@@ -46,7 +47,7 @@ class Moon
 
         void renderMoon(CL_ProgramObject &program);
 
-        /*TODO: Global game-time (day) management */
+        CL_BlendMode blend_mode;
 
     public:
         Moon(const string &imagePath = "moon.png", float _scaleX = 1, float _scaleY = 1);

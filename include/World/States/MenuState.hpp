@@ -223,35 +223,6 @@ class MenuState : public State
         CL_Draw::gradient_fill(mGC, CL_Rectf(0, 0, mGeom.get_width(), mGeom.get_height()),
                 CL_Gradient(color1, color2));
 
-        /*// Draw simple moon
-        mMoon.draw(mGC, 200, 200);
-
-        //////// Shaders passes
-
-        // Render moon to own buffer
-        mGC.set_frame_buffer(mSceneBuf);
-        mMoon.draw(mGC, 200, 200);
-        mGC.reset_frame_buffer();
-
-        // Bloom pass
-        mGC.set_frame_buffer(mBloomBuf);
-        mGC.set_texture(0, mSceneTexture);
-        renderMoon(mProgramBloom);
-        mGC.reset_texture(0);
-        mGC.reset_frame_buffer();
-
-        // Horizontal Blur pass
-        mGC.set_frame_buffer(mBlurBuf);
-        mGC.set_texture(0, mBloomTexture);
-        renderMoon(mProgramBlurH);
-        mGC.reset_texture(0);
-        mGC.reset_frame_buffer();
-
-        // Vertical Blur pass
-        mGC.set_texture(0, mBlurTexture);
-        renderMoon(mProgramBlurV);
-        mGC.reset_texture(0);*/
-
         worldManager.update();
 
         int *time = worldManager.getWorldTime();

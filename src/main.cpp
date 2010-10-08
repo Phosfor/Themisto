@@ -9,6 +9,10 @@ int Application::main(const std::vector<CL_String> &args)
     LOG("Display handle is initialized");
     CL_SetupGL glHandle;
     LOG("GL handle is initialized");
+    CL_SetupSound soundHandle;
+    LOG("Sound handle is initialized");
+    //CL_SetupVorbis vorbisHandle;
+    //LOG("Vorbis module is initialized");
 
     try
     {

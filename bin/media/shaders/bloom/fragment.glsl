@@ -36,7 +36,10 @@ void main(void)
     }*/
 
 /////////////////////// BLOOM 2
-
+   if (texture2D(Texture0, TexCoord).a == 0.0f)
+   {
+      discard;
+   }
     vec2 dx1   = vec2 ( 1.0 / 512.0, 0.0 );
     vec2 dy1   = vec2 ( 0.0, 1.0 / 512.0 );
     vec4 base = texture2D ( Texture0, TexCoord.xy ) +
@@ -44,12 +47,20 @@ void main(void)
                 texture2D ( Texture0, TexCoord.xy + dy1 ) +
                 texture2D ( Texture0, TexCoord.xy + dx1 + dy1 );
 
-    base *= 0.45;
+    base *= 0.20;
 
     if ( length ( base.rgb ) < 0.8 )
         base.rgb = vec3 ( 0.0 );
 
-  base.a = 0.4;
-  gl_FragColor = base;
 
+/*
+   if (texture2D(Texture0, TexCoord).a != 0.0f)
+   {
+      base.a = 0.4;
+   }
+*/
+
+  base.a = 0.8;
+
+  gl_FragColor = base;
 }
