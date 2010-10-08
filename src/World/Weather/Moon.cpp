@@ -64,7 +64,9 @@ void Moon::update()
 
     // Render moon to own buffer
     mGC.set_frame_buffer(mSceneBuf);
+    mGC.clear();
     mMoon.draw(mGC, moonX, moonY);
+    mGC.pop_modelview();
     mGC.reset_frame_buffer();
 
     // Bloom pass
