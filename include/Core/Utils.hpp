@@ -26,6 +26,9 @@ using namespace boost::posix_time;
 // Don't ask me where did I take this
 #define MagicKoef 19.2
 
+// 1s = 3s (real seconds = game seconds)
+#define GameTimeKoef 3
+
 //#define PixelsPerMeter 40.0
 #define PixelsPerMeter (ScreenResolutionY / MagicKoef)
 

@@ -5,10 +5,12 @@ varying vec2 TexCoord;
 
 void main(void)
 {
+/*
    if (texture2D(Texture0, TexCoord).a == 0.0f)
    {
       discard;
    }
+*/
     vec2 dx1   = vec2 ( 1.0 / 512.0, 0.0 );
     vec2 dy1   = vec2 ( 0.0, 1.0 / 512.0 );
     vec4 base = texture2D ( Texture0, TexCoord.xy ) +

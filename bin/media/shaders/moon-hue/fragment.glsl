@@ -9,7 +9,7 @@ void main(void)
 //   rgba.r += ColorOffset;
 //   rgba.r += 0.2f;
 
-   //rgba.a = max(rgba.a, 0.8f);
+   rgba.a = max(rgba.a, 0.8f);
    rgba.rgb *= rgba.a;
 
    gl_FragColor = rgba;

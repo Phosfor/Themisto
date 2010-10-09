@@ -31,7 +31,7 @@ Stars::Stars(int maxStars)
         y[i] = rand() % mHeight;
         float brightness = (float)(rand() % 10 + 1)/10.0f;
 
-        float g = 1.0f - (float)(rand()%3+1)/10.0f;
+        float g = 1.0f - (float)(rand()%4+1)/10.0f;
         float b = 1.0f - Randf(0.5f);
 
         color[i] = CL_Colorf(1.0f, g, b, brightness);

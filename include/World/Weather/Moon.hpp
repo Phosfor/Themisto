@@ -32,31 +32,6 @@ class Moon
         float mBloomSize;
 
         CL_GraphicContext mGC;
-        CL_BlendMode blend_mode;
-
-        CL_ProgramObject mProgramBlurH;
-        CL_ProgramObject mProgramBlurV;
-        CL_ProgramObject mProgramBloom;
-        CL_ProgramObject mProgramHue;
-
-        CL_Texture mBlurTexture;
-        CL_FrameBuffer mBlurBuf;
-
-        CL_Texture mBloomTexture;
-        CL_FrameBuffer mBloomBuf;
-
-        CL_Texture mSceneTexture;
-        CL_FrameBuffer mSceneBuf;
-
-        CL_Texture mHueTexture;
-        CL_FrameBuffer mHueBuf;
-
-        void makeBloomHandle();
-        void makeBlurHandleH();
-        void makeBlurHandleV();
-        void makeHueHandle();
-
-        void renderMoon(CL_ProgramObject &program, bool bloomPass = false);
 
     public:
         Moon(const string &imagePath = "moon.png", float _scaleX = 1, float _scaleY = 1);

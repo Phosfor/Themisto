@@ -6,7 +6,8 @@ void WorldManager::initWorld()
     memset(mWorldTime, 0, sizeof(mWorldTime));
     mNight = false;
 
-    mMoonHandle = new Moon("moon_small2.png", 1, 1);
+    //mMoonHandle = new Moon("moon_small2.png", 1, 1);
+    mMoonHandle = new Moon("SkyX_Moon.png", 1, 1);
     mRainHandle = new Rain();
     mStarsHandle = new Stars();
 
@@ -73,7 +74,7 @@ void WorldManager::update()
     if (mRainEnabled) mRainHandle->update(mWindPower);
 
     mWorldTime[2] += appManager.getElapsed();
-    if (mWorldTime[2] >= 60)
+    if (mWorldTime[2] >= 194.0*3)
     {
         mWorldTime[2] = 0;
         mWorldTime[1]++;

@@ -33,7 +33,7 @@ class Stars
 
     public:
         ~Stars();
-        Stars(int maxStars = 400);
+        Stars(int maxStars = 200);
         void setStarsLimit(int maxStars);
         int getStarsLimit();
         void update();
