@@ -8,15 +8,18 @@ void WorldManager::initWorld()
 
     mMoonHandle = new Moon("moon_small2.png", 1, 1);
     mRainHandle = new Rain();
+    mStarsHandle = new Stars();
 
     mMoonEnabled = false;
     mRainEnabled = false;
+    mStarsEnabled = false;
 }
 
 WorldManager::~WorldManager()
 {
     delete mRainHandle;
     delete mMoonHandle;
+    delete mStarsHandle;
 }
 
 void WorldManager::setWindPower(float _power)
@@ -52,6 +55,11 @@ void WorldManager::enableRain(bool state, int _maxDrops)
     mRainEnabled = state;
 }
 
+void WorldManager::enableStars(bool state)
+{
+    mStarsEnabled = state;
+}
+
 void WorldManager::enableMoon(bool state, float _scaleX, float _scaleY)
 {
     mMoonHandle->setScale(_scaleX, _scaleY);
@@ -60,6 +68,7 @@ void WorldManager::enableMoon(bool state, float _scaleX, float _scaleY)
 
 void WorldManager::update()
 {
+    if (mStarsEnabled) mStarsHandle->update();
     if (mMoonEnabled) mMoonHandle->update();
     if (mRainEnabled) mRainHandle->update(mWindPower);
 

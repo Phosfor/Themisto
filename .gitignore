@@ -3,3 +3,6 @@ build/
 .*ject
 bin/Themisto
 gmon.out
+.dep.inc
+bin/*.log
+bin/Themisto

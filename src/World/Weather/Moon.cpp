@@ -11,6 +11,7 @@ Moon::Moon(const string &imagePath, float _scaleX, float _scaleY)
     mB = 1.0f;
     mScaleX = 1.0f;
     mScaleY = 1.0f;
+    mBloomSize = 0.19f;
 
     // Apply image scaling and linear filtrating (to make sprite smooth)
     mMoon.set_scale(_scaleX, _scaleY);
@@ -102,7 +103,7 @@ void Moon::update()
     // Bloom pass ---------------------------------------
     mGC.set_frame_buffer(mBloomBuf);
     mGC.set_texture(0, mSceneTexture);
-    renderMoon(mProgramBloom);
+    renderMoon(mProgramBloom, true);
     mGC.reset_texture(0);
     mGC.reset_frame_buffer();
 
@@ -123,7 +124,7 @@ void Moon::update()
     // Color pass ---------------------------------------
     mGC.set_blend_mode(blend_mode);
     mGC.set_texture(0, mHueTexture);
-    renderMoon(mProgramHue, true);
+    renderMoon(mProgramHue);
     mGC.reset_texture(0);
     mGC.reset_blend_mode();
 
@@ -150,7 +151,7 @@ void Moon::makeBloomHandle()
     mProgramBloom.bind_attribute_location(1, "TextCoord0");
 
     if (!mProgramBloom.link())
-        throw CL_Exception("Unable to link shader!");
+        throw CL_Exception("Unable to link bloom shader! (Moon)");
 }
 
 void Moon::makeBlurHandleH()
@@ -192,7 +193,7 @@ void Moon::makeHueHandle()
         throw CL_Exception("Unable to link hue shader!");
 }
 
-void Moon::renderMoon(CL_ProgramObject &program, bool huePass)
+void Moon::renderMoon(CL_ProgramObject &program, bool bloomPass)
 {
     CL_Rectf rect(0.0f, 0.0f, (float)mGC.get_width(), (float)mGC.get_height());
     CL_Rectf texture_unit1_coords(0.0f, 0.0f, 1.0f, 1.0f);
@@ -220,6 +221,8 @@ void Moon::renderMoon(CL_ProgramObject &program, bool huePass)
     CL_PrimitivesArray primarray(mGC);
     primarray.set_attributes(0, positions);
     primarray.set_attributes(1, tex1_coords);
+
+    if (bloomPass) mProgramBloom.set_uniform1f("BloomSize", mBloomSize);
 
     mGC.set_program_object(program, cl_program_matrix_modelview_projection);
     mGC.draw_primitives(cl_triangles, 6, primarray);

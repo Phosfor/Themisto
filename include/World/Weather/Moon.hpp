@@ -29,6 +29,7 @@ class Moon
         float mGlobalTime;    // Time for one step Moon animation
         float mAngle;         // The angle where Moon is currently located
         float mColorOffset;
+        float mBloomSize;
 
         CL_GraphicContext mGC;
         CL_BlendMode blend_mode;
@@ -55,7 +56,7 @@ class Moon
         void makeBlurHandleV();
         void makeHueHandle();
 
-        void renderMoon(CL_ProgramObject &program, bool huePass = false);
+        void renderMoon(CL_ProgramObject &program, bool bloomPass = false);
 
     public:
         Moon(const string &imagePath = "moon.png", float _scaleX = 1, float _scaleY = 1);
