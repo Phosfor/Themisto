@@ -45,6 +45,9 @@ using namespace boost::posix_time;
 // The speed of free falling
 #define G Meters2Pixels(9.81)
 
+// Find random number between [lower; 1.0]
+#define Randf(lower) ((float)(rand()%10 + (float)lower)/10.0f)
+
 #define utils (Utils::get_mutable_instance())
 #define utilsConst (Utils::get_const_instance())
 
