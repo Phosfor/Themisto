@@ -77,15 +77,15 @@ void Moon::update()
     float moonY = y_local + mCenterY - mMoonCenterY;
 
     // Draw simple moon
-    if (mAngle > Deg2Rad(-45))
+    if (mAngle > Deg2Rad(-30))
     {
         if (mG > 0.85f ) mG -= 0.0002;
         if (mB > 0.75f) mB -= 0.0004;
-        if (mScaleX < 1.2) mScaleX += 0.00015;
-        if (mScaleY < 1.1) mScaleY += 0.0001;
+        if (mScaleX < 1.2) mScaleX += 0.00018;
+        if (mScaleY < 1.05) mScaleY += 0.0001;
     }
 
-    setScale(mScaleX, mScaleY);
+    mMoon.set_scale(mScaleX, mScaleY);
     mMoon.set_color(CL_Colorf(1.0f, mG, mB));
     mMoon.draw(mGC, moonX, moonY);
     mMoon.set_color(CL_Colorf(1.0f, 1.0f, 1.0f));
@@ -132,14 +132,10 @@ void Moon::update()
     mGlobalTime += appManager.getElapsed();
 
     // Increase angle each 75 ms
-    if (mGlobalTime >= 75)
+    if (mGlobalTime >= 5)
     {
         mGlobalTime = 0;
-        if (mAngle <= Deg2Rad(0))
-        {
-            mAngle+=0.0005;
-            mColorOffset = fabs(0.5*mAngle/90);
-        }
+        if (mAngle <= Deg2Rad(0)) mAngle+=0.0005;
         /*TODO: Do something when moon is hided */
     }
 }
@@ -190,8 +186,7 @@ void Moon::makeHueHandle()
                 "media/shaders/moon-hue/fragment.glsl");
 
     mProgramHue.bind_attribute_location(0, "Position");
-    mProgramHue.bind_attribute_location(1, "ColorOffset0");
-    mProgramHue.bind_attribute_location(2, "TextCoord0");
+    mProgramHue.bind_attribute_location(1, "TextCoord0");
 
     if (!mProgramHue.link())
         throw CL_Exception("Unable to link hue shader!");
@@ -224,17 +219,7 @@ void Moon::renderMoon(CL_ProgramObject &program, bool huePass)
 
     CL_PrimitivesArray primarray(mGC);
     primarray.set_attributes(0, positions);
-
-    if (huePass)
-    {
-        CL_Vec1f *offset = new CL_Vec1f(mColorOffset);
-        primarray.set_attributes(1, offset);
-        primarray.set_attributes(2, tex1_coords);
-    }
-    else
-    {
-        primarray.set_attributes(1, tex1_coords);
-    }
+    primarray.set_attributes(1, tex1_coords);
 
     mGC.set_program_object(program, cl_program_matrix_modelview_projection);
     mGC.draw_primitives(cl_triangles, 6, primarray);

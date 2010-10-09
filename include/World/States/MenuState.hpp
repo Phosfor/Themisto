@@ -51,7 +51,7 @@ class MenuState : public State
         mGeom = appManager.getWindow().get_geometry();
 
         mStatFont = new CL_Font(appManager.getGraphic(), "Ubuntu", 30);
-        mBackground = CL_Image(appManager.getGraphic(), "media/tree.png");
+        mBackground = CL_Image(appManager.getGraphic(), "media/ground.png");
 
         mRainState = new CL_CheckBox(&guiManager.getWrapper());
         mRainState->set_geometry(CL_RectPS(mGeom.get_width() - 150 - 40, 5, 150, 30));
@@ -102,7 +102,6 @@ class MenuState : public State
     void update()
     {
         //mGC.clear(CL_Colorf::gray);
-        //mBackground.draw(mGC, 0, 0);
 
         CL_Pointf pos1(mGeom.get_width()/2, 0);
         CL_Pointf pos2(mGeom.get_width()/2, mGeom.get_height());
@@ -115,6 +114,8 @@ class MenuState : public State
                 CL_Gradient(color1, color2));
 
         worldManager.update();
+
+        mBackground.draw(mGC, 0, mGC.get_height()-mBackground.get_height());
 
         int *time = worldManager.getWorldTime();
         mStatFont->draw_text(appManager.getGraphic(), 10, 25,

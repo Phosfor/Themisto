@@ -1,5 +1,5 @@
 uniform sampler2D Texture0;
-varying float ColorOffset;
+//varying float ColorOffset;
 varying vec2 TexCoord;
 
 void main(void)
