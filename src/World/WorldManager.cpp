@@ -2,9 +2,10 @@
 
 void WorldManager::initWorld()
 {
-    mWindPower = 0.0;
+    mWindPower = 0.0f;
     memset(mWorldTime, 0, sizeof(mWorldTime));
     mNight = false;
+    mTotalSec = 0.0f;
 
     //mMoonHandle = new Moon("moon_small2.png", 1, 1);
     mMoonHandle = new Moon("SkyX_Moon.png", 1, 1);
@@ -73,8 +74,10 @@ void WorldManager::update()
     if (mMoonEnabled) mMoonHandle->update();
     if (mRainEnabled) mRainHandle->update(mWindPower);
 
-    mWorldTime[2] += appManager.getElapsed();
-    if (mWorldTime[2] >= 194.0*3)
+    float gameSeconds = (appManager.getElapsed() * 194)/1000.0f;
+    mTotalSec += gameSeconds;
+    mWorldTime[2] += gameSeconds;
+    if (mWorldTime[2] >= 60)
     {
         mWorldTime[2] = 0;
         mWorldTime[1]++;
@@ -83,6 +86,11 @@ void WorldManager::update()
         {
             mWorldTime[1] = 0;
             mWorldTime[0]++;
+
+            if (mWorldTime[0] >= 24)
+            {
+                mWorldTime[0] = mWorldTime[1] = mWorldTime[2] = mTotalSec = 0;
+            }
         }
     }
 }

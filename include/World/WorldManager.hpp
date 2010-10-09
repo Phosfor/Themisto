@@ -29,6 +29,7 @@ class WorldManager : public boost::serialization::singleton<WorldManager>
 
         bool mNight;
         int mWorldTime[3]; // 0 - hours; 1 - minutes; 2 - seconds
+        float mTotalSec;
 
         Rain *mRainHandle;
         Moon *mMoonHandle;
