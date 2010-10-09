@@ -96,6 +96,12 @@ void Stars::update()
             mShowed = true;
             mProgramBloom.validate();
             cout << "Info log: " << mProgramBloom.get_info_log().c_str() << "\n\n";
+
+            vector<CL_ShaderObject> temp = mProgramBloom.get_shaders();
+            for (int i=0; i < temp.size(); i++)
+            {
+                cout << "Info log for shader object #" << i << " : " << temp[i].get_info_log().c_str() << "\n";
+            }
         }
     }
     mGC.reset_frame_buffer();
