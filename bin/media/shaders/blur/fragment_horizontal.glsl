@@ -29,7 +29,7 @@ void main(void)
       sum.a = 0.4;
    }
 */
-   sum.a = 0.7;
+//   sum.a = 0.9;
 
    gl_FragColor = sum;
 }

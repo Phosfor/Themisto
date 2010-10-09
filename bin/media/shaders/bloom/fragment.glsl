@@ -47,7 +47,7 @@ void main(void)
                 texture2D ( Texture0, TexCoord.xy + dy1 ) +
                 texture2D ( Texture0, TexCoord.xy + dx1 + dy1 );
 
-    base *= 0.20;
+    base *= 0.19;
 
     if ( length ( base.rgb ) < 0.8 )
         base.rgb = vec3 ( 0.0 );
@@ -60,7 +60,7 @@ void main(void)
    }
 */
 
-  base.a = 0.8;
+//  base.a = 0.8;
 
   gl_FragColor = base;
 }

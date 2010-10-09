@@ -1,7 +1,7 @@
 uniform sampler2D Texture0;
 varying vec2 TexCoord;
 
-#define	HALF_SIZE 3.0
+#define	HALF_SIZE 2.0
 
 void main (void)
 {
@@ -15,5 +15,7 @@ void main (void)
       tx  += dx;
    }
 
-   gl_FragColor = clamp ( sum / (2.0*HALF_SIZE+1.0), 0.0, 10000.0 );
+   vec4 color = clamp ( sum / (2.0*HALF_SIZE+1.0), 0.0, 10000.0 );
+   color.a = 0.8f;
+   gl_FragColor = color;
 }

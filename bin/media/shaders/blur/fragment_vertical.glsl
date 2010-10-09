@@ -1,4 +1,5 @@
 uniform sampler2D Texture0;
+//varying float HueOffset;
 varying vec2 TexCoord;
 
 void main (void)
@@ -33,7 +34,7 @@ void main (void)
    }
 */
 
-   sum.a = 0.4;
+//   sum.a = 0.9;
 
    gl_FragColor = sum;
 }
