@@ -1,41 +1,10 @@
 uniform sampler2D Texture0;
+uniform float BloomSize;
+
 varying vec2 TexCoord;
 
 void main(void)
 {
-   //vec4 rgba = texture2D(Texture0, TexCoord);
-   //gl_FragColor = rgba;
-
-/////////////////////////// Bloom
-/*
-   vec4 sum = vec4(0);
-   int j;
-   int i;
-
-   for( i= -4 ;i < 4; i++)
-   {
-        for (j = -3; j < 3; j++)
-        {
-            sum += texture2D(Texture0, TexCoord + vec2(j, i)*0.004) * 0.25;
-        }
-   }
-       if (texture2D(Texture0, TexCoord).r < 0.3)
-    {
-       gl_FragColor = sum*sum*0.012 + texture2D(Texture0, TexCoord);
-    }
-    else
-    {
-        if (texture2D(Texture0, TexCoord).r < 0.5)
-        {
-            gl_FragColor = sum*sum*0.009 + texture2D(Texture0, TexCoord);
-        }
-        else
-        {
-            gl_FragColor = sum*sum*0.0075 + texture2D(Texture0, TexCoord);
-        }
-    }*/
-
-/////////////////////// BLOOM 2
    if (texture2D(Texture0, TexCoord).a == 0.0f)
    {
       discard;
@@ -47,20 +16,11 @@ void main(void)
                 texture2D ( Texture0, TexCoord.xy + dy1 ) +
                 texture2D ( Texture0, TexCoord.xy + dx1 + dy1 );
 
-    base *= 0.19;
+//base *= 0.19;
+    base *= BloomSize;
 
     if ( length ( base.rgb ) < 0.8 )
         base.rgb = vec3 ( 0.0 );
 
-
-/*
-   if (texture2D(Texture0, TexCoord).a != 0.0f)
-   {
-      base.a = 0.4;
-   }
-*/
-
-//  base.a = 0.8;
-
-  gl_FragColor = base;
+    gl_FragColor = base;
 }
