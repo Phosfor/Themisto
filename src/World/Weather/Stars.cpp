@@ -42,7 +42,7 @@ Stars::Stars(int maxStars)
     mStarsBuf.attach_color_buffer(0, mStarsTexture);
 
     makeBloomHandle();
-    mBloomSize = 0.0f;
+    mBloomSize = 0.03f;
     mTimer = 0.0f;
     mIncrease = true;
 
@@ -85,6 +85,7 @@ void Stars::update()
     for (unsigned int i=0; i < mMaxStars; i++)
     {
         //CL_Draw::point(mGC, x[i], y[i], color[i]);
+        if (rand() % 20 == 0) continue;
         CL_Draw::circle(mGC, x[i], y[i], 1.5, color[i]);
     }
     mGC.reset_frame_buffer();
@@ -97,9 +98,9 @@ void Stars::update()
     mGC.reset_blend_mode();
 
     mTimer += appManager.getElapsed();
-    if (mTimer >= 75 && mIncrease)
+    if (mTimer >= 5 && mIncrease)
     {
-        mBloomSize += 0.001f;
+        mBloomSize += 0.0001f;
         mTimer = 0;
         if (mBloomSize >= 0.20f) mIncrease = false;
     }
