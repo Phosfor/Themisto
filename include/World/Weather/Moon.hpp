@@ -30,13 +30,14 @@ class Moon
         float mAngle;         // The angle where Moon is currently located
         float mColorOffset;
         float mBloomSize;
+        bool mRenderMoon;
 
         CL_GraphicContext mGC;
 
     public:
         Moon(const string &imagePath = "moon.png", float _scaleX = 1, float _scaleY = 1);
         void setScale(float _scaleX, float _scaleY);
-        void update();
+        void update(int hours);
 
 };
 

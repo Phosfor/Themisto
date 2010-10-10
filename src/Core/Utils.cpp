@@ -12,12 +12,14 @@ string Utils::getMediaFolder()
 
 ptime Utils::getCurrentTime() const
 {
-    return microsec_clock::local_time();
+    using namespace boost;
+    return posix_time::microsec_clock::local_time();
 }
 
 string Utils::checkLocation(const string &path)
 {
-    if (!boost::filesystem::exists(path))
+    using namespace boost;
+    if (!filesystem::exists(path))
     {
         LOG(FORMAT("The path `%1%` could be invalid!", path));
     }
@@ -27,6 +29,9 @@ string Utils::checkLocation(const string &path)
 
 string Utils::getTimeDifference()
 {
+    using namespace boost;
+    using namespace boost::posix_time;
+
     // If we don't call writeTimestamp before this function
     if (mTimeStamp.is_not_a_date_time()) LOG("You are trying to get time difference but you have to call writeTimestamp first!");
 

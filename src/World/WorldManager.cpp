@@ -70,11 +70,8 @@ void WorldManager::enableMoon(bool state, float _scaleX, float _scaleY)
 
 void WorldManager::update()
 {
-    if (mStarsEnabled) mStarsHandle->update();
-    if (mMoonEnabled) mMoonHandle->update();
-    if (mRainEnabled) mRainHandle->update(mWindPower);
-
-    float gameSeconds = (appManager.getElapsed() * 194)/1000.0f;
+    float gameSeconds = GameSeconds(appManager.getElapsed());
+    //float gameSeconds = (appManager.getElapsed() * TimeKoef)/1000.0f;
     mTotalSec += gameSeconds;
     mWorldTime[2] += gameSeconds;
     if (mWorldTime[2] >= 60)
@@ -93,6 +90,10 @@ void WorldManager::update()
             }
         }
     }
+
+    if (mStarsEnabled) mStarsHandle->update();
+    if (mMoonEnabled) mMoonHandle->update(mWorldTime[2]);
+    if (mRainEnabled) mRainHandle->update(mWindPower);
 }
 
 float WorldManager::getDropLimit()

@@ -20,9 +20,6 @@ class Stars
         float mTimer;
         bool mIncrease;
 
-        // TODO: Remove
-        bool mShowed;
-
         CL_GraphicContext mGC;
         CL_BlendMode blend_mode;
         CL_ProgramObject mProgramBloom;

@@ -60,7 +60,7 @@ Stars::Stars(int maxStars)
     mBloomSlider->func_value_changed().set(this, &Stars::bloomChanged);
 
     // TODO: Remove
-    mShowed = false;
+    //mShowed = false;
 }
 
 void Stars::bloomChanged()
@@ -88,21 +88,8 @@ void Stars::update()
     for (unsigned int i=0; i < mMaxStars; i++)
     {
         //CL_Draw::point(mGC, x[i], y[i], color[i]);
-        if (rand() % 70 == 0) continue;
+        if (rand() % 60 == 0) continue;
         CL_Draw::circle(mGC, x[i], y[i], 1, color[i]);
-
-        if (i > 50 && !mShowed)
-        {
-            mShowed = true;
-            mProgramBloom.validate();
-            cout << "Info log: " << mProgramBloom.get_info_log().c_str() << "\n\n";
-
-            vector<CL_ShaderObject> temp = mProgramBloom.get_shaders();
-            for (int i=0; i < temp.size(); i++)
-            {
-                cout << "Info log for shader object #" << i << " : " << temp[i].get_info_log().c_str() << "\n";
-            }
-        }
     }
     mGC.reset_frame_buffer();
 
