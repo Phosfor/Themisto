@@ -87,7 +87,7 @@ class MenuState : public State
         worldManager.enableSky(true);
         worldManager.enableMoon(true);
         worldManager.enableStars(true);
-        worldManager.enableRain(true, 100);
+        //worldManager.enableRain(true, 100);
         worldManager.setWindPower(-2.0);
     }
 
@@ -116,6 +116,8 @@ class MenuState : public State
                 CL_String(cl_format("wind: %1", int(worldManager.getWindPower()))), CL_Colorf::white);
         mStatFont->draw_text(appManager.getGraphic(), 10, 100,
                 CL_String(cl_format("max drops: %1", int(worldManager.getDropLimit()))), CL_Colorf::white);
+        mStatFont->draw_text(appManager.getGraphic(), 10, 125,
+                CL_String(cl_format("moon angle: %1", int(worldManager.getMoonAngle()))), CL_Colorf::white);
     }
 
     string type() { return "MenuState"; }

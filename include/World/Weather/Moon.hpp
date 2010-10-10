@@ -27,16 +27,14 @@ class Moon
         float mAngle;         // The angle where Moon is currently located
 
         bool mRenderMoon;
-        bool mNearEscaping; // True when moon is going out of the screen
 
         CL_GraphicContext mGC;
 
     public:
         Moon(const string &imagePath = "moon.png", float _scaleX = 1, float _scaleY = 1);
         void setScale(float _scaleX, float _scaleY);
-        bool nearEscape();
-        void setNearEscape(bool state);
-        void update(int hours);
+        float getMoonAngle();
+        void update(int *time);
 };
 
 #endif /* _WEATHER_MOON_HPP_ */

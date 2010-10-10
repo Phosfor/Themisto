@@ -12,7 +12,10 @@ class Sky
         CL_Colorf color1;
         CL_Colorf color2;
 
-        bool mAtmosphereScattering;
+        int r1, g1, b1; // Used as const for lower sky-gradient
+        int r2, g2, b2; // Atmosphere scattering
+        float t;
+
         bool mNight;
 
         CL_GraphicContext mGC;
@@ -21,7 +24,7 @@ class Sky
     public:
         Sky(CL_Colorf &first = CL_Colorf::transparent,
                 CL_Colorf &second = CL_Colorf::transparent);
-        void update();
+        void update(float hours);
 };
 
 #endif /* _WEATHER_SKY_HPP_ */

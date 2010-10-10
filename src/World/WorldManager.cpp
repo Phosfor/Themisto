@@ -84,12 +84,12 @@ void WorldManager::update()
     mWorldTime[2] += gameSeconds;
     if (mWorldTime[2] >= 60)
     {
-        mWorldTime[2] = 0;
+        mWorldTime[2] -= 60;
         mWorldTime[1]++;
 
         if (mWorldTime[1] >= 60)
         {
-            mWorldTime[1] = 0;
+            mWorldTime[1] -= 60;
             mWorldTime[0]++;
 
             if (mWorldTime[0] >= 24)
@@ -99,9 +99,9 @@ void WorldManager::update()
         }
     }
 
-    if (mSkyEnabled) mSkyHandle->update();
+    if (mSkyEnabled) mSkyHandle->update(mTotalSec/60.0/60.0);
     if (mStarsEnabled) mStarsHandle->update();
-    if (mMoonEnabled) mMoonHandle->update(mWorldTime[2]);
+    if (mMoonEnabled) mMoonHandle->update(mWorldTime);
     if (mRainEnabled) mRainHandle->update(mWindPower);
 }
 
@@ -113,4 +113,9 @@ float WorldManager::getDropLimit()
 void WorldManager::setDropLimit(float maxDrops)
 {
     mRainHandle->setDropLimit(maxDrops);
+}
+
+float WorldManager::getMoonAngle()
+{
+    return mMoonHandle->getMoonAngle();
 }
