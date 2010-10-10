@@ -9,6 +9,7 @@
 #include "World/Weather/Rain.hpp"
 #include "World/Weather/Moon.hpp"
 #include "World/Weather/Stars.hpp"
+#include "World/Weather/Sky.hpp"
 
 #include <boost/serialization/singleton.hpp>
 
@@ -34,10 +35,12 @@ class WorldManager : public boost::serialization::singleton<WorldManager>
         Rain *mRainHandle;
         Moon *mMoonHandle;
         Stars *mStarsHandle;
+        Sky *mSkyHandle;
 
         bool mRainEnabled;
         bool mMoonEnabled;
         bool mStarsEnabled;
+        bool mSkyEnabled;
 
     public:
         void initWorld();
@@ -54,6 +57,7 @@ class WorldManager : public boost::serialization::singleton<WorldManager>
         void enableRain(bool state, int _maxDrops = 150);
         void enableMoon(bool state, float _scaleX = 1, float _scaleY = 1);
         void enableStars(bool state);
+        void enableSky(bool state);
 
         int *getWorldTime();
         bool isNight();

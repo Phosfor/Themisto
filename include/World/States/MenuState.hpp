@@ -66,9 +66,9 @@ class MenuState : public State
         mWindSlider->set_geometry(CL_RectPS(mGeom.get_width() - 180 - 5, 35, 180, 30));
         mWindSlider->func_value_changed().set(this, &MenuState::windPowerChanged);
 
-        mWindLabel = new CL_Label(&guiManager.getWrapper());
+        /*mWindLabel = new CL_Label(&guiManager.getWrapper());
         mWindLabel->set_text("wind:");
-        mWindLabel->set_geometry(CL_RectPS(mGeom.get_width()-180-100, 35, 180, 30));
+        mWindLabel->set_geometry(CL_RectPS(mGeom.get_width()-180-100, 35, 180, 30));*/
 
         mDropSlider = new CL_Slider(&guiManager.getWrapper());
         mDropSlider->set_horizontal(true);
@@ -84,10 +84,11 @@ class MenuState : public State
         //mSome->func_clicked().set(this, &MenuState::rainStateChanged);
 
         worldManager.initWorld();
+        worldManager.enableSky(true);
         worldManager.enableMoon(true);
         worldManager.enableStars(true);
-        //worldManager.enableRain(true, 150);
-        //worldManager.setWindPower(-5.0);
+        worldManager.enableRain(true, 100);
+        worldManager.setWindPower(-2.0);
     }
 
     void shutdown()
@@ -97,25 +98,13 @@ class MenuState : public State
         delete mSome;
         delete mWindSlider;
         delete mDropSlider;
-        delete mWindLabel;
+        //delete mWindLabel;
     }
 
     void update()
     {
-        //mGC.clear(CL_Colorf::gray);
-
-        CL_Pointf pos1(mGeom.get_width()/2, 0);
-        CL_Pointf pos2(mGeom.get_width()/2, mGeom.get_height());
-
-        //CL_Colorf color1(14/255.0f, 33/255.0f, 78/255.0f);
-        CL_Colorf color1(25/255.0f, 60/255.0f, 141/255.0f);
-        CL_Colorf color2(83/255.0f, 178/255.0f, 234/255.0f);
-
-        CL_Draw::gradient_fill(mGC, CL_Rectf(0, 0, mGeom.get_width(), mGeom.get_height()),
-                CL_Gradient(color1, color2));
-
+        mGC.clear();
         worldManager.update();
-
         mBackground.draw(mGC, 0, mGC.get_height()-mBackground.get_height());
 
         int *time = worldManager.getWorldTime();

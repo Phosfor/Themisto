@@ -17,7 +17,6 @@ class Moon
     private:
         // Moon graphic representing
         CL_Sprite mMoon;
-        int mMoonCenterX, mMoonCenterY;
         CL_Colorf mMoonColor;
         float mG, mB;
         float mScaleX, mScaleY;
@@ -25,18 +24,19 @@ class Moon
         // Moon ellipse orbit
         int mRadius;
         float mCenterX, mCenterY;
-
         float mAngle;         // The angle where Moon is currently located
-        float mColorOffset;
+
         bool mRenderMoon;
+        bool mNearEscaping; // True when moon is going out of the screen
 
         CL_GraphicContext mGC;
 
     public:
         Moon(const string &imagePath = "moon.png", float _scaleX = 1, float _scaleY = 1);
         void setScale(float _scaleX, float _scaleY);
+        bool nearEscape();
+        void setNearEscape(bool state);
         void update(int hours);
-
 };
 
 #endif /* _WEATHER_MOON_HPP_ */

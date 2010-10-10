@@ -10,6 +10,7 @@ set(Themisto_srcs
     World/Weather/Rain.cpp
     World/Weather/Moon.cpp
     World/Weather/Stars.cpp
+    World/Weather/Sky.cpp
     World/WorldManager.cpp
 
     main.cpp

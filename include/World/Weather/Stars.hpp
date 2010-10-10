@@ -30,11 +30,7 @@ class Stars
         void makeBloomHandle();
         void renderStars(CL_ProgramObject &program);
 
-        CL_Slider *mBloomSlider;
-        void bloomChanged();
-
     public:
-        ~Stars();
         Stars(int maxStars = 200);
         void setStarsLimit(int maxStars);
         int getStarsLimit();

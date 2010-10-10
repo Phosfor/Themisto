@@ -1,10 +1,5 @@
 #include "World/Weather/Stars.hpp"
 
-Stars::~Stars()
-{
-    delete mBloomSlider;
-}
-
 Stars::Stars(int maxStars)
 {
     srand(time(NULL));
@@ -22,7 +17,6 @@ Stars::Stars(int maxStars)
     mGC = appManager.getGraphic();
     mWidth = appManager.getWindow().get_geometry().get_width();
     mHeight = appManager.getWindow().get_geometry().get_height();
-
 
     mMaxStars = maxStars;
     for (int i=0; i < mMaxStars; i++)
@@ -50,22 +44,6 @@ Stars::Stars(int maxStars)
             cl_blend_dest_color, cl_blend_one,
             cl_blend_one, cl_blend_one);
     blend_mode.enable_blending(true);
-
-    // TODO: REMOVE
-    mBloomSlider = new CL_Slider(&guiManager.getWrapper());
-    mBloomSlider->set_horizontal(true);
-    mBloomSlider->set_position(200);
-    mBloomSlider->set_ranges(100, 400, 5, 5);
-    mBloomSlider->set_geometry(CL_RectPS(mWidth - 180 - 5, 100, 180, 30));
-    mBloomSlider->func_value_changed().set(this, &Stars::bloomChanged);
-
-    // TODO: Remove
-    //mShowed = false;
-}
-
-void Stars::bloomChanged()
-{
-    mBloomSize = mBloomSlider->get_position() / 1000.0f;
 }
 
 int Stars::getStarsLimit()

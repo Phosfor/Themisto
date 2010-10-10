@@ -11,10 +11,12 @@ void WorldManager::initWorld()
     mMoonHandle = new Moon("SkyX_Moon.png", 1, 1);
     mRainHandle = new Rain();
     mStarsHandle = new Stars();
+    mSkyHandle = new Sky();
 
     mMoonEnabled = false;
     mRainEnabled = false;
     mStarsEnabled = false;
+    mSkyEnabled = false;
 }
 
 WorldManager::~WorldManager()
@@ -22,6 +24,7 @@ WorldManager::~WorldManager()
     delete mRainHandle;
     delete mMoonHandle;
     delete mStarsHandle;
+    delete mSkyHandle;
 }
 
 void WorldManager::setWindPower(float _power)
@@ -68,6 +71,11 @@ void WorldManager::enableMoon(bool state, float _scaleX, float _scaleY)
     mMoonEnabled = state;
 }
 
+void WorldManager::enableSky(bool state)
+{
+    mSkyEnabled = state;
+}
+
 void WorldManager::update()
 {
     float gameSeconds = GameSeconds(appManager.getElapsed());
@@ -91,6 +99,7 @@ void WorldManager::update()
         }
     }
 
+    if (mSkyEnabled) mSkyHandle->update();
     if (mStarsEnabled) mStarsHandle->update();
     if (mMoonEnabled) mMoonHandle->update(mWorldTime[2]);
     if (mRainEnabled) mRainHandle->update(mWindPower);
