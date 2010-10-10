@@ -67,7 +67,7 @@ void Rain::update(float _windPower)
 {
     float elapsed = appManager.getElapsed()/1000;
 
-    for (unsigned int i=0; i < mMaxDrops; i++)
+    for (int i=0; i < mMaxDrops; i++)
     {
         if (timeout[i] > 0)
         {
@@ -101,7 +101,7 @@ void Rain::setDropLimit(int maxDrops)
 
     if (maxDrops > mMaxDrops)
     {
-        for (unsigned int i=0; i < maxDrops - mMaxDrops; i++)
+        for (int i=0; i < maxDrops - mMaxDrops; i++)
         {
             timeout[mMaxDrops+i] = rand() % 100;
         }

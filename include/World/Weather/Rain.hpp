@@ -17,7 +17,7 @@ class Rain
     private:
         vector<int> x, y, x_speed, y_speed, timeout;
 
-        unsigned int mMaxDrops;
+        int mMaxDrops;
         float mWidth, mHeight;
 
         CL_Colorf mDropColor;

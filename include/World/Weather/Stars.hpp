@@ -14,7 +14,7 @@ class Stars
         vector<int> x, y, size;
         vector<CL_Colorf> color;
 
-        unsigned int mMaxStars;
+        int mMaxStars;
         int mWidth, mHeight;
         float mBloomSize;
         float mTimer;

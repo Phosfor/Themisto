@@ -63,7 +63,7 @@ void Stars::update()
     mGC.set_frame_buffer(mStarsBuf);
     mGC.clear(CL_Colorf::transparent);
     mGC.clear(CL_Colorf::black);
-    for (unsigned int i=0; i < mMaxStars; i++)
+    for (int i=0; i < mMaxStars; i++)
     {
         //CL_Draw::point(mGC, x[i], y[i], color[i]);
         if (rand() % 60 == 0) continue;

@@ -11,7 +11,6 @@ Moon::Moon(const string &imagePath, float _scaleX, float _scaleY)
     mScaleX = mScaleY = 1.0f;
 
     mRenderMoon = true;
-    mNearEscaping = false;
 
     // Apply image scaling and linear filtrating (to make sprite smooth)
     mMoon.set_scale(_scaleX, _scaleY);
@@ -34,7 +33,7 @@ void Moon::setScale(float _scaleX, float _scaleY)
     mMoon.set_scale(_scaleX, _scaleY);
 }
 
-void Moon::update(int hours)
+void Moon::update(int *time)
 {
     if (!mRenderMoon) return;
 
@@ -42,37 +41,28 @@ void Moon::update(int hours)
     float moonY = (mRadius * sin(mAngle)) * 1.1 + mCenterY;   // Y position of the Moon
 
     // Draw simple moon
-    if (mAngle > Deg2Rad(-20))
+    if (time[0] >= 9)
     {
-        mNearEscaping = true;
-        if (mG > 0.85f ) mG -= 0.0002;
-        if (mB > 0.75f) mB -= 0.0004;
-        if (mScaleX < 1.15) mScaleX += 0.00018;
-        if (mScaleY < 1.05) mScaleY += 0.0001;
-    }
+        if (mG > 0.85f ) mG -= 0.00025;
+        if (mB > 0.75f) mB -= 0.00045;
+        if (mScaleX < 1.15) mScaleX += 0.00020;
+        if (mScaleY < 1.08) mScaleY += 0.00015;
 
-    if (mNearEscaping)
-    {
         mMoon.set_scale(mScaleX, mScaleY);
         mMoon.set_color(CL_Colorf(1.0f, mG, mB));
     }
+
     mMoon.draw(mGC, moonX, moonY);
 
     float mRadIncrease = (Deg2Rad(90) * GameSeconds(appManager.getElapsed())) / (12.0*60.0*60.0);
 
-    if (mAngle <= Deg2Rad(5))
+    if (mAngle <= Deg2Rad(10))
         mAngle+=mRadIncrease;
     else
         mRenderMoon = false;
 }
 
-bool Moon::nearEscape()
+float Moon::getMoonAngle()
 {
-    return mNearEscaping;
-}
-
-void Moon::setNearEscape(bool state)
-{
-    mNearEscaping = state;
-    // TODO: If true, move Moon to the -90 degrees
+    return Rad2Deg(mAngle);
 }
