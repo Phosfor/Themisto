@@ -26,10 +26,8 @@ class Moon
         int mRadius;
         float mCenterX, mCenterY;
 
-        float mGlobalTime;    // Time for one step Moon animation
         float mAngle;         // The angle where Moon is currently located
         float mColorOffset;
-        float mBloomSize;
         bool mRenderMoon;
 
         CL_GraphicContext mGC;

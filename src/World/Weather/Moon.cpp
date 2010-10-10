@@ -11,7 +11,6 @@ Moon::Moon(const string &imagePath, float _scaleX, float _scaleY)
     mB = 1.0f;
     mScaleX = 1.0f;
     mScaleY = 1.0f;
-    mBloomSize = 0.19f;
     mRenderMoon = true;
 
     // Apply image scaling and linear filtrating (to make sprite smooth)
@@ -23,7 +22,6 @@ Moon::Moon(const string &imagePath, float _scaleX, float _scaleY)
     mMoonCenterY = mMoon.get_height()*_scaleY / 2;
     //mMoon.set_alignment(origin_center);
 
-    mGlobalTime = 0;
     mRadius = Meters2Pixels(15); // The orbit radius is about 600 pixels
     mAngle = Deg2Rad(-90);       // Start Moon position (85 degrees)
     mColorOffset = 0.0;
@@ -54,11 +52,11 @@ void Moon::update(int hours)
     float moonY = y_local + mCenterY - mMoonCenterY;
 
     // Draw simple moon
-    if (mAngle > Deg2Rad(-40))
+    if (mAngle > Deg2Rad(-20))
     {
         if (mG > 0.85f ) mG -= 0.0002;
         if (mB > 0.75f) mB -= 0.0004;
-        if (mScaleX < 1.2) mScaleX += 0.00018;
+        if (mScaleX < 1.15) mScaleX += 0.00018;
         if (mScaleY < 1.05) mScaleY += 0.0001;
     }
 
@@ -67,9 +65,7 @@ void Moon::update(int hours)
     mMoon.draw(mGC, moonX, moonY);
     mMoon.set_color(CL_Colorf(1.0f, 1.0f, 1.0f));
 
-
-    mGlobalTime += appManager.getElapsed();
-
+    // TODO: remove deg2rad(90) with number
     float mRadIncrease = (Deg2Rad(90) * GameSeconds(appManager.getElapsed())) / (12.0*60.0*60.0);
 
     if (mAngle <= Deg2Rad(5))
