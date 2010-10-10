@@ -12,6 +12,11 @@ class Sky
         CL_Colorf color1;
         CL_Colorf color2;
 
+        CL_Pointf pos1;
+        CL_Pointf pos2;
+
+        //CL_Colorf colorScattering;
+
         int r1, g1, b1; // Used as const for lower sky-gradient
         int r2, g2, b2; // Atmosphere scattering
         float t;

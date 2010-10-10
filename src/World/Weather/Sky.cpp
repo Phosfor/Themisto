@@ -23,12 +23,16 @@ Sky::Sky(CL_Colorf &first, CL_Colorf &second)
     r2 = 234;
     g2 = 197;
     b2 = 83;
+    //colorScattering = color2;
 
     mNight = false;
     t = 0.0f;
 
     mGC = appManager.getGraphic();
     mGeom = appManager.getWindow().get_geometry();
+
+    pos1 = CL_Pointf(0.0, 0.0);
+    pos2 = CL_Pointf(mGeom.get_width(), mGeom.get_height());
 }
 
 void Sky::update(float hours)
@@ -49,15 +53,15 @@ void Sky::update(float hours)
         float g = t * (g2 - g1) + g1;
         float b = t * (b2 - b1) + b1;
 
-        /*cout << "time: " << hours << "\n";
-        cout << "t: " << t << "\n";
-        cout << "(r;g;b) : " << r << "; " << g << "; " << b << "\n";*/
+        pos2 += t * 10.0f;
 
         color2 = CL_Colorf(r/255.0f, g/255.0f, b/255.0f);
     }
 
-    /*CL_Draw::gradient_fill(mGC, CL_Rectf(0, 0, mGeom.get_width(), mGeom.get_height()), 
-            CL_Gradient(color1, color2));*/
-    CL_Draw::gradient_fill(mGC, 0.0, 0.0, 2400.0, 1500.0,
+    CL_Draw::gradient_fill(mGC,
+            pos1, pos2,
             CL_Gradient(color1, color2));
+    /*CL_Draw::gradient_fill(mGC, CL_Pointf(0.0, 0.0),
+            CL_Pointf(mGeom.get_width()*1.3, mGeom.get_height()*1.3),
+            CL_Gradient(CL_Colorf::transparent, colorScattering));*/
 }
