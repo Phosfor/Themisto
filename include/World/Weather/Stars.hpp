@@ -34,7 +34,7 @@ class Stars
         Stars(int maxStars = 200);
         void setStarsLimit(int maxStars);
         int getStarsLimit();
-        void update();
+        void update(float hours);
 };
 
 #endif /* _WEATHER_STARS_HPP_ */

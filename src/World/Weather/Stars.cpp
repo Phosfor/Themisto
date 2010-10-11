@@ -36,7 +36,7 @@ Stars::Stars(int maxStars)
     mStarsBuf.attach_color_buffer(0, mStarsTexture);
 
     makeBloomHandle();
-    mBloomSize = 0.03f;
+    mBloomSize = 0.09f;
     mTimer = 0.0f;
     mIncrease = true;
 
@@ -57,7 +57,7 @@ void Stars::setStarsLimit(int maxStars)
     /*TODO: Add new stars */
 }
 
-void Stars::update()
+void Stars::update(float hours)
 {
     // Draw all the stars to the buffer
     mGC.set_frame_buffer(mStarsBuf);
@@ -79,7 +79,7 @@ void Stars::update()
     mGC.reset_blend_mode();
 
     mTimer += appManager.getElapsed();
-    if (mTimer >= 5 && mIncrease)
+    if (mTimer >= 5 && mIncrease && hours >= 10.0f)
     {
         mBloomSize += 0.0001f;
         mTimer = 0;

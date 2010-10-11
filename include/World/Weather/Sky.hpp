@@ -9,22 +9,20 @@
 class Sky
 {
     private:
-        CL_Colorf color1;
-        CL_Colorf color2;
+        CL_Colorf color1, color2, color3; // 1,2 - constans, 3 - changeable
 
-        CL_Pointf pos1;
-        CL_Pointf pos2;
-
-        //CL_Colorf colorScattering;
+        CL_Rectf quad1, quad2;
 
         int r1, g1, b1; // Used as const for lower sky-gradient
         int r2, g2, b2; // Atmosphere scattering
-        float t;
+
+        float t1, t2;
 
         bool mNight;
 
         CL_GraphicContext mGC;
-        CL_Rect mGeom;
+
+        float mWidth, mHeight;
 
     public:
         Sky(CL_Colorf &first = CL_Colorf::transparent,
