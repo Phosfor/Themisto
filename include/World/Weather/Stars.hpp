@@ -17,8 +17,7 @@ class Stars
         int mMaxStars;
         int mWidth, mHeight;
         float mBloomSize;
-        float mTimer;
-        bool mIncrease;
+        float t;
 
         CL_GraphicContext mGC;
         CL_BlendMode blend_mode;

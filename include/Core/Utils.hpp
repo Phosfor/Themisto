@@ -58,7 +58,7 @@ using namespace std;
 //////////////////////// TIME MANAGEMENT ////////////////////////////////
 
 // Game time is 220 times faster than in real life
-#define TimeKoef 4000.0f
+#define TimeKoef 1000.0f
 
 //---------- Real time → game time
 
