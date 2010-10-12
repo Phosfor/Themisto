@@ -101,7 +101,7 @@ void WorldManager::update()
 
     if (mSkyEnabled) mSkyHandle->update(mTotalSec/60.0/60.0);
     if (mStarsEnabled) mStarsHandle->update(mTotalSec/60.0/60.0);
-    if (mMoonEnabled) mMoonHandle->update(mWorldTime);
+    if (mMoonEnabled) mMoonHandle->update(mTotalSec/60.0/60.0);
     if (mRainEnabled) mRainHandle->update(mWindPower);
 }
 

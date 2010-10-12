@@ -19,12 +19,12 @@ class Moon
         CL_Sprite mMoon;
         CL_Colorf mMoonColor;
         float mG, mB;
-        float mScaleX, mScaleY;
 
         // Moon ellipse orbit
         int mRadius;
         float mCenterX, mCenterY;
-        float mAngle;         // The angle where Moon is currently located
+        float mAngle; // The angle where Moon is currently located
+        float t;  // For the moon color&size transation
 
         bool mRenderMoon;
 
@@ -34,7 +34,7 @@ class Moon
         Moon(const string &imagePath = "moon.png", float _scaleX = 1, float _scaleY = 1);
         void setScale(float _scaleX, float _scaleY);
         float getMoonAngle();
-        void update(int *time);
+        void update(float hours);
 };
 
 #endif /* _WEATHER_MOON_HPP_ */

@@ -8,7 +8,6 @@ Moon::Moon(const string &imagePath, float _scaleX, float _scaleY)
 
     mMoonColor = mMoon.get_color();
     mG = mB = 1.0f;
-    mScaleX = mScaleY = 1.0f;
 
     mRenderMoon = true;
 
@@ -33,22 +32,23 @@ void Moon::setScale(float _scaleX, float _scaleY)
     mMoon.set_scale(_scaleX, _scaleY);
 }
 
-void Moon::update(int *time)
+void Moon::update(float hours)
 {
     if (!mRenderMoon) return;
 
     float moonX = (mRadius * cos(mAngle)) * 1.3 + mCenterX;   // X position of the Moon
     float moonY = (mRadius * sin(mAngle)) * 1.1 + mCenterY;   // Y position of the Moon
 
-    // Draw simple moon
-    if (time[0] >= 9)
-    {
-        if (mG > 0.85f ) mG -= 0.00025;
-        if (mB > 0.75f) mB -= 0.00045;
-        if (mScaleX < 1.15) mScaleX += 0.00020;
-        if (mScaleY < 1.08) mScaleY += 0.00015;
+    if (hours <= 9.0f) {
+        t = 0.0f;
+    } else if (hours >= 12.0f) {
+        t = 1.0f;
+    } else {
+        t = (hours - 9.0f) / (12.0f - 9.0f);
 
-        mMoon.set_scale(mScaleX, mScaleY);
+        mG = (1-t)*0.25 + 0.75;
+        mB = (1-t)*0.45 + 0.45;
+
         mMoon.set_color(CL_Colorf(1.0f, mG, mB));
     }
 
