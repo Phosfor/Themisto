@@ -9,24 +9,34 @@
 class Sky
 {
     private:
-        CL_Colorf color1, color2, color3; // 1,2 - constans, 3 - changeable
+        CL_Rectf quad1, quad2; // The sky is splitted into 2 quads
 
-        CL_Rectf quad1, quad2;
+        // Current colors for the gradients (are changeable)
+        CL_Colorf 
+            mColorTop,
+            mColorMiddle,
+            mColorBottom;
 
-        int r1, g1, b1; // Used as const for lower sky-gradient
-        int r2, g2, b2; // Atmosphere scattering
+        // Constant colors, used to get back old colors after transactions
+        CL_Colorf 
+            mColorTopConst,
+            mColorMiddleConst,
+            mColorBottomConst;
 
+        // Transation colors
+        CL_Colorf
+            mColorTopTrans,     // After moon hiding color (night)
+            mColorMiddleTrans,  // After moon hiding color (night)
+            mColorBottomTrans;  // Scattering color
+
+        // Used as koeficient [0; 1] with color transations
         float t1, t2;
 
-        bool mNight;
-
         CL_GraphicContext mGC;
-
         float mWidth, mHeight;
 
     public:
-        Sky(CL_Colorf &first = CL_Colorf::transparent,
-                CL_Colorf &second = CL_Colorf::transparent);
+        Sky();
         void update(float hours);
 };
 

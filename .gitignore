@@ -6,3 +6,4 @@ gmon.out
 .dep.inc
 bin/*.log
 bin/Themisto
+additional/*
