@@ -30,10 +30,12 @@ class Sky
             mColorBottomTrans;  // Scattering color
 
         // Used as koeficient [0; 1] with color transations
-        float t1, t2;
+        float t1, t2, t3;
 
         CL_GraphicContext mGC;
         float mWidth, mHeight;
+
+        bool mNight;
 
     public:
         Sky();

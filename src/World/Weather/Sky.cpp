@@ -14,7 +14,8 @@ Sky::Sky()
     mColorMiddleTrans = CL_Colorf(54/255.0f, 85/255.0f, 198/255.0f);
     mColorBottomTrans = CL_Colorf(234/255.0f, 197/255.0f, 83/255.0f);
 
-    t1 = t2 = 0.0f;
+    t1 = t2 = t3 = 0.0f;
+    mNight = false;
 
     mGC = appManager.getGraphic();
     CL_Rectf geom = appManager.getWindow().get_geometry();
@@ -47,6 +48,7 @@ void Sky::update(float hours)
         t2 = 0.0f;
     } else if (hours >= 14.0f) {
         t2 = 1.0f;
+        mNight = true;
     } else {
         t2 = (hours - 12.0f) / (14.0f - 12.0f);
 
@@ -70,6 +72,32 @@ void Sky::update(float hours)
         b = t2 * (mColorMiddleTrans.b - mColorMiddleConst.b) + mColorMiddleConst.b;
 
         mColorMiddle = CL_Colorf(r, g, b);
+    }
+
+    if (mNight)
+    {
+        if (hours <= 21.5f) {
+            t3 = 0.0f;
+        } else if (hours >= 23.8f) {
+            t3 = 1.0f;
+            mNight = false;
+        } else {
+            t3 = (hours - 21.5f) / (23.8f - 21.5f);
+
+            // After moon hiding the DAY becomes (make top part of the sky lighter)
+            float r = t3 * (mColorTopConst.r - mColorTopTrans.r) + mColorTopTrans.r;
+            float g = t3 * (mColorTopConst.g - mColorTopTrans.g) + mColorTopTrans.g;
+            float b = t3 * (mColorTopConst.b - mColorTopTrans.b) + mColorTopTrans.b;
+
+            mColorTop = CL_Colorf(r, g, b);
+
+            // Make middle of the sky lighter (the day comes)
+            r = t3 * (mColorMiddleConst.r - mColorMiddleTrans.r) + mColorMiddleTrans.r;
+            g = t3 * (mColorMiddleConst.g - mColorMiddleTrans.g) + mColorMiddleTrans.g;
+            b = t3 * (mColorMiddleConst.b - mColorMiddleTrans.b) + mColorMiddleTrans.b;
+
+            mColorMiddle = CL_Colorf(r, g, b);
+        }
     }
 
     CL_Draw::gradient_fill(mGC, quad1, CL_Gradient(mColorTop, mColorMiddle));
