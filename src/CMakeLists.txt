@@ -11,6 +11,7 @@ set(Themisto_srcs
     World/Weather/Moon.cpp
     World/Weather/Stars.cpp
     World/Weather/Sky.cpp
+    World/Weather/Leaves.cpp
     World/WorldManager.cpp
 
     main.cpp
