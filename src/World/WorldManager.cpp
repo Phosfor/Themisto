@@ -12,11 +12,13 @@ void WorldManager::initWorld()
     mRainHandle = new Rain();
     mStarsHandle = new Stars();
     mSkyHandle = new Sky();
+    mLeavesHandle = new Leaves();
 
     mMoonEnabled = false;
     mRainEnabled = false;
     mStarsEnabled = false;
     mSkyEnabled = false;
+    mLeavesEnabled =false;
 }
 
 WorldManager::~WorldManager()
@@ -25,6 +27,7 @@ WorldManager::~WorldManager()
     delete mMoonHandle;
     delete mStarsHandle;
     delete mSkyHandle;
+    delete mLeavesHandle;
 }
 
 void WorldManager::setWindPower(float _power)
@@ -76,12 +79,18 @@ void WorldManager::enableSky(bool state)
     mSkyEnabled = state;
 }
 
+void WorldManager::enableLeaves(bool state, int _maxLeaves)
+{
+    if (_maxLeaves != -1) mLeavesHandle->setLeafLimit(_maxLeaves);
+    mLeavesEnabled = state;
+}
+
 void WorldManager::update()
 {
     float gameSeconds = GameSeconds(appManager.getElapsed());
-    //float gameSeconds = (appManager.getElapsed() * TimeKoef)/1000.0f;
     mTotalSec += gameSeconds;
     mWorldTime[2] += gameSeconds;
+
     if (mWorldTime[2] >= 60)
     {
         mWorldTime[2] -= 60;
@@ -102,6 +111,8 @@ void WorldManager::update()
     if (mSkyEnabled) mSkyHandle->update(mTotalSec/60.0/60.0);
     if (mStarsEnabled) mStarsHandle->update(mTotalSec/60.0/60.0);
     if (mMoonEnabled) mMoonHandle->update(mTotalSec/60.0/60.0);
+
+    if (mLeavesEnabled) mLeavesHandle->update(mWindPower);
     if (mRainEnabled) mRainHandle->update(mWindPower);
 }
 
