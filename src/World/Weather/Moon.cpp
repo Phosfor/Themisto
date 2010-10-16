@@ -34,6 +34,13 @@ void Moon::setScale(float _scaleX, float _scaleY)
 
 void Moon::update(float hours)
 {
+    // Set moon back
+    if (!mRenderMoon && hours >= 21.4f)
+    {
+        mRenderMoon = true;
+        mAngle = Deg2Rad(-110);
+        mMoon.set_color(CL_Colorf::white);
+    }
     if (!mRenderMoon) return;
 
     float moonX = (mRadius * cos(mAngle)) * 1.3 + mCenterX;   // X position of the Moon
