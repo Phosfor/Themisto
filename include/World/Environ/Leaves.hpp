@@ -10,7 +10,8 @@
 class Leaf
 {
     private:
-        float x, y_offset, x_speed, k1, k2;
+        float x, y_offset, x_speed, y_speed, k1, k2;
+        float speed_koef;
         int leafType;
         bool remove;
         int width, height;

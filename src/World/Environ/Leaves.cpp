@@ -16,6 +16,7 @@ Leaf::Leaf(float windPower)
     y_offset = height - height*((rand()%6+2)/10.0);
 
     x_speed = 0.1;
+    y_speed = 0.1;
 
     // Used for leaf pitching animation
     addedAngle = 0;
@@ -38,11 +39,14 @@ Leaf::Leaf(float windPower)
 
     // Toggled when the leaf reached min/max trajectory points
     animation = false;
+
+    speed_koef = rand()%35 + 50;
 }
 
 void Leaf::update(float windPower, float elapsed)
 {
     x += x_speed * elapsed;
+    y_offset += y_speed * elapsed;
     float y = k1 * sinf(k2 * Deg2Rad(x)) + y_offset;
 
     if (floor(abs(y - y_offset)+0.5) >= k1) animation = true;
@@ -74,8 +78,8 @@ void Leaf::update(float windPower, float elapsed)
         if (x < -imageHandle.get_width() || y > height) remove = true;
     }
 
-    // TODO: * rand koef (instead of 50)
-    x_speed = windPower * 70.0 * elapsed;
+    x_speed = speed_koef * windPower * elapsed;
+    y_speed = G * elapsed;
 
     imageHandle.draw(mGC, x, y);
 }
