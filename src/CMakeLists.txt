@@ -7,11 +7,12 @@ set(Themisto_srcs
     Core/GuiManager.cpp
     Core/Utils.cpp
 
-    World/Weather/Rain.cpp
-    World/Weather/Moon.cpp
-    World/Weather/Stars.cpp
-    World/Weather/Sky.cpp
-    World/Weather/Leaves.cpp
+    World/Environ/Rain.cpp
+    World/Environ/Moon.cpp
+    World/Environ/Stars.cpp
+    World/Environ/Sky.cpp
+    World/Environ/Leaves.cpp
+    World/Environ/Clouds.cpp
     World/WorldManager.cpp
 
     main.cpp
