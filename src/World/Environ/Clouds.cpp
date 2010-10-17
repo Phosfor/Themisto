@@ -17,16 +17,15 @@ Cloud::Cloud(float windPower)
     cloudType = rand()%8;
     imageHandle = CL_Sprite(mGC, cl_format("media/clouds/%1.png", cloudType));
 
-    // Rotate cloud surface at some random angle
-    /*int angle = rand() % 45 + 1;
-    imageHandle.set_angle(CL_Angle::from_degrees(angle));*/
-
-    float k1 = (float)(rand()%10 + 5) / 10.0f;
+    /*float k1 = (float)(rand()%5 + 3) / 10.0f;
     float k2 = (float)(rand()%5 + 3) / 10.0f;
-    imageHandle.set_scale(k1, k2);
+    imageHandle.set_scale(k1, k2);*/
 
-    cout << "Pos: " << x << "; " << y_offset << "\n";
-    cout << "Scaled with koef: " << k1 << "; " << k2 << "\n";
+    float alpha = (float)(rand()%5 + 6) / 10.0f;
+    float color = (float)(rand()%5 + 6) / 10.0f;
+    mColor = CL_Colorf(color, color, color, alpha);
+
+    speed_koef = rand() % 35 + 45;
 }
 
 void Cloud::update(float windPower, float elapsed)
@@ -39,7 +38,9 @@ void Cloud::update(float windPower, float elapsed)
         if (x < -imageHandle.get_width()) mRemove = true;
     }
 
-    x_speed = 40.0 * windPower * elapsed;
+    x_speed = speed_koef * windPower * elapsed;
+
+    imageHandle.set_color(mColor);
     imageHandle.draw(mGC, x, y_offset);
 }
 

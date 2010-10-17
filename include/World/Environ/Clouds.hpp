@@ -13,8 +13,10 @@ class Cloud
 {
     private:
         float x, y_offset, x_speed;
+        float speed_koef;
         int cloudType;
         CL_Sprite imageHandle;
+        CL_Colorf mColor;
 
         bool mRemove;
 
