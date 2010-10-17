@@ -17,12 +17,8 @@ Cloud::Cloud(float windPower)
     cloudType = rand()%8;
     imageHandle = CL_Sprite(mGC, cl_format("media/clouds/%1.png", cloudType));
 
-    /*float k1 = (float)(rand()%5 + 3) / 10.0f;
-    float k2 = (float)(rand()%5 + 3) / 10.0f;
-    imageHandle.set_scale(k1, k2);*/
-
-    float alpha = (float)(rand()%5 + 6) / 10.0f;
-    float color = (float)(rand()%5 + 6) / 10.0f;
+    float alpha = (float)(rand()%4 + 7) / 10.0f;
+    float color = (float)(rand()%1 + 3) / 10.0f;
     mColor = CL_Colorf(color, color, color, alpha);
 
     speed_koef = rand() % 35 + 45;
