@@ -63,10 +63,15 @@ void Moon::update(float hours)
 
     float mRadIncrease = (Deg2Rad(90) * GameSeconds(appManager.getElapsed())) / (12.0*60.0*60.0);
 
+    //cout << "game seconds: " << GameSeconds(appManager.getElapsed()) << "\n";
+    //cout << "mRadIncrease: " << mRadIncrease << "\n";
+
     if (mAngle <= Deg2Rad(10))
         mAngle+=mRadIncrease;
     else
         mRenderMoon = false;
+
+    //cout << "Angle: " << Rad2Deg(mAngle) << "\n";
 }
 
 float Moon::getMoonAngle()

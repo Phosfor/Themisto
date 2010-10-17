@@ -122,8 +122,8 @@ void WorldManager::update()
     if (mMoonEnabled) mMoonHandle->update(mTotalSec/60.0/60.0);
 
     if (mCloudsEnabled) mCloudsHandle->update(mWindPower);
-    if (mLeavesEnabled) mLeavesHandle->update(mWindPower);
     if (mRainEnabled) mRainHandle->update(mWindPower);
+    if (mLeavesEnabled) mLeavesHandle->update(mWindPower);
 }
 
 float WorldManager::getDropLimit()

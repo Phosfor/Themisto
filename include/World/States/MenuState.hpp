@@ -53,7 +53,7 @@ class MenuState : public State
 
         mStatFont = new CL_Font(appManager.getGraphic(), "Ubuntu", 30);
         mBackground = CL_Image(appManager.getGraphic(), "media/ground.png");
-        mFg1 = CL_Image(appManager.getGraphic(), "media/bg_1.png");
+        //mFg1 = CL_Image(appManager.getGraphic(), "media/bg_1.png");
 
         mRainState = new CL_CheckBox(&guiManager.getWrapper());
         mRainState->set_geometry(CL_RectPS(mGeom.get_width() - 150 - 40, 5, 150, 30));
@@ -89,9 +89,9 @@ class MenuState : public State
         worldManager.enableSky(true);
         worldManager.enableMoon(true);
         worldManager.enableStars(true);
-        worldManager.enableLeaves(true, 5);
-        worldManager.enableClouds(true, 7);
-        //worldManager.enableRain(true, 60);
+        worldManager.enableLeaves(true, 7);
+        worldManager.enableClouds(true, 25);
+        worldManager.enableRain(true, 50);
         worldManager.setWindPower(-2.0);
     }
 
