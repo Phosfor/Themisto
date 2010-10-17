@@ -32,9 +32,7 @@ class Leaves
 {
     private:
         vector<Leaf> mLeaves;
-
-        int mMaxLeaves;
-        CL_GraphicContext mGC;
+        unsigned int mMaxLeaves;
 
     public:
         Leaves(int maxLeaves = 5);

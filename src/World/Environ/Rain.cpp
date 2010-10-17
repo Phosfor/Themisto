@@ -1,4 +1,4 @@
-#include "World/Weather/Rain.hpp"
+#include "World/Environ/Rain.hpp"
 
 void Rain::processDrops(float _windPower, int i)
 {
@@ -21,8 +21,8 @@ void Rain::processDrops(float _windPower, int i)
     x[i] = posX;
     y[i] = 0;
 
-    x_speed[i] = 0;
-    y_speed[i] = 0;
+    /*x_speed[i] = 0;
+    y_speed[i] = 0;*/
 
     x_speed[i] = _windPower*0.1;
     y_speed[i] = G*0.1;

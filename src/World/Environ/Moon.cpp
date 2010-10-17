@@ -1,4 +1,4 @@
-#include "World/Weather/Moon.hpp"
+#include "World/Environ/Moon.hpp"
 
 Moon::Moon(const string &imagePath, float _scaleX, float _scaleY)
 {

@@ -1,4 +1,4 @@
-#include "World/Weather/Leaves.hpp"
+#include "World/Environ/Leaves.hpp"
 
 Leaf::Leaf(float windPower)
 {
@@ -26,7 +26,7 @@ Leaf::Leaf(float windPower)
     k2 = (rand() % 7 + 3) / 10.0;
 
     // Load some random leaf surface
-    leafType = rand()%3+1;
+    leafType = rand()%4;
     imageHandle = CL_Sprite(mGC, cl_format("media/leaves/%1.png", leafType));
 
     // Rotate leaf surface at some random angle
@@ -71,7 +71,7 @@ void Leaf::update(float windPower, float elapsed)
     if (windPower > 0) {
         if (x > width + 10 || y > height) remove = true;
     } else {
-        if (x < 10 || y > height) remove = true;
+        if (x < -imageHandle.get_width() || y > height) remove = true;
     }
 
     // TODO: * rand koef (instead of 50)
@@ -89,8 +89,6 @@ Leaves::Leaves(int maxLeaves)
 {
     srand(time(NULL));
     mMaxLeaves = maxLeaves;
-
-    mGC = appManager.getGraphic();
 }
 
 void Leaves::setLeafLimit(int maxLeaves)
@@ -112,12 +110,9 @@ void Leaves::update(float _windPower)
         if (rand()%200 == 0) mLeaves.push_back(Leaf(_windPower));
     }
 
-    for (int i=0; i < mLeaves.size(); i++)
+    for (unsigned int i=0; i < mLeaves.size(); i++)
     {
         mLeaves[i].update(_windPower, elapsed);
-        if (mLeaves[i].getRemove())
-        {
-            mLeaves.erase(mLeaves.begin() + i);
-        }
+        if (mLeaves[i].getRemove()) mLeaves.erase(mLeaves.begin() + i);
     }
 }

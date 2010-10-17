@@ -1,4 +1,4 @@
-#include "World/Weather/Sky.hpp"
+#include "World/Environ/Sky.hpp"
 
 Sky::Sky()
 {

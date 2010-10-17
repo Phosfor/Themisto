@@ -21,11 +21,6 @@ class Stars
         bool mNight;
         bool mDrawStars;
 
-        CL_Sprite mWayPattern[3]; // Milkway texture patterns
-        vector<CL_Sprite> mMilkWay;
-        CL_Sprite mSkyPattern;
-        vector<int> x_,y_;
-
         CL_GraphicContext mGC;
         CL_BlendMode blend_mode;
 

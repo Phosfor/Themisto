@@ -1,4 +1,4 @@
-#include "World/Weather/Stars.hpp"
+#include "World/Environ/Stars.hpp"
 
 Stars::Stars(int maxStars)
 {
@@ -29,30 +29,6 @@ Stars::Stars(int maxStars)
         float b = 1.0f - Randf(0.5f);
 
         color[i] = CL_Colorf(1.0f, g, b, brightness);
-    }
-
-    mWayPattern[0] = CL_Sprite(mGC, "media/milkway/pattern0.png");
-    mWayPattern[1] = CL_Sprite(mGC, "media/milkway/pattern1.png");
-    mWayPattern[2] = CL_Sprite(mGC, "media/milkway/pattern2.png");
-    // Drawing the milkway
-    // y = k*x + b
-    // k = tg(L)
-    // b: y in the intersection with Y
-    for (float x=0; x < mWidth/100; x++)
-    {
-        mMilkWay.push_back(CL_Sprite(mWayPattern[rand()%3]));
-        mMilkWay[x].set_alpha(0.5);
-        float k = (rand()%15+10)/10.0f;
-        mMilkWay[x].set_scale(k, k);
-    }
-
-    mSkyPattern = CL_Sprite(mGC, "media/sky_pattern.png");
-    for (int i=0; i < 100; i++)
-    {
-        float x = rand() % mWidth;
-        float y = rand() % mHeight;
-        x_.push_back(x);
-        y_.push_back(y);
     }
 
     mStarsTexture = CL_Texture(mGC, mGC.get_width(), mGC.get_height());
@@ -147,21 +123,6 @@ void Stars::update(float hours)
     renderStars(mProgramBlur);
     mGC.reset_texture(0);
     mGC.reset_blend_mode();
-
-    /*for (float x=0; x < mWidth/100; x++)
-    {
-        float k = tan(Deg2Rad(140));
-        float x_ = x * 100;
-        float b = mHeight - mHeight*0.4;
-        float y = k*x_ + b;
-        mMilkWay[x].draw(mGC, x_, y);
-    }*/
-
-    /*mSkyPattern.set_color(CL_Colorf(41/255.0f, 87/255.0f, 102/255.0f, 0.1f));
-    for (int i=0; i < 100; i++)
-    {
-        mSkyPattern.draw(mGC, x_[i], y_[i]);
-    }*/
 }
 
 void Stars::makeBloomHandle()
