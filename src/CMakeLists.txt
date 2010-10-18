@@ -35,6 +35,7 @@ target_link_libraries(Themisto
 
     ${Boost_LIBRARIES}
     ${ClanLib_LIBRARIES}
+    ${BOX2D_LIBRARY}
     fontconfig
     pthread
 )

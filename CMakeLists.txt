@@ -18,6 +18,7 @@ find_package(ZLIB REQUIRED)
 
 find_package(PNG REQUIRED)
 find_package(JPEG REQUIRED)
+find_package(Box2D REQUIRED)
 
 add_definitions(-Wall -pg -g)
 set(CMAKE_BUILD_TYPE "Debug")
@@ -32,6 +33,7 @@ include_directories(
 	"${CMAKE_SOURCE_DIR}/include/"
 	${Boost_INCLUDE_DIRS}
 	${ClanLib_INCLUDE_DIRS}
+	${BOX2D_INCLUDE_DIR}
 )
 
 add_subdirectory("${CMAKE_SOURCE_DIR}/src/")
