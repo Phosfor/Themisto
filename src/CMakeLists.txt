@@ -36,4 +36,5 @@ target_link_libraries(Themisto
     ${Boost_LIBRARIES}
     ${ClanLib_LIBRARIES}
     fontconfig
+    pthread
 )
