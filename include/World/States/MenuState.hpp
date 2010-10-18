@@ -89,9 +89,10 @@ class MenuState : public State
         worldManager.enableSky(true);
         worldManager.enableMoon(true);
         worldManager.enableStars(true);
-        worldManager.enableLeaves(true, 7);
+        worldManager.enableLeaves(true, 4);
         worldManager.enableClouds(true, 25);
         worldManager.enableRain(true, 50);
+        worldManager.enableBirds(true);
         worldManager.setWindPower(-2.0);
     }
 

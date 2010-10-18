@@ -14,6 +14,7 @@ void WorldManager::initWorld()
     mSkyHandle = new Sky();
     mLeavesHandle = new Leaves();
     mCloudsHandle = new Clouds();
+    mBirdsHandle = new Birds();
 
     mMoonEnabled = false;
     mRainEnabled = false;
@@ -21,6 +22,7 @@ void WorldManager::initWorld()
     mSkyEnabled = false;
     mLeavesEnabled =false;
     mCloudsEnabled =false;
+    mBirdsEnabled = false;
 }
 
 WorldManager::~WorldManager()
@@ -31,6 +33,7 @@ WorldManager::~WorldManager()
     delete mSkyHandle;
     delete mLeavesHandle;
     delete mCloudsHandle;
+    delete mBirdsHandle;
 }
 
 void WorldManager::setWindPower(float _power)
@@ -94,6 +97,11 @@ void WorldManager::enableClouds(bool state, int _maxClouds)
     mCloudsEnabled = state;
 }
 
+void WorldManager::enableBirds(bool state)
+{
+    mBirdsEnabled = state;
+}
+
 void WorldManager::update()
 {
     float gameSeconds = GameSeconds(appManager.getElapsed());
@@ -124,6 +132,7 @@ void WorldManager::update()
     if (mCloudsEnabled) mCloudsHandle->update(mWindPower);
     if (mRainEnabled) mRainHandle->update(mWindPower);
     if (mLeavesEnabled) mLeavesHandle->update(mWindPower);
+    if (mBirdsEnabled) mBirdsHandle->update();
 }
 
 float WorldManager::getDropLimit()

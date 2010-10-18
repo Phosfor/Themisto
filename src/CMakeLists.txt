@@ -13,6 +13,7 @@ set(Themisto_srcs
     World/Environ/Sky.cpp
     World/Environ/Leaves.cpp
     World/Environ/Clouds.cpp
+    World/Environ/Birds.cpp
     World/WorldManager.cpp
 
     main.cpp
