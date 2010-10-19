@@ -16,6 +16,9 @@ set(Themisto_srcs
     World/Environ/Birds.cpp
     World/WorldManager.cpp
 
+    World/States/MenuState.cpp
+
+
     main.cpp
 )
 
