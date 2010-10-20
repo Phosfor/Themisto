@@ -17,10 +17,11 @@ set(Themisto_srcs
     World/Environ/Clouds.cpp
     World/Environ/Birds.cpp
     World/WorldManager.cpp
+    World/Objects/Grass.cpp
 
     World/States/MenuState.cpp
+
     Physic/Body.cpp
-    
 
     main.cpp
 )

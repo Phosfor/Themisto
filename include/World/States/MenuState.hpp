@@ -4,12 +4,16 @@
 #include "Core/StateManager.hpp"
 #include "Core/ApplicationManager.hpp"
 #include "World/WorldManager.hpp"
+#include "Core/PhysicManager.hpp"
+#include "Core/SceneLoader.hpp"
 
 #include <boost/foreach.hpp>
 
 #include <ClanLib/core.h>
 #include <ClanLib/display.h>
 #include <ClanLib/application.h>
+
+#include "World/Objects/Grass.hpp"
 
 using namespace std;
 
@@ -18,21 +22,11 @@ class MenuState : public State
     private:
     CL_Font *mStatFont;
     CL_Image mBackground;
-    CL_Image mFg1;
-
-    CL_CheckBox *mRainState;
-    CL_PushButton *mSome;
-    CL_Slider *mWindSlider;
-    CL_Slider *mDropSlider;
-
-    CL_Label *mWindLabel;
 
     CL_GraphicContext mGC;
-    CL_Rect mGeom;
 
-    void rainStateChanged();
-    void windPowerChanged();
-    void dropNumChanged();
+    // Will be moved to some manager
+    Grass mGrass;
 
     void init();
     void shutdown();
