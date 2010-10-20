@@ -1,17 +1,39 @@
-#ifndef _PHYSIC_MANAGER_H_
-#define _PHYSIC_MANAGER_H_
+#ifndef _PHYSIC_MANAGER_HPP_
+#define _PHYSIC_MANAGER_HPP_
 
 #include <boost/serialization/singleton.hpp>
+#include <Box2D/Box2D.h>
 
-#define physicManager (ResourceManager::get_mutable_instance())
-#define physicManagerConst (ResourceManager::get_const_instance())
+#include <list>
 
-class ResourceManager : public 
-boost::serialization::singleton<ResourceManager>
+#include "Physic/Body.hpp"
+#include "Core/Utils.hpp"
+#include "Core/ApplicationManager.hpp"
+
+#define physicManager (PhysicManager::get_mutable_instance())
+#define physicManagerConst (PhysicManager::get_const_instance())
+
+class PhysicManager : public
+boost::serialization::singleton<PhysicManager>
 {
-    
-    
-}
+    private:
+        b2World* mWorld;
+        std::list<Body>* mBodies;
+    public:
+        float32 mTimeStep;
+        int32 mVelocityIterations;
+        int32 mPositionIterations;
 
 
-#endif /* _PHYSIC_MANAGER_HPP_ */
+        PhysicManager();
+        ~PhysicManager();
+
+        b2World& getWorld();
+        void registerBody(Body* body);
+        std::list<Body>& getBodies();
+        void step();
+        void updateVisual();
+};
+
+#endif
+

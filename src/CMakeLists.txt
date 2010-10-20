@@ -6,6 +6,8 @@ set(Themisto_srcs
     Core/StateManager.cpp
     Core/GuiManager.cpp
     Core/Utils.cpp
+    Core/PhysicManager.cpp
+    Core/SceneLoader.cpp
 
     World/Environ/Rain.cpp
     World/Environ/Moon.cpp
@@ -17,7 +19,8 @@ set(Themisto_srcs
     World/WorldManager.cpp
 
     World/States/MenuState.cpp
-
+    Physic/Body.cpp
+    
 
     main.cpp
 )
