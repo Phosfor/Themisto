@@ -5,8 +5,9 @@
 #include <ClanLib/display.h>
 #include "Core/Utils.hpp"
 #include "Core/ApplicationManager.hpp"
+#include "World/Environ/EnvironObject.hpp"
 
-class Sky
+class Sky : public EnvironObject
 {
     private:
         CL_Rectf quad1, quad2; // The sky is splitted into 2 quads
@@ -33,13 +34,12 @@ class Sky
         float t1, t2, t3;
 
         CL_GraphicContext mGC;
-        float mWidth, mHeight;
 
         bool mNight;
 
     public:
         Sky();
-        void update(float hours);
+        void update(float windPower, float elapsed, float globalTime);
 };
 
 #endif /* _WEATHER_SKY_HPP_ */

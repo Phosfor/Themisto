@@ -1,6 +1,7 @@
 #include "World/Environ/Sky.hpp"
 
 Sky::Sky()
+   : EnvironObject()
 {
     mColorTop = CL_Colorf(25/255.0f, 60/255.0f, 141/255.0f);
     mColorMiddle = CL_Colorf(54/255.0f, 119/255.0f, 198/255.0f);
@@ -18,23 +19,20 @@ Sky::Sky()
     mNight = false;
 
     mGC = appManager.getGraphic();
-    CL_Rectf geom = appManager.getWindow().get_geometry();
-    mWidth = geom.get_width();
-    mHeight = geom.get_height();
 
-    quad1 = CL_Rectf(0, 0, mWidth, mHeight/2.0);
-    quad2 = CL_Rectf(0, mHeight/2.0, mWidth, mHeight + mHeight * 0.3);
+    quad1 = CL_Rectf(0, 0, mWindowWidth, mWindowHeight/2.0);
+    quad2 = CL_Rectf(0, mWindowHeight/2.0, mWindowWidth, mWindowHeight + mWindowHeight * 0.3);
 }
 
-void Sky::update(float hours)
+void Sky::update(float windPower, float elapsed, float globalTime)
 {
-    // Make atmosphere scattering? [9; 12] hours
-    if (hours <= 9.0f) {
+    // Make atmosphere scattering? [9; 12] globalTime
+    if (globalTime <= 9.0f) {
         t1 = 0.0f;
-    } else if (hours >= 11.0f) {
+    } else if (globalTime >= 11.0f) {
         t1 = 1.0f;
     } else {
-        t1 = (hours - 9.0f) / (11.0f - 9.0f);
+        t1 = (globalTime - 9.0f) / (11.0f - 9.0f);
 
         // Make color transation of the sky bottom (to the scattering color)
         float r = t1 * (mColorBottomTrans.r - mColorBottomConst.r) + mColorBottomConst.r;
@@ -44,13 +42,13 @@ void Sky::update(float hours)
         mColorBottom = CL_Colorf(r, g, b);
     }
 
-    if (hours <= 12.0f) {
+    if (globalTime <= 12.0f) {
         t2 = 0.0f;
-    } else if (hours >= 14.0f) {
+    } else if (globalTime >= 14.0f) {
         t2 = 1.0f;
         mNight = true;
     } else {
-        t2 = (hours - 12.0f) / (14.0f - 12.0f);
+        t2 = (globalTime - 12.0f) / (14.0f - 12.0f);
 
         // Get back bottom color after scattering
         float r = t2 * (mColorBottomConst.r - mColorBottomTrans.r) + mColorBottomTrans.r;
@@ -76,13 +74,13 @@ void Sky::update(float hours)
 
     if (mNight)
     {
-        if (hours <= 21.5f) {
+        if (globalTime <= 21.5f) {
             t3 = 0.0f;
-        } else if (hours >= 23.8f) {
+        } else if (globalTime >= 23.8f) {
             t3 = 1.0f;
             mNight = false;
         } else {
-            t3 = (hours - 21.5f) / (23.8f - 21.5f);
+            t3 = (globalTime - 21.5f) / (23.8f - 21.5f);
 
             // After moon hiding the DAY becomes (make top part of the sky lighter)
             float r = t3 * (mColorTopConst.r - mColorTopTrans.r) + mColorTopTrans.r;

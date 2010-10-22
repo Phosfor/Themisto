@@ -1,4 +1,5 @@
 set(Themisto_srcs
+    # Core
     Core/ConfigManager.cpp
     Core/LogManager.cpp
     Core/ApplicationManager.cpp
@@ -9,6 +10,8 @@ set(Themisto_srcs
     Core/PhysicManager.cpp
     Core/SceneLoader.cpp
 
+    # Environ
+    World/Environ/EnvironObject.cpp
     World/Environ/Rain.cpp
     World/Environ/Moon.cpp
     World/Environ/Stars.cpp
@@ -17,10 +20,14 @@ set(Themisto_srcs
     World/Environ/Clouds.cpp
     World/Environ/Birds.cpp
     World/WorldManager.cpp
+
+    # Objects
     World/Objects/Grass.cpp
 
+    # States
     World/States/MenuState.cpp
 
+    # Physic
     Physic/Body.cpp
     Physic/BodyVisual.cpp
     Physic/BodyMaterial.cpp

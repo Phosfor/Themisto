@@ -1,53 +1,68 @@
 #include "World/Environ/Birds.hpp"
 
-Birds::Birds()
+void Birds::processBirds(CL_GraphicContext &gc, int width, int height, int i)
 {
-    mGC = appManager.getGraphic();
-    mWidth = mGC.get_width();
-    mHeight = mGC.get_height();
-
-    for (int i=1; i <= 10; i++)
+    // TODO: Chose the bird type here
+    for (int j=1; j <= 10; j++)
     {
         // Load all animation frames
-        mImageDesc.add_frame(CL_ImageProviderFactory::load(cl_format("media/bird/%1.png", i)));
+        mBirds[i].mImageDesc.add_frame(CL_ImageProviderFactory::load(cl_format("media/bird/%1.png", j)));
     }
-    mBirdImage = CL_Sprite(mGC, mImageDesc);
-    mBirdImage.set_scale(0.5, 0.5);
-    mBirdImage.set_linear_filter(true);
 
-    mProbability = 800;
-    mFlying = false;
+    mBirds[i].mBirdImage = CL_Sprite(gc, mBirds[i].mImageDesc);
+    mBirds[i].mBirdImage.set_scale(0.5, 0.5);
+    mBirds[i].mBirdImage.set_linear_filter(true);
+
+    mBirds[i].x_speed = rand() % 30 + 150;
+    mBirds[i].timeout = rand() % 500;
+
+    if (rand()%2 == 0) {
+        mBirds[i].x = 0 - mBirds[i].mBirdImage.get_width();
+        mBirds[i].side = 1; // The speed should be less than zero (to make flying left)
+        mBirds[i].mBirdImage.set_angle_yaw(CL_Angle::from_degrees(180));
+    } else {
+        mBirds[i].x = width;
+        mBirds[i].side = -1;
+        mBirds[i].mBirdImage.set_angle_yaw(CL_Angle::from_degrees(0));
+    }
+
+    mBirds[i].y = height * (float)(rand()%3 + 2) / 10.0;
 }
 
-void Birds::update()
+Birds::Birds(int maxBirds)
+    : EnvironObject(), mProbability(1000), mFirstTime(true)
 {
-    if (!mFlying && rand()%mProbability == 0) 
+    mGC = appManager.getGraphic();
+    mMaxObjects = maxBirds;
+
+    for (int i=0; i < maxBirds; i++)
+        mBirds.push_back(BirdData());
+}
+
+void Birds::update(float windPower, float elapsed, float globalTime)
+{
+    if (mFirstTime)
     {
-        cout << "Bird is added\n";
-        mFlying = true;
-
-        x_speed = rand() %30 + 150;
-        if (rand()%2 == 0) {
-            x = 0 - mBirdImage.get_width();
-            mRightSide = 1; // The speed should be less than zero (to make flying left)
-            mBirdImage.set_angle_yaw(CL_Angle::from_degrees(180));
-        } else {
-            x = mWidth;
-            mRightSide = -1;
-            mBirdImage.set_angle_yaw(CL_Angle::from_degrees(0));
-        }
-
-        y = mHeight * (float)(rand()%3 + 2) / 10.0;
+        for (int i=0; i < mMaxObjects; i++)
+            processBirds(mGC, mWindowWidth, mWindowHeight, i);
+        mFirstTime = false;
     }
+    for (int i=0; i < mMaxObjects; i++)
+    {
+        if (mBirds[i].timeout > 0)
+        {
+            mBirds[i].timeout--;
+        }
+        else
+        {
+            mBirds[i].x += mBirds[i].side * mBirds[i].x_speed * elapsed;
+            mBirds[i].mBirdImage.update();
+            mBirds[i].mBirdImage.draw(mGC, mBirds[i].x, mBirds[i].y);
 
-    if (!mFlying) return;
-
-    x += mRightSide * x_speed * appManager.getElapsed() / 1000.0f;
-    mBirdImage.update();
-    mBirdImage.draw(mGC, x, y);
-
-    if (mRightSide == 1 && x >= mWidth) 
-        mFlying = false;
-    else if (mRightSide == -1 && x <= 0 - mBirdImage.get_width())
-        mFlying = false;
+            if (mBirds[i].side == 1 && mBirds[i].x >= mWindowWidth) 
+                processBirds(mGC, mWindowWidth, mWindowHeight, i);
+            else if (mBirds[i].side == -1 && mBirds[i].x <= 0 - mBirds[i].mBirdImage.get_width())
+                processBirds(mGC, mWindowWidth, mWindowHeight, i);
+        }
+    }
 }

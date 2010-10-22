@@ -6,40 +6,32 @@
 
 #include "Core/Utils.hpp"
 #include "Core/ApplicationManager.hpp"
+#include "World/Environ/EnvironObject.hpp"
 
-class Leaf
+struct LeafData
 {
-    private:
-        float x, y_offset, x_speed, y_speed, k1, k2;
-        float speed_koef;
-        int leafType;
-        bool remove;
-        int width, height;
-        CL_Sprite imageHandle;
-        CL_GraphicContext mGC;
+    float x, y, x_speed, y_speed, k1, k2, speed_koef;
+    int leafType, timeout;
 
-        bool animation;
-        float addedAngle;
-        float timer;
+    CL_Sprite imageHandle;
 
-    public:
-        Leaf(float windPower);
-
-        void update(float windPower, float elapsed);
-        bool getRemove();
+    bool animation;
+    float addedAngle, timer;
 };
 
-class Leaves
+class Leaves : public EnvironObject
 {
     private:
-        vector<Leaf> mLeaves;
-        unsigned int mMaxLeaves;
+        vector<LeafData> mLeaves;
+        bool firstTime;
+
+        CL_GraphicContext mGC;
+
+        void processLeaves(CL_GraphicContext &gc, float windPower, int i);
 
     public:
         Leaves(int maxLeaves = 5);
-        void setLeafLimit(int maxLeaves);
-        int getLeafLimit();
-        void update(float _windPower);
+        void update(float windPower, float elapsed, float globalTime);
 };
 
 #endif /* _WEATHER_LEAVES_HPP_ */

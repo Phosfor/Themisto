@@ -65,7 +65,7 @@ void WorldManager::setWorldTime(int _hours, int _minutes, int _seconds)
 
 void WorldManager::enableRain(bool state, int _maxDrops)
 {
-    mRainHandle->setDropLimit(_maxDrops);
+    mRainHandle->setLimit(_maxDrops);
     mRainEnabled = state;
 }
 
@@ -87,13 +87,13 @@ void WorldManager::enableSky(bool state)
 
 void WorldManager::enableLeaves(bool state, int _maxLeaves)
 {
-    if (_maxLeaves != -1) mLeavesHandle->setLeafLimit(_maxLeaves);
+    if (_maxLeaves != -1) mLeavesHandle->setLimit(_maxLeaves);
     mLeavesEnabled = state;
 }
 
 void WorldManager::enableClouds(bool state, int _maxClouds)
 {
-    if (_maxClouds != -1) mCloudsHandle->setCloudLimit(_maxClouds);
+    if (_maxClouds != -1) mCloudsHandle->setLimit(_maxClouds);
     mCloudsEnabled = state;
 }
 
@@ -104,9 +104,13 @@ void WorldManager::enableBirds(bool state)
 
 void WorldManager::update()
 {
-    float gameSeconds = GameSeconds(appManager.getElapsed());
+    float elapsed = appManager.getElapsed();
+    float gameSeconds = GameSeconds(elapsed);
+    elapsed /= 1000.f;
+
     mTotalSec += gameSeconds;
     mWorldTime[2] += gameSeconds;
+    float totalHours = mTotalSec/60.0/60.0;
 
     if (mWorldTime[2] >= 60)
     {
@@ -125,24 +129,24 @@ void WorldManager::update()
         }
     }
 
-    if (mSkyEnabled) mSkyHandle->update(mTotalSec/60.0/60.0);
-    if (mStarsEnabled) mStarsHandle->update(mTotalSec/60.0/60.0);
-    if (mMoonEnabled) mMoonHandle->update(mTotalSec/60.0/60.0);
+    if (mSkyEnabled) mSkyHandle->update(mWindPower, elapsed, totalHours);
+    if (mStarsEnabled) mStarsHandle->update(mWindPower, elapsed, totalHours);
+    if (mMoonEnabled) mMoonHandle->update(mWindPower, elapsed, totalHours);
 
-    if (mCloudsEnabled) mCloudsHandle->update(mWindPower);
-    if (mRainEnabled) mRainHandle->update(mWindPower);
-    if (mLeavesEnabled) mLeavesHandle->update(mWindPower);
-    if (mBirdsEnabled) mBirdsHandle->update();
+    if (mCloudsEnabled) mCloudsHandle->update(mWindPower, elapsed, totalHours);
+    if (mRainEnabled) mRainHandle->update(mWindPower, elapsed, totalHours);
+    if (mLeavesEnabled) mLeavesHandle->update(mWindPower, elapsed, totalHours);
+    if (mBirdsEnabled) mBirdsHandle->update(mWindPower, elapsed, totalHours);
 }
 
-float WorldManager::getDropLimit()
+int WorldManager::getDropLimit()
 {
-    return mRainHandle->getDropLimit();
+    return mRainHandle->getLimit();
 }
 
 void WorldManager::setDropLimit(float maxDrops)
 {
-    mRainHandle->setDropLimit(maxDrops);
+    mRainHandle->setLimit(maxDrops);
 }
 
 float WorldManager::getMoonAngle()

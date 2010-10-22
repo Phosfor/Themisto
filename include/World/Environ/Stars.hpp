@@ -6,20 +6,24 @@
 
 #include "Core/Utils.hpp"
 #include "Core/ApplicationManager.hpp"
-#include "Core/GuiManager.hpp"
+#include "World/Environ/EnvironObject.hpp"
 
-class Stars
+struct StarsData
+{
+    float x, y, size, brightness;
+    CL_Colorf color;
+
+    StarsData(int width, int height);
+};
+
+class Stars : public EnvironObject
 {
     private:
-        vector<int> x, y, size;
-        vector<CL_Colorf> color;
+        std::vector<StarsData> mStars;
 
-        int mMaxStars;
-        int mWidth, mHeight;
         float mBloomSize;
         float t1, t2;
-        bool mNight;
-        bool mDrawStars;
+        bool mNight, mDrawStars;
 
         CL_GraphicContext mGC;
         CL_BlendMode blend_mode;
@@ -40,9 +44,7 @@ class Stars
 
     public:
         Stars(int maxStars = 200);
-        void setStarsLimit(int maxStars);
-        int getStarsLimit();
-        void update(float hours);
+        void update(float windPower, float elapsed, float globalTime);
 };
 
 #endif /* _WEATHER_STARS_HPP_ */

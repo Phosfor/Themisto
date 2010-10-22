@@ -1,78 +1,77 @@
 #include "World/Environ/Clouds.hpp"
 
-Cloud::Cloud(float windPower)
+void Clouds::processClouds(CL_GraphicContext &gc, float windPower, int i, bool firstTime)
 {
-    mGC = appManager.getGraphic();
-    mWidth = mGC.get_width();
-    mHeight = mGC.get_height();
+    mClouds[i].y_offset = rand() % (int)(mWindowHeight * 0.05);
 
-    if (windPower < 0)
-        x = mWidth + rand() % 500;
+    mClouds[i].x_speed = 0;
+    mClouds[i].cloudType = rand() % 8;
+    mClouds[i].imageHandle = CL_Sprite(gc, cl_format("media/clouds/%1.png", mClouds[i].cloudType));
+
+    if (!firstTime)
+    {
+        if (windPower < 0)
+            mClouds[i].x = mWindowWidth;
+        else
+            mClouds[i].x = 0 - mClouds[i].imageHandle.get_width();
+
+        mClouds[i].timeout = rand() % 300;
+    }
     else
-        x = 0 - rand() % 500;
-
-    y_offset = rand() % (int)(mHeight * 0.05);
-
-    x_speed = 0.1;
-    cloudType = rand()%8;
-    imageHandle = CL_Sprite(mGC, cl_format("media/clouds/%1.png", cloudType));
+    {
+        mClouds[i].x = rand() % mWindowWidth;
+    }
 
     float alpha = (float)(rand()%4 + 7) / 10.0f;
     float color = (float)(rand()%1 + 3) / 10.0f;
-    mColor = CL_Colorf(color, color, color, alpha);
+    mClouds[i].mColor = CL_Colorf(color, color, color, alpha);
 
-    speed_koef = rand() % 35 + 45;
-}
-
-void Cloud::update(float windPower, float elapsed)
-{
-    x += x_speed * elapsed;
-
-    if (windPower > 0) {
-        if (x > mWidth + 10) mRemove = true;
-    } else {
-        if (x < -imageHandle.get_width()) mRemove = true;
-    }
-
-    x_speed = speed_koef * windPower * elapsed;
-
-    imageHandle.set_color(mColor);
-    imageHandle.draw(mGC, x, y_offset);
-}
-
-bool Cloud::getRemove()
-{
-    return mRemove;
+    mClouds[i].speed_koef = rand() % 35 + 45;
 }
 
 Clouds::Clouds(int maxClouds)
+    : EnvironObject(), mFirstTime(true)
 {
     srand(time(NULL));
-    mMaxClouds = maxClouds;
+
+    mMaxObjects = maxClouds;
+    mGC = appManager.getGraphic();
 }
 
-void Clouds::setCloudLimit(int maxClouds)
+void Clouds::update(float windPower, float elapsed, float globalTime)
 {
-    mMaxClouds = maxClouds;
-}
-
-int Clouds::getCloudLimit()
-{
-    return mMaxClouds;
-}
-
-void Clouds::update(float _windPower)
-{
-    float elapsed = appManager.getElapsed() / 1000.0f;
-
-    if (mClouds.size() < mMaxClouds)
+    if (mFirstTime)
     {
-        if (rand()%80 == 0) mClouds.push_back(Cloud(_windPower));
+        for (int i=0; i < mMaxObjects; i++)
+        {
+            mClouds.push_back(CloudData());
+            processClouds(mGC, windPower, i, true);
+        }
+
+        mFirstTime = false;
     }
 
-    for (unsigned int i=0; i < mClouds.size(); i++)
+    for (int i=0; i < mMaxObjects; i++)
     {
-        mClouds[i].update(_windPower, elapsed);
-        if (mClouds[i].getRemove()) mClouds.erase(mClouds.begin() + i);
+        if (mClouds[i].timeout > 0)
+        {
+            mClouds[i].timeout--;
+        }
+        else
+        {
+            mClouds[i].x += mClouds[i].x_speed * elapsed;
+            mClouds[i].x_speed = mClouds[i].speed_koef * windPower * elapsed;
+
+            if (windPower > 0) {
+                if (mClouds[i].x > mWindowWidth)
+                    processClouds(mGC, windPower, i);
+            } else {
+                if (mClouds[i].x < -mClouds[i].imageHandle.get_width())
+                    processClouds(mGC, windPower, i);
+            }
+
+            mClouds[i].imageHandle.set_color(mClouds[i].mColor);
+            mClouds[i].imageHandle.draw(mGC, mClouds[i].x, mClouds[i].y_offset);
+        }
     }
 }

@@ -32,10 +32,10 @@ void Moon::setScale(float _scaleX, float _scaleY)
     mMoon.set_scale(_scaleX, _scaleY);
 }
 
-void Moon::update(float hours)
+void Moon::update(float windPower, float elapsed, float globalTime)
 {
     // Set moon back
-    if (!mRenderMoon && hours >= 21.4f)
+    if (!mRenderMoon && globalTime >= 21.4f)
     {
         mRenderMoon = true;
         mAngle = Deg2Rad(-110);
@@ -46,12 +46,12 @@ void Moon::update(float hours)
     float moonX = (mRadius * cos(mAngle)) * 1.3 + mCenterX;   // X position of the Moon
     float moonY = (mRadius * sin(mAngle)) * 1.1 + mCenterY;   // Y position of the Moon
 
-    if (hours <= 9.0f) {
+    if (globalTime <= 9.0f) {
         t = 0.0f;
-    } else if (hours >= 12.0f) {
+    } else if (globalTime >= 12.0f) {
         t = 1.0f;
     } else {
-        t = (hours - 9.0f) / (12.0f - 9.0f);
+        t = (globalTime - 9.0f) / (12.0f - 9.0f);
 
         mG = (1-t)*0.25 + 0.75;
         mB = (1-t)*0.45 + 0.45;
@@ -61,7 +61,7 @@ void Moon::update(float hours)
 
     mMoon.draw(mGC, moonX, moonY);
 
-    float mRadIncrease = (Deg2Rad(90) * GameSeconds(appManager.getElapsed())) / (12.0*60.0*60.0);
+    float mRadIncrease = (Deg2Rad(90) * GameSeconds(elapsed * 1000.0)) / (12.0*60.0*60.0);
 
     //cout << "game seconds: " << GameSeconds(appManager.getElapsed()) << "\n";
     //cout << "mRadIncrease: " << mRadIncrease << "\n";

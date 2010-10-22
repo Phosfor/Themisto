@@ -7,12 +7,11 @@
 #include "Core/Utils.hpp"
 
 #include "Core/ApplicationManager.hpp"
-#include "Core/GuiManager.hpp"
-#include <boost/foreach.hpp>
+#include "World/Environ/EnvironObject.hpp"
 
 using namespace std;
 
-class Moon
+class Moon : public EnvironObject
 {
     private:
         // Moon graphic representing
@@ -34,7 +33,7 @@ class Moon
         Moon(const string &imagePath = "moon.png", float _scaleX = 1, float _scaleY = 1);
         void setScale(float _scaleX, float _scaleY);
         float getMoonAngle();
-        void update(float hours);
+        void update(float windPower, float elapsed, float globalTime);
 };
 
 #endif /* _WEATHER_MOON_HPP_ */

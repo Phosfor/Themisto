@@ -59,7 +59,7 @@ class WorldManager : public boost::serialization::singleton<WorldManager>
         float getWindPower();
 
         void setDropLimit(float maxDrops);
-        float getDropLimit();
+        int getDropLimit();
 
         float getMoonAngle();
 

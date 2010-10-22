@@ -1,34 +1,29 @@
 #include "World/Environ/Stars.hpp"
 
+StarsData::StarsData(int width, int height)
+{
+    x = rand() % width;
+    y = rand() % height;
+    brightness = (float)(rand() % 10 + 1)/10.0f;
+
+    float g = 1.0f - (float)(rand()%4+1)/10.0f;
+    float b = 1.0f - Randf(0.5f);
+
+    color = CL_Colorf(1.0f, g, b, brightness);
+}
+
 Stars::Stars(int maxStars)
+    : EnvironObject(), mBloomSize(0.09f), t1(0), t2(0)
+    , mNight(false), mDrawStars(false)
 {
     srand(time(NULL));
 
-    x = vector<int>(maxStars);
-    y = vector<int>(maxStars);
-    size = vector<int>(maxStars);
-    color = vector<CL_Colorf>(maxStars);
-
-    fill(x.begin(), x.end(), 0);
-    fill(y.begin(), y.end(), 0);
-    fill(size.begin(), size.end(), 0);
-    fill(color.begin(), color.end(), CL_Colorf());
-
     mGC = appManager.getGraphic();
-    mWidth = appManager.getWindow().get_geometry().get_width();
-    mHeight = appManager.getWindow().get_geometry().get_height();
+    mMaxObjects = maxStars;
 
-    mMaxStars = maxStars;
-    for (int i=0; i < mMaxStars; i++)
+    for (int i=0; i < mMaxObjects; i++)
     {
-        x[i] = rand() % mWidth;
-        y[i] = rand() % mHeight;
-        float brightness = (float)(rand() % 10 + 1)/10.0f;
-
-        float g = 1.0f - (float)(rand()%4+1)/10.0f;
-        float b = 1.0f - Randf(0.5f);
-
-        color[i] = CL_Colorf(1.0f, g, b, brightness);
+        mStars.push_back(StarsData(mWindowWidth, mWindowHeight));
     }
 
     mStarsTexture = CL_Texture(mGC, mGC.get_width(), mGC.get_height());
@@ -42,51 +37,35 @@ Stars::Stars(int maxStars)
     makeBloomHandle();
     makeBlurHandle();
 
-    mBloomSize = 0.09f;
-    t1 = t2 = 0.0f;
-    mNight = false;
-    mDrawStars = false;
-
     blend_mode.set_blend_function(
             cl_blend_dest_color, cl_blend_one,
             cl_blend_one, cl_blend_one);
     blend_mode.enable_blending(true);
 }
 
-int Stars::getStarsLimit()
+void Stars::update(float windPower, float elapsed, float globalTime)
 {
-    return mMaxStars;
-}
-
-void Stars::setStarsLimit(int maxStars)
-{
-    mMaxStars = maxStars;
-    /*TODO: Add new stars */
-}
-
-void Stars::update(float hours)
-{
-    if (hours <= 10.0f) {
+    if (globalTime <= 10.0f) {
         t1 = 0.0f;
-    } else if (hours >= 13.0f) {
+    } else if (globalTime >= 13.0f) {
         t1 = 1.0f;
         mNight = true;
     } else {
         mDrawStars = true;
-        t1 = ((hours - 10.0f) / (13.0f - 10.0f))/5;
+        t1 = ((globalTime - 10.0f) / (13.0f - 10.0f))/5;
         mBloomSize = t1;
     }
 
     if (mNight)
     {
-        if (hours <= 21.5f) {
+        if (globalTime <= 21.5f) {
             t2 = 0.0f;
-        } else if (hours >= 23.8f) {
+        } else if (globalTime >= 23.8f) {
             t2 = 1.0f;
             mNight = false;
             mDrawStars = false;
         } else {
-            t2 = ((hours - 10.0f) / (13.0f - 10.0f))/5;
+            t2 = ((globalTime - 10.0f) / (13.0f - 10.0f))/5;
             mBloomSize = 1.0f - t2;
         }
     }
@@ -97,31 +76,25 @@ void Stars::update(float hours)
     mGC.set_frame_buffer(mStarsBuf);
     mGC.clear(CL_Colorf::transparent);
     //mGC.clear(CL_Colorf::black);
-    for (int i=0; i < mMaxStars; i++)
+    for (int i=0; i < mMaxObjects; i++)
     {
         // Stars "blinking"
         if (rand() % 60 == 0) continue;
-        CL_Draw::circle(mGC, x[i], y[i], 1, color[i]);
+        CL_Draw::circle(mGC, mStars[i].x, mStars[i].y, 1, mStars[i].color);
     }
     mGC.reset_frame_buffer();
 
     // Process texture with stars using bloom shader
     mGC.set_blend_mode(blend_mode);
-    mGC.set_texture(0, mStarsTexture);
-    renderStars(mProgramBloom, true);
-    mGC.reset_texture(0);
-    mGC.reset_frame_buffer();
+        mGC.set_texture(0, mStarsTexture);
+            renderStars(mProgramBloom, true);
+        mGC.reset_texture(0);
     mGC.reset_blend_mode();
 
-    mGC.set_frame_buffer(mBlurBuf);
-    mGC.clear(CL_Colorf::transparent);
-    //mWayPattern.draw(mGC, 500, 500);
-    mGC.reset_frame_buffer();
-
     mGC.set_blend_mode(blend_mode);
-    mGC.set_texture(0, mBlurTexture);
-    renderStars(mProgramBlur);
-    mGC.reset_texture(0);
+        mGC.set_texture(0, mBlurTexture);
+            renderStars(mProgramBlur);
+        mGC.reset_texture(0);
     mGC.reset_blend_mode();
 }
 
