@@ -36,7 +36,7 @@ int Application::main(const std::vector<CL_String> &args)
 
         // Queueing the states
         bool physic = false;
-        for (int i=0; i < args.size(); i++)
+        for (unsigned int i=0; i < args.size(); i++)
         {
            if (args[i] == "physic") physic = true;
         }
