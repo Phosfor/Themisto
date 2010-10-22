@@ -9,31 +9,20 @@ BodyVisual::BodyVisual(Body *body)
 
 void BodyVisual::redrawBody()
 {
-
-      /*
-        b2Fixture* fixture = mBody->GetFixtureList;
-        if(fixture != NULL)
+    b2Fixture* fixture = mBody->getb2Body().GetFixtureList();
+    if (fixture != NULL)
+    {
+        switch (fixture->GetType())
         {
-        
-                b2PolygonShape *shape =   (b2PolygonShape*)fixture.GetShape();
-                int vertexCount = shape->GetVertexCount();
-                if(vertexCount > 0)
-                {
-                    b2Vec2 vertex1 = shape->GetVertex(0);
-                    for(int i=1; i<shape->GetVertexCount(); i++)
-                    {
-                        b2Vec2 vertex2 = shape->GetVertex(i);
-                        CL_Draw::line(appManager.getGraphic(), vertex1.x,
-                                         vertex1.y, vertex2.x, vertex2.y, CL_Colorf::red);
-                        vertex1 = vertex2;
+            case b2Shape::e_circle:
+                b2CircleShape *circle = (b2CircleShape*)fixture->GetShape();
 
-                    }
-                }
-                
-
+                b2Vec2 center = b2Mul(fixture->GetBody()->GetTransform(), circle->m_p);
+                CL_Draw::circle(appManager.getGraphic(), center.x, center.y, circle->m_radius, CL_Colorf::black);
+                break;
         }
-        */
-        
+    }
+
     CL_Draw::circle(appManager.getGraphic() , mBody->getb2Body().GetWorldCenter().x,
                                          mBody->getb2Body().GetWorldCenter().y, 5.0f, CL_Colorf::red);
 }
