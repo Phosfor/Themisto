@@ -23,7 +23,7 @@ class Leaves : public EnvironObject
 {
     private:
         vector<LeafData> mLeaves;
-        bool firstTime;
+        bool mFirstTime;
 
         CL_GraphicContext mGC;
 
@@ -31,6 +31,7 @@ class Leaves : public EnvironObject
 
     public:
         Leaves(int maxLeaves = 5);
+        void setLimit(int limit);
         void update(float windPower, float elapsed, float globalTime);
 };
 

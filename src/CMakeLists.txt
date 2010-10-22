@@ -9,6 +9,7 @@ set(Themisto_srcs
     Core/Utils.cpp
     Core/PhysicManager.cpp
     Core/SceneLoader.cpp
+    Core/EnvironManager.cpp
 
     # Environ
     World/Environ/EnvironObject.cpp
@@ -19,7 +20,6 @@ set(Themisto_srcs
     World/Environ/Leaves.cpp
     World/Environ/Clouds.cpp
     World/Environ/Birds.cpp
-    World/WorldManager.cpp
 
     # Objects
     World/Objects/Grass.cpp

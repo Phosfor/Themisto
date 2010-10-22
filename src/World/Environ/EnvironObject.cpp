@@ -10,6 +10,16 @@ int EnvironObject::getLimit()
    return mMaxObjects;
 }
 
+void EnvironObject::setEnabled(bool state)
+{
+    mEnabled = state;
+}
+
+bool EnvironObject::getEnabled()
+{
+    return mEnabled;
+}
+
 EnvironObject::EnvironObject()
 {
     mWindowWidth = ScreenResolutionX;

@@ -1,5 +1,14 @@
 #include "World/Environ/Leaves.hpp"
 
+void Leaves::setLimit(int limit)
+{
+   mLeaves.resize(limit);
+   if (limit > mMaxObjects && !mFirstTime)
+      for (int i=0; i < limit-mMaxObjects; i++)
+         processLeaves(mGC, 0, i);
+}
+
+
 void Leaves::processLeaves(CL_GraphicContext &gc, float windPower, int i)
 {
     mLeaves[i].timer = mLeaves[i].addedAngle = 0;
@@ -34,7 +43,7 @@ void Leaves::processLeaves(CL_GraphicContext &gc, float windPower, int i)
 }
 
 Leaves::Leaves(int maxLeaves)
-    : EnvironObject(), firstTime(true)
+    : EnvironObject(), mFirstTime(true)
 {
     srand(time(NULL));
     mGC = appManager.getGraphic();
@@ -44,14 +53,14 @@ Leaves::Leaves(int maxLeaves)
 void Leaves::update(float windPower, float elapsed, float globalTime)
 {
     // Init pack part of leaves
-    if (firstTime)
+    if (mFirstTime)
     {
         for (int i=0; i < mMaxObjects; i++)
         {
             mLeaves.push_back(LeafData());
             processLeaves(mGC, windPower, i);
         }
-        firstTime = false;
+        mFirstTime = false;
     }
 
     for (int i=0; i < mMaxObjects; i++)

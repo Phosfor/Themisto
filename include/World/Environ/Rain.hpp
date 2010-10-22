@@ -29,6 +29,7 @@ class Rain : public EnvironObject
 
     public:
         Rain(int maxDrops = 150);
+        void setLimit(int limit);
         void update(float windPower, float elapsed, float globalTime);
 };
 

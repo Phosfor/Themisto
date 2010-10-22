@@ -1,5 +1,13 @@
 #include "World/Environ/Clouds.hpp"
 
+void Clouds::setLimit(int limit)
+{
+   mClouds.resize(limit);
+   if (limit > mMaxObjects && !mFirstTime)
+      for (int i=0; i < limit-mMaxObjects; i++)
+         processClouds(mGC, mWindowWidth, mWindowHeight, i);
+}
+
 void Clouds::processClouds(CL_GraphicContext &gc, float windPower, int i, bool firstTime)
 {
     mClouds[i].y_offset = rand() % (int)(mWindowHeight * 0.05);
