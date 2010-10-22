@@ -36,8 +36,8 @@ class EnvironManager : public boost::serialization::singleton<EnvironManager>
             Environ_Sky    = 0,
             Environ_Stars  = 1,
             Environ_Moon   = 2,
-            Environ_Clouds = 3,
-            Environ_Rain   = 4,
+            Environ_Rain   = 3,
+            Environ_Clouds = 4,
             Environ_Leaves = 5,
             Environ_Birds  = 6
         };
