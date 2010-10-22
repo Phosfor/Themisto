@@ -6,6 +6,8 @@ void Birds::setLimit(int limit)
    if (limit > mMaxObjects && !mFirstTime)
       for (int i=0; i < limit-mMaxObjects; i++)
          processBirds(mGC, mWindowWidth, mWindowHeight, i);
+
+   mMaxObjects = limit;
 }
 
 void Birds::processBirds(CL_GraphicContext &gc, int width, int height, int i)

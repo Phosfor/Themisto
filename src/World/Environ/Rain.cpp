@@ -3,6 +3,7 @@
 void Rain::setLimit(int limit)
 {
    mData.resize(limit, Data());
+   mMaxObjects = limit;
 }
 
 Data::Data()

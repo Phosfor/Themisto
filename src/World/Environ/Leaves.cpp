@@ -6,6 +6,8 @@ void Leaves::setLimit(int limit)
    if (limit > mMaxObjects && !mFirstTime)
       for (int i=0; i < limit-mMaxObjects; i++)
          processLeaves(mGC, 0, i);
+
+   mMaxObjects = limit;
 }
 
 

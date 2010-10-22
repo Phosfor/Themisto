@@ -6,6 +6,8 @@ void Clouds::setLimit(int limit)
    if (limit > mMaxObjects && !mFirstTime)
       for (int i=0; i < limit-mMaxObjects; i++)
          processClouds(mGC, mWindowWidth, mWindowHeight, i);
+
+   mMaxObjects = limit;
 }
 
 void Clouds::processClouds(CL_GraphicContext &gc, float windPower, int i, bool firstTime)
@@ -28,6 +30,7 @@ void Clouds::processClouds(CL_GraphicContext &gc, float windPower, int i, bool f
     else
     {
         mClouds[i].x = rand() % mWindowWidth;
+        mClouds[i].timeout = 0;
     }
 
     float alpha = (float)(rand()%4 + 7) / 10.0f;

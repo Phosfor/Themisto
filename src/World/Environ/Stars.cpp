@@ -3,6 +3,7 @@
 void Stars::setLimit(int limit)
 {
    mStars.resize(limit, StarsData(mWindowWidth, mWindowHeight));
+   mMaxObjects = limit;
 }
 
 StarsData::StarsData(int width, int height)
