@@ -18,7 +18,10 @@ void MenuState::init()
     environManager.setWindPower(-2.0);
 }
 
-void MenuState::shutdown() { }
+void MenuState::shutdown() 
+{ 
+    delete mStatFont;
+}
 
 void MenuState::update()
 {
