@@ -35,7 +35,16 @@ int Application::main(const std::vector<CL_String> &args)
         CL_Slot slotInput = appManager.getKeyboard().sig_key_up().connect(Application::onInput);
 
         // Queueing the states
-        stateManager.push(new MenuState);
+        bool physic = false;
+        for (int i=0; i < args.size(); i++)
+        {
+           if (args[i] == "physic") physic = true;
+        }
+
+        if (physic)
+           stateManager.push(new PhysicState);
+        else
+           stateManager.push(new MenuState);
 
         while (appManager.getRunning())
         {

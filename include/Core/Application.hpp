@@ -13,8 +13,10 @@
 #include "Core/ResourceManager.hpp"
 #include "Core/StateManager.hpp"
 #include "Core/GuiManager.hpp"
-#include "World/States/MenuState.hpp"
 #include "Core/Utils.hpp"
+
+#include "World/States/MenuState.hpp"
+#include "World/States/PhysicState.hpp"
 
 // This is wrapper to make the Main function crossplatform
 class Application
