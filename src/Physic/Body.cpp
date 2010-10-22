@@ -1,14 +1,23 @@
 #include "Physic/Body.hpp"
-#include "Core/Application.hpp"
-#include <Box2D/Collision/Shapes/b2PolygonShape.h>
 
-Body::Body()
-{
-}
+
 
 Body::Body(b2Body* body)
 {
     mBody = body;
+    mAppliedImpacts = new list<Impact*>;
+    mMaterial = new BodyMaterial;
+}
+
+Body::~Body()
+{
+    delete mAppliedImpacts;
+    delete mMaterial;
+}
+
+void Body::setVisual(BodyVisual* visualiser)
+{
+    mBodyVisual = visualiser;
 }
 
 b2Body& Body::getb2Body()
@@ -16,33 +25,140 @@ b2Body& Body::getb2Body()
     return *mBody;
 }
 
+void Body::setMaterial(BodyMaterial *material)
+{
+    mMaterial->Name = material->Name;
+    mMaterial->KindleTemperature = material->KindleTemperature;
+    mMaterial->KindleReceptivity = material->KindleReceptivity;
+    mMaterial->FlameTemperature = material->FlameTemperature;
+    mMaterial->SelfFlareUpRate = material->SelfFlareUpRate;
+    mMaterial->CarbonizeRate = material->CarbonizeRate;
+    mMaterial->ElectricalConductivity = material->ElectricalConductivity;
+    mMaterial->ThermalReceptivity = material->ThermalReceptivity;
+    mMaterial->DampReceptivity = material->DampReceptivity;
+    mMaterial->FrozingTemperature = material->FrozingTemperature;
+}
+
+BodyMaterial* Body::getMaterial()
+{
+    return mMaterial;
+}
+
 void Body::updateVisual()
 {
-    if(mBody != NULL)
+    if(mBodyVisual != NULL)
     {
-        /*
-        b2Fixture* fixture = mBody->GetFixtureList;
-        if(fixture != NULL)
-        {
-                b2PolygonShape *shape = (b2PolygonShape*)fixture.GetShape();
-                int vertexCount = shape->GetVertexCount();
-                if(vertexCount > 0)
-                {
-                    b2Vec2 vertex1 = shape->GetVertex(0);
-                    for(int i=1; i<shape->GetVertexCount(); i++)
-                    {
-                        b2Vec2 vertex2 = shape->GetVertex(i);
-                        CL_Draw::line(appManager.getGraphic(), vertex1.x,
-                                         vertex1.y, vertex2.x, vertex2.y, CL_Colorf::red);
-                        vertex1 = vertex2;
-
-                    }
-                }
-
-        }
-        */
-        CL_Draw::circle(appManager.getGraphic(), mBody->GetWorldCenter().x,
-                                         mBody->GetWorldCenter().y, 5.0f, CL_Colorf::red);
-
+        mBodyVisual->redrawBody();
     }
+}
+
+void Body::applyImpact(Impact* impact)
+{
+    mAppliedImpacts->push_front(impact);
+}
+
+void Body::cancelImpact(Impact* impact)
+{
+    mAppliedImpacts->remove(impact);
+}
+
+bool Body::isFrozen()
+{
+    return mTemperature <= mMaterial->FrozingTemperature;
+}
+
+void Body::step()
+{
+    for(std::list<Impact*>::iterator impact = mAppliedImpacts->begin();
+      impact != mAppliedImpacts->end(); ++impact)
+    {
+        switch((*impact)->Type)
+        {
+            case Moisten:
+                calculateMoistenImpact(*impact);
+            break;
+            case Heat:
+                calculateHeatImpacts(*impact);
+            break;
+            case Cool:
+                calculateCoolImpacts(*impact);
+            break;
+            case Beat:
+                calculateBeatImpacts(*impact);
+            break;
+            case Wind:
+                calculateWindImpacts(*impact);
+            break;
+            case Electricity:
+                calculateElectricityImpacts(*impact);
+            break;
+        }
+    }
+    if(mKindleLevel > 0)
+    {
+        mCarbonizeLevel += physicManager.mTimeStep * mMaterial->SelfFlareUpRate;
+        if( mCarbonizeLevel > 1) mCarbonizeLevel = 1;
+    }
+
+}
+
+ void Body::calculateMoistenImpact(Impact* impact)
+{
+    mDampness += impact->Intensity * physicManager.mTimeStep * mMaterial->DampReceptivity;
+    if(mDampness > mMaxDampness)
+    {
+        mDampness = mMaxDampness;
+    }
+}
+ void Body::calculateHeatImpacts(Impact* impact)
+{
+    if(mKindleLevel == 0)
+    {
+        mTemperature += impact->Intensity * physicManager.mTimeStep * mMaterial->ThermalReceptivity;
+    }
+    //if body burning
+    if(mTemperature >= mMaterial->KindleTemperature)
+    {
+        if( mMaterial->KindleTemperature > 0)
+        {
+            //up flame size
+            mKindleLevel += impact->Intensity *
+                physicManager.mTimeStep * mMaterial->KindleReceptivity;
+            if(mKindleLevel > mMaxKindleLevel)
+            {
+                mKindleLevel = mMaxKindleLevel;
+            }
+            //up carbonize level and temperature
+            if( mMaxKindleLevel > 0)
+            {
+                mCarbonizeLevel += (mKindleLevel / mMaxKindleLevel) *
+                    mMaterial->CarbonizeRate * physicManager.mTimeStep;
+                if(mCarbonizeLevel > 1) mCarbonizeLevel = 1;
+
+                mTemperature = mMaterial->FlameTemperature * mKindleLevel / mMaxKindleLevel;
+            }
+        }
+    }
+}
+ void Body::calculateCoolImpacts(Impact* impact)
+{
+    if(mKindleLevel == 0)
+    {
+        mTemperature -= impact->Intensity * physicManager.mTimeStep * mMaterial->ThermalReceptivity;
+    }
+}
+ void Body::calculateBeatImpacts(Impact* impact)
+{
+    b2Vec2 direction = impact->Dirrection;
+    direction.Normalize();
+    b2Vec2 impulsVec = impact->Intensity * direction;
+    mBody->ApplyLinearImpulse(impulsVec, impact->ImpactPoint);
+}
+ void Body::calculateWindImpacts(Impact* impact)
+{
+
+}
+ void Body::calculateElectricityImpacts(Impact* impact)
+{
+
 }

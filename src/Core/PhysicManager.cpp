@@ -33,6 +33,10 @@ std::list<Body>& PhysicManager::getBodies()
 
 void PhysicManager::step()
 {
+    for (std::list<Body>::iterator body=mBodies->begin(); body!=mBodies->end(); ++body)
+    {
+        body->step();
+    }
     mWorld->Step(mTimeStep, mVelocityIterations, mPositionIterations);
 }
 

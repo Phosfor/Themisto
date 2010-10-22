@@ -22,6 +22,9 @@ set(Themisto_srcs
     World/States/MenuState.cpp
 
     Physic/Body.cpp
+    Physic/BodyVisual.cpp
+    Physic/BodyMaterial.cpp
+    Physic/Impact.cpp
 
     main.cpp
 )

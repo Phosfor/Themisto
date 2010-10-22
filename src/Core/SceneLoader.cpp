@@ -1,10 +1,11 @@
 #include "Core/SceneLoader.hpp"
-#include "Core/PhysicManager.hpp"
+
 
 SceneLoader::SceneLoader(){}
 
 void SceneLoader::loadScene()
 {
+
     //add earth
     b2BodyDef earthDef;
     earthDef.position.Set(100.0f, 200.0f);
@@ -16,6 +17,8 @@ void SceneLoader::loadScene()
     earth->CreateFixture(&earthShape, 0.0f);
 
     Body *earthBody = new Body(earth);
+    BodyVisual *earthVisual = new BodyVisual(earthBody);
+    earthBody->setVisual(earthVisual);
     physicManager.registerBody(earthBody);
 
     //add box
@@ -34,5 +37,6 @@ void SceneLoader::loadScene()
     box1->CreateFixture(&box1Fixture);
 
     Body *box1Body = new Body(box1);
+    box1Body->setVisual(new BodyVisual(box1Body));
     physicManager.registerBody(box1Body);
 }
