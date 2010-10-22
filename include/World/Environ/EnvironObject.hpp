@@ -12,11 +12,17 @@ class EnvironObject
    protected:
       int mMaxObjects;
       int mWindowWidth, mWindowHeight;
+      bool mEnabled;
 
    public:
       EnvironObject();
+
       virtual void setLimit(int limit);
       virtual int getLimit();
+
+      bool getEnabled();
+      void setEnabled(bool state);
+
       virtual void update(float windPower, float elapsed, float globalTime) = 0;
 };
 
