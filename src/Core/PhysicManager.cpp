@@ -7,13 +7,20 @@ PhysicManager::PhysicManager()
     mTimeStep = 1.0f / 60.0f;
     mVelocityIterations = 6;
     mPositionIterations = 2;
-
-    mBodies = new std::list<Body>;
+    mDefaultMaterial = new BodyMaterial();
+    mBodies = new std::list<Body*>;
+    mEnvironTemperature = 20;
 }
 
 PhysicManager::~PhysicManager()
 {
     delete mWorld;
+    delete mDefaultMaterial;
+    for (std::list<Body*>::iterator body=mBodies->begin(); body!=mBodies->end(); ++body)
+    {
+        delete *body;
+    }
+    delete mBodies;
 }
 
 b2World& PhysicManager::getWorld()
@@ -23,27 +30,27 @@ b2World& PhysicManager::getWorld()
 
 void PhysicManager::registerBody(Body* body)
 {
-    mBodies->push_front(*body);
+    mBodies->push_front(body);
 }
 
-std::list<Body>& PhysicManager::getBodies()
+std::list<Body*>& PhysicManager::getBodies()
 {
     return *mBodies;
 }
 
 void PhysicManager::step()
 {
-    for (std::list<Body>::iterator body=mBodies->begin(); body!=mBodies->end(); ++body)
+    for (std::list<Body*>::iterator body=mBodies->begin(); body!=mBodies->end(); ++body)
     {
-        body->step();
+        (*body)->step();
     }
     mWorld->Step(mTimeStep, mVelocityIterations, mPositionIterations);
 }
 
 void PhysicManager::updateVisual()
 {
-    for (std::list<Body>::iterator body=mBodies->begin(); body!=mBodies->end(); ++body)
+    for (std::list<Body*>::iterator body=mBodies->begin(); body!=mBodies->end(); ++body)
     {
-        body->updateVisual();
+        (*body)->updateVisual();
     }
 }

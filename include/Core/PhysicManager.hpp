@@ -7,32 +7,37 @@
 #include <list>
 
 #include "Physic/Body.hpp"
+#include "Physic/BodyMaterial.hpp"
 #include "Core/Utils.hpp"
 #include "Core/ApplicationManager.hpp"
 
 #define physicManager (PhysicManager::get_mutable_instance())
 #define physicManagerConst (PhysicManager::get_const_instance())
 
+
 class Body;
+
 
 class PhysicManager : public
 boost::serialization::singleton<PhysicManager>
 {
     private:
         b2World* mWorld;
-        std::list<Body>* mBodies;
+        std::list<Body*>* mBodies;
+
     public:
         float32 mTimeStep;
         int32 mVelocityIterations;
         int32 mPositionIterations;
-
+        BodyMaterial *mDefaultMaterial; //sharing default material for memory economy reason
+        float mEnvironTemperature;
 
         PhysicManager();
         ~PhysicManager();
 
         b2World& getWorld();
         void registerBody(Body* body);
-        std::list<Body>& getBodies();
+        std::list<Body*>& getBodies();
         void step();
         void updateVisual();
 };

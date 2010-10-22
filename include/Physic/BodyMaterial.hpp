@@ -15,43 +15,73 @@ struct BodyMaterial
 {
     string Name;
 
-    //if temperature become more then kindle temperature, body would flare up
+    // If temperature become more then kindle temperature, body would flare up
     float KindleTemperature;
 
-    //how fast body will flare up
-    //value=0:, mKindleLevel always would be 0
-    //value=1: under heat impact with intensity=KindleTemperature, at unit time interval,
-    //KindleLevel would become MaxKindleLevel
+    // How fast body will flare up
+    // value=0:, mKindleLevel always would be 0
+    // value=1: under heat impact with intensity=KindleTemperature, at unit time interval,
+    // KindleLevel would become MaxKindleLevel
     float KindleReceptivity;
 
-    //body temperature, after it burning with full strench flame
+    // Body temperature, after it burning with full strench flame
     float FlameTemperature;
 
-    //How fast body will flare up by itself
-    //value 0: body wouldn't flare up by itself
-    //value 1: if KindleLevel > 0 then at unit time interval KindleLevel become MaxKindleLevel
+    // How fast body will flare up by itself
+    // value 0: body wouldn't flare up by itself
+    // value 1: if KindleLevel > 0 then at unit time interval KindleLevel become MaxKindleLevel
     float SelfFlareUpRate;
 
-    //how fast body will carbonize
-    //value = 0 - flame would make no effect
-    //if value=1 then with KindleLevel=maxKindleLevel at unit time inteval, body would fully burn out
+    // How fast body will carbonize
+    // value = 0 - flame would make no effect
+    // if value=1 then with KindleLevel=maxKindleLevel at unit time inteval, body would fully burn out
     float CarbonizeRate;
 
-    //0 - wouldn't conducte electicity, 1 - conduct without resistance
+    // 0 - wouldn't conducte electicity, 1 - conduct without resistance
     float ElectricalConductivity;
 
-    //How fast body would warm up
-    //0 - wouln't warm up, 1 - receive all warm
+    // How fast body would warm up
+    // 0 - wouln't warm up, 1 - receive all warm
     float ThermalReceptivity;
 
-    //How fost body would soak water
-    //if value 0, then Dumpness would always be 0
-    //if value 1, then under moisten impact with intensity=1,
-    //Dampness would become MaxDumpness in one time unit
+    // How fost body would soak water
+    // if value 0, then Dumpness would always be 0
+    // if value 1, then under moisten impact with intensity=1,
+    // Dampness would become MaxDumpness in one time unit
     float DampReceptivity;
 
-    //if temperature fall to FrozingTemperature, body would become frozen
+    // If temperature fall to FrozingTemperature, body would become frozen
     float FrozingTemperature;
+
+    // How much would fall friction, when dumpness grow up to unit
+    float InflDampnessToFriction;
+
+    // How much would fall KinleTemperature, when dumpness grow up to unit
+    float InflDampnessToKindleTemperature;
+
+    // How much would fall MaxKindle, when dumpness grow up to unit
+    float InflDampnessToMaxKindle;
+
+    // How much would fall KinleReceptivity, when dumpness grow up to unit
+    float InflDampnessToKindleReceptivity;
+
+    // How much would grow up FrozingTemperature, when dumpness grow up to unit
+    float InflDampnessToFrozingTemperature;
+
+    // How much would fall MaxKindle, when CarbonizeLevel grow up to one per cent
+    float InflCarbonizeLevelToMaxKindle;
+
+    // How much would fall MaxDumpness, when CarbonizeLevel grow up to one per cent
+    float InflCarbonizeLevelToMaxDampness;
+
+    // How much would fall ElecticalConductivity, when CarbonizeLevel grow up to one per cent
+    float InflCarbonizeLevelToElecticalConductivity;
+
+    // How mush would fall KindleLevel becouse of an one unit of water
+    float InflMoistenToKindleLevel;
+
+    // How many water would evaporate in time unit, when temperature = 1
+    float InflTemperatureToDampness;
 
     BodyMaterial();
 };

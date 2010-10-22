@@ -6,13 +6,14 @@ Body::Body(b2Body* body)
 {
     mBody = body;
     mAppliedImpacts = new list<Impact*>;
-    mMaterial = new BodyMaterial;
+    mMaterial = physicManager.mDefaultMaterial;
+    mShouldFreeBodyVisual = true;
 }
 
 Body::~Body()
 {
     delete mAppliedImpacts;
-    delete mMaterial;
+    if(mShouldFreeBodyVisual) delete mBodyVisual;
 }
 
 void Body::setVisual(BodyVisual* visualiser)
@@ -27,16 +28,7 @@ b2Body& Body::getb2Body()
 
 void Body::setMaterial(BodyMaterial *material)
 {
-    mMaterial->Name = material->Name;
-    mMaterial->KindleTemperature = material->KindleTemperature;
-    mMaterial->KindleReceptivity = material->KindleReceptivity;
-    mMaterial->FlameTemperature = material->FlameTemperature;
-    mMaterial->SelfFlareUpRate = material->SelfFlareUpRate;
-    mMaterial->CarbonizeRate = material->CarbonizeRate;
-    mMaterial->ElectricalConductivity = material->ElectricalConductivity;
-    mMaterial->ThermalReceptivity = material->ThermalReceptivity;
-    mMaterial->DampReceptivity = material->DampReceptivity;
-    mMaterial->FrozingTemperature = material->FrozingTemperature;
+    mMaterial = material;
 }
 
 BodyMaterial* Body::getMaterial()
@@ -64,11 +56,48 @@ void Body::cancelImpact(Impact* impact)
 
 bool Body::isFrozen()
 {
-    return mTemperature <= mMaterial->FrozingTemperature;
+    return mTemperature <= mCurrentFrozingTemperature;
 }
 
 void Body::step()
 {
+    if(mKindleLevel > 0)
+    {
+        mCarbonizeLevel += physicManager.mTimeStep * mMaterial->SelfFlareUpRate;
+        if( mCarbonizeLevel > 1) mCarbonizeLevel = 1;
+    }
+    else
+    {
+        mTemperature -= (physicManager.mEnvironTemperature - mTemperature)/2 *
+            mMaterial->ThermalReceptivity * physicManager.mTimeStep;
+    }
+
+    if(mDampness > 0)
+    {
+        mDampness -= physicManager.mTimeStep * mTemperature * mMaterial->InflTemperatureToDampness;
+
+        b2Fixture* fixture = mBody->GetFixtureList();
+        if(fixture != NULL)
+        {
+            float friction = fixture->GetFriction() - mDampness * mMaterial->InflDampnessToFriction;
+            fixture->SetFriction(friction);
+        }
+    }
+
+    // Calculate influences one time here for productivity reasons
+    mCurrentMaxKindle = mMaxKindleLevel -
+        mDampness * mMaterial->InflDampnessToMaxKindle -
+        mCarbonizeLevel * mMaterial->InflCarbonizeLevelToMaxKindle;
+    mCurrentKindleTemperature = mMaterial->KindleTemperature -
+        mDampness * mMaterial->InflDampnessToKindleTemperature;
+    mCurrentKindleReceptivity = mMaterial->KindleReceptivity -
+        mDampness * mMaterial->InflDampnessToKindleReceptivity;
+    mCurrentFrozingTemperature = mMaterial->FrozingTemperature +
+        mDampness * mMaterial->InflDampnessToFrozingTemperature;
+    mCurrentMaxDumpness = mMaxDampness - mCarbonizeLevel * mMaterial->InflCarbonizeLevelToMaxDampness;
+    mCurrentElectricalConductivity = mMaterial->ElectricalConductivity -
+        mCarbonizeLevel * mMaterial->InflCarbonizeLevelToElecticalConductivity;
+
     for(std::list<Impact*>::iterator impact = mAppliedImpacts->begin();
       impact != mAppliedImpacts->end(); ++impact)
     {
@@ -92,22 +121,23 @@ void Body::step()
             case Electricity:
                 calculateElectricityImpacts(*impact);
             break;
+            case Nothing: break;
         }
     }
-    if(mKindleLevel > 0)
-    {
-        mCarbonizeLevel += physicManager.mTimeStep * mMaterial->SelfFlareUpRate;
-        if( mCarbonizeLevel > 1) mCarbonizeLevel = 1;
-    }
+
 
 }
 
  void Body::calculateMoistenImpact(Impact* impact)
 {
     mDampness += impact->Intensity * physicManager.mTimeStep * mMaterial->DampReceptivity;
-    if(mDampness > mMaxDampness)
+    if(mDampness > mCurrentMaxDumpness)
     {
-        mDampness = mMaxDampness;
+        mDampness = mCurrentMaxDumpness;
+    }
+    if( mKindleLevel > 0)
+    {
+        mKindleLevel -= impact->Intensity * physicManager.mTimeStep * mMaterial->InflMoistenToKindleLevel;
     }
 }
  void Body::calculateHeatImpacts(Impact* impact)
@@ -116,26 +146,26 @@ void Body::step()
     {
         mTemperature += impact->Intensity * physicManager.mTimeStep * mMaterial->ThermalReceptivity;
     }
-    //if body burning
-    if(mTemperature >= mMaterial->KindleTemperature)
+    // If body burning
+    if(mTemperature >= mCurrentKindleTemperature)
     {
-        if( mMaterial->KindleTemperature > 0)
+        if( mCurrentKindleTemperature > 0)
         {
-            //up flame size
+            // Up flame size
             mKindleLevel += impact->Intensity *
-                physicManager.mTimeStep * mMaterial->KindleReceptivity;
-            if(mKindleLevel > mMaxKindleLevel)
+                physicManager.mTimeStep * mCurrentKindleReceptivity;
+            if(mKindleLevel > mCurrentMaxKindle)
             {
-                mKindleLevel = mMaxKindleLevel;
+                mKindleLevel = mCurrentMaxKindle;
             }
-            //up carbonize level and temperature
-            if( mMaxKindleLevel > 0)
+            // Up carbonize level and temperature
+            if( mCurrentMaxKindle > 0)
             {
-                mCarbonizeLevel += (mKindleLevel / mMaxKindleLevel) *
+                mCarbonizeLevel += (mKindleLevel / mCurrentMaxKindle) *
                     mMaterial->CarbonizeRate * physicManager.mTimeStep;
                 if(mCarbonizeLevel > 1) mCarbonizeLevel = 1;
 
-                mTemperature = mMaterial->FlameTemperature * mKindleLevel / mMaxKindleLevel;
+                mTemperature = mMaterial->FlameTemperature * mKindleLevel / mCurrentMaxKindle;
             }
         }
     }

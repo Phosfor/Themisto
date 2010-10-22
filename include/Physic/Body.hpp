@@ -21,6 +21,12 @@ class Body
         BodyVisual *mBodyVisual;
         std::list<Impact*> *mAppliedImpacts;
         BodyMaterial *mMaterial;
+        float mCurrentMaxKindle;
+        float mCurrentKindleTemperature;
+        float mCurrentKindleReceptivity;
+        float mCurrentFrozingTemperature;
+        float mCurrentMaxDumpness;
+        float mCurrentElectricalConductivity;
 
     protected:
         virtual void calculateMoistenImpact(Impact* impact);
@@ -42,29 +48,37 @@ class Body
         void setMaterial(BodyMaterial *material);
         BodyMaterial* getMaterial();
 
+        // Should body free memory under mBodyVisual object at destroing
+        // Default value is true
+        bool mShouldFreeBodyVisual;
+
+        // Is body temperature under the ForzingTemperature
         bool isFrozen();
 
-        //0 - body will sink, more - stronger force will pop body from water
+        // 0 - body will sink, more - stronger force will pop body from water
         float Buoyancy;
-        //how big flame dance on body
-        //0 - no flame, maxKindleLevel - flare for full stench
+
+        // How big flame dance on body
+        // 0 - no flame, maxKindleLevel - flare for full stench
         float mKindleLevel;
-        //How big flame can store this body
+
+        // How big flame can store this body
         float mMaxKindleLevel;
 
-        //0 - body ok, 1 - burned to dust
+        // 0 - body ok, 1 - burned to dust
         float mCarbonizeLevel;
 
-        //temperature in Kelvins
+        // Temperature in Kelvins
         float mTemperature;
 
-        //How many water in body
-        //0 - dry, maxDampness - full of water
+        // How many water in body
+        // 0 - dry, maxDampness - full of water
         float mDampness;
-        //How many water body can soak up
+
+        // How many water body can soak up
         float mMaxDampness;
 
-        //possible to cord up body
+        // Possible to cord up body
         bool mAcceptsCord;
 
 

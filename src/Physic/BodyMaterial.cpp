@@ -13,4 +13,14 @@ BodyMaterial::BodyMaterial()
     ThermalReceptivity = 1;
     DampReceptivity = 0;
     FrozingTemperature = -273;
+    InflDampnessToFriction = 0;
+    InflDampnessToKindleTemperature = 0;
+    InflDampnessToMaxKindle = 0;
+    InflDampnessToKindleReceptivity = 0;
+    InflDampnessToFrozingTemperature = 0;
+    InflCarbonizeLevelToMaxKindle = 0;
+    InflCarbonizeLevelToMaxDampness = 0;
+    InflCarbonizeLevelToElecticalConductivity = 0;
+    InflMoistenToKindleLevel = 0;
+    InflTemperatureToDampness = 0;
 }
