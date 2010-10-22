@@ -1,5 +1,13 @@
 #include "World/Environ/Birds.hpp"
 
+void Birds::setLimit(int limit)
+{
+   mBirds.resize(limit);
+   if (limit > mMaxObjects && !mFirstTime)
+      for (int i=0; i < limit-mMaxObjects; i++)
+         processBirds(mGC, mWindowWidth, mWindowHeight, i);
+}
+
 void Birds::processBirds(CL_GraphicContext &gc, int width, int height, int i)
 {
     // TODO: Chose the bird type here

@@ -29,6 +29,7 @@ class Clouds : public EnvironObject
 
     public:
         Clouds(int maxClouds = 4);
+        void setLimit(int limit);
         void update(float windPower, float elapsed, float globalTime);
 };
 

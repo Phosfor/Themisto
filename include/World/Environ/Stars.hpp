@@ -44,6 +44,7 @@ class Stars : public EnvironObject
 
     public:
         Stars(int maxStars = 200);
+        void setLimit(int limit);
         void update(float windPower, float elapsed, float globalTime);
 };
 

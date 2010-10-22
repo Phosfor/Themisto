@@ -11,9 +11,9 @@ void MenuState::init()
     environManager.enableType(true, EnvironManager::Environ_Sky);
     environManager.enableType(true, EnvironManager::Environ_Moon);
     environManager.enableType(true, EnvironManager::Environ_Stars);
-    environManager.enableType(true, EnvironManager::Environ_Leaves, 4);
+    environManager.enableType(true, EnvironManager::Environ_Leaves, 15);
     environManager.enableType(true, EnvironManager::Environ_Clouds, 10);
-    environManager.enableType(true, EnvironManager::Environ_Rain, 40);
+    environManager.enableType(true, EnvironManager::Environ_Rain, 20);
     environManager.enableType(true, EnvironManager::Environ_Birds);
     environManager.setWindPower(-2.0);
 }

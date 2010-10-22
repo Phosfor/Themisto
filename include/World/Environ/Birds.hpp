@@ -27,6 +27,7 @@ class Birds : public EnvironObject
 
     public:
         Birds(int maxBirds = 1);
+        void setLimit(int limit);
         void update(float windPower, float elapsed, float globalTime);
 };
 

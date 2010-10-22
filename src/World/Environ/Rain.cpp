@@ -1,5 +1,10 @@
 #include "World/Environ/Rain.hpp"
 
+void Rain::setLimit(int limit)
+{
+   mData.resize(limit, Data());
+}
+
 Data::Data()
     : x(rand()%ScreenResolutionX), y(0)
     , x_speed(), y_speed(0), timeout(rand()%130)

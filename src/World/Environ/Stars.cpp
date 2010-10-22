@@ -1,5 +1,10 @@
 #include "World/Environ/Stars.hpp"
 
+void Stars::setLimit(int limit)
+{
+   mStars.resize(limit, StarsData(mWindowWidth, mWindowHeight));
+}
+
 StarsData::StarsData(int width, int height)
 {
     x = rand() % width;
