@@ -31,6 +31,8 @@ void MenuState::update()
     physicManager.step();
     physicManager.updateVisual();
 
+    mGrass.update();
+
     int *time = worldManager.getWorldTime();
     mStatFont->draw_text(appManager.getGraphic(), 10, 25,
             CL_String(cl_format("world time: %1:%2:%3", time[0], time[1], time[2])), CL_Colorf::white);
