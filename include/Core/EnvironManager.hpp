@@ -21,60 +21,52 @@
 #include <stdlib.h>
 #include <time.h>
 #include <math.h>
-using namespace std;
+
+#include <map>
 
 #define environManager (EnvironManager::get_mutable_instance())
 #define environManagerConst (EnvironManager::get_const_instance())
 
 class EnvironManager : public boost::serialization::singleton<EnvironManager>
 {
+    public:
+        // Numbers show the priority of render
+        enum EnvironTypes
+        {
+            Environ_Sky    = 0,
+            Environ_Stars  = 1,
+            Environ_Moon   = 2,
+            Environ_Clouds = 3,
+            Environ_Rain   = 4,
+            Environ_Leaves = 5,
+            Environ_Birds  = 6
+        };
+
     private:
+        typedef std::map<EnvironTypes, EnvironObject*> MapType;
+        MapType mObjectsMap;
         float mWindPower;
 
         bool mNight;
         int mEnvironTime[3]; // 0 - hours; 1 - minutes; 2 - seconds
         float mTotalSec;
 
-        Rain *mRainHandle;
-        Moon *mMoonHandle;
-        Stars *mStarsHandle;
-        Sky *mSkyHandle;
-        Leaves *mLeavesHandle;
-        Clouds *mCloudsHandle;
-        Birds *mBirdsHandle;
-
-        bool mRainEnabled;
-        bool mMoonEnabled;
-        bool mStarsEnabled;
-        bool mSkyEnabled;
-        bool mLeavesEnabled;
-        bool mCloudsEnabled;
-        bool mBirdsEnabled;
-
     public:
         void initEnviron();
         ~EnvironManager();
+        bool isNight();
 
         void setWindPower(float _power);
         float getWindPower();
 
-        void setDropLimit(float maxDrops);
-        int getDropLimit();
+        void setLimit(EnvironTypes type, int limit);
+        int getLimit(EnvironTypes type);
 
-        float getMoonAngle();
+        void enableType(bool state, EnvironTypes type, int limit = -1);
+        EnvironObject *getTypeHandle(EnvironTypes type);
 
         void setEnvironTime(int _hours, int _minutes, int _seconds);
-
-        void enableRain(bool state, int _maxDrops = 150);
-        void enableMoon(bool state, float _scaleX = 1, float _scaleY = 1);
-        void enableStars(bool state);
-        void enableSky(bool state);
-        void enableLeaves(bool state, int _maxLeaves = -1);
-        void enableClouds(bool state, int _maxClouds = -1);
-        void enableBirds(bool state);
-
         int *getEnvironTime();
-        bool isNight();
 
         void update();
 };

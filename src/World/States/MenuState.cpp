@@ -8,13 +8,13 @@ void MenuState::init()
     mBackground = CL_Image(appManager.getGraphic(), "media/ground.png");
 
     environManager.initEnviron();
-    environManager.enableSky(true);
-    environManager.enableMoon(true);
-    environManager.enableStars(true);
-    environManager.enableLeaves(true, 4);
-    environManager.enableClouds(true, 15);
-    environManager.enableRain(true, 50);
-    environManager.enableBirds(true);
+    environManager.enableType(true, EnvironManager::Environ_Sky);
+    environManager.enableType(true, EnvironManager::Environ_Moon);
+    environManager.enableType(true, EnvironManager::Environ_Stars);
+    environManager.enableType(true, EnvironManager::Environ_Leaves, 4);
+    environManager.enableType(true, EnvironManager::Environ_Clouds, 10);
+    environManager.enableType(true, EnvironManager::Environ_Rain, 40);
+    environManager.enableType(true, EnvironManager::Environ_Birds);
     environManager.setWindPower(-2.0);
 }
 

@@ -6,34 +6,11 @@ void EnvironManager::initEnviron()
     memset(mEnvironTime, 0, sizeof(mEnvironTime));
     mNight = false;
     mTotalSec = 0.0f;
-
-    //mMoonHandle = new Moon("moon_small2.png", 1, 1);
-    mMoonHandle = new Moon("SkyX_Moon.png", 1, 1);
-    mRainHandle = new Rain();
-    mStarsHandle = new Stars();
-    mSkyHandle = new Sky();
-    mLeavesHandle = new Leaves();
-    mCloudsHandle = new Clouds();
-    mBirdsHandle = new Birds();
-
-    mMoonEnabled = false;
-    mRainEnabled = false;
-    mStarsEnabled = false;
-    mSkyEnabled = false;
-    mLeavesEnabled =false;
-    mCloudsEnabled =false;
-    mBirdsEnabled = false;
 }
 
 EnvironManager::~EnvironManager()
 {
-    delete mRainHandle;
-    delete mMoonHandle;
-    delete mStarsHandle;
-    delete mSkyHandle;
-    delete mLeavesHandle;
-    delete mCloudsHandle;
-    delete mBirdsHandle;
+    mObjectsMap.clear();
 }
 
 void EnvironManager::setWindPower(float _power)
@@ -63,45 +40,6 @@ void EnvironManager::setEnvironTime(int _hours, int _minutes, int _seconds)
     mEnvironTime[2] = _seconds;
 }
 
-void EnvironManager::enableRain(bool state, int _maxDrops)
-{
-    mRainHandle->setLimit(_maxDrops);
-    mRainEnabled = state;
-}
-
-void EnvironManager::enableStars(bool state)
-{
-    mStarsEnabled = state;
-}
-
-void EnvironManager::enableMoon(bool state, float _scaleX, float _scaleY)
-{
-    mMoonHandle->setScale(_scaleX, _scaleY);
-    mMoonEnabled = state;
-}
-
-void EnvironManager::enableSky(bool state)
-{
-    mSkyEnabled = state;
-}
-
-void EnvironManager::enableLeaves(bool state, int _maxLeaves)
-{
-    if (_maxLeaves != -1) mLeavesHandle->setLimit(_maxLeaves);
-    mLeavesEnabled = state;
-}
-
-void EnvironManager::enableClouds(bool state, int _maxClouds)
-{
-    if (_maxClouds != -1) mCloudsHandle->setLimit(_maxClouds);
-    mCloudsEnabled = state;
-}
-
-void EnvironManager::enableBirds(bool state)
-{
-    mBirdsEnabled = state;
-}
-
 void EnvironManager::update()
 {
     float elapsed = appManager.getElapsed();
@@ -123,33 +61,63 @@ void EnvironManager::update()
             mEnvironTime[0]++;
 
             if (mEnvironTime[0] >= 24)
-            {
                 mEnvironTime[0] = mEnvironTime[1] = mEnvironTime[2] = mTotalSec = 0;
-            }
         }
     }
 
-    if (mSkyEnabled) mSkyHandle->update(mWindPower, elapsed, totalHours);
-    if (mStarsEnabled) mStarsHandle->update(mWindPower, elapsed, totalHours);
-    if (mMoonEnabled) mMoonHandle->update(mWindPower, elapsed, totalHours);
-
-    if (mCloudsEnabled) mCloudsHandle->update(mWindPower, elapsed, totalHours);
-    if (mRainEnabled) mRainHandle->update(mWindPower, elapsed, totalHours);
-    if (mLeavesEnabled) mLeavesHandle->update(mWindPower, elapsed, totalHours);
-    if (mBirdsEnabled) mBirdsHandle->update(mWindPower, elapsed, totalHours);
+    // Update all environ objects
+    for (MapType::const_iterator it = mObjectsMap.begin(); it != mObjectsMap.end(); ++it)
+    {
+        it->second->update(mWindPower, elapsed, totalHours);
+    }
 }
 
-int EnvironManager::getDropLimit()
+void EnvironManager::enableType(bool state, EnvironTypes type, int limit)
 {
-    return mRainHandle->getLimit();
+    // If the type is already exists in map
+    if (mObjectsMap.find(type) != mObjectsMap.end())
+    {
+        mObjectsMap[type]->setEnabled(state);
+    }
+    else
+    {
+        EnvironObject *temp;
+        switch (type)
+        {
+            case Environ_Sky:    temp = new Sky();    break;
+            case Environ_Stars:  temp = new Stars();  break;
+            case Environ_Moon:   temp = new Moon();   break;
+            case Environ_Clouds: temp = new Clouds(); break;
+            case Environ_Rain:   temp = new Rain();   break;
+            case Environ_Leaves: temp = new Leaves(); break;
+            case Environ_Birds:  temp = new Birds();  break;
+        }
+        temp->setEnabled(state);
+        mObjectsMap.insert(MapType::value_type(type, temp));
+    }
+
+    if (limit != -1) mObjectsMap[type]->setLimit(limit);
 }
 
-void EnvironManager::setDropLimit(float maxDrops)
+EnvironObject *EnvironManager::getTypeHandle(EnvironTypes type)
 {
-    mRainHandle->setLimit(maxDrops);
+    if (mObjectsMap.find(type) == mObjectsMap.end())
+    {
+        LOG("You was trying to get nonexistent object handle with type id: " + type);
+        return NULL;
+    }
+    else
+    {
+        return mObjectsMap[type];
+    }
 }
 
-float EnvironManager::getMoonAngle()
+void EnvironManager::setLimit(EnvironTypes type, int limit)
 {
-    return mMoonHandle->getMoonAngle();
+    mObjectsMap[type]->setLimit(limit);
+}
+
+int EnvironManager::getLimit(EnvironTypes type)
+{
+    return mObjectsMap[type]->getLimit();
 }
