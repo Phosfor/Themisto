@@ -8,12 +8,17 @@ Body::Body(b2Body* body)
     mAppliedImpacts = new list<Impact*>;
     mMaterial = physicManager.mDefaultMaterial;
     mShouldFreeBodyVisual = true;
+    mIsDefaultMaterial = true;
+    mSouldReeBodyMaterial =true;
+    mShouldFreeB2Body = true;
 }
 
 Body::~Body()
 {
     delete mAppliedImpacts;
     if(mShouldFreeBodyVisual) delete mBodyVisual;
+    if(mSouldReeBodyMaterial) delete mMaterial;
+    if(mShouldFreeB2Body) physicManager.getWorld().DestroyBody(mBody);
 }
 
 void Body::setVisual(BodyVisual* visualiser)

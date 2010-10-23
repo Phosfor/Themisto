@@ -48,9 +48,21 @@ class Body
         void setMaterial(BodyMaterial *material);
         BodyMaterial* getMaterial();
 
+        // Applied material to body or not
+        // Notice, that defaut material is one object for all
+        bool mIsDefaultMaterial;
+
+        // Sould boyd free memory under mMaterial object at sestroing
+        // By default is false, but setted to true after some material applied
+        bool mSouldReeBodyMaterial;
+
         // Should body free memory under mBodyVisual object at destroing
         // Default value is true
         bool mShouldFreeBodyVisual;
+
+        // Should body free memory under mBody object at destroing
+        // Default is true
+        bool mShouldFreeB2Body;
 
         // Is body temperature under the ForzingTemperature
         bool isFrozen();

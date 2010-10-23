@@ -29,7 +29,7 @@ boost::serialization::singleton<PhysicManager>
         float32 mTimeStep;
         int32 mVelocityIterations;
         int32 mPositionIterations;
-        BodyMaterial *mDefaultMaterial; //sharing default material for memory economy reason
+        BodyMaterial *mDefaultMaterial; // Sharing default material for memory economy reason
         float mEnvironTemperature;
 
         PhysicManager();
@@ -40,6 +40,7 @@ boost::serialization::singleton<PhysicManager>
         std::list<Body*>& getBodies();
         void step();
         void updateVisual();
+        void disposeScene();
 };
 
 #endif
