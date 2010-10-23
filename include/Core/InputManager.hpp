@@ -19,18 +19,23 @@ class InputManager : public boost::serialization::singleton<InputManager>
     private:
         CL_InputContext mInput;
 
-        CL_InputDevice mKeyboard;
-        CL_InputDevice mMouse;
-        CL_InputDevice mJoystick;
+        CL_InputDevice *mKeyboard;
+        CL_InputDevice *mMouse;
+        CL_InputDevice *mJoystick;
 
     public:
-        ~InputManager();
         void initInput();
 
         CL_InputContext &getInput();
         CL_InputDevice &getKeyboard();
         CL_InputDevice &getMouse();
         CL_InputDevice &getJoystick();
+
+        // Could be used with mouse buttons too
+        bool keyPressed(int code);
+
+        CL_Point getMousePos();
+        void setMousePos(int x, int y);
 };
 
 #endif /* _INPUT_MANAGER_HPP_ */

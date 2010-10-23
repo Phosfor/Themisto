@@ -50,11 +50,6 @@ CL_GraphicContext &ApplicationManager::getGraphic()
     return mWindow->get_gc();
 }
 
-CL_InputDevice &ApplicationManager::getKeyboard()
-{
-    return mWindow->get_ic().get_keyboard();
-}
-
 CL_DisplayWindow &ApplicationManager::getWindow()
 {
     return *mWindow;

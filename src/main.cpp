@@ -22,6 +22,9 @@ int Application::main(const std::vector<CL_String> &args)
         appManager.initWindow("Themisto");
         LOG("The window has been created!");
 
+        inputManager.initInput();
+        LOG("Input system is configured");
+
         //guiManager.initGui(appManager.getWindow(), "media/gui_basic/");
         //LOG("The gui has been initialized!");
 
@@ -32,7 +35,7 @@ int Application::main(const std::vector<CL_String> &args)
         resourceManager.loadFonts();
 
         CL_Slot slotQuit = appManager.getWindow().sig_window_close().connect(Application::onWindowClose);
-        CL_Slot slotInput = appManager.getKeyboard().sig_key_up().connect(Application::onInput);
+        CL_Slot slotInput = inputManager.getKeyboard().sig_key_up().connect(Application::onInput);
 
         // Queueing the states
         bool physic = false;

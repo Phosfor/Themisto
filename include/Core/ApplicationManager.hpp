@@ -40,7 +40,6 @@ class ApplicationManager : public boost::serialization::singleton<ApplicationMan
         void setRunning(bool state);
 
         CL_GraphicContext &getGraphic();
-        CL_InputDevice &getKeyboard();
         CL_DisplayWindow &getWindow();
 };
 
