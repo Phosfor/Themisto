@@ -48,6 +48,9 @@ void BodyVisual::redrawBody()
 
             case b2Shape::e_polygon:
                 {
+                    CL_Colorf color(0.95f, 0.95f, 0.6f, 1.0f);
+                    CL_GraphicContext mGC = appManager.getGraphic();
+
                     b2PolygonShape *poly = (b2PolygonShape*)fixture->GetShape();
                     unsigned int vertexCount = poly->m_vertexCount;
                     //b2Assert(vertexCount <= b2_maxPolygonVertices);
@@ -56,6 +59,21 @@ void BodyVisual::redrawBody()
                     // Get position of vertices in the world
                     for (unsigned int i=0; i < vertexCount; ++i)
                         vertices[i] = b2Mul(fixture->GetBody()->GetTransform(), poly->m_vertices[i]);
+
+                    std::vector<CL_Vec2f> triangles;
+                    for (int32 i = 0; i < vertexCount; ++i)
+                      triangles.push_back(CL_Vec2f(vertices[i].x, vertices[i].y));
+
+                    if (!triangles.empty())
+                    {
+                      CL_PrimitivesArray primarray(mGC);
+                      primarray.set_attributes(0, &triangles[0]);
+                      primarray.set_attribute(1, color);
+                      mGC.set_program_object(cl_program_color_only);
+                      //mGC.draw_primitives(cl_triangle_fan, primarray, 0, triangles.size());
+                      mGC.draw_primitives(cl_triangle_fan, triangles.size(), primarray);
+                      mGC.reset_program_object();
+                    }
 
                     // Draw fixture using that vertices
                     for (unsigned int j=0; j < vertexCount; ++j)
