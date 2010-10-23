@@ -14,7 +14,7 @@ void PhysicState::shutdown() { }
 
 void PhysicState::update()
 {
-    mGC.clear(CL_Colorf::grey);
+    mGC.clear(CL_Colorf::black);
     //mBackground.draw(mGC, 0, mGC.get_height()-mBackground.get_height());
 
     physicManager.step();

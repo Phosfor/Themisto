@@ -8,11 +8,11 @@ void SceneLoader::loadScene()
 
     //add earth
     b2BodyDef earthDef;
-    earthDef.position.Set(100.0f, 200.0f);
+    earthDef.position.Set(100.0f, 500.0f);
     b2Body* earth = physicManager.getWorld().CreateBody(&earthDef);
 
     b2PolygonShape earthShape;
-    earthShape.SetAsBox(100.0f, 2.0f);
+    earthShape.SetAsBox(800.0f, 2.0f);
 
     earth->CreateFixture(&earthShape, 0.0f);
 
@@ -28,7 +28,7 @@ void SceneLoader::loadScene()
     b2Body* box1 = physicManager.getWorld().CreateBody(&box1Def);
 
     b2PolygonShape box1Shape;
-    box1Shape.SetAsBox(2.0f, 2.0f);
+    box1Shape.SetAsBox(10.0f, 10.0f);
 
     b2FixtureDef box1Fixture;
     box1Fixture.shape = &box1Shape;
@@ -47,7 +47,7 @@ void SceneLoader::loadScene()
     b2Body* circle1 = physicManager.getWorld().CreateBody(&circle1Def);
 
     b2CircleShape circle1Shape;
-    circle1Shape.m_radius = 4.0f;
+    circle1Shape.m_radius = 20.0f;
     circle1Shape.m_p = circle1Def.position;
 
     b2FixtureDef circle1Fixture;
