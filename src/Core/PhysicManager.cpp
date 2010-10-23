@@ -15,17 +15,24 @@ PhysicManager::PhysicManager()
 PhysicManager::~PhysicManager()
 {
     disposeScene();
-    delete mWorld;
+
     delete mDefaultMaterial;
     delete mBodies;
+     delete mWorld;
 }
 
 void PhysicManager::disposeScene()
 {
-    for (std::list<Body*>::iterator body=mBodies->begin(); body!=mBodies->end(); ++body)
+    Body* b ;
+    for (std::list<Body*>::iterator body=mBodies->begin(); body!=mBodies->end(); )
     {
-        delete *body;
-    }
+        b = *body;
+        ++body;
+        mBodies->remove(b);
+
+        delete b;
+
+    };
     mBodies->clear();
 }
 

@@ -5,20 +5,22 @@
 Body::Body(b2Body* body)
 {
     mBody = body;
+    body->SetUserData(this);
     mAppliedImpacts = new list<Impact*>;
     mMaterial = physicManager.mDefaultMaterial;
     mShouldFreeBodyVisual = true;
     mIsDefaultMaterial = true;
-    mSouldReeBodyMaterial =true;
+    mSouldFreeBodyMaterial =false;
     mShouldFreeB2Body = true;
+    mParentWorld = &physicManager.getWorld();
 }
 
 Body::~Body()
 {
     delete mAppliedImpacts;
-    if(mShouldFreeBodyVisual) delete mBodyVisual;
-    if(mSouldReeBodyMaterial) delete mMaterial;
-    if(mShouldFreeB2Body) physicManager.getWorld().DestroyBody(mBody);
+    if(mShouldFreeBodyVisual) if(mBodyVisual != NULL) delete mBodyVisual;
+    if(mSouldFreeBodyMaterial) if(mMaterial != NULL) delete mMaterial;
+    if(mShouldFreeB2Body) mParentWorld->DestroyBody(mBody);
 }
 
 void Body::setVisual(BodyVisual* visualiser)
@@ -34,6 +36,7 @@ b2Body& Body::getb2Body()
 void Body::setMaterial(BodyMaterial *material)
 {
     mMaterial = material;
+    mSouldFreeBodyMaterial = true;
 }
 
 BodyMaterial* Body::getMaterial()

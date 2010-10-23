@@ -21,6 +21,7 @@ class Body
         BodyVisual *mBodyVisual;
         std::list<Impact*> *mAppliedImpacts;
         BodyMaterial *mMaterial;
+        b2World *mParentWorld;
         float mCurrentMaxKindle;
         float mCurrentKindleTemperature;
         float mCurrentKindleReceptivity;
@@ -54,7 +55,7 @@ class Body
 
         // Sould boyd free memory under mMaterial object at sestroing
         // By default is false, but setted to true after some material applied
-        bool mSouldReeBodyMaterial;
+        bool mSouldFreeBodyMaterial;
 
         // Should body free memory under mBodyVisual object at destroing
         // Default value is true
