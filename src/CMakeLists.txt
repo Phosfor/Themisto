@@ -10,6 +10,7 @@ set(Themisto_srcs
     Core/PhysicManager.cpp
     Core/SceneLoader.cpp
     Core/EnvironManager.cpp
+    Core/InputManager.cpp
 
     # Environ
     World/Environ/EnvironObject.cpp
