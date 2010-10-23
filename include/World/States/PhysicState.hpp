@@ -6,6 +6,7 @@
 #include "Core/PhysicManager.hpp"
 #include "Core/SceneLoader.hpp"
 #include "Physic/DebugDraw.hpp"
+#include "Physic/DebugInstruments.hpp"
 
 #include <boost/foreach.hpp>
 
@@ -15,13 +16,17 @@
 
 using namespace std;
 
+class DebugDragAndDrop;
+
 class PhysicState : public State
 {
     private:
     CL_Font *mStatFont;
     DebugDraw mDebugDrawHandle;
+    DebugDragAndDrop mDebugDragAndDropHandle;
 
     CL_GraphicContext mGC;
+    public:
 
     void init();
     void shutdown();

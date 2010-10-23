@@ -12,11 +12,13 @@ void PhysicState::init()
             //b2DebugDraw::e_jointBit |
             //b2DebugDraw::e_aabbBit  |
             b2DebugDraw::e_pairBit);
+    mDebugDragAndDropHandle.init();
     physicManager.getWorld().SetDebugDraw(&mDebugDrawHandle);
 }
 
-void PhysicState::shutdown() 
-{ 
+
+void PhysicState::shutdown()
+{
     delete mStatFont;
 }
 
