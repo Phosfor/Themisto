@@ -34,10 +34,11 @@ void SceneLoader::loadScene()
     box1Fixture.shape = &box1Shape;
     box1Fixture.density = 100.0f;
     box1Fixture.friction = 0.3;
-    box1->CreateFixture(&box1Fixture);
+
 
     Body *box1Body = new Body(box1);
     box1Body->setVisual(new BodyVisual(box1Body));
+    box1Body->createFixture(&box1Fixture);
     physicManager.registerBody(box1Body);
 
      //add some circle
@@ -60,11 +61,12 @@ void SceneLoader::loadScene()
     circle1Fixture.shape = &circle1Shape;
     circle1Fixture.density = 200.0f;
     circle1Fixture.friction = 0.8f;
-    circle1->CreateFixture(&circle1Fixture);
-    circle1->ResetMassData();
+
 
     Body *circle1Body = new Body(circle1);
     circle1Body->setVisual(new BodyVisual(circle1Body));
+    circle1Body->createFixture(&circle1Fixture);
+    circle1->ResetMassData();
     physicManager.registerBody(circle1Body);
 
     //add polygon
@@ -90,9 +92,10 @@ void SceneLoader::loadScene()
     polygon1Fixture.shape= &polygon1Shape;
     polygon1Fixture.density = 150.0f;
     polygon1Fixture.friction = 0.1;
-    polygon1->CreateFixture(&polygon1Fixture);
+
 
     Body *polygon1Body = new Body(polygon1);
     polygon1Body->setVisual(new BodyVisual(polygon1Body));
+    polygon1Body->createFixture(&polygon1Fixture);
     physicManager.registerBody(polygon1Body);
 }

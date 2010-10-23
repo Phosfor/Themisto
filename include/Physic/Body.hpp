@@ -48,6 +48,9 @@ class Body
         virtual void cancelImpact(Impact* impact);
         void setMaterial(BodyMaterial *material);
         BodyMaterial* getMaterial();
+        b2Fixture* createFixture(b2FixtureDef *def);
+
+        int mFixtureCount;
 
         // Applied material to body or not
         // Notice, that defaut material is one object for all

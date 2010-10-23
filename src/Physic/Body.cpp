@@ -13,6 +13,7 @@ Body::Body(b2Body* body)
     mSouldFreeBodyMaterial =false;
     mShouldFreeB2Body = true;
     mParentWorld = &physicManager.getWorld();
+    mFixtureCount = 0;
 }
 
 Body::~Body()
@@ -21,6 +22,14 @@ Body::~Body()
     if(mShouldFreeBodyVisual) if(mBodyVisual != NULL) delete mBodyVisual;
     if(mSouldFreeBodyMaterial) if(mMaterial != NULL) delete mMaterial;
     if(mShouldFreeB2Body) mParentWorld->DestroyBody(mBody);
+}
+
+b2Fixture* Body::createFixture(b2FixtureDef *def)
+{
+
+    b2Fixture *fixture = mBody->CreateFixture(def);
+    mFixtureCount++;
+    return fixture;
 }
 
 void Body::setVisual(BodyVisual* visualiser)
