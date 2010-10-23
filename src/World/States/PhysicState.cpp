@@ -3,22 +3,30 @@
 void PhysicState::init()
 {
     mGC = appManager.getGraphic();
-
     mStatFont = new CL_Font(appManager.getGraphic(), "Ubuntu", 30);
-    mBackground = CL_Image(appManager.getGraphic(), "media/ground.png");
 
     sceneLoader.loadScene();
+
+    mDebugDrawHandle.SetFlags(
+            b2DebugDraw::e_shapeBit |
+            //b2DebugDraw::e_jointBit |
+            //b2DebugDraw::e_aabbBit  |
+            b2DebugDraw::e_pairBit);
+    physicManager.getWorld().SetDebugDraw(&mDebugDrawHandle);
 }
 
-void PhysicState::shutdown() { }
+void PhysicState::shutdown() 
+{ 
+    delete mStatFont;
+}
 
 void PhysicState::update()
 {
     mGC.clear(CL_Colorf::black);
-    //mBackground.draw(mGC, 0, mGC.get_height()-mBackground.get_height());
 
     physicManager.step();
     physicManager.updateVisual();
+    physicManager.getWorld().DrawDebugData();
 
     mStatFont->draw_text(appManager.getGraphic(), 10, 25,
             CL_String(cl_format("elapsed: %1", int(floor(appManager.getElapsed()+0.5)))), CL_Colorf::white);

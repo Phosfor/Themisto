@@ -33,6 +33,7 @@ set(Themisto_srcs
     Physic/BodyVisual.cpp
     Physic/BodyMaterial.cpp
     Physic/Impact.cpp
+    Physic/DebugDraw.cpp
 
     main.cpp
 )

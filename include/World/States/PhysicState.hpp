@@ -5,6 +5,7 @@
 #include "Core/ApplicationManager.hpp"
 #include "Core/PhysicManager.hpp"
 #include "Core/SceneLoader.hpp"
+#include "Physic/DebugDraw.hpp"
 
 #include <boost/foreach.hpp>
 
@@ -18,7 +19,7 @@ class PhysicState : public State
 {
     private:
     CL_Font *mStatFont;
-    CL_Image mBackground;
+    DebugDraw mDebugDrawHandle;
 
     CL_GraphicContext mGC;
 
