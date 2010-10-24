@@ -6,7 +6,7 @@
 
 #include "Core/Utils.hpp"
 #include "Core/ApplicationManager.hpp"
-#include "World/Environ/EnvironObject.hpp"
+#include "World/Environ/Object.hpp"
 
 #define kTail 0.025
 #define kDropAlpha 0.5

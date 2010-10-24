@@ -14,7 +14,7 @@ set(Themisto_srcs
 
     # Environ
     World/WorldManager.cpp
-    World/Environ/EnvironObject.cpp
+    World/Environ/Object.cpp
     World/Environ/Rain.cpp
     World/Environ/Moon.cpp
     World/Environ/Stars.cpp
@@ -23,7 +23,6 @@ set(Themisto_srcs
     World/Environ/Clouds.cpp
     World/Environ/Birds.cpp
     
-
     # Objects
     World/Objects/Grass.cpp
 
