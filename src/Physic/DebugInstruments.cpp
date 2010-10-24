@@ -2,13 +2,11 @@
 
 void DebugDragAndDrop::init()
 {
-    cout<<"\nInit!\n";
     mMousePos = new b2Vec2;
     CL_InputDevice device = inputManager.getMouse();
-    device.sig_key_down().connect(this, &DebugDragAndDrop::mouseDown);
-    device.sig_pointer_move().connect(this, &DebugDragAndDrop::mouseMove);
-    device.sig_key_up().connect(this, &DebugDragAndDrop::mouseUp);
-    cout<<"\nEnd init!\n";
+    mDownSlot = device.sig_key_down().connect(this, &DebugDragAndDrop::mouseDown);
+    mMoveSlot = device.sig_pointer_move().connect(this, &DebugDragAndDrop::mouseMove);
+    mUpSlot = device.sig_key_up().connect(this, &DebugDragAndDrop::mouseUp);
 }
 
  DebugDragAndDrop::~DebugDragAndDrop()
@@ -25,7 +23,6 @@ bool DebugDragAndDrop::ReportFixture(b2Fixture *fixture)
     {
         mDraggingBody = (Body*) fixture->GetBody()->GetUserData();
         mDrag = true;
-        cout<<"\nDrag!\n";
         return false;
     }
     return true;
@@ -33,7 +30,6 @@ bool DebugDragAndDrop::ReportFixture(b2Fixture *fixture)
 
 void DebugDragAndDrop::mouseDown(const CL_InputEvent &ev, const CL_InputState &state)
 {
-    cout<<"\nMouseDown!\n";
     mMousePos->Set((float) ev.mouse_pos.x, (float) ev.mouse_pos.y);
     b2AABB region;
     region.lowerBound.Set(mMousePos->x - 2.0f, mMousePos->y - 2.0f);
@@ -43,7 +39,6 @@ void DebugDragAndDrop::mouseDown(const CL_InputEvent &ev, const CL_InputState &s
 
 void DebugDragAndDrop::mouseMove(const CL_InputEvent &ev, const CL_InputState &state)
 {
-    cout<<"\nMouseMove!\n";
     if(mDrag && mDraggingBody != NULL)
     {
         b2Vec2 force =  *mMousePos - mDraggingBody->getb2Body().GetWorldCenter();
@@ -53,7 +48,6 @@ void DebugDragAndDrop::mouseMove(const CL_InputEvent &ev, const CL_InputState &s
 
 void DebugDragAndDrop::mouseUp(const CL_InputEvent &ev, const CL_InputState &state)
 {
-     cout<<"\nMouseUp!\n";
     mDrag = false;
     mDraggingBody = NULL;
 }

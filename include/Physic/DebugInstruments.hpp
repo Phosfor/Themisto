@@ -21,6 +21,8 @@ class DebugDragAndDrop: public b2QueryCallback
 
         bool ReportFixture (b2Fixture *fixture);
 
+        // Slots handles
+        CL_Slot mDownSlot, mUpSlot, mMoveSlot;
 
     public:
         void init();
