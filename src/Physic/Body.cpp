@@ -7,21 +7,27 @@ Body::Body(b2Body* body)
     mBody = body;
     body->SetUserData(this);
     mAppliedImpacts = new list<Impact*>;
-    mMaterial = physicManager.mDefaultMaterial;
     mShouldFreeBodyVisual = true;
     mIsDefaultMaterial = true;
     mSouldFreeBodyMaterial =false;
     mShouldFreeB2Body = true;
-    mParentWorld = &physicManager.getWorld();
+    mParentWorld = mBody->GetWorld();
     mFixtureCount = 0;
+    mState = new BodyState;
 }
 
 Body::~Body()
 {
     delete mAppliedImpacts;
+    delete mState;
     if(mShouldFreeBodyVisual) if(mBodyVisual != NULL) delete mBodyVisual;
-    if(mSouldFreeBodyMaterial) if(mMaterial != NULL) delete mMaterial;
+    if(mSouldFreeBodyMaterial) if(mState->Material != NULL) delete mState->Material;
     if(mShouldFreeB2Body) mParentWorld->DestroyBody(mBody);
+}
+
+BodyState* Body::getState()
+{
+    return mState;
 }
 
 b2Fixture* Body::createFixture(b2FixtureDef *def)
@@ -35,6 +41,11 @@ b2Fixture* Body::createFixture(b2FixtureDef *def)
 void Body::setVisual(BodyVisual* visualiser)
 {
     mBodyVisual = visualiser;
+    if(visualiser != NULL)
+    {
+        visualiser->setBodyState(mState);
+    }
+
 }
 
 b2Body& Body::getb2Body()
@@ -44,13 +55,13 @@ b2Body& Body::getb2Body()
 
 void Body::setMaterial(BodyMaterial *material)
 {
-    mMaterial = material;
+    mState->Material = material;
     mSouldFreeBodyMaterial = true;
 }
 
 BodyMaterial* Body::getMaterial()
 {
-    return mMaterial;
+    return mState->Material;
 }
 
 void Body::updateVisual()
@@ -71,49 +82,10 @@ void Body::cancelImpact(Impact* impact)
     mAppliedImpacts->remove(impact);
 }
 
-bool Body::isFrozen()
+
+void Body::step(float32 timeStep)
 {
-    return mTemperature <= mCurrentFrozingTemperature;
-}
-
-void Body::step()
-{
-    if(mKindleLevel > 0)
-    {
-        mCarbonizeLevel += physicManager.mTimeStep * mMaterial->SelfFlareUpRate;
-        if( mCarbonizeLevel > 1) mCarbonizeLevel = 1;
-    }
-    else
-    {
-        mTemperature -= (physicManager.mEnvironTemperature - mTemperature)/2 *
-            mMaterial->ThermalReceptivity * physicManager.mTimeStep;
-    }
-
-    if(mDampness > 0)
-    {
-        mDampness -= physicManager.mTimeStep * mTemperature * mMaterial->InflTemperatureToDampness;
-
-        b2Fixture* fixture = mBody->GetFixtureList();
-        if(fixture != NULL)
-        {
-            float friction = fixture->GetFriction() - mDampness * mMaterial->InflDampnessToFriction;
-            fixture->SetFriction(friction);
-        }
-    }
-
-    // Calculate influences one time here for productivity reasons
-    mCurrentMaxKindle = mMaxKindleLevel -
-        mDampness * mMaterial->InflDampnessToMaxKindle -
-        mCarbonizeLevel * mMaterial->InflCarbonizeLevelToMaxKindle;
-    mCurrentKindleTemperature = mMaterial->KindleTemperature -
-        mDampness * mMaterial->InflDampnessToKindleTemperature;
-    mCurrentKindleReceptivity = mMaterial->KindleReceptivity -
-        mDampness * mMaterial->InflDampnessToKindleReceptivity;
-    mCurrentFrozingTemperature = mMaterial->FrozingTemperature +
-        mDampness * mMaterial->InflDampnessToFrozingTemperature;
-    mCurrentMaxDumpness = mMaxDampness - mCarbonizeLevel * mMaterial->InflCarbonizeLevelToMaxDampness;
-    mCurrentElectricalConductivity = mMaterial->ElectricalConductivity -
-        mCarbonizeLevel * mMaterial->InflCarbonizeLevelToElecticalConductivity;
+    calculateInfluences(timeStep);
 
     for(std::list<Impact*>::iterator impact = mAppliedImpacts->begin();
       impact != mAppliedImpacts->end(); ++impact)
@@ -121,22 +93,22 @@ void Body::step()
         switch((*impact)->Type)
         {
             case Moisten:
-                calculateMoistenImpact(*impact);
+                calculateMoistenImpact(*impact, timeStep);
             break;
             case Heat:
-                calculateHeatImpacts(*impact);
+                calculateHeatImpact(*impact, timeStep);
             break;
             case Cool:
-                calculateCoolImpacts(*impact);
+                calculateCoolImpact(*impact, timeStep);
             break;
             case Beat:
-                calculateBeatImpacts(*impact);
+                calculateBeatImpact(*impact, timeStep);
             break;
             case Wind:
-                calculateWindImpacts(*impact);
+                calculateWindImpact(*impact, timeStep);
             break;
             case Electricity:
-                calculateElectricityImpacts(*impact);
+                calculateElectricityImpact(*impact, timeStep);
             break;
             case Nothing: break;
         }
@@ -145,67 +117,118 @@ void Body::step()
 
 }
 
- void Body::calculateMoistenImpact(Impact* impact)
+void Body::calculateInfluences(float32 timeStep)
 {
-    mDampness += impact->Intensity * physicManager.mTimeStep * mMaterial->DampReceptivity;
-    if(mDampness > mCurrentMaxDumpness)
+    if(mState->KindleLevel > 0)
     {
-        mDampness = mCurrentMaxDumpness;
+        mState->CarbonizeLevel += timeStep * mState->Material->SelfFlareUpRate;
+        if( mState->CarbonizeLevel > 1) mState->CarbonizeLevel = 1;
     }
-    if( mKindleLevel > 0)
+    else
     {
-        mKindleLevel -= impact->Intensity * physicManager.mTimeStep * mMaterial->InflMoistenToKindleLevel;
+        mState->Temperature -= (worldManager.mEnvironTemperature - mState->Temperature)/2 *
+            mState->Material->ThermalReceptivity * timeStep;
+    }
+
+    if(mState->Dampness > 0)
+    {
+        mState->Dampness -= timeStep * mState->Temperature * mState->Material->InflTemperatureToDampness;
+
+        b2Fixture* fixture = mBody->GetFixtureList();
+        if(fixture != NULL)
+        {
+            float friction = fixture->GetFriction() - mState->Dampness * mState->Material->InflDampnessToFriction;
+            fixture->SetFriction(friction);
+        }
+    }
+
+     // Calculate influences one time here for productivity reasons
+    mCurrentMaxKindle = mMaxKindleLevel -
+        mState->Dampness * mState->Material->InflDampnessToMaxKindle -
+        mState->CarbonizeLevel * mState->Material->InflCarbonizeLevelToMaxKindle;
+    mCurrentKindleTemperature = mState->Material->KindleTemperature -
+        mState->Dampness * mState->Material->InflDampnessToKindleTemperature;
+    mCurrentKindleReceptivity = mState->Material->KindleReceptivity -
+        mState->Dampness * mState->Material->InflDampnessToKindleReceptivity;
+    mCurrentFrozingTemperature = mState->Material->FrozingTemperature +
+        mState->Dampness * mState->Material->InflDampnessToFrozingTemperature;
+    mCurrentMaxDumpness = mMaxDampness - mState->CarbonizeLevel * mState->Material->InflCarbonizeLevelToMaxDampness;
+    mCurrentElectricalConductivity = mState->Material->ElectricalConductivity -
+        mState->CarbonizeLevel * mState->Material->InflCarbonizeLevelToElecticalConductivity;
+}
+
+void Body::calculateMoistenImpact(Impact* impact, float32 timeStep)
+{
+    mState->Dampness += impact->Intensity * timeStep * mState->Material->DampReceptivity;
+    if(mState->Dampness > mCurrentMaxDumpness)
+    {
+        mState->Dampness = mCurrentMaxDumpness;
+    }
+    if( mState->KindleLevel > 0)
+    {
+        mState->KindleLevel -= impact->Intensity * timeStep * mState->Material->InflMoistenToKindleLevel;
     }
 }
- void Body::calculateHeatImpacts(Impact* impact)
+ void Body::calculateHeatImpact(Impact* impact, float32 timeStep)
 {
-    if(mKindleLevel == 0)
+    if(mState->KindleLevel == 0)
     {
-        mTemperature += impact->Intensity * physicManager.mTimeStep * mMaterial->ThermalReceptivity;
+        mState->Temperature += impact->Intensity * timeStep *
+            mState->Material->ThermalReceptivity;
     }
     // If body burning
-    if(mTemperature >= mCurrentKindleTemperature)
+    if(mState->Temperature >= mCurrentKindleTemperature)
     {
         if( mCurrentKindleTemperature > 0)
         {
             // Up flame size
-            mKindleLevel += impact->Intensity *
-                physicManager.mTimeStep * mCurrentKindleReceptivity;
-            if(mKindleLevel > mCurrentMaxKindle)
+            mState->KindleLevel += impact->Intensity *
+                timeStep * mCurrentKindleReceptivity;
+            if(mState->KindleLevel > mCurrentMaxKindle)
             {
-                mKindleLevel = mCurrentMaxKindle;
+                mState->KindleLevel = mCurrentMaxKindle;
             }
             // Up carbonize level and temperature
             if( mCurrentMaxKindle > 0)
             {
-                mCarbonizeLevel += (mKindleLevel / mCurrentMaxKindle) *
-                    mMaterial->CarbonizeRate * physicManager.mTimeStep;
-                if(mCarbonizeLevel > 1) mCarbonizeLevel = 1;
+                mState->CarbonizeLevel += (mState->KindleLevel / mCurrentMaxKindle) *
+                    mState->Material->CarbonizeRate * timeStep;
+                if(mState->CarbonizeLevel > 1) mState->CarbonizeLevel = 1;
 
-                mTemperature = mMaterial->FlameTemperature * mKindleLevel / mCurrentMaxKindle;
+                mState->Temperature = mState->Material->FlameTemperature *
+                    mState->KindleLevel / mCurrentMaxKindle;
             }
         }
     }
 }
- void Body::calculateCoolImpacts(Impact* impact)
+ void Body::calculateCoolImpact(Impact* impact, float32 timeStep)
 {
-    if(mKindleLevel == 0)
+    if(mState->KindleLevel == 0)
     {
-        mTemperature -= impact->Intensity * physicManager.mTimeStep * mMaterial->ThermalReceptivity;
+        mState->Temperature -= impact->Intensity * timeStep *
+            mState->Material->ThermalReceptivity;
+        if(mState->Temperature < mCurrentFrozingTemperature)
+        {
+            mState->IsFrozen = true;
+        }
+        else
+        {
+            mState->IsFrozen = false;
+        }
     }
 }
- void Body::calculateBeatImpacts(Impact* impact)
+ void Body::calculateBeatImpact(Impact* impact, float32 timeStep)
 {
     b2Vec2 direction = impact->Dirrection;
     direction.Normalize();
     b2Vec2 impulsVec = impact->Intensity * direction;
     mBody->ApplyLinearImpulse(impulsVec, impact->ImpactPoint);
 }
- void Body::calculateWindImpacts(Impact* impact)
+ void Body::calculateWindImpact(Impact* impact, float32 timeStep)
 {
 
 }
- void Body::calculateElectricityImpacts(Impact* impact)
+ void Body::calculateElectricityImpact(Impact* impact, float32 timeStep)
 {
 
 }

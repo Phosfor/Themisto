@@ -6,7 +6,6 @@
 
 #include "Core/PhysicManager.hpp"
 #include "Physic/Body.hpp"
-#include "Physic/BodyVisual.hpp"
 
 #define sceneLoader (SceneLoader::get_mutable_instance())
 #define sceneLoaderConst (SceneLoader::get_const_instance())

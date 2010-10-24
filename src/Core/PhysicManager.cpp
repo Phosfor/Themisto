@@ -7,18 +7,15 @@ PhysicManager::PhysicManager()
     mTimeStep = 1.0f / 60.0f;
     mVelocityIterations = 6;
     mPositionIterations = 2;
-    mDefaultMaterial = new BodyMaterial();
     mBodies = new std::list<Body*>;
-    mEnvironTemperature = 20;
 }
 
 PhysicManager::~PhysicManager()
 {
     disposeScene();
 
-    delete mDefaultMaterial;
     delete mBodies;
-     delete mWorld;
+    delete mWorld;
 }
 
 void PhysicManager::disposeScene()
@@ -55,7 +52,7 @@ void PhysicManager::step()
 {
     for (std::list<Body*>::iterator body=mBodies->begin(); body!=mBodies->end(); ++body)
     {
-        (*body)->step();
+        (*body)->step(mTimeStep);
     }
     mWorld->Step(mTimeStep, mVelocityIterations, mPositionIterations);
 }

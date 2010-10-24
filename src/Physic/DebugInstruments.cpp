@@ -9,7 +9,7 @@ void DebugDragAndDrop::init()
     device.sig_pointer_move().connect(DebugDragAndDrop::mouseMove);
     device.sig_key_up().connect(DebugDagAndDrop::mouseUp);
 }
-/*
+
  DebugDragAndDrop::~DebugDragAndDrop()
  {
      if(mMousePos != NULL)
@@ -17,7 +17,7 @@ void DebugDragAndDrop::init()
          delete mMousePos;
      }
  }
-*/
+
 bool DebugDragAndDrop::ReportFixture(b2Fixture *fixture)
 {
     if(fixture->TestPoint(*mMousePos))

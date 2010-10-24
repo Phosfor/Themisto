@@ -13,6 +13,7 @@ set(Themisto_srcs
     Core/InputManager.cpp
 
     # Environ
+    World/WorldManager.cpp
     World/Environ/EnvironObject.cpp
     World/Environ/Rain.cpp
     World/Environ/Moon.cpp
@@ -21,6 +22,7 @@ set(Themisto_srcs
     World/Environ/Leaves.cpp
     World/Environ/Clouds.cpp
     World/Environ/Birds.cpp
+    
 
     # Objects
     World/Objects/Grass.cpp
@@ -36,6 +38,7 @@ set(Themisto_srcs
     Physic/Impact.cpp
     Physic/DebugDraw.cpp
     Physic/DebugInstruments.cpp
+    Physic/BodyState.cpp
 
     main.cpp
 )

@@ -7,15 +7,11 @@
 #include <list>
 
 #include "Physic/Body.hpp"
-#include "Physic/BodyMaterial.hpp"
 #include "Core/Utils.hpp"
 #include "Core/ApplicationManager.hpp"
 
 #define physicManager (PhysicManager::get_mutable_instance())
 #define physicManagerConst (PhysicManager::get_const_instance())
-
-
-class Body;
 
 
 class PhysicManager : public
@@ -29,8 +25,6 @@ boost::serialization::singleton<PhysicManager>
         float32 mTimeStep;
         int32 mVelocityIterations;
         int32 mPositionIterations;
-        BodyMaterial *mDefaultMaterial; // Sharing default material for memory economy reason
-        float mEnvironTemperature;
 
         PhysicManager();
         ~PhysicManager();

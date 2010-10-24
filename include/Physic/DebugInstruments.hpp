@@ -3,26 +3,25 @@
 
 #include <Box2D/Dynamics/b2World.h>
 #include <Physic/Body.hpp>
-
-class Body;
+#include "Core/ApplicationManager.hpp"
 
 class DebugDragAndDrop: public b2QueryCallback
 {
     private:
-        static bool mDrag;
-        static b2Vec2*  mMousePos;
-        static Body* mDraggingBody;
+        bool mDrag;
+        b2Vec2*  mMousePos;
+        Body* mDraggingBody;
 
-        static void mouseDown(const CL_InputEvent &key, const CL_InputState &state);
-        static void mouseUp(const CL_InputEvent &key, const CL_InputState &state);
-        static void mouseMove(const CL_InputEvent &key, const CL_InputState &state);
+        void mouseDown(const CL_InputEvent &key, const CL_InputState &state);
+        void mouseUp(const CL_InputEvent &key, const CL_InputState &state);
+        void mouseMove(const CL_InputEvent &key, const CL_InputState &state);
 
-       bool ReportFixture (b2Fixture *fixture);
+        bool ReportFixture (b2Fixture *fixture);
 
 
     public:
-        static void init();
-
+        void init();
+        ~DebugDragAndDrop();
 
 };
 

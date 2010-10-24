@@ -17,7 +17,7 @@ void SceneLoader::loadScene()
     earth->CreateFixture(&earthShape, 0.0f);
 
     Body *earthBody = new Body(earth);
-    BodyVisual *earthVisual = new BodyVisual(earthBody);
+    BodyVisual *earthVisual = new BodyVisual;
     earthBody->setVisual(earthVisual);
     physicManager.registerBody(earthBody);
 
@@ -37,7 +37,7 @@ void SceneLoader::loadScene()
 
 
     Body *box1Body = new Body(box1);
-    box1Body->setVisual(new BodyVisual(box1Body));
+    box1Body->setVisual(new BodyVisual);
     box1Body->createFixture(&box1Fixture);
     physicManager.registerBody(box1Body);
 
@@ -65,7 +65,7 @@ void SceneLoader::loadScene()
 
 
     Body *circle1Body = new Body(circle1);
-    circle1Body->setVisual(new BodyVisual(circle1Body));
+    circle1Body->setVisual(new BodyVisual);
     circle1Body->createFixture(&circle1Fixture);
     circle1->ResetMassData();
     physicManager.registerBody(circle1Body);
@@ -96,7 +96,7 @@ void SceneLoader::loadScene()
 
 
     Body *polygon1Body = new Body(polygon1);
-    polygon1Body->setVisual(new BodyVisual(polygon1Body));
+    polygon1Body->setVisual(new BodyVisual);
     polygon1Body->createFixture(&polygon1Fixture);
     physicManager.registerBody(polygon1Body);
 
@@ -123,7 +123,7 @@ void SceneLoader::loadScene()
 		fd.restitution = 0.5f;
 		b->CreateFixture(&fd);
 		Body* bb = new Body(b);
-		BodyVisual* v = new BodyVisual(bb);
+		BodyVisual* v = new BodyVisual;
 		bb->setVisual(v);
 		physicManager.registerBody(bb);
 	}

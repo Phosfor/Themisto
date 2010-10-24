@@ -23,7 +23,7 @@ class PhysicState : public State
     private:
     CL_Font *mStatFont;
     DebugDraw mDebugDrawHandle;
-    DebugDragAndDrop mDebugDragAndDropHandle;
+    DebugDragAndDrop *mDebugDragAndDropHandle;
 
     CL_GraphicContext mGC;
     public:

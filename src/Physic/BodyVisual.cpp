@@ -1,13 +1,16 @@
 #include "Physic/BodyVisual.hpp"
 
 
-BodyVisual::BodyVisual(Body *body)
+BodyVisual::BodyVisual()
 {
-    mBody = body;
-    body->setVisual(this);
 }
 
 void BodyVisual::redrawBody()
 {
 
+}
+
+void BodyVisual::setBodyState(BodyState *state)
+{
+    mBodyState = state;
 }
