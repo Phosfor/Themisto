@@ -86,3 +86,29 @@ void Clouds::update(float windPower, float elapsed, float globalTime)
         }
     }
 }
+
+CL_Pointf Clouds::getCloudPos()
+{
+    int counter;
+    CL_Pointf result(-1, -1);
+    while (result.x == -1)
+    {
+        ++counter;
+        if (counter == 4) break;
+
+        int index = rand() % mMaxObjects + 1;
+        if (mClouds[index].x > mWindowWidth*0.1 &&
+            mClouds[index].x < mWindowWidth - mWindowWidth*0.1)
+        {
+            result.x = mClouds[index].x;
+            result.y = mClouds[index].y_offset + 
+                mClouds[index].imageHandle.get_height() / 2.0f;
+        }
+        else
+        {
+            continue;
+        }
+    }
+
+    return result;
+}

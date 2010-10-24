@@ -31,6 +31,9 @@ class Clouds : public EnvironObject
         Clouds(int maxClouds = 4);
         void setLimit(int limit);
         void update(float windPower, float elapsed, float globalTime);
+
+        // For the lightning
+        CL_Pointf getCloudPos();
 };
 
 #endif /* _WEATHER_CLOUDS_HPP_ */
