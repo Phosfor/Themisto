@@ -2,6 +2,11 @@
 
 void WorldManager::initWorld()
 {
+
+}
+
+WorldManager::WorldManager()
+{
     mDefaultMaterial = new BodyMaterial;
     mEnvironTemperature = 20;
 }

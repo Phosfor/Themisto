@@ -11,7 +11,7 @@
 #include "Physic/BodyState.hpp"
 #include "Physic/BodyVisual.hpp"
 #include "World/WorldManager.hpp"
-
+#include <iostream>
 #include <list>
 
 class Body

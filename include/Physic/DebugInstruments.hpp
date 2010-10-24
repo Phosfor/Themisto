@@ -6,6 +6,7 @@
 #include "Core/ApplicationManager.hpp"
 #include "Core/PhysicManager.hpp"
 #include "Core/InputManager.hpp"
+#include <iostream>
 
 class DebugDragAndDrop: public b2QueryCallback
 {

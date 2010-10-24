@@ -2,6 +2,9 @@
 
 void PhysicState::init()
 {
+    mDebugDragAndDropHandle = new DebugDragAndDrop;
+    mDebugDragAndDropHandle->init();
+
     mGC = appManager.getGraphic();
     mStatFont = new CL_Font(appManager.getGraphic(), "Ubuntu", 30);
 
@@ -14,8 +17,7 @@ void PhysicState::init()
             b2DebugDraw::e_pairBit);
     physicManager.getWorld().SetDebugDraw(&mDebugDrawHandle);
 
-    mDebugDragAndDropHandle = new DebugDragAndDrop;
-    mDebugDragAndDropHandle->init();
+
 }
 
 

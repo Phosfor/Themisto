@@ -18,6 +18,7 @@ class WorldManager : public boost::serialization::singleton<WorldManager>
         float mEnvironTemperature;
 
         void initWorld();
+        WorldManager();
         ~WorldManager();
 };
 
