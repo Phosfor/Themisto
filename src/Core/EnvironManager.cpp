@@ -124,5 +124,14 @@ int EnvironManager::getLimit(EnvironTypes type)
 
 bool EnvironManager::getTypeEnabled(EnvironTypes type)
 {
-    return mObjectsMap[type]->getEnabled();
+    if (mObjectsMap.find(type) == mObjectsMap.end())
+    {
+        return false;
+    }
+    else
+    {
+        return mObjectsMap[type]->getEnabled();
+    }
+
+    return false;
 }
