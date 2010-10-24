@@ -3,6 +3,7 @@
 
 #include <string.h>
 #include "Physic/BodyMaterial.hpp"
+#include "World/WorldManager.hpp"
 
 struct BodyState
 {

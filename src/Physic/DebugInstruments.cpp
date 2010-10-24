@@ -5,9 +5,9 @@ void DebugDragAndDrop::init()
 {
     mMousePos = new b2Vec2;
     CL_InputDevice device = inputManager.getMouse();
-    device.sig_key_down().connect(DebugDragAndDrop::mouseDown);
-    device.sig_pointer_move().connect(DebugDragAndDrop::mouseMove);
-    device.sig_key_up().connect(DebugDragAndDrop::mouseUp);
+    device.sig_key_down().connect(this, &DebugDragAndDrop::mouseDown);
+    device.sig_pointer_move().connect(this, &DebugDragAndDrop::mouseMove);
+    device.sig_key_up().connect(this, &DebugDragAndDrop::mouseUp);
 }
 
  DebugDragAndDrop::~DebugDragAndDrop()
