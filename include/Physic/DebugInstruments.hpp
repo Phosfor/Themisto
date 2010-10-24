@@ -11,9 +11,8 @@
 class DebugDragAndDrop: public b2QueryCallback
 {
     private:
-        bool mDrag;
-        b2Vec2*  mMousePos;
-        Body* mDraggingBody;
+        b2MouseJoint* mMouseJoint;
+        b2Vec2 *mMousePos;
 
         void mouseDown(const CL_InputEvent &key, const CL_InputState &state);
         void mouseUp(const CL_InputEvent &key, const CL_InputState &state);

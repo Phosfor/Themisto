@@ -48,9 +48,9 @@ void Body::setVisual(BodyVisual* visualiser)
 
 }
 
-b2Body& Body::getb2Body()
+b2Body* Body::getb2Body()
 {
-    return *mBody;
+    return mBody;
 }
 
 void Body::setMaterial(BodyMaterial *material)

@@ -50,7 +50,7 @@ class Body
         void setMaterial(BodyMaterial *material);
         BodyState *getState();
         BodyMaterial* getMaterial();
-        b2Body& getb2Body();
+        b2Body* getb2Body();
 
         void updateVisual();
         void step(float32 timeStep);

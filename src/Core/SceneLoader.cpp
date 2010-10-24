@@ -32,7 +32,7 @@ void SceneLoader::loadScene()
 
     b2FixtureDef box1Fixture;
     box1Fixture.shape = &box1Shape;
-    box1Fixture.density = 100.0f;
+    box1Fixture.density = 1.0f;
     box1Fixture.friction = 0.3;
 
 
@@ -51,7 +51,7 @@ void SceneLoader::loadScene()
     b2MassData mass;
     mass.mass = 10;
     mass.center.Set(0.0f, 0.0f);
-    mass.I = 100;
+    mass.I = 10;
     circle1->SetMassData(&mass);
 
     b2CircleShape circle1Shape;
@@ -60,7 +60,7 @@ void SceneLoader::loadScene()
 
     b2FixtureDef circle1Fixture;
     circle1Fixture.shape = &circle1Shape;
-    circle1Fixture.density = 200.0f;
+    circle1Fixture.density = 1.0f;
     circle1Fixture.friction = 0.8f;
 
 
@@ -91,7 +91,7 @@ void SceneLoader::loadScene()
 
     b2FixtureDef polygon1Fixture;
     polygon1Fixture.shape= &polygon1Shape;
-    polygon1Fixture.density = 150.0f;
+    polygon1Fixture.density = 1.0f;
     polygon1Fixture.friction = 0.1;
 
 
@@ -101,7 +101,7 @@ void SceneLoader::loadScene()
     physicManager.registerBody(polygon1Body);
 
     //define a 'U' shaped area of square boxes
-    float MPP = 0.2;
+    /*float MPP = 0.2;
 	for (int i=1; i<=15; i++)
 	{
 		b2BodyDef bd;
@@ -126,5 +126,5 @@ void SceneLoader::loadScene()
 		BodyVisual* v = new BodyVisual;
 		bb->setVisual(v);
 		physicManager.registerBody(bb);
-	}
+	}*/
 }
