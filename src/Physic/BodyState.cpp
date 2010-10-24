@@ -10,7 +10,7 @@ BodyState::BodyState()
     CarbonizeLevel = 0;
 
     // Temperature in Kelvins
-    Temperature = physicManager.mEnvironTemperature;
+    Temperature = worldManager.mEnvironTemperature;
 
     // How many water in body
     // 0 - dry, maxDampness - full of water
