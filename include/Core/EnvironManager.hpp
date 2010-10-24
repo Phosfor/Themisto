@@ -65,6 +65,8 @@ class EnvironManager : public boost::serialization::singleton<EnvironManager>
         void enableType(bool state, EnvironTypes type, int limit = -1);
         EnvironObject *getTypeHandle(EnvironTypes type);
 
+        bool getTypeEnabled(EnvironTypes type);
+
         void setEnvironTime(int _hours, int _minutes, int _seconds);
         int *getEnvironTime();
 

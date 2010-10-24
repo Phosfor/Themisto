@@ -121,3 +121,8 @@ int EnvironManager::getLimit(EnvironTypes type)
 {
     return mObjectsMap[type]->getLimit();
 }
+
+bool EnvironManager::getTypeEnabled(EnvironTypes type)
+{
+    return mObjectsMap[type]->getEnabled();
+}
