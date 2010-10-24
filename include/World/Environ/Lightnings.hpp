@@ -8,6 +8,7 @@
 
 #include "Core/ApplicationManager.hpp"
 #include "World/Environ/Object.hpp"
+#include "World/Environ/Types.hpp"
 
 class Lightnings : public EnvironObject
 {

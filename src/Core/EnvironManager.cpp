@@ -91,6 +91,7 @@ void EnvironManager::enableType(bool state, EnvironTypes type, int limit)
             case Environ_Rain:   temp = new Rain();   break;
             case Environ_Leaves: temp = new Leaves(); break;
             case Environ_Birds:  temp = new Birds();  break;
+            case Environ_Lightnings:  temp = new Lightnings();  break;
         }
         temp->setEnabled(state);
         mObjectsMap.insert(MapType::value_type(type, temp));
