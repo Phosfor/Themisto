@@ -4,6 +4,7 @@
 #include <Box2D/Dynamics/b2World.h>
 #include <Physic/Body.hpp>
 #include "Core/ApplicationManager.hpp"
+#include "Core/PhysicManager.hpp"
 
 class DebugDragAndDrop: public b2QueryCallback
 {
