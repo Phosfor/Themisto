@@ -32,9 +32,9 @@ void SceneLoader::loadScene()
 
     b2FixtureDef box1Fixture;
     box1Fixture.shape = &box1Shape;
-    box1Fixture.density = 0.4f;
-    box1Fixture.friction = 0.3;
-
+    box1Fixture.density = 100.0f;
+    box1Fixture.friction = 0.5;
+    box1Fixture.restitution = 0.05;
 
     Body *box1Body = new Body(box1);
     box1Body->setVisual(new BodyVisual);
@@ -56,9 +56,9 @@ void SceneLoader::loadScene()
 
     b2FixtureDef circle1Fixture;
     circle1Fixture.shape = &circle1Shape;
-    circle1Fixture.density = 1.0f;
-    circle1Fixture.friction = 0.3f;
-
+    circle1Fixture.density = 2.0f;
+    circle1Fixture.friction = 0.2f;
+    circle1Fixture.restitution = 0.3;
 
     Body *circle1Body = new Body(circle1);
     circle1Body->setVisual(new BodyVisual);
@@ -84,8 +84,9 @@ void SceneLoader::loadScene()
 
     b2FixtureDef polygon1Fixture;
     polygon1Fixture.shape= &polygon1Shape;
-    polygon1Fixture.density = 1.0f;
-    polygon1Fixture.friction = 0.1;
+    polygon1Fixture.density = 2.0f;
+    polygon1Fixture.friction = 0.4;
+    polygon1Fixture.restitution = 0.05;
 
 
     Body *polygon1Body = new Body(polygon1);
