@@ -8,6 +8,9 @@ void DebugDragAndDrop::init()
     mMoveSlot = device.sig_pointer_move().connect(this, &DebugDragAndDrop::mouseMove);
     mUpSlot = device.sig_key_up().connect(this, &DebugDragAndDrop::mouseUp);
     mMouseJoint = NULL;
+    b2BodyDef attachDef;
+    mAttachBody = physicManager.getWorld().CreateBody(&attachDef);
+
 }
 
  DebugDragAndDrop::~DebugDragAndDrop()
@@ -24,18 +27,20 @@ bool DebugDragAndDrop::ReportFixture(b2Fixture *fixture)
     {
         b2Body *draggingBody = fixture->GetBody();
         b2MouseJointDef jointDef;
+        jointDef.bodyA = mAttachBody;
         jointDef.bodyB = draggingBody;
         jointDef.frequencyHz = 60.0f;
         jointDef.dampingRatio = 0.0f;
         std::list<Body*> bodies = physicManager.getBodies();
-        for(std::list<Body*>::iterator body = bodies.begin(); body != bodies.end(); ++body)
+
+        /*for(std::list<Body*>::iterator body = bodies.begin(); body != bodies.end(); ++body)
         {
             if((*body)->getb2Body()->GetType() == b2_staticBody)
             {
                 jointDef.bodyA = (*body)->getb2Body();
                 break;
             }
-        }
+        }*/
 
         jointDef.target =*mMousePos;
         jointDef.maxForce = 1000.0f * draggingBody->GetMass();

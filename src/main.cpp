@@ -1,60 +1,6 @@
 #include "Core/Application.hpp"
-/*
-#include <iostream>
-#include "boost/date_time/posix_time/posix_time.hpp" //include all types plus i/o
-#include <Box2D/Box2D.h>
-using namespace boost::posix_time;
 
 
-
-   string getTimeDifference(ptime begin)
-   {
-   	time_duration result = microsec_clock::local_time() - begin;
-
-   	return to_simple_string(result);
-   }
-
-
-
-void testPhysic()
-{
-	b2World world = physicManager.getWorld();
-
-	b2BodyDef groundBodyDef;
-	groundBodyDef.position.Set(0.0f, -10.0f);
-	b2Body* groundBody = world.CreateBody(&groundBodyDef);
-	b2PolygonShape groundBox;
-	groundBox.SetAsBox(50.0f, 10.0f);
-	groundBody->CreateFixture(&groundBox, 0.0f);
-	b2BodyDef bodyDef;
-	bodyDef.type = b2_dynamicBody;
-	bodyDef.position.Set(0.0f, 4.0f);
-	b2Body* body = world.CreateBody(&bodyDef);
-
-
-	b2PolygonShape dynamicBox;
-	dynamicBox.SetAsBox(1.0f, 1.0f);
-	b2FixtureDef fixtureDef;
-	fixtureDef.shape = &dynamicBox;
-	fixtureDef.density = 1.0f;
-	fixtureDef.friction = 0.3f;
-	body->CreateFixture(&fixtureDef);
-
-
-
-
-    ptime begin = microsec_clock::local_time();
-	for (int32 i = 0; i < 60; ++i)
-	{
-	    physicManager.step();
-		//world.Step(timeStep, velocityIterations, positionIterations);
-		//world.ClearForces();
-		//printf("%4.2f %4.2f %4.2f\n", position.x, position.y, angle);
-	}
-	cout<<getTimeDifference(begin);
-
-}
-*/
 int Application::main(const std::vector<CL_String> &args)
 {
 
