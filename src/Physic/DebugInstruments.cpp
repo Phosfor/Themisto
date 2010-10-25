@@ -25,6 +25,8 @@ bool DebugDragAndDrop::ReportFixture(b2Fixture *fixture)
         b2Body *draggingBody = fixture->GetBody();
         b2MouseJointDef jointDef;
         jointDef.bodyB = draggingBody;
+        jointDef.frequencyHz = 60.0f;
+        jointDef.dampingRatio = 0.0f;
         std::list<Body*> bodies = physicManager.getBodies();
         for(std::list<Body*>::iterator body = bodies.begin(); body != bodies.end(); ++body)
         {
@@ -36,7 +38,7 @@ bool DebugDragAndDrop::ReportFixture(b2Fixture *fixture)
         }
 
         jointDef.target =*mMousePos;
-        jointDef.maxForce = 10000.0f * draggingBody->GetMass();
+        jointDef.maxForce = 1000.0f * draggingBody->GetMass();
         mMouseJoint = (b2MouseJoint*)physicManager.getWorld().CreateJoint(&jointDef);
         draggingBody->SetActive(true);
         return false;
@@ -48,7 +50,7 @@ void DebugDragAndDrop::mouseDown(const CL_InputEvent &ev, const CL_InputState &s
 {
     if(mMouseJoint == NULL)
     {
-        mMousePos->Set((float) ev.mouse_pos.x, (float) ev.mouse_pos.y);
+        mMousePos->Set((float) Pixels2Meters(ev.mouse_pos.x), (float) Pixels2Meters(ev.mouse_pos.y));
         b2AABB region;
         region.lowerBound.Set(mMousePos->x - 0.001f, mMousePos->y - 0.0f);
         region.upperBound.Set(mMousePos->x + 0.001f, mMousePos->y + 0.001f);
@@ -60,7 +62,7 @@ void DebugDragAndDrop::mouseMove(const CL_InputEvent &ev, const CL_InputState &s
 {
    if(mMouseJoint != NULL)
    {
-       mMousePos->Set((float) ev.mouse_pos.x, (float) ev.mouse_pos.y);
+       mMousePos->Set((float) Pixels2Meters(ev.mouse_pos.x), (float) Pixels2Meters(ev.mouse_pos.y));
        mMouseJoint->SetTarget(*mMousePos);
    }
 }

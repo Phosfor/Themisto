@@ -3,6 +3,7 @@
 
 #include <Box2D/Box2D.h>
 #include "Core/ApplicationManager.hpp"
+#include "Core/Utils.hpp"
 
 struct b2AABB;
 class DebugDraw : public b2DebugDraw

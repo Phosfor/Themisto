@@ -2,11 +2,11 @@
 
 PhysicManager::PhysicManager()
 {
-    b2Vec2 gravity(0.0f, Meters2Pixels(10.0f));
-    mWorld = new b2World(gravity, true);
+    b2Vec2 gravity(0.0f, 10.0f);
+    mWorld = new b2World(gravity, false);
     mTimeStep = 1.0f / 60.0f;
     mVelocityIterations = 6;
-    mPositionIterations = 2;
+    mPositionIterations = 4;
     mBodies = new std::list<Body*>;
 }
 
@@ -55,6 +55,7 @@ void PhysicManager::step()
         (*body)->step(mTimeStep);
     }
     mWorld->Step(mTimeStep, mVelocityIterations, mPositionIterations);
+    mWorld->ClearForces();
 }
 
 void PhysicManager::updateVisual()

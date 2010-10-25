@@ -8,11 +8,11 @@ void SceneLoader::loadScene()
 
     //add earth
     b2BodyDef earthDef;
-    earthDef.position.Set(100.0f, 300.0f);
+    earthDef.position.Set(2.0f, 5.0f);
     b2Body* earth = physicManager.getWorld().CreateBody(&earthDef);
 
     b2PolygonShape earthShape;
-    earthShape.SetAsBox(800.0f, 2.0f);
+    earthShape.SetAsEdge(b2Vec2(-50.0f, 10.0f), b2Vec2(50.0f, 10.0f));
 
     earth->CreateFixture(&earthShape, 0.0f);
 
@@ -23,16 +23,16 @@ void SceneLoader::loadScene()
 
     //add box
     b2BodyDef box1Def;
-    box1Def.position.Set(100.0f, 50.0f);
+    box1Def.position.Set(5.0f, 2.0f);
     box1Def.type = b2_dynamicBody;
     b2Body* box1 = physicManager.getWorld().CreateBody(&box1Def);
 
     b2PolygonShape box1Shape;
-    box1Shape.SetAsBox(10.0f, 10.0f);
+    box1Shape.SetAsBox(0.5f, 0.5f);
 
     b2FixtureDef box1Fixture;
     box1Fixture.shape = &box1Shape;
-    box1Fixture.density = 1.0f;
+    box1Fixture.density = 0.4f;
     box1Fixture.friction = 0.3;
 
 
@@ -44,48 +44,41 @@ void SceneLoader::loadScene()
      //add some circle
     b2BodyDef circle1Def;
 
-    circle1Def.position.Set(110.0f, 7.0f);
+    circle1Def.position.Set(5.0f, 3.0f);
     circle1Def.type = b2_dynamicBody;
     b2Body* circle1 = physicManager.getWorld().CreateBody(&circle1Def);
     circle1->SetBullet(true);
-    b2MassData mass;
-    mass.mass = 10;
-    mass.center.Set(0.0f, 0.0f);
-    mass.I = 10;
-    circle1->SetMassData(&mass);
+
 
     b2CircleShape circle1Shape;
-    circle1Shape.m_radius = 20.0f;
-    circle1Shape.m_p.Set(0.0f, 10.0f);
+    circle1Shape.m_radius = 0.7f;
+    circle1Shape.m_p.Set(0.0f, 0.5f);
 
     b2FixtureDef circle1Fixture;
     circle1Fixture.shape = &circle1Shape;
     circle1Fixture.density = 1.0f;
-    circle1Fixture.friction = 0.8f;
+    circle1Fixture.friction = 0.3f;
 
 
     Body *circle1Body = new Body(circle1);
     circle1Body->setVisual(new BodyVisual);
     circle1Body->createFixture(&circle1Fixture);
-    circle1->ResetMassData();
     physicManager.registerBody(circle1Body);
 
     //add polygon
     b2BodyDef polygon1Def;
-    polygon1Def.position.Set(200.0f, 7.0f);
+    polygon1Def.position.Set(10.0f, 0.35f);
     polygon1Def.type = b2_dynamicBody;
     b2Body* polygon1 = physicManager.getWorld().CreateBody(&polygon1Def);
 
     b2PolygonShape polygon1Shape;
-    int vertexCount = 6;
+    int vertexCount = 3;
     b2Vec2 vertices[vertexCount];
 
-    vertices[0] = b2Vec2(0.0f, 0.0f);
-    vertices[1] = b2Vec2(5.0f, 0.0f);
-    vertices[2] = b2Vec2(30.0f, 5.0f);
-    vertices[3] = b2Vec2(5.0f, 30.0f);
-    vertices[4] = b2Vec2(0.0f, 5.0f);
-    vertices[5] = b2Vec2(1.0f, 1.0f);
+    vertices[0] = b2Vec2(-1.0f, 0.0f);
+    vertices[1] = b2Vec2(1.0f, 0.0f);
+    vertices[2] = b2Vec2(0.0f, 1.0f);
+
 
     polygon1Shape.Set(vertices, vertexCount);
 
@@ -99,23 +92,23 @@ void SceneLoader::loadScene()
     polygon1Body->setVisual(new BodyVisual);
     polygon1Body->createFixture(&polygon1Fixture);
     physicManager.registerBody(polygon1Body);
-
+    /*
     //define a 'U' shaped area of square boxes
-    /*float MPP = 0.2;
+    float MPP = 0.2;
 	for (int i=1; i<=15; i++)
 	{
 		b2BodyDef bd;
 		bd.type = b2_dynamicBody;
 
 		if (i <= 5)
-			bd.position.Set(500*MPP, (400+i*32)*MPP);
+			bd.position.Set(50*MPP, (40+i*3.2)*MPP);
 		else if (i <= 10)
-			bd.position.Set((505 + (i-5)*32)*MPP, 500*MPP);
+			bd.position.Set((50.5 + (i-5)*3.2)*MPP, 50.0*MPP);
 		else
-			bd.position.Set(702*MPP, (400+(i-10)*32)*MPP);
+			bd.position.Set(70.2*MPP, (40.0+(i-10)*3.2)*MPP);
 		b2Body *b = physicManager.getWorld().CreateBody(&bd);
 		b2PolygonShape box;
-		box.SetAsBox(16*MPP, 16*MPP);
+		box.SetAsBox(1.6*MPP, 1.6*MPP);
 		b2FixtureDef fd;
 		fd.shape = &box;
 		fd.density = 1.0f;
