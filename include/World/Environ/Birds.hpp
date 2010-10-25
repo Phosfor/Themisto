@@ -5,7 +5,7 @@
 #include <ClanLib/display.h>
 #include "Core/Utils.hpp"
 #include "Core/ApplicationManager.hpp"
-#include "World/Environ/EnvironObject.hpp"
+#include "World/Environ/Object.hpp"
 
 struct BirdData
 {

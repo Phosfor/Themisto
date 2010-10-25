@@ -7,7 +7,7 @@
 #include "Core/Utils.hpp"
 
 #include "Core/ApplicationManager.hpp"
-#include "World/Environ/EnvironObject.hpp"
+#include "World/Environ/Object.hpp"
 
 using namespace std;
 

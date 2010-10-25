@@ -91,6 +91,7 @@ void EnvironManager::enableType(bool state, EnvironTypes type, int limit)
             case Environ_Rain:   temp = new Rain();   break;
             case Environ_Leaves: temp = new Leaves(); break;
             case Environ_Birds:  temp = new Birds();  break;
+            case Environ_Lightnings:  temp = new Lightnings();  break;
         }
         temp->setEnabled(state);
         mObjectsMap.insert(MapType::value_type(type, temp));
@@ -120,4 +121,18 @@ void EnvironManager::setLimit(EnvironTypes type, int limit)
 int EnvironManager::getLimit(EnvironTypes type)
 {
     return mObjectsMap[type]->getLimit();
+}
+
+bool EnvironManager::getTypeEnabled(EnvironTypes type)
+{
+    if (mObjectsMap.find(type) == mObjectsMap.end())
+    {
+        return false;
+    }
+    else
+    {
+        return mObjectsMap[type]->getEnabled();
+    }
+
+    return false;
 }

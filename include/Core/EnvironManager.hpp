@@ -5,6 +5,7 @@
 #include <ClanLib/display.h>
 
 #include "Core/Utils.hpp"
+#include "World/Environ/Types.hpp"
 
 #include "World/Environ/Rain.hpp"
 #include "World/Environ/Moon.hpp"
@@ -13,6 +14,7 @@
 #include "World/Environ/Leaves.hpp"
 #include "World/Environ/Clouds.hpp"
 #include "World/Environ/Birds.hpp"
+#include "World/Environ/Lightnings.hpp"
 
 #include <boost/serialization/singleton.hpp>
 
@@ -29,19 +31,6 @@
 
 class EnvironManager : public boost::serialization::singleton<EnvironManager>
 {
-    public:
-        // Numbers show the priority of render
-        enum EnvironTypes
-        {
-            Environ_Sky    = 0,
-            Environ_Stars  = 1,
-            Environ_Moon   = 2,
-            Environ_Rain   = 3,
-            Environ_Clouds = 4,
-            Environ_Leaves = 5,
-            Environ_Birds  = 6
-        };
-
     private:
         typedef std::map<EnvironTypes, EnvironObject*> MapType;
         MapType mObjectsMap;
@@ -64,6 +53,8 @@ class EnvironManager : public boost::serialization::singleton<EnvironManager>
 
         void enableType(bool state, EnvironTypes type, int limit = -1);
         EnvironObject *getTypeHandle(EnvironTypes type);
+
+        bool getTypeEnabled(EnvironTypes type);
 
         void setEnvironTime(int _hours, int _minutes, int _seconds);
         int *getEnvironTime();
