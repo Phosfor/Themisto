@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<ThemistoLevel version="0.1" authors="Wincode team">
+    <World size_width="1152" size_height="864">
+
+        <Environ active="true">
+            <Rain enabled="true" limit="50" />
+            <Clouds enabled="true" />
+            <Lightning enabled="true" />
+            <Sky enabled="true" />
+            <Moon enabled="true" />
+            <Leaves enabled="true" limit="5" />
+            <Stars enabled="true" />
+            <Birds enabled="true" />
+            <Wind power="-2" />
+        </Environ>
+
+        <Objects>
+            <Object name="Ground">
+                <Visual>
+                    <Position x="100" y="100" />
+                    <Size width="200" height="500" />
+                    <Resource name="someTexture" />
+                </Visual>
+            </Object>
+        </Objects>
+
+    </World>
+</ThemistoLevel>

@@ -7,6 +7,8 @@ void MenuState::init()
     mStatFont = new CL_Font(appManager.getGraphic(), "Ubuntu", 30);
     mBackground = CL_Image(appManager.getGraphic(), "media/ground.png");
 
+    sceneLoader.loadScene("test.xml");
+
     environManager.initEnviron();
     environManager.enableType(true, Environ_Sky);
     environManager.enableType(true, Environ_Moon);

@@ -8,7 +8,7 @@ void PhysicState::init()
     mGC = appManager.getGraphic();
     mStatFont = new CL_Font(appManager.getGraphic(), "Ubuntu", 30);
 
-    sceneLoader.loadScene();
+    //sceneLoader.loadScene();
 
     mDebugDrawHandle.SetFlags(
             b2DebugDraw::e_shapeBit |
