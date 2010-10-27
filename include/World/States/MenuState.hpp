@@ -3,7 +3,6 @@
 
 #include "Core/StateManager.hpp"
 #include "Core/ApplicationManager.hpp"
-#include "Core/EnvironManager.hpp"
 #include "Core/SceneLoader.hpp"
 
 #include <ClanLib/core.h>

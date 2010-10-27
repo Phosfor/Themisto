@@ -5,6 +5,7 @@
 #include <Box2D/Box2D.h>
 
 #include "Core/PhysicManager.hpp"
+#include "Core/EnvironManager.hpp"
 #include "Physic/Body.hpp"
 
 #define sceneLoader (SceneLoader::get_mutable_instance())

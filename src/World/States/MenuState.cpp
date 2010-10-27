@@ -9,7 +9,7 @@ void MenuState::init()
 
     sceneLoader.loadScene("test.xml");
 
-    environManager.initEnviron();
+    /*environManager.initEnviron();
     environManager.enableType(true, Environ_Sky);
     environManager.enableType(true, Environ_Moon);
     environManager.enableType(true, Environ_Stars);
@@ -18,7 +18,7 @@ void MenuState::init()
     environManager.enableType(true, Environ_Lightnings);
     environManager.enableType(true, Environ_Rain, 50);
     environManager.enableType(true, Environ_Birds);
-    environManager.setWindPower(-2.0);
+    environManager.setWindPower(-2.0);*/
 }
 
 void MenuState::shutdown() 
