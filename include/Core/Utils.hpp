@@ -13,6 +13,7 @@ using namespace std;
 
 /////////////////////////////////////////////////////////////////////////
 //////////////////////// UTILS FUNCTIONS ////////////////////////////////
+#define GAME_VERSION 0.1
 
 // Make formatted string. Usage: FORMAT("some %1% string %2%", firstArg % secondArg);
 #define FORMAT(parentString, params) (boost::format(parentString) % params).str()
