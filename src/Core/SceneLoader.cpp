@@ -42,6 +42,25 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
     if (mEnvironEnabled)
     {
         environManager.initEnviron();
+
+        std::map<std::string, EnvironTypes> deps;
+        deps["Rain"] = Environ_Rain;
+        deps["Clouds"] = Environ_Clouds;
+        deps["Lightnings"] = Environ_Lightnings;
+        deps["Sky"] = Environ_Sky;
+        deps["Moon"] = Environ_Moon;
+        deps["Leaves"] = Environ_Leaves;
+        deps["Stars"] = Environ_Stars;
+        deps["Birds"] = Environ_Birds;
+
+        CL_DomNodeList childList = environ.get_child_nodes();
+        for (int i=0; i < childList.get_length(); ++i)
+        {
+            EnvironTypes type = deps[childList.item(i).get_node_name().c_str()];
+            bool enabled = childList.item(i).to_element().get_attribute("enabled") == "true";
+
+            environManager.enableType(enabled, type);
+        }
     }
 
     mMutex.unlock();

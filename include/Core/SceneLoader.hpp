@@ -6,7 +6,10 @@
 
 #include "Core/PhysicManager.hpp"
 #include "Core/EnvironManager.hpp"
+#include "World/Environ/Types.hpp"
+
 #include "Physic/Body.hpp"
+#include <map>
 
 #define sceneLoader (SceneLoader::get_mutable_instance())
 #define sceneLoaderConst (SceneLoader::get_const_instance())
