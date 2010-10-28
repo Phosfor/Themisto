@@ -1,19 +1,15 @@
 #include "World/Environ/Moon.hpp"
 
-Moon::Moon(const string &imagePath, float _scaleX, float _scaleY)
+Moon::Moon()
 {
     string media = utils.getMediaFolder();
     CL_GraphicContext gc = appManager.getGraphic();
-    mMoon = CL_Sprite(appManager.getGraphic(), utils.getMediaFolder() + "/" + imagePath);
+    mMoon = CL_Sprite(gc, "media/SkyX_Moon.png");
 
     mMoonColor = mMoon.get_color();
     mG = mB = 1.0f;
 
     mRenderMoon = true;
-
-    // Apply image scaling and linear filtrating (to make sprite smooth)
-    mMoon.set_scale(_scaleX, _scaleY);
-    mMoon.set_linear_filter(true);
 
     mMoon.set_alignment(origin_center);
 

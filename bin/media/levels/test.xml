@@ -6,7 +6,7 @@
         <Environ active="true">
             <Rain enabled="true" limit="50" />
             <Clouds enabled="true" />
-            <Lightning enabled="true" />
+            <Lightnings enabled="true" />
             <Sky enabled="true" />
             <Moon enabled="true" />
             <Leaves enabled="true" limit="5" />

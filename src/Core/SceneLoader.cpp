@@ -2,13 +2,14 @@
 
 void SceneLoader::loadScene(const std::string &sceneName)
 {
-    mThread.start<SceneLoader, const std::string&>(this, &SceneLoader::_threadWrapper, sceneName);
-    mThread.join();
+    //mThread.start<SceneLoader, const std::string&>(this, &SceneLoader::_threadWrapper, sceneName);
+    //mThread.join();
+    _threadWrapper(sceneName);
 }
 
 void SceneLoader::_threadWrapper(const std::string &sceneName)
 {
-    mMutex.lock();
+    //mMutex.lock();
 
     CL_File fileHandle = CL_File("media/levels/" + sceneName);
     CL_DomDocument document(fileHandle);
@@ -41,6 +42,7 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
     // If Environ is enabled, go through all environ-params in the level file
     if (mEnvironEnabled)
     {
+        using namespace boost;
         environManager.initEnviron();
 
         std::map<std::string, EnvironTypes> deps;
@@ -56,12 +58,19 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
         CL_DomNodeList childList = environ.get_child_nodes();
         for (int i=0; i < childList.get_length(); ++i)
         {
-            EnvironTypes type = deps[childList.item(i).get_node_name().c_str()];
-            bool enabled = childList.item(i).to_element().get_attribute("enabled") == "true";
+            CL_DomNode tag = childList.item(i);
+            if (tag.get_node_name() == "Wind")
+            {
+                float pow = lexical_cast<float>(tag.to_element().get_attribute("power").c_str());
+                environManager.setWindPower(pow);
+            }
+            EnvironTypes type = deps[tag.get_node_name().c_str()];
+            bool enabled = tag.to_element().get_attribute("enabled") == "true";
 
             environManager.enableType(enabled, type);
         }
+        LOG_NOFORMAT("- All environ objects are loaded.\n");
     }
 
-    mMutex.unlock();
+    //mMutex.unlock();
 }

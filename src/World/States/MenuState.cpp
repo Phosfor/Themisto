@@ -8,17 +8,6 @@ void MenuState::init()
     mBackground = CL_Image(appManager.getGraphic(), "media/ground.png");
 
     sceneLoader.loadScene("test.xml");
-
-    /*environManager.initEnviron();
-    environManager.enableType(true, Environ_Sky);
-    environManager.enableType(true, Environ_Moon);
-    environManager.enableType(true, Environ_Stars);
-    environManager.enableType(true, Environ_Leaves, 4);
-    environManager.enableType(true, Environ_Clouds, 10);
-    environManager.enableType(true, Environ_Lightnings);
-    environManager.enableType(true, Environ_Rain, 50);
-    environManager.enableType(true, Environ_Birds);
-    environManager.setWindPower(-2.0);*/
 }
 
 void MenuState::shutdown() 

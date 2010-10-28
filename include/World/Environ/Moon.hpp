@@ -30,7 +30,7 @@ class Moon : public EnvironObject
         CL_GraphicContext mGC;
 
     public:
-        Moon(const string &imagePath = "SkyX_Moon.png", float _scaleX = 1, float _scaleY = 1);
+        Moon();
         void setScale(float _scaleX, float _scaleY);
         float getMoonAngle();
         void update(float windPower, float elapsed, float globalTime);
