@@ -65,9 +65,14 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
                 environManager.setWindPower(pow);
             }
             EnvironTypes type = deps[tag.get_node_name().c_str()];
+
             bool enabled = tag.to_element().get_attribute("enabled") == "true";
 
-            environManager.enableType(enabled, type);
+            int lim = -1;
+            CL_String s_lim = tag.to_element().get_attribute("limit");
+            if (s_lim != "") lim = lexical_cast<int>(s_lim.c_str());
+
+            environManager.enableType(enabled, type, lim);
         }
         LOG_NOFORMAT("- All environ objects are loaded.\n");
     }
