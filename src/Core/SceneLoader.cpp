@@ -16,7 +16,8 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
 
     CL_DomElement root = document.get_document_element();
     CL_DomElement world = root.get_first_child_element();
-    CL_DomElement environ = world.get_first_child_element();
+    CL_DomElement environ = world.get_elements_by_tag_name("Environ").item(0).to_element();
+    CL_DomElement objects = world.get_elements_by_tag_name("Objects").item(0).to_element();
 
     // Get level attributes
     CL_String authors = root.get_attribute("authors");
@@ -75,6 +76,47 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
             environManager.enableType(enabled, type, lim);
         }
         LOG_NOFORMAT("- All environ objects are loaded.\n");
+    }
+
+    // Objects parsing
+    {
+        using namespace boost;
+
+        float x = 0, y = 0;
+
+        CL_DomNodeList childList = objects.get_child_nodes();
+        for (int i=0; i < childList.get_length(); ++i)
+        {
+            CL_DomElement tag = childList.item(i).to_element();
+
+            std::string name = tag.get_attribute("name").c_str();
+            std::string type = tag.get_attribute("type").c_str();
+            bool physic = tag.get_attribute("physic_body") == "true";
+            LOG_NOFORMAT(cl_format("- Parsing object `%1` of type `%2`, physic body: `%3`\n", 
+                        name, type, physic));
+
+            // Parsing visuals
+            {
+                CL_DomElement visual = objects.get_elements_by_tag_name("Visual").item(0).to_element();
+                CL_DomNodeList childList = visual.get_child_nodes();
+
+                for (int i=0; i < childList.get_length(); ++i)
+                {
+                    CL_DomElement tag = childList.item(i).to_element();
+                    if (tag.get_node_name() == "Position")
+                    {
+                        x = lexical_cast<float>(tag.get_attribute("x").c_str());
+                        y = lexical_cast<float>(tag.get_attribute("y").c_str());
+                    }
+                }
+            }
+
+            // Creating final object
+            Object *obj = BuildObjectType(type);
+            obj->setPosition(CL_Pointf(x, y));
+            obj->setName(name);
+            objectsManager.addObject(name, obj);
+        }
     }
 
     //mMutex.unlock();

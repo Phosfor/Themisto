@@ -6,6 +6,7 @@
 
 #include "Core/PhysicManager.hpp"
 #include "Core/EnvironManager.hpp"
+#include "Core/ObjectsManager.hpp"
 #include "World/Environ/Types.hpp"
 #include "World/Objects/ObjectTypeBuilder.hpp"
 

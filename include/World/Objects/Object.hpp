@@ -16,7 +16,7 @@ class Object
         virtual std::string getType() { return mType; }
         virtual void setType(const std::string &type) { mType = type; }
 
-        virtual void setPosition(CL_Pointf &pos) { mX = pos.x; mY = pos.y; }
+        virtual void setPosition(const CL_Pointf &pos) { mX = pos.x; mY = pos.y; }
         virtual void setX(float x) { mX = x; }
         virtual void setY(float y) { mY = y; }
 
