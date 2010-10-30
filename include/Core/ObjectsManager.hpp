@@ -17,11 +17,11 @@
 
 #define objectsManager (ObjectsManager::get_mutable_instance())
 #define objectsManagerConst (ObjectsManager::get_const_instance())
-
+typedef map<std::string, Object*> ObjectMapType;
 class ObjectsManager : public boost::serialization::singleton<ObjectsManager>
 {
     private:
-        std::map<std::string, Object*> mObjects;
+        ObjectMapType mObjects;
         unsigned int mNumObjects;
 
     public:
