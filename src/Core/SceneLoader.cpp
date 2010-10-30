@@ -38,6 +38,7 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
     // Check whether environ should be enabled
     bool mEnvironEnabled = false;
     if (environ.get_attribute("active") == "true") mEnvironEnabled = true;
+    environManager.setEnvironEnabled(mEnvironEnabled);
     LOG_NOFORMAT(cl_format("- Environ enabled state: %1\n", mEnvironEnabled));
 
     // If Environ is enabled, go through all environ-params in the level file

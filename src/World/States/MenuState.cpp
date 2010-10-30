@@ -3,11 +3,10 @@
 void MenuState::init()
 {
     mGC = appManager.getGraphic();
-
     mStatFont = new CL_Font(appManager.getGraphic(), "Ubuntu", 30);
-    mBackground = CL_Image(appManager.getGraphic(), "media/ground.png");
 
     sceneLoader.loadScene("test.xml");
+    mEnvironEnabled = environManager.getEnvironEnabled();
 }
 
 void MenuState::shutdown() 
@@ -18,10 +17,7 @@ void MenuState::shutdown()
 void MenuState::update()
 {
     mGC.clear();
-    environManager.update();
-    mBackground.draw(mGC, 0, mGC.get_height()-mBackground.get_height());
-
-    mGrass.update();
+    if (mEnvironEnabled) environManager.update();
 
     int *time = environManager.getEnvironTime();
     mStatFont->draw_text(appManager.getGraphic(), 10, 25,

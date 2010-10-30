@@ -9,20 +9,15 @@
 #include <ClanLib/display.h>
 #include <ClanLib/application.h>
 
-#include "World/Objects/Grass.hpp"
-
 using namespace std;
 
 class MenuState : public State
 {
     private:
     CL_Font *mStatFont;
-    CL_Image mBackground;
+    bool mEnvironEnabled;
 
     CL_GraphicContext mGC;
-
-    // Will be moved to some manager
-    Grass mGrass;
 
     void init();
     void shutdown();
