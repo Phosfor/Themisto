@@ -16,13 +16,15 @@
         </Environ>
 
         <Objects>
-            <Object name="Ground">
+
+            <Object name="SomeGrass" type="Object_Grass" physic_body="false">
                 <Visual>
                     <Position x="100" y="100" />
                     <Size width="200" height="500" />
-                    <Resource name="someTexture" />
+                    <!--<Resource name="someTexture" />-->
                 </Visual>
             </Object>
+
         </Objects>
 
     </World>

@@ -7,6 +7,7 @@
 #include "Core/PhysicManager.hpp"
 #include "Core/EnvironManager.hpp"
 #include "World/Environ/Types.hpp"
+#include "World/Objects/ObjectTypeBuilder.hpp"
 
 #include "Physic/Body.hpp"
 #include <map>
