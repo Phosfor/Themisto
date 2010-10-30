@@ -2,6 +2,7 @@
 
 Grass::Grass()
 {
+    mType = "Object_Grass";
     mGC = appManager.getGraphic();
     mImageHandle = CL_Sprite(mGC, "media/plants/3.png");
 

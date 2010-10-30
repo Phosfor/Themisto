@@ -3,7 +3,7 @@
 
 class Object
 {
-    private:
+    protected:
         float x, y;
         std::string mName, mType;
 
