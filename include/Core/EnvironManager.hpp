@@ -36,7 +36,7 @@ class EnvironManager : public boost::serialization::singleton<EnvironManager>
         MapType mObjectsMap;
         float mWindPower;
 
-        bool mNight;
+        bool mNight, mEnvironEnabled;
         int mEnvironTime[3]; // 0 - hours; 1 - minutes; 2 - seconds
         float mTotalSec;
 
@@ -44,6 +44,9 @@ class EnvironManager : public boost::serialization::singleton<EnvironManager>
         void initEnviron();
         ~EnvironManager();
         bool isNight();
+
+        void setEnvironEnabled(bool state);
+        bool getEnvironEnabled();
 
         void setWindPower(float _power);
         float getWindPower();
