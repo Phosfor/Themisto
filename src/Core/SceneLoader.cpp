@@ -5,7 +5,7 @@ SceneLoader::SceneLoader(){}
 
 void SceneLoader::loadScene()
 {
-    /*
+
     //add earth
     b2BodyDef earthDef;
     earthDef.position.Set(2.0f, 5.0f);
@@ -93,7 +93,7 @@ void SceneLoader::loadScene()
     polygon1Body->setVisual(new BodyVisual);
     polygon1Body->createFixture(&polygon1Fixture);
     physicManager.registerBody(polygon1Body);
-
+    /*
     //define a 'U' shaped area of square boxes
     float MPP = 0.2;
 	for (int i=1; i<=15; i++)

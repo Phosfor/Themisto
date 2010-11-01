@@ -3,11 +3,14 @@
 
 #include <ClanLib/core.h>
 #include <ClanLib/display.h>
+
 #include "Core/Utils.hpp"
 #include "Core/ApplicationManager.hpp"
 #include "Core/GuiManager.hpp"
 
-class Grass
+#include "World/Objects/Object.hpp"
+
+class Grass : public Object
 {
     private:
         CL_Sprite mImageHandle;

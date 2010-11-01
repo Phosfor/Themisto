@@ -17,11 +17,12 @@ class Lightnings : public EnvironObject
         Clouds *mCloudsHandle;
 
         CL_Pointf mPosition;
-        CL_Image mLightningImage;
+        CL_Image mLightningImage[11];
 
         const int mProbability;
         bool mAnimation;
-        float mTimer;
+        float mTimer, alpha;
+        int mHandle;
 
         CL_GraphicContext mGC;
 

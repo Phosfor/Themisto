@@ -26,21 +26,6 @@ class Stars : public EnvironObject
         bool mNight, mDrawStars;
 
         CL_GraphicContext mGC;
-        CL_BlendMode blend_mode;
-
-        CL_ProgramObject mProgramBloom;
-        CL_ProgramObject mProgramBlur;
-
-        CL_FrameBuffer mStarsBuf;
-        CL_Texture mStarsTexture;
-
-        CL_FrameBuffer mBlurBuf;
-        CL_Texture mBlurTexture;
-
-        void makeBloomHandle();
-        void makeBlurHandle();
-
-        void renderStars(CL_ProgramObject &program, bool bloom = false);
 
     public:
         Stars(int maxStars = 200);

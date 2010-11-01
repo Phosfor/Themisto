@@ -8,8 +8,6 @@
 #include "Physic/DebugDraw.hpp"
 #include "Physic/DebugInstruments.hpp"
 
-#include <boost/foreach.hpp>
-
 #include <ClanLib/core.h>
 #include <ClanLib/display.h>
 #include <ClanLib/application.h>

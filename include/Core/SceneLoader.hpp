@@ -5,19 +5,29 @@
 #include <Box2D/Box2D.h>
 
 #include "Core/PhysicManager.hpp"
+#include "Core/EnvironManager.hpp"
+#include "Core/ObjectsManager.hpp"
+#include "World/Environ/Types.hpp"
+#include "World/Objects/ObjectTypeBuilder.hpp"
+
 #include "Physic/Body.hpp"
+#include <map>
 
 #define sceneLoader (SceneLoader::get_mutable_instance())
 #define sceneLoaderConst (SceneLoader::get_const_instance())
 
-using namespace std;
-
 class SceneLoader : public
 boost::serialization::singleton<SceneLoader>
 {
+    private:
+        // For the threading
+        CL_Mutex mMutex;
+        CL_Thread mThread;
+
+        void _threadWrapper(const std::string &sceneName);
+
     public:
-        SceneLoader();
-        void loadScene();
+        void loadScene(const std::string &sceneName);
 };
 
 #endif
