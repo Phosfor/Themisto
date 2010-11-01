@@ -1,5 +1,11 @@
 <h2>About</h2>
-Themisto is an open-source 2D indie game
+Themisto is an open-source 2D indie game.
+
+<h2>License</h2>
+The source is contributed under GPL license.
+
+©Wincode team: Tyslenko Max and Pavel Bogatirev
+<a href="http://wincode.org">Our site wincode.org</a>
 
 <h2>Building</h2>
 To build it follow such comands:
