@@ -8,6 +8,7 @@ PhysicManager::PhysicManager()
     mVelocityIterations = 6;
     mPositionIterations = 4;
     mBodies = new std::list<Body*>;
+    app = &appManager;
 }
 
 PhysicManager::~PhysicManager()
@@ -52,7 +53,7 @@ void PhysicManager::step()
 {
     for (std::list<Body*>::iterator body=mBodies->begin(); body!=mBodies->end(); ++body)
     {
-        (*body)->step(mTimeStep);
+        (*body)->step(app->getElapsed());
     }
     mWorld->Step(mTimeStep, mVelocityIterations, mPositionIterations);
     mWorld->ClearForces();
