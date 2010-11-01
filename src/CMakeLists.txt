@@ -40,6 +40,9 @@ set(Themisto_srcs
     Physic/DebugDraw.cpp
     Physic/DebugInstruments.cpp
     Physic/BodyState.cpp
+    Physic/AreaManager.cpp
+    Physic/PhysicRain.cpp
+    Physic/PhysicWind.cpp
 
     main.cpp
 )

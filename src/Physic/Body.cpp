@@ -5,17 +5,18 @@
 Body::Body(b2Body* body)
 {
     mBody = body;
+
     body->SetUserData(this);
     mAppliedImpacts = new list<Impact*>;
     mShouldFreeBodyVisual = true;
     mIsDefaultMaterial = true;
     mSouldFreeBodyMaterial =false;
     mShouldFreeB2Body = true;
-    mParentWorld = mBody->GetWorld();
-    mFixtureCount = 0;
+    mParentWorld= mBody->GetWorld();
     mState = new BodyState;
+    mLastLocation = calculateLocation();
+    world= &worldManager;
 }
-
 Body::~Body()
 {
     delete mAppliedImpacts;
@@ -25,17 +26,18 @@ Body::~Body()
     if(mShouldFreeB2Body) mParentWorld->DestroyBody(mBody);
 }
 
+void Body::applyRainImpact(Impact *impact)
+{
+    mRainImpact = impact;
+}
+void Body::applyWindImpact(Impact *impact)
+{
+    mWindImpact = impact;
+}
+
 BodyState* Body::getState()
 {
     return mState;
-}
-
-b2Fixture* Body::createFixture(b2FixtureDef *def)
-{
-
-    b2Fixture *fixture = mBody->CreateFixture(def);
-    mFixtureCount++;
-    return fixture;
 }
 
 void Body::setVisual(BodyVisual* visualiser)
@@ -83,62 +85,85 @@ void Body::cancelImpact(Impact* impact)
 }
 
 
-void Body::step(float32 timeStep)
+void Body::step(float32 elapsed)
 {
-    calculateInfluences(timeStep);
+    calculateInfluences(elapsed);
+    calculateImpacts(elapsed);
+    b2AABB currentLocation = calculateLocation();
+    
+    b2Vec2 ll = mLastLocation.lowerBound;
+    b2Vec2 cl = currentLocation.lowerBound;
+    float cellSize = areaManager.getCellSize();
+    // If body moved father then cell size
+    if(abs(ll.x - cl.x) > cellSize || abs(ll.y - cl.y) > cellSize)
+    {
+        areaManager.reportNewBodyLocation(&mLastLocation, &currentLocation, mBody);
+        mLastLocation = currentLocation;
+    }
+}
 
+void Body::calculateImpacts(float32 elapsed)
+{
     for(std::list<Impact*>::iterator impact = mAppliedImpacts->begin();
       impact != mAppliedImpacts->end(); ++impact)
     {
         switch((*impact)->Type)
         {
             case Moisten:
-                calculateMoistenImpact(*impact, timeStep);
+                calculateMoistenImpact(*impact, elapsed);
             break;
             case Heat:
-                calculateHeatImpact(*impact, timeStep);
+                calculateHeatImpact(*impact, elapsed);
             break;
             case Cool:
-                calculateCoolImpact(*impact, timeStep);
+                calculateCoolImpact(*impact, elapsed);
             break;
             case Beat:
-                calculateBeatImpact(*impact, timeStep);
+                calculateBeatImpact(*impact, elapsed);
             break;
             case Wind:
-                calculateWindImpact(*impact, timeStep);
+                calculateWindImpact(*impact, elapsed);
             break;
             case Electricity:
-                calculateElectricityImpact(*impact, timeStep);
+                calculateElectricityImpact(*impact, elapsed);
             break;
             case Nothing: break;
         }
     }
-
+    if(mRainImpact != NULL)
+    {
+        calculateMoistenImpact(mRainImpact, elapsed);
+    }
+    if(mWindImpact != NULL)
+    {
+        calculateWindImpact(mWindImpact, elapsed);
+    }
 
 }
 
-void Body::calculateInfluences(float32 timeStep)
+void Body::calculateInfluences(float32 elapsed)
 {
     if(mState->KindleLevel > 0)
     {
-        mState->CarbonizeLevel += timeStep * mState->Material->SelfFlareUpRate;
+        mState->CarbonizeLevel += elapsed * mState->Material->SelfFlareUpRate;
         if( mState->CarbonizeLevel > 1) mState->CarbonizeLevel = 1;
     }
     else
     {
-        mState->Temperature -= (worldManager.mEnvironTemperature - mState->Temperature)/2 *
-            mState->Material->ThermalReceptivity * timeStep;
+        mState->Temperature -= (world->mEnvironTemperature - mState->Temperature)/2 *
+            mState->Material->ThermalReceptivity * elapsed;
     }
 
     if(mState->Dampness > 0)
     {
-        mState->Dampness -= timeStep * mState->Temperature * mState->Material->InflTemperatureToDampness;
+        mState->Dampness -= elapsed * mState->Temperature * mState->Material->InflTemperatureToDampness;
 
         b2Fixture* fixture = mBody->GetFixtureList();
-        if(fixture != NULL)
+        while(fixture != NULL)
         {
             float friction = fixture->GetFriction() - mState->Dampness * mState->Material->InflDampnessToFriction;
             fixture->SetFriction(friction);
+            fixture = fixture->GetNext();
         }
     }
 
@@ -157,23 +182,23 @@ void Body::calculateInfluences(float32 timeStep)
         mState->CarbonizeLevel * mState->Material->InflCarbonizeLevelToElecticalConductivity;
 }
 
-void Body::calculateMoistenImpact(Impact* impact, float32 timeStep)
+void Body::calculateMoistenImpact(Impact* impact, float32 elapsed)
 {
-    mState->Dampness += impact->Intensity * timeStep * mState->Material->DampReceptivity;
+    mState->Dampness += impact->Intensity * elapsed * mState->Material->DampReceptivity;
     if(mState->Dampness > mCurrentMaxDumpness)
     {
         mState->Dampness = mCurrentMaxDumpness;
     }
     if( mState->KindleLevel > 0)
     {
-        mState->KindleLevel -= impact->Intensity * timeStep * mState->Material->InflMoistenToKindleLevel;
+        mState->KindleLevel -= impact->Intensity * elapsed * mState->Material->InflMoistenToKindleLevel;
     }
 }
- void Body::calculateHeatImpact(Impact* impact, float32 timeStep)
+ void Body::calculateHeatImpact(Impact* impact, float32 elapsed)
 {
     if(mState->KindleLevel == 0)
     {
-        mState->Temperature += impact->Intensity * timeStep *
+        mState->Temperature += impact->Intensity * elapsed *
             mState->Material->ThermalReceptivity;
     }
     // If body burning
@@ -183,7 +208,7 @@ void Body::calculateMoistenImpact(Impact* impact, float32 timeStep)
         {
             // Up flame size
             mState->KindleLevel += impact->Intensity *
-                timeStep * mCurrentKindleReceptivity;
+                elapsed * mCurrentKindleReceptivity;
             if(mState->KindleLevel > mCurrentMaxKindle)
             {
                 mState->KindleLevel = mCurrentMaxKindle;
@@ -192,7 +217,7 @@ void Body::calculateMoistenImpact(Impact* impact, float32 timeStep)
             if( mCurrentMaxKindle > 0)
             {
                 mState->CarbonizeLevel += (mState->KindleLevel / mCurrentMaxKindle) *
-                    mState->Material->CarbonizeRate * timeStep;
+                    mState->Material->CarbonizeRate * elapsed;
                 if(mState->CarbonizeLevel > 1) mState->CarbonizeLevel = 1;
 
                 mState->Temperature = mState->Material->FlameTemperature *
@@ -201,11 +226,11 @@ void Body::calculateMoistenImpact(Impact* impact, float32 timeStep)
         }
     }
 }
- void Body::calculateCoolImpact(Impact* impact, float32 timeStep)
+ void Body::calculateCoolImpact(Impact* impact, float32 elapsed)
 {
     if(mState->KindleLevel == 0)
     {
-        mState->Temperature -= impact->Intensity * timeStep *
+        mState->Temperature -= impact->Intensity * elapsed *
             mState->Material->ThermalReceptivity;
         if(mState->Temperature < mCurrentFrozingTemperature)
         {
@@ -217,18 +242,41 @@ void Body::calculateMoistenImpact(Impact* impact, float32 timeStep)
         }
     }
 }
- void Body::calculateBeatImpact(Impact* impact, float32 timeStep)
+ void Body::calculateBeatImpact(Impact* impact, float32 elapsed)
 {
     b2Vec2 direction = impact->Dirrection;
     direction.Normalize();
     b2Vec2 impulsVec = impact->Intensity * direction;
     mBody->ApplyLinearImpulse(impulsVec, impact->ImpactPoint);
 }
- void Body::calculateWindImpact(Impact* impact, float32 timeStep)
+ void Body::calculateWindImpact(Impact* impact, float32 elapsed)
 {
 
 }
- void Body::calculateElectricityImpact(Impact* impact, float32 timeStep)
+ void Body::calculateElectricityImpact(Impact* impact, float32 elapsed)
 {
 
+}
+
+b2AABB Body::calculateLocation()
+{
+    b2AABB region;
+    b2Fixture* firstFixture = mBody->GetFixtureList();
+    if(firstFixture != NULL)
+    {
+        b2AABB r = firstFixture->GetAABB();
+        region.lowerBound = r.lowerBound;
+        region.upperBound = r.upperBound;
+
+        for(b2Fixture* fixture = firstFixture->GetNext(); fixture != NULL; fixture = fixture->GetNext())
+        {
+            region.Combine(region, fixture->GetAABB());
+        }
+    }
+    else
+    {
+        region.lowerBound.Set(0,0);
+        region.upperBound.Set(0,0);
+    }
+    return region;
 }

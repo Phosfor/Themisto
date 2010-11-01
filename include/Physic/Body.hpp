@@ -11,6 +11,7 @@
 #include "Physic/BodyState.hpp"
 #include "Physic/BodyVisual.hpp"
 #include "World/WorldManager.hpp"
+#include "Physic/AreaManager.hpp"
 #include <iostream>
 #include <list>
 
@@ -18,6 +19,8 @@ class Body
 {
     private:
         BodyVisual *mBodyVisual;
+        b2AABB mLastLocation;
+        b2AABB calculateLocation();
 
     protected:
 
@@ -25,6 +28,9 @@ class Body
         BodyState* mState;
         std::list<Impact*> *mAppliedImpacts;
         b2World *mParentWorld;
+        Impact* mRainImpact;
+        Impact* mWindImpact;
+        WorldManager* world;
 
         float mCurrentMaxKindle;
         float mCurrentKindleTemperature;
@@ -33,6 +39,7 @@ class Body
         float mCurrentMaxDumpness;
         float mCurrentElectricalConductivity;
 
+        virtual void calculateImpacts(float32 timeStep);
         virtual void calculateInfluences(float32 timeStep);
         virtual void calculateMoistenImpact(Impact* impact, float32 timeStep);
         virtual void calculateHeatImpact(Impact* impact, float32 timeStep);
@@ -53,15 +60,14 @@ class Body
         b2Body* getb2Body();
 
         void updateVisual();
-        void step(float32 timeStep);
+        void step(float32 elapsed);
 
         virtual void applyImpact(Impact* impact);
         virtual void cancelImpact(Impact* impact);
-
-
-        b2Fixture* createFixture(b2FixtureDef *def);
-
-        int mFixtureCount;
+        // Moisten impact of natural rain
+        virtual void applyRainImpact(Impact *impact);
+        // Wind impact of natural wind
+        virtual void applyWindImpact(Impact *impact);
 
         // Applied material to body or not
         // Notice, that defaut material is one object for all
@@ -78,6 +84,8 @@ class Body
         // Should body free memory under mBody object at destroing
         // Default is true
         bool mShouldFreeB2Body;
+
+
 
         // How big flame can store this body
         float mMaxKindleLevel;

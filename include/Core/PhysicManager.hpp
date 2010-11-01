@@ -20,6 +20,7 @@ boost::serialization::singleton<PhysicManager>
     private:
         b2World* mWorld;
         std::list<Body*>* mBodies;
+        ApplicationManager* app;
 
     public:
         float32 mTimeStep;
