@@ -43,6 +43,7 @@ set(Themisto_srcs
     Physic/AreaManager.cpp
     Physic/PhysicRain.cpp
     Physic/PhysicWind.cpp
+    Physic/BodyPart.cpp
 
     main.cpp
 )

@@ -112,7 +112,7 @@ void AreaManager::setWindImpact(Impact* impact, int x, int y)
     {
         CellInfo* cell = new CellInfo;
         cell->WindImpact = impact;
-        cell->OccupyingBody = NULL;
+        cell->OccupyingFixture = NULL;
         matrix[x][y] = cell;
     }
     else
@@ -134,19 +134,19 @@ Impact*  AreaManager::getWindImpact(int x, int y)
 }
 
 
-b2Body* AreaManager::getCellBody(int x, int y)
+b2Fixture* AreaManager::getCellFixture(int x, int y)
 {
     CellInfo*** matrix = getMatrix(x, y);
     if(matrix[x][y] != NULL)
     {
-        return matrix[x][y]->OccupyingBody;
+        return matrix[x][y]->OccupyingFixture;
     }
     else
     {
         return NULL;
     }
 }
-void AreaManager::reportNewBodyLocation(const b2AABB *oldLocation, const b2AABB *newLocation, b2Body* body)
+void AreaManager::reportNewFixtureLocation(const b2AABB *oldLocation, const b2AABB *newLocation, b2Fixture* body)
 {
     CellRegion oldRegion;
     if(oldLocation != NULL)
@@ -173,7 +173,7 @@ void AreaManager::reportNewBodyLocation(const b2AABB *oldLocation, const b2AABB 
                 CellInfo*** matrix = getMatrix(x,y);
                 if(matrix[x][y] != NULL)
                 {
-                    matrix[x][y]->OccupyingBody = NULL;
+                    matrix[x][y]->OccupyingFixture = NULL;
                 }
             }
         }
@@ -206,12 +206,12 @@ void AreaManager::reportNewBodyLocation(const b2AABB *oldLocation, const b2AABB 
                 CellInfo*** matrix = getMatrix(x,y);
                 if(matrix[x][y] != NULL)
                 {
-                    matrix[x][y]->OccupyingBody = body;
+                    matrix[x][y]->OccupyingFixture = body;
                 }
                 else
                 {
                     CellInfo *cell = new CellInfo;
-                    cell->OccupyingBody = body;
+                    cell->OccupyingFixture = body;
                     cell->WindImpact = NULL;
                     matrix[x][y] = cell;
                 }
@@ -290,7 +290,7 @@ void AreaManager::resetMatrix(CellInfo*** matrix)
             if(matrix[x][y] != NULL)
             {
                 mCellReset.invoke(matrix[x][y]);
-                matrix[x][y]->OccupyingBody = NULL;
+                matrix[x][y]->OccupyingFixture = NULL;
                 matrix[x][y]->WindImpact = NULL;
             }
         }
@@ -305,10 +305,9 @@ void AreaManager::scanArea(b2AABB* region)
 
 bool AreaManagerQueryCallback::ReportFixture (b2Fixture *fixture)
 {
-    areaManager.reportNewBodyLocation(NULL, &fixture->GetAABB(), fixture->GetBody());
+    areaManager.reportNewFixtureLocation(NULL, &fixture->GetAABB(), fixture);
     return true;
 }
-
 
 
 

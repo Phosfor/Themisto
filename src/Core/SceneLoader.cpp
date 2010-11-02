@@ -1,124 +1,124 @@
 #include "Core/SceneLoader.hpp"
 
-
-SceneLoader::SceneLoader(){}
-
-void SceneLoader::loadScene()
+void SceneLoader::loadScene(const std::string &sceneName)
 {
+    //mThread.start<SceneLoader, const std::string&>(this, &SceneLoader::_threadWrapper, sceneName);
+    //mThread.join();
+    _threadWrapper(sceneName);
+}
 
-    //add earth
-    b2BodyDef earthDef;
-    earthDef.position.Set(2.0f, 5.0f);
-    b2Body* earth = physicManager.getWorld().CreateBody(&earthDef);
+void SceneLoader::_threadWrapper(const std::string &sceneName)
+{
+    //mMutex.lock();
 
-    b2PolygonShape earthShape;
-    earthShape.SetAsEdge(b2Vec2(-50.0f, 10.0f), b2Vec2(50.0f, 10.0f));
+    CL_File fileHandle = CL_File("media/levels/" + sceneName);
+    CL_DomDocument document(fileHandle);
 
-    earth->CreateFixture(&earthShape, 0.0f);
+    CL_DomElement root = document.get_document_element();
+    CL_DomElement world = root.get_first_child_element();
+    CL_DomElement environ = world.get_elements_by_tag_name("Environ").item(0).to_element();
+    CL_DomElement objects = world.get_elements_by_tag_name("Objects").item(0).to_element();
 
-    Body *earthBody = new Body(earth);
-    BodyVisual *earthVisual = new BodyVisual;
-    earthBody->setVisual(earthVisual);
-    physicManager.registerBody(earthBody);
+    // Get level attributes
+    CL_String authors = root.get_attribute("authors");
+    CL_String version = root.get_attribute("version");
 
-    //add box
-    b2BodyDef box1Def;
-    box1Def.position.Set(5.0f, 2.0f);
-    box1Def.type = b2_dynamicBody;
-    b2Body* box1 = physicManager.getWorld().CreateBody(&box1Def);
+    LOG(cl_format("Loading new scene with name `%1` for the game version: `%2`. Created by: `%3`."
+                  , sceneName, version, authors));
 
-    b2PolygonShape box1Shape;
-    box1Shape.SetAsBox(0.5f, 0.5f);
+    // Check versions of the game and the level
+    if (boost::lexical_cast<float>(version.c_str()) != GAME_VERSION)
+        LOG(cl_format("Warning! Level version is different with game one(%1). Possible faults.", version));
 
-    b2FixtureDef box1Fixture;
-    box1Fixture.shape = &box1Shape;
-    box1Fixture.density = 100.0f;
-    box1Fixture.friction = 0.5;
-    box1Fixture.restitution = 0.05;
+    // Get world dimensions
+    int worldWidth = boost::lexical_cast<int>(world.get_attribute("size_width").c_str());
+    int worldHeight = boost::lexical_cast<int>(world.get_attribute("size_height").c_str());
+    LOG_NOFORMAT(cl_format("- World size width: %1\n- World size height: %2\n", worldWidth, worldHeight));
 
-    Body *box1Body = new Body(box1);
-    box1Body->setVisual(new BodyVisual);
-    box1Body->createFixture(&box1Fixture);
-    physicManager.registerBody(box1Body);
+    // Check whether environ should be enabled
+    bool mEnvironEnabled = false;
+    if (environ.get_attribute("active") == "true") mEnvironEnabled = true;
+    environManager.setEnvironEnabled(mEnvironEnabled);
+    LOG_NOFORMAT(cl_format("- Environ enabled state: %1\n", mEnvironEnabled));
 
-     //add some circle
-    b2BodyDef circle1Def;
+    // If Environ is enabled, go through all environ-params in the level file
+    if (mEnvironEnabled)
+    {
+        using namespace boost;
+        environManager.initEnviron();
 
-    circle1Def.position.Set(5.0f, 3.0f);
-    circle1Def.type = b2_dynamicBody;
-    b2Body* circle1 = physicManager.getWorld().CreateBody(&circle1Def);
-    circle1->SetBullet(true);
+        std::map<std::string, EnvironTypes> deps;
+        deps["Rain"] = Environ_Rain;
+        deps["Clouds"] = Environ_Clouds;
+        deps["Lightnings"] = Environ_Lightnings;
+        deps["Sky"] = Environ_Sky;
+        deps["Moon"] = Environ_Moon;
+        deps["Leaves"] = Environ_Leaves;
+        deps["Stars"] = Environ_Stars;
+        deps["Birds"] = Environ_Birds;
 
+        CL_DomNodeList childList = environ.get_child_nodes();
+        for (int i=0; i < childList.get_length(); ++i)
+        {
+            CL_DomNode tag = childList.item(i);
+            if (tag.get_node_name() == "Wind")
+            {
+                float pow = lexical_cast<float>(tag.to_element().get_attribute("power").c_str());
+                environManager.setWindPower(pow);
+            }
+            EnvironTypes type = deps[tag.get_node_name().c_str()];
 
-    b2CircleShape circle1Shape;
-    circle1Shape.m_radius = 0.7f;
-    circle1Shape.m_p.Set(0.0f, 0.5f);
+            bool enabled = tag.to_element().get_attribute("enabled") == "true";
 
-    b2FixtureDef circle1Fixture;
-    circle1Fixture.shape = &circle1Shape;
-    circle1Fixture.density = 2.0f;
-    circle1Fixture.friction = 0.2f;
-    circle1Fixture.restitution = 0.3;
+            int lim = -1;
+            CL_String s_lim = tag.to_element().get_attribute("limit");
+            if (s_lim != "") lim = lexical_cast<int>(s_lim.c_str());
 
-    Body *circle1Body = new Body(circle1);
-    circle1Body->setVisual(new BodyVisual);
-    circle1Body->createFixture(&circle1Fixture);
-    physicManager.registerBody(circle1Body);
+            environManager.enableType(enabled, type, lim);
+        }
+        LOG_NOFORMAT("- All environ objects are loaded.\n");
+    }
 
-    //add polygon
-    b2BodyDef polygon1Def;
-    polygon1Def.position.Set(10.0f, 0.35f);
-    polygon1Def.type = b2_dynamicBody;
-    b2Body* polygon1 = physicManager.getWorld().CreateBody(&polygon1Def);
+    // Objects parsing
+    {
+        using namespace boost;
 
-    b2PolygonShape polygon1Shape;
-    int vertexCount = 3;
-    b2Vec2 vertices[vertexCount];
+        float x = 0, y = 0;
 
-    vertices[0] = b2Vec2(-1.0f, 0.0f);
-    vertices[1] = b2Vec2(1.0f, 0.0f);
-    vertices[2] = b2Vec2(0.0f, 1.0f);
+        CL_DomNodeList childList = objects.get_child_nodes();
+        for (int i=0; i < childList.get_length(); ++i)
+        {
+            CL_DomElement tag = childList.item(i).to_element();
 
+            std::string name = tag.get_attribute("name").c_str();
+            std::string type = tag.get_attribute("type").c_str();
+            bool physic = tag.get_attribute("physic_body") == "true";
+            LOG_NOFORMAT(cl_format("- Parsing object `%1` of type `%2`, physic body: `%3`\n", 
+                        name, type, physic));
 
-    polygon1Shape.Set(vertices, vertexCount);
+            // Parsing visuals
+            {
+                CL_DomElement visual = objects.get_elements_by_tag_name("Visual").item(0).to_element();
+                CL_DomNodeList childList = visual.get_child_nodes();
 
-    b2FixtureDef polygon1Fixture;
-    polygon1Fixture.shape= &polygon1Shape;
-    polygon1Fixture.density = 2.0f;
-    polygon1Fixture.friction = 0.4;
-    polygon1Fixture.restitution = 0.05;
+                for (int i=0; i < childList.get_length(); ++i)
+                {
+                    CL_DomElement tag = childList.item(i).to_element();
+                    if (tag.get_node_name() == "Position")
+                    {
+                        x = lexical_cast<float>(tag.get_attribute("x").c_str());
+                        y = lexical_cast<float>(tag.get_attribute("y").c_str());
+                    }
+                }
+            }
 
+            // Creating final object
+            Object *obj = BuildObjectType(type);
+            obj->setPosition(CL_Pointf(x, y));
+            obj->setName(name);
+            objectsManager.addObject(name, obj);
+        }
+    }
 
-    Body *polygon1Body = new Body(polygon1);
-    polygon1Body->setVisual(new BodyVisual);
-    polygon1Body->createFixture(&polygon1Fixture);
-    physicManager.registerBody(polygon1Body);
-    /*
-    //define a 'U' shaped area of square boxes
-    float MPP = 0.2;
-	for (int i=1; i<=15; i++)
-	{
-		b2BodyDef bd;
-		bd.type = b2_dynamicBody;
-
-		if (i <= 5)
-			bd.position.Set(50*MPP, (40+i*3.2)*MPP);
-		else if (i <= 10)
-			bd.position.Set((50.5 + (i-5)*3.2)*MPP, 50.0*MPP);
-		else
-			bd.position.Set(70.2*MPP, (40.0+(i-10)*3.2)*MPP);
-		b2Body *b = physicManager.getWorld().CreateBody(&bd);
-		b2PolygonShape box;
-		box.SetAsBox(1.6*MPP, 1.6*MPP);
-		b2FixtureDef fd;
-		fd.shape = &box;
-		fd.density = 1.0f;
-		fd.friction = 0.3f;
-		fd.restitution = 0.5f;
-		b->CreateFixture(&fd);
-		Body* bb = new Body(b);
-		BodyVisual* v = new BodyVisual;
-		bb->setVisual(v);
-		physicManager.registerBody(bb);
-	}*/
+    //mMutex.unlock();
 }

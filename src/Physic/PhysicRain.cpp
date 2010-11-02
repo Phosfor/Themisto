@@ -25,10 +25,10 @@ void PhysicRain::regionUpdated(CellRegion region)
         bool applied = false;
         for(int y=allRegion.upperY; y>=allRegion.lowerY; --y)
         {
-            b2Body* cellb2Body = areaManager.getCellBody(x,y);
-            if(cellb2Body != NULL)
+            b2Fixture* cellb2Fixture = areaManager.getCellFixture(x,y);
+            if(cellb2Fixture != NULL)
             {
-                Body* body = (Body*)cellb2Body->GetUserData();
+                BodyPart* body = (BodyPart*)cellb2Fixture->GetUserData();
                 if(applied) body->applyRainImpact(NULL);
                 else
                 {

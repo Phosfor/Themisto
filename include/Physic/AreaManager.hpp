@@ -19,7 +19,7 @@ class AreaManagerQueryCallback: public b2QueryCallback
 
 struct CellInfo
 {
-    b2Body* OccupyingBody;
+    b2Fixture* OccupyingFixture;
     Impact* WindImpact;
 };
 
@@ -64,8 +64,9 @@ boost::serialization::singleton<AreaManager>
         void setWindImpact(Impact* impact, int x, int y);
         Impact* getWindImpact(int x, int y);
 
-        b2Body* getCellBody(int x, int y);
-        void reportNewBodyLocation(const b2AABB *oldLocation, const b2AABB *newLocation, b2Body* body);
+        b2Fixture* getCellFixture(int x, int y);
+        void reportNewFixtureLocation(const b2AABB *oldLocation,
+                const b2AABB *newLocation, b2Fixture* body);
 
         void init(b2World *world, float sellSize=10);
         ~AreaManager();
