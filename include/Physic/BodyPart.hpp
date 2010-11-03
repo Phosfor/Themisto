@@ -5,6 +5,7 @@
 #include <ClanLib/core.h>
 #include <Box2D/Collision/Shapes/b2PolygonShape.h>
 #include <Box2D/Common/b2Math.h>
+#include <Box2D/Collision/b2Collision.h>
 
 #include "Physic/BodyMaterial.hpp"
 #include "Physic/Impact.hpp"
@@ -14,6 +15,7 @@
 #include "Physic/AreaManager.hpp"
 #include <iostream>
 #include <list>
+#include <map>
 
 
 class BodyPart
@@ -26,6 +28,8 @@ class BodyPart
         Impact* mRainImpact;
         Impact* mWindImpact;
         WorldManager* world;
+        std::list<BodyPart*> *mStaticCollisions;
+        std::map<b2Fixture*, Impact*>* mContactImpacts;
 
         float mCurrentMaxKindle;
         float mCurrentKindleTemperature;
@@ -42,6 +46,10 @@ class BodyPart
         virtual void calculateBeatImpact(Impact* impact, float32 timeStep);
         virtual void calculateWindImpact(Impact* impact, float32 timeStep);
         virtual void calculateElectricityImpact(Impact* impact, float32 timeStep);
+
+        void findStaticCollisions();
+        void calculateThermalTransmissions();
+        void calculateThermalTransmission(BodyPart* p);
     public:
         BodyPart(b2Fixture* fixture);
         ~BodyPart();
