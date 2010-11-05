@@ -73,7 +73,7 @@ class BodyPart
         bool mIsDefaultMaterial;
 
         // Sould boyd free memory under mMaterial object at sestroing
-        // By default is false, but setted to true after some material applied
+        // By default is false
         bool mSouldFreeBodyMaterial;
 
         // How big flame can store this body

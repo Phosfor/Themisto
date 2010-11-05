@@ -22,27 +22,143 @@
                     <Position x="100" y="100" />
                     <Size width="200" height="500" />
                     <!--<Resource name="someTexture" />-->
-                </Visual>
-                <Body>
+                </Visual>         
+
+            </Object>
+             <Body>
+                    <b2Body>
+                        <Position>
+                            <x>0.0</x>
+                            <y>0.0</y>
+                        </Position>
+                        <Type>b2_dynamicBody</Type>
+                        <Angle>0</Angle>
+                        <LinearVelocity>
+                            <x>1.0</x>
+                            <y>0.1</y>
+                        </LinearVelocity>
+                        <AngularVelocity>1.0</AngularVelocity>
+                        <LinearDamping>0.1</LinearDamping>
+                        <AllowSleep>true</AllowSleep>
+                        <Awake>true</Awake>
+                        <FixedRotation>false</FixedRotation>
+                        <Bullet>false</Bullet>
+                        <Active>true</Active>
+                    </b2Body>
                     <Part>
-                        <Shape type="cirle" >
-                            <Point>0;0</Point>
-                            <Radius>2.0</Radius>
-                        </Shape>
+                        <b2Fixture>
+                            <Friction>0.3</Friction>
+                            <Restitution>0.3</Restitution>
+                            <Density>0.3</Density>
+                            <IsSensor>false</IsSensor>
+                            <Filter>
+                                <CategoryBits>0x12FF</CategoryBits>
+                                <MaskBits>0x12FF</MaskBits>
+                                <GroupIndex>-1</GroupIndex>
+                            </Filter>
+                            <Shape>
+                                <Type>e_cyrcle</Type>
+                                <Radius>0.6</Radius>
+                                <Center>
+                                    <x>0.0</x>
+                                    <y>0.0</y>
+                                </Center>
+                            </Shape>
+                        </b2Fixture>
                         <Material>
-                            <Density>1.0</Density>
+                            <Name>default</Name>
+                        </Material>
+                    </Part>
+                    <Part>
+                        <b2Fixture>
+                            <Density>0.5</Density>
+                            <Shape>
+                                <Type>e_polygon</Type>
+                                <Radius>0.6</Radius>
+                                <Vertices>
+                                    <Vertex>
+                                        <x>1.0</x>
+                                        <y>0.0</y>
+                                    </Vertex>
+                                    <Vertex>
+                                        <x>-1.0</x>
+                                        <y>0.0</y>
+                                    </Vertex>
+                                    <Vertex>
+                                        <x>0.0</x>
+                                        <y>1.0</y>
+                                    </Vertex>
+                                </Vertices>
+                                 <Normals>
+                                    <Normal>
+                                        <x>1.0</x>
+                                        <y>0.0</y>
+                                    </Normal>
+                                    <Normal>
+                                        <x>-1.0</x>
+                                        <y>0.0</y>
+                                    </Normal>
+                                    <Normal>
+                                        <x>0.0</x>
+                                        <y>1.0</y>
+                                    </Normal>
+                                </Normals>
+                                <Center>
+                                    <x>0.0</x>
+                                    <y>0.0</y>
+                                </Center>
+                            </Shape>
+                        </b2Fixture>
+                        <MaxKindleLevel>0.6</MaxKindleLevel>
+                        <MaxDampness>0.6</MaxDampness>
+                        <AcceptsCord>true</AcceptsCord>
+                        <Material>
+                            <Name>Ferum</Name>
+                            <KindleTemperature>0.6</KindleTemperature>
+                            <KindleReceptivity>0.6</KindleReceptivity>
+                            <SelfFlareUpRate>0.6</SelfFlareUpRate>
+                            <CarbonizeRate>0.6</CarbonizeRate>
+                            <ElectricalConductivity>0.6</ElectricalConductivity>
+                            <ThermalReceptivity>0.6</ThermalReceptivity>
+                            <DampReceptivity>0.6</DampReceptivity>
+                            <FrozingTemperature>0.6</FrozingTemperature>
+                            <InflDampnessToFriction>0.6</InflDampnessToFriction>
+                            <InflDampnessToKindleTemperature>0.6</InflDampnessToKindleTemperature>
+                            <InflDampnessToMaxKindle>0.6</InflDampnessToMaxKindle>
+                            <InflDampnessToKindleReceptivity>0.6</InflDampnessToKindleReceptivity>
+                            <InflDampnessToFrozingTemperature>0.6</InflDampnessToFrozingTemperature>
+                            <InflCarbonizeLevelToMaxKindle>0.6</InflCarbonizeLevelToMaxKindle>
+                            <InflCarbonizeLevelToMaxDampness>0.6</InflCarbonizeLevelToMaxDampness>
+                            <InflCarbonizeLevelToElecticalConductivity>0.6</InflCarbonizeLevelToElecticalConductivity>
+                            <InflMoistenToKindleLevel>0.6</InflMoistenToKindleLevel>
+                            <InflTemperatureToDampness>0.6</InflTemperatureToDampness>
                         </Material>
                         <State>
-                            <KindleLevel>0.0</KindleLevel>
-                            <Dampness>0.0</Dampness>
-                            <Temperature>25</Temperature>
+                            <Dampness>0.6</Dampness>
+                            <KindleLevel>0.6</KindleLevel>
+                            <Temperature>0.6</Temperature>
+                            <CarbonizeLevel>0.6</CarbonizeLevel>
+                            <IsFrozen>false</IsFrozen>
                         </State>
-                        <AceptsCord>false</AceptsCord>
-                        <MaxKindleLevel>false</MaxKindleLevel>
-                        <MaxDampness>false</MaxDampness>
+                        <StaticImpacts>
+                            <Impact>
+                                <Type>Moisten</Type>
+                                <Intensity>0.2</Intensity>
+                                <Dirrection>
+                                    <x>0.0</x>
+                                    <y>0.0</y>
+                                </Dirrection>
+                                <ImpactPoint>
+                                    <x>0.0</x>
+                                    <y>0.0</y>
+                                </ImpactPoint>
+                            </Impact>
+                        </StaticImpacts>
                     </Part>
+                    <Visual>
+
+                    </Visual>
                 </Body>
-            </Object>
 
         </Objects>
 

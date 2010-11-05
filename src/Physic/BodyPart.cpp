@@ -66,7 +66,6 @@ b2Fixture* BodyPart::getFixture()
 void BodyPart::setMaterial(BodyMaterial *material)
 {
     mState->Material = material;
-    mSouldFreeBodyMaterial = true;
 }
 
 BodyMaterial* BodyPart::getMaterial()

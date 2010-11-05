@@ -49,7 +49,7 @@ class Body
         bool mShouldFreeB2Body;
 
         // 0 - body will sink, more - stronger force will pop body from water
-        float Buoyancy;
+        float mBuoyancy;
 
 };
 
