@@ -23,6 +23,25 @@
                     <Size width="200" height="500" />
                     <!--<Resource name="someTexture" />-->
                 </Visual>
+                <Body>
+                    <Part>
+                        <Shape type="cirle" >
+                            <Point>0;0</Point>
+                            <Radius>2.0</Radius>
+                        </Shape>
+                        <Material>
+                            <Density>1.0</Density>
+                        </Material>
+                        <State>
+                            <KindleLevel>0.0</KindleLevel>
+                            <Dampness>0.0</Dampness>
+                            <Temperature>25</Temperature>
+                        </State>
+                        <AceptsCord>false</AceptsCord>
+                        <MaxKindleLevel>false</MaxKindleLevel>
+                        <MaxDampness>false</MaxDampness>
+                    </Part>
+                </Body>
             </Object>
 
         </Objects>
