@@ -17,27 +17,25 @@
 
         <Objects>
 
-            <Object name="SomeGrass" type="Object_Grass" physic_body="false">
-                <Visual>
-                    <Position x="100" y="100" />
-                    <Size width="200" height="500" />
-                    <!--<Resource name="someTexture" />-->
-                </Visual>         
-
-            </Object>
-             <Body>
+             <Object name="SomeGrass" type="Object_Grass" physic_body="false">
+                 <Visual>
+                     <Position x="100" y="100" />
+                     <Size width="200" height="500" />
+                     <!--<Resource name="someTexture" />-->
+                 </Visual>         
+             	<Body>
                     <b2Body>
                         <Position>
-                            <x>0.0</x>
-                            <y>0.0</y>
+                            <x>89.0</x>
+                            <y>99.0</y>
                         </Position>
-                        <Type>b2_dynamicBody</Type>
-                        <Angle>0</Angle>
+                        <Type>DynamicBody</Type>
+                        <Angle>0.2</Angle>
                         <LinearVelocity>
                             <x>1.0</x>
                             <y>0.1</y>
                         </LinearVelocity>
-                        <AngularVelocity>1.0</AngularVelocity>
+                        <AngularVelocity>0.4</AngularVelocity>
                         <LinearDamping>0.1</LinearDamping>
                         <AllowSleep>true</AllowSleep>
                         <Awake>true</Awake>
@@ -57,11 +55,11 @@
                                 <GroupIndex>-1</GroupIndex>
                             </Filter>
                             <Shape>
-                                <Type>e_cyrcle</Type>
+                                <Type>e_circle</Type>
                                 <Radius>0.6</Radius>
                                 <Center>
-                                    <x>0.0</x>
-                                    <y>0.0</y>
+                                    <x>4.0</x>
+                                    <y>12.0</y>
                                 </Center>
                             </Shape>
                         </b2Fixture>
@@ -74,7 +72,6 @@
                             <Density>0.5</Density>
                             <Shape>
                                 <Type>e_polygon</Type>
-                                <Radius>0.6</Radius>
                                 <Vertices>
                                     <Vertex>
                                         <x>1.0</x>
@@ -155,11 +152,8 @@
                             </Impact>
                         </StaticImpacts>
                     </Part>
-                    <Visual>
-
-                    </Visual>
                 </Body>
-
+             </Object>
         </Objects>
 
     </World>
