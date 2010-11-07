@@ -24,7 +24,6 @@ struct BodyState
         // 0 - dry, maxDampness - full of water
         float Dampness;
 
-        BodyMaterial *Material;
 
         BodyState();
 };

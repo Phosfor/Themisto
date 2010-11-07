@@ -456,7 +456,7 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
                             }
 
                             fixture = b2body->CreateFixture(&fixdef);
-                            partHandle = new BodyPart(fixture);
+                            partHandle = new BodyPart(fixture, worldManager.mDefaultMaterial);
                         }
                         else if(partChild.get_node_name() == "MaxKindleLevel")
                         {

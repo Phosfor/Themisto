@@ -18,7 +18,6 @@ BodyState::BodyState()
 
     IsFrozen = false;
 
-    Material = worldManager.mDefaultMaterial;
 
 }
 

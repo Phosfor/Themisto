@@ -30,6 +30,7 @@ class BodyPart
         WorldManager* world;
         std::list<BodyPart*> *mStaticCollisions;
         std::map<b2Fixture*, Impact*>* mContactImpacts;
+        BodyMaterial *mMaterial;
 
         float mCurrentMaxKindle;
         float mCurrentKindleTemperature;
@@ -51,7 +52,7 @@ class BodyPart
         void calculateThermalTransmissions();
         void calculateThermalTransmission(BodyPart* p);
     public:
-        BodyPart(b2Fixture* fixture);
+        BodyPart(b2Fixture* fixture, BodyMaterial* material);
         ~BodyPart();
         void setMaterial(BodyMaterial *material);
         BodyState *getState();

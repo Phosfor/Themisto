@@ -1,7 +1,7 @@
 #include "Physic/BodyPart.hpp"
 
 
-BodyPart::BodyPart(b2Fixture* fixture)
+BodyPart::BodyPart(b2Fixture* fixture, BodyMaterial* material)
 {
     mFixture = fixture;
 
@@ -9,6 +9,7 @@ BodyPart::BodyPart(b2Fixture* fixture)
     mAppliedImpacts = new list<Impact*>;
     mIsDefaultMaterial = true;
     mSouldFreeBodyMaterial =false;
+    mMaterial = material;
     mParentWorld= mFixture->GetBody()->GetWorld();
     mState = new BodyState;
     world= &worldManager;
@@ -21,7 +22,7 @@ BodyPart::~BodyPart()
     delete mAppliedImpacts;
     delete mState;
     delete mStaticCollisions;
-    if(mSouldFreeBodyMaterial) if(mState->Material != NULL) delete mState->Material;
+    if(mSouldFreeBodyMaterial) delete mMaterial;
     for(std::map<b2Fixture*, Impact*>::iterator i = mContactImpacts->begin();
             i != mContactImpacts->end(); ++i)
     {
@@ -65,12 +66,12 @@ b2Fixture* BodyPart::getFixture()
 
 void BodyPart::setMaterial(BodyMaterial *material)
 {
-    mState->Material = material;
+    mMaterial = material;
 }
 
 BodyMaterial* BodyPart::getMaterial()
 {
-    return mState->Material;
+    return mMaterial;
 }
 
 void BodyPart::applyImpact(Impact* impact)
@@ -196,49 +197,49 @@ void BodyPart::calculateInfluences(float32 elapsed)
 {
     if(mState->KindleLevel > 0)
     {
-        mState->CarbonizeLevel += elapsed * mState->Material->SelfFlareUpRate;
+        mState->CarbonizeLevel += elapsed * mMaterial->SelfFlareUpRate;
         if( mState->CarbonizeLevel > 1) mState->CarbonizeLevel = 1;
     }
     else
     {
         mState->Temperature -= (world->mEnvironTemperature - mState->Temperature)/2 *
-            mState->Material->ThermalReceptivity * elapsed;
+            mMaterial->ThermalReceptivity * elapsed;
     }
 
     if(mState->Dampness > 0)
     {
-        mState->Dampness -= elapsed * mState->Temperature * mState->Material->InflTemperatureToDampness;
+        mState->Dampness -= elapsed * mState->Temperature * mMaterial->InflTemperatureToDampness;
 
             float friction = mFixture->GetFriction() - 
-                mState->Dampness * mState->Material->InflDampnessToFriction;
+                mState->Dampness * mMaterial->InflDampnessToFriction;
             mFixture->SetFriction(friction);
     }
 
      // Calculate influences one time here for productivity reasons
     mCurrentMaxKindle = mMaxKindleLevel -
-        mState->Dampness * mState->Material->InflDampnessToMaxKindle -
-        mState->CarbonizeLevel * mState->Material->InflCarbonizeLevelToMaxKindle;
-    mCurrentKindleTemperature = mState->Material->KindleTemperature -
-        mState->Dampness * mState->Material->InflDampnessToKindleTemperature;
-    mCurrentKindleReceptivity = mState->Material->KindleReceptivity -
-        mState->Dampness * mState->Material->InflDampnessToKindleReceptivity;
-    mCurrentFrozingTemperature = mState->Material->FrozingTemperature +
-        mState->Dampness * mState->Material->InflDampnessToFrozingTemperature;
-    mCurrentMaxDumpness = mMaxDampness - mState->CarbonizeLevel * mState->Material->InflCarbonizeLevelToMaxDampness;
-    mCurrentElectricalConductivity = mState->Material->ElectricalConductivity -
-        mState->CarbonizeLevel * mState->Material->InflCarbonizeLevelToElecticalConductivity;
+        mState->Dampness * mMaterial->InflDampnessToMaxKindle -
+        mState->CarbonizeLevel * mMaterial->InflCarbonizeLevelToMaxKindle;
+    mCurrentKindleTemperature = mMaterial->KindleTemperature -
+        mState->Dampness * mMaterial->InflDampnessToKindleTemperature;
+    mCurrentKindleReceptivity = mMaterial->KindleReceptivity -
+        mState->Dampness * mMaterial->InflDampnessToKindleReceptivity;
+    mCurrentFrozingTemperature = mMaterial->FrozingTemperature +
+        mState->Dampness * mMaterial->InflDampnessToFrozingTemperature;
+    mCurrentMaxDumpness = mMaxDampness - mState->CarbonizeLevel * mMaterial->InflCarbonizeLevelToMaxDampness;
+    mCurrentElectricalConductivity = mMaterial->ElectricalConductivity -
+        mState->CarbonizeLevel * mMaterial->InflCarbonizeLevelToElecticalConductivity;
 }
 
 void BodyPart::calculateMoistenImpact(Impact* impact, float32 elapsed)
 {
-    mState->Dampness += impact->Intensity * elapsed * mState->Material->DampReceptivity;
+    mState->Dampness += impact->Intensity * elapsed * mMaterial->DampReceptivity;
     if(mState->Dampness > mCurrentMaxDumpness)
     {
         mState->Dampness = mCurrentMaxDumpness;
     }
     if( mState->KindleLevel > 0)
     {
-        mState->KindleLevel -= impact->Intensity * elapsed * mState->Material->InflMoistenToKindleLevel;
+        mState->KindleLevel -= impact->Intensity * elapsed * mMaterial->InflMoistenToKindleLevel;
     }
 }
  void BodyPart::calculateHeatImpact(Impact* impact, float32 elapsed)
@@ -246,7 +247,7 @@ void BodyPart::calculateMoistenImpact(Impact* impact, float32 elapsed)
     if(mState->KindleLevel == 0)
     {
         mState->Temperature += impact->Intensity * elapsed *
-            mState->Material->ThermalReceptivity;
+            mMaterial->ThermalReceptivity;
     }
     // If body burning
     if(mState->Temperature >= mCurrentKindleTemperature)
@@ -264,10 +265,10 @@ void BodyPart::calculateMoistenImpact(Impact* impact, float32 elapsed)
             if( mCurrentMaxKindle > 0)
             {
                 mState->CarbonizeLevel += (mState->KindleLevel / mCurrentMaxKindle) *
-                    mState->Material->CarbonizeRate * elapsed;
+                    mMaterial->CarbonizeRate * elapsed;
                 if(mState->CarbonizeLevel > 1) mState->CarbonizeLevel = 1;
 
-                mState->Temperature = mState->Material->FlameTemperature *
+                mState->Temperature = mMaterial->FlameTemperature *
                     mState->KindleLevel / mCurrentMaxKindle;
             }
         }
@@ -278,7 +279,7 @@ void BodyPart::calculateMoistenImpact(Impact* impact, float32 elapsed)
     if(mState->KindleLevel == 0)
     {
         mState->Temperature -= impact->Intensity * elapsed *
-            mState->Material->ThermalReceptivity;
+            mMaterial->ThermalReceptivity;
         if(mState->Temperature < mCurrentFrozingTemperature)
         {
             mState->IsFrozen = true;
