@@ -7,6 +7,7 @@ Body::Body(b2Body* body)
     mBody = body;
 
     body->SetUserData(this);
+    mBodyVisual = NULL;
     mShouldFreeBodyVisual = true;
     mShouldFreeB2Body = true;
     mParentWorld= mBody->GetWorld();
