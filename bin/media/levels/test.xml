@@ -3,7 +3,7 @@
 <ThemistoLevel version="0.1" authors="Wincode team">
     <World size_width="1152" size_height="864">
 
-        <Environ active="true">
+        <Environ active="false">
             <Rain enabled="true" limit="50" />
             <Clouds enabled="true" />
             <Lightnings enabled="true" />
@@ -17,11 +17,10 @@
 
         <Objects>
 
-             <Object name="SomeGrass" type="Object_Grass" physic_body="false">
+             <Object name="SomeGrass" physic_body="false">
                  <Visual>
                      <Position x="100" y="100" />
                      <Size width="200" height="500" />
-                     <!--<Resource name="someTexture" />-->
                  </Visual>         
              	<Body>
                     <b2Body>
@@ -78,11 +77,11 @@
                                         <y>0.0</y>
                                     </Vertex>
                                     <Vertex>
-                                        <x>-1.0</x>
+                                        <x>2.0</x>
                                         <y>0.0</y>
                                     </Vertex>
                                     <Vertex>
-                                        <x>0.0</x>
+                                        <x>1.0</x>
                                         <y>1.0</y>
                                     </Vertex>
                                 </Vertices>

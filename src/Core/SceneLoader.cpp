@@ -455,6 +455,8 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
                                 }
                             }
 
+                            cout<<fixdef.density << '\n';
+
                             fixture = b2body->CreateFixture(&fixdef);
                             partHandle = new BodyPart(fixture, worldManager.mDefaultMaterial);
                         }
@@ -469,10 +471,10 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
             // END OF PHYSIC PARSING ---------------------------------------------
 
             // Creating final object
-            Object *obj = BuildObjectType(type);
-            obj->setPosition(CL_Pointf(x, y));
-            obj->setName(name);
-            objectsManager.addObject(name, obj);
+            //Object *obj = BuildObjectType(type);
+            //obj->setPosition(CL_Pointf(x, y));
+            //obj->setName(name);
+            //objectsManager.addObject(name, obj);
         }
     }
     // END OF OBJECTS PARSING -------------------------------------------
