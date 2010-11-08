@@ -401,12 +401,12 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
                                                             CL_DomElement component = vertexComponents.item(j).to_element();
                                                             if (component.get_node_name() == "x")
                                                             {
-                                                                float x = lexical_cast<float>(component.get_text().c_str());
+                                                                x = lexical_cast<float>(component.get_text().c_str());
                                                                 verticesListX.push_back(x);
                                                             }
                                                             else if(component.get_node_name() == "y")
                                                             {
-                                                                float y = lexical_cast<float>(component.get_text().c_str());
+                                                                y = lexical_cast<float>(component.get_text().c_str());
                                                                 verticesListY.push_back(y);
                                                             }
                                                         }
