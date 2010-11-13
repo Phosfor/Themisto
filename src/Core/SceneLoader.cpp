@@ -118,6 +118,7 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
             }
 
             // START OF PHYSIC PARSING -------------------------------------------
+            if (physic)
             {
                 // Physic body variables
                 b2BodyDef bdef;
@@ -127,6 +128,8 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
                 b2Body *b2body;
                 Body *bodyHandle;
                 BodyPart *partHandle;
+                BodyMaterial *materialHandle;
+                BodyState *stateHandle;
 
                 CL_DomElement body = tag.get_elements_by_tag_name("Body").item(0).to_element();
 
@@ -368,7 +371,7 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
                                     else if (typeHandle == b2Shape::e_polygon)
                                     {
                                         std::vector<float> verticesListX, verticesListY, normalsListX, normalsListY;
-                                        float radius = 0, x = 0, y = 0;
+                                        float x = 0, y = 0;
 
                                         CL_DomNodeList shapeList = fixtureParam.get_child_nodes();
                                         for (int i=0; i < shapeList.get_length(); ++i)
@@ -443,19 +446,17 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
                                         }
 
                                         b2PolygonShape *shapeHandle = new b2PolygonShape();
-                                        for (int i=0; i < verticesListX.size(); ++i)
+                                        for (unsigned int i=0; i < verticesListX.size(); ++i)
                                             shapeHandle->m_vertices[i].Set(verticesListX[i], verticesListY[i]);
                                         shapeHandle->m_vertexCount = verticesListX.size();
 
-                                        for (int i=0; i < normalsListX.size(); ++i)
+                                        for (unsigned int i=0; i < normalsListX.size(); ++i)
                                             shapeHandle->m_normals[i].Set(normalsListX[i], normalsListY[i]);
                                         shapeHandle->m_centroid.Set(x, y);
                                         fixdef.shape = shapeHandle;
                                     }
                                 }
                             }
-
-                            cout<<fixdef.density << '\n';
 
                             fixture = b2body->CreateFixture(&fixdef);
                             partHandle = new BodyPart(fixture, worldManager.mDefaultMaterial);
@@ -465,14 +466,193 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
                             float value = lexical_cast<float>(partChild.get_text().c_str());
                             partHandle->mMaxKindleLevel = value;
                         }
+                        else if(partChild.get_node_name() == "MaxDampness")
+                        {
+                            float value = lexical_cast<float>(partChild.get_text().c_str());
+                            partHandle->mMaxDampness = value;
+                        }
+                        else if(partChild.get_node_name() == "AcceptsCoord")
+                        {
+                            bool value = partChild.get_text() == "true";
+                            // TODO: Do something with value!!!
+                        }
+                        else if(partChild.get_node_name() == "State")
+                        {
+                            stateHandle = partHandle->getState();
+                            CL_DomNodeList stateChildList = partChild.get_child_nodes();
+                            for (int i=0; i < stateChildList.get_length(); ++i)
+                            {
+                                CL_DomElement stateElement = stateChildList.item(i).to_element();
+                                if (stateElement.get_node_name() == "Dampness")
+                                {
+                                    float value = lexical_cast<float>(stateElement.get_text().c_str());
+                                    stateHandle->Dampness = value;
+                                }
+                                else if (stateElement.get_node_name() == "KindleLevel")
+                                {
+                                    float value = lexical_cast<float>(stateElement.get_text().c_str());
+                                    stateHandle->KindleLevel = value;
+                                }
+                                else if (stateElement.get_node_name() == "Temperature")
+                                {
+                                    float value = lexical_cast<float>(stateElement.get_text().c_str());
+                                    stateHandle->Temperature = value;
+                                }
+                                else if (stateElement.get_node_name() == "CarbonizeLevel")
+                                {
+                                    float value = lexical_cast<float>(stateElement.get_text().c_str());
+                                    stateHandle->CarbonizeLevel = value;
+                                }
+                                else if (stateElement.get_node_name() == "IsFrozen")
+                                {
+                                    float value = lexical_cast<float>(stateElement.get_text().c_str());
+                                    stateHandle->IsFrozen = value;
+                                }
+                            }
+                        }
+                        else if (partChild.get_node_name() == "StaticImpacts")
+                        {
+                            Impact* impact = new Impact();
+                            CL_DomNodeList impactsList = partChild.get_child_nodes();
+                            for (int i=0; i < impactsList.get_length(); ++i)
+                            {
+                                CL_DomElement impact = impactsList.item(i).to_element();
+                                if (impact.get_node_name() == "Type")
+                            }
+                        }
                     }
-                }
+
+                    // Parse material
+                    CL_DomNodeList matList = physicPart.get_elements_by_tag_name("Material");
+
+                    // The material tag doesn't exist
+                    if (matList.get_length() <= 0)
+                    {
+                        materialHandle = worldManager.mDefaultMaterial;
+                        // TODO
+                        // bodyPart в файле loadPhysics ты прописал
+                        /*materialHandle->mShouldFreeBodyMaterial = false;
+                        materialHandle->mIsDefaultMaterial = true;*/
+                    }
+                    else
+                    {
+                        materialHandle = new BodyMaterial();
+                        /*bodyHandle->mShouldFreeBodyMaterial = true;
+                        bodyHandle->mIsDefaultMaterial = false;*/
+                        materialHandle->Name = matList.item(0).to_element().get_child_string("Name");
+
+                        CL_DomNodeList matChildList = matList.item(0).get_child_nodes();
+                        // Go through material child tags
+                        for (int i=0; i < matChildList.get_length(); ++i)
+                        {
+                            CL_DomElement matChild = matChildList.item(i).to_element();
+                            if (matChild.get_node_name() == "KindleTemperature")
+                            {
+                                float value = lexical_cast<float>(matChild.get_text().c_str());
+                                materialHandle->KindleTemperature = value;
+                            }
+                            else if (matChild.get_node_name() == "KindleReceptivity")
+                            {
+                                float value = lexical_cast<float>(matChild.get_text().c_str());
+                                materialHandle->KindleReceptivity = value;
+                            }
+                            else if (matChild.get_node_name() == "FlameTemperature")
+                            {
+                                float value = lexical_cast<float>(matChild.get_text().c_str());
+                                materialHandle->FlameTemperature = value;
+                            }
+                            else if (matChild.get_node_name() == "SelfFlareUpRate")
+                            {
+                                float value = lexical_cast<float>(matChild.get_text().c_str());
+                                materialHandle->SelfFlareUpRate = value;
+                            }
+                            else if (matChild.get_node_name() == "CarbonizeRate")
+                            {
+                                float value = lexical_cast<float>(matChild.get_text().c_str());
+                                materialHandle->CarbonizeRate = value;
+                            }
+                            else if (matChild.get_node_name() == "ElectricalConductivity")
+                            {
+                                float value = lexical_cast<float>(matChild.get_text().c_str());
+                                materialHandle->ElectricalConductivity = value;
+                            }
+                            else if (matChild.get_node_name() == "ThermalReceptivity")
+                            {
+                                float value = lexical_cast<float>(matChild.get_text().c_str());
+                                materialHandle->ThermalReceptivity = value;
+                            }
+                            else if (matChild.get_node_name() == "DampReceptivity")
+                            {
+                                float value = lexical_cast<float>(matChild.get_text().c_str());
+                                materialHandle->DampReceptivity = value;
+                            }
+                            else if (matChild.get_node_name() == "FrozingTemperature")
+                            {
+                                float value = lexical_cast<float>(matChild.get_text().c_str());
+                                materialHandle->FrozingTemperature = value;
+                            }
+                            else if (matChild.get_node_name() == "InflDampnessToFriction")
+                            {
+                                float value = lexical_cast<float>(matChild.get_text().c_str());
+                                materialHandle->InflDampnessToFriction = value;
+                            }
+                            else if (matChild.get_node_name() == "InflDampnessToKindleTemperature")
+                            {
+                                float value = lexical_cast<float>(matChild.get_text().c_str());
+                                materialHandle->InflDampnessToKindleTemperature = value;
+                            }
+                            else if (matChild.get_node_name() == "InflDampnessToMaxKindle")
+                            {
+                                float value = lexical_cast<float>(matChild.get_text().c_str());
+                                materialHandle->InflDampnessToMaxKindle = value;
+                            }
+                            else if (matChild.get_node_name() == "InflDampnessToKindleReceptivity")
+                            {
+                                float value = lexical_cast<float>(matChild.get_text().c_str());
+                                materialHandle->InflDampnessToKindleReceptivity = value;
+                            }
+                            else if (matChild.get_node_name() == "InflDampnessToFrozingTemperature")
+                            {
+                                float value = lexical_cast<float>(matChild.get_text().c_str());
+                                materialHandle->InflDampnessToFrozingTemperature = value;
+                            }
+                            else if (matChild.get_node_name() == "InflCarbonizeLevelToMaxKindle")
+                            {
+                                float value = lexical_cast<float>(matChild.get_text().c_str());
+                                materialHandle->InflCarbonizeLevelToMaxKindle = value;
+                            }
+                            else if (matChild.get_node_name() == "InflCarbonizeLevelToMaxDampness")
+                            {
+                                float value = lexical_cast<float>(matChild.get_text().c_str());
+                                materialHandle->InflCarbonizeLevelToMaxDampness = value;
+                            }
+                            else if (matChild.get_node_name() == "InflCarbonizeLevelToElecticalConductivity")
+                            {
+                                float value = lexical_cast<float>(matChild.get_text().c_str());
+                                materialHandle->InflCarbonizeLevelToElecticalConductivity = value;
+                            }
+                            else if (matChild.get_node_name() == "InflMoistenToKindleLevel")
+                            {
+                                float value = lexical_cast<float>(matChild.get_text().c_str());
+                                materialHandle->InflMoistenToKindleLevel = value;
+                            }
+                            else if (matChild.get_node_name() == "InflTemperatureToDampness")
+                            {
+                                float value = lexical_cast<float>(matChild.get_text().c_str());
+                                materialHandle->InflTemperatureToDampness = value;
+                            }
+                        } // for (int i=0; i < matChildList.get_length(); ++i)
+                    } // if (matList.get_length() <= 0)
+
+                    partHandle->setMaterial(materialHandle);
+                } // for (int i=0; i < parts.get_length(); ++i)
             }
             // END OF PHYSIC PARSING ---------------------------------------------
 
             // Creating final object
             //Object *obj = BuildObjectType(type);
             //obj->setPosition(CL_Pointf(x, y));
+            
             //obj->setName(name);
             //objectsManager.addObject(name, obj);
         }

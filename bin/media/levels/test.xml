@@ -3,7 +3,7 @@
 <ThemistoLevel version="0.1" authors="Wincode team">
     <World size_width="1152" size_height="864">
 
-        <Environ active="false">
+        <Environ active="true">
             <Rain enabled="true" limit="50" />
             <Clouds enabled="true" />
             <Lightnings enabled="true" />
@@ -17,7 +17,7 @@
 
         <Objects>
 
-             <Object name="SomeGrass" physic_body="false">
+             <Object name="SomeGrass" physic_body="true">
                  <Visual>
                      <Position x="100" y="100" />
                      <Size width="200" height="500" />
@@ -49,7 +49,7 @@
                             <Density>0.3</Density>
                             <IsSensor>false</IsSensor>
                             <Filter>
-                                <CategoryBits>0x12FF</CategoryBits>
+                                <CategoryBits>0x12ff</CategoryBits>
                                 <MaskBits>0x12FF</MaskBits>
                                 <GroupIndex>-1</GroupIndex>
                             </Filter>
@@ -63,7 +63,7 @@
                             </Shape>
                         </b2Fixture>
                         <Material>
-                            <Name>default</Name>
+                            <Name>Default</Name>
                         </Material>
                     </Part>
                     <Part>
@@ -105,7 +105,7 @@
                                 </Center>
                             </Shape>
                         </b2Fixture>
-                        <MaxKindleLevel>0.6</MaxKindleLevel>
+                        <MaxKindleLevel>0.9999</MaxKindleLevel>
                         <MaxDampness>0.6</MaxDampness>
                         <AcceptsCord>true</AcceptsCord>
                         <Material>
