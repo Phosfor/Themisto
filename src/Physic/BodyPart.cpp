@@ -8,7 +8,7 @@ BodyPart::BodyPart(b2Fixture* fixture, BodyMaterial* material)
     fixture->SetUserData(this);
     mAppliedImpacts = new list<Impact*>;
     mIsDefaultMaterial = true;
-    mSouldFreeBodyMaterial =false;
+    mShouldFreeBodyMaterial =false;
     mMaterial = material;
     mParentWorld= mFixture->GetBody()->GetWorld();
     mState = new BodyState;
@@ -22,7 +22,7 @@ BodyPart::~BodyPart()
     delete mAppliedImpacts;
     delete mState;
     delete mStaticCollisions;
-    if(mSouldFreeBodyMaterial) delete mMaterial;
+    if(mShouldFreeBodyMaterial) delete mMaterial;
     for(std::map<b2Fixture*, Impact*>::iterator i = mContactImpacts->begin();
             i != mContactImpacts->end(); ++i)
     {

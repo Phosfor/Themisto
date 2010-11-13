@@ -173,7 +173,7 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
                     if (child.get_node_name() == "Angle")
                     {
                         float angle = lexical_cast<float>(child.get_text().c_str());
-                        // TODO: SET ANGLE SOMEWHERE !!!!!!11111адынадын
+                        bdef.angle = angle;
                     }
 
                     // Linear velocity parsing
@@ -471,10 +471,10 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
                             float value = lexical_cast<float>(partChild.get_text().c_str());
                             partHandle->mMaxDampness = value;
                         }
-                        else if(partChild.get_node_name() == "AcceptsCoord")
+                        else if(partChild.get_node_name() == "AcceptsCord")
                         {
                             bool value = partChild.get_text() == "true";
-                            // TODO: Do something with value!!!
+                            partHandle->mAcceptsCord = value;
                         }
                         else if(partChild.get_node_name() == "State")
                         {
@@ -512,13 +512,13 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
                         }
                         else if (partChild.get_node_name() == "StaticImpacts")
                         {
-                            Impact* impact = new Impact();
-                            CL_DomNodeList impactsList = partChild.get_child_nodes();
-                            for (int i=0; i < impactsList.get_length(); ++i)
-                            {
-                                CL_DomElement impact = impactsList.item(i).to_element();
-                                if (impact.get_node_name() == "Type")
-                            }
+                            /*Impact* impact = new Impact();*/
+                            //CL_DomNodeList impactsList = partChild.get_child_nodes();
+                            //for (int i=0; i < impactsList.get_length(); ++i)
+                            //{
+                                //CL_DomElement impact = impactsList.item(i).to_element();
+                                //if (impact.get_node_name() == "Type")
+                            /*}*/
                         }
                     }
 
@@ -529,16 +529,14 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
                     if (matList.get_length() <= 0)
                     {
                         materialHandle = worldManager.mDefaultMaterial;
-                        // TODO
-                        // bodyPart в файле loadPhysics ты прописал
-                        /*materialHandle->mShouldFreeBodyMaterial = false;
-                        materialHandle->mIsDefaultMaterial = true;*/
+                        partHandle->mShouldFreeBodyMaterial = false;
+                        partHandle->mIsDefaultMaterial = true;
                     }
                     else
                     {
                         materialHandle = new BodyMaterial();
-                        /*bodyHandle->mShouldFreeBodyMaterial = true;
-                        bodyHandle->mIsDefaultMaterial = false;*/
+                        partHandle->mShouldFreeBodyMaterial = true;
+                        partHandle->mIsDefaultMaterial = false;
                         materialHandle->Name = matList.item(0).to_element().get_child_string("Name");
 
                         CL_DomNodeList matChildList = matList.item(0).get_child_nodes();

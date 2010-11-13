@@ -75,7 +75,7 @@ class BodyPart
 
         // Sould boyd free memory under mMaterial object at sestroing
         // By default is false
-        bool mSouldFreeBodyMaterial;
+        bool mShouldFreeBodyMaterial;
 
         // How big flame can store this body
         float mMaxKindleLevel;
