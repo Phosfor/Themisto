@@ -121,18 +121,9 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
             if (physic)
             {
                 // Physic body variables
-                b2BodyDef bdef;
-                b2FixtureDef fixdef;
-                b2CircleShape cshape;
-                b2PolygonShape pshape;
-                b2Vec2* vertices = NULL;
-                b2Fixture *fixture;
-                b2Filter filter;
                 b2Body *b2body;
+                b2BodyDef bdef;
                 Body *bodyHandle;
-                BodyPart *partHandle;
-                BodyMaterial *materialHandle;
-                BodyState *stateHandle;
 
                 CL_DomElement body = tag.get_elements_by_tag_name("Body").item(0).to_element();
 
@@ -254,6 +245,17 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
                 CL_DomNodeList parts = body.get_elements_by_tag_name("Part");
                 for (int i=0; i < parts.get_length(); ++i)
                 {
+                    b2FixtureDef fixdef;
+                    b2CircleShape cshape;
+                    b2PolygonShape pshape;
+                    b2Vec2* vertices = NULL;
+                    //b2Vec2* normals = NULL;
+                    b2Fixture *fixture;
+                    BodyMaterial *materialHandle;
+                    BodyState *stateHandle;
+                    BodyPart *partHandle;
+                    b2Filter filter;
+
                     CL_DomElement physicPart = parts.item(i).to_element();
 
                     // Go through Part children
@@ -374,7 +376,6 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
                                     // The shape is a polygon
                                     else if (typeHandle == b2Shape::e_polygon)
                                     {
-                                        std::vector<float> verticesListX, verticesListY, normalsListX, normalsListY;
 
                                         CL_DomNodeList shapeList = fixtureParam.get_child_nodes();
                                         for (int i=0; i < shapeList.get_length(); ++i)
@@ -412,48 +413,47 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
                                                             if (component.get_node_name() == "x")
                                                             {
                                                                 x = lexical_cast<float>(component.get_text().c_str());
-                                                                verticesListX.push_back(x);
                                                             }
                                                             else if(component.get_node_name() == "y")
                                                             {
                                                                 y = lexical_cast<float>(component.get_text().c_str());
-                                                                verticesListY.push_back(y);
                                                             }
                                                         }
                                                         vertices[i].Set(x,y);
                                                     }
                                                 }
-                                                pshape.Set(vertices, verticesList.get_length());
+                                                pshape.Set(vertices,verticesList.get_length());
                                             }
                                             // Parse polygon normals
-                                            else if (shapeParam.get_node_name() == "Normals")
-                                            {
-                                                CL_DomNodeList normalsList = shapeParam.get_child_nodes();
-                                                for (int i=0; i < normalsList.get_length(); ++i)
-                                                {
-                                                    CL_DomElement normal = normalsList.item(i).to_element();
-                                                    if (normal.get_node_name() == "Normal")
-                                                    {
-                                                        CL_DomNodeList normalComponents = normal.get_child_nodes();
-                                                        for (int j=0; j < normalComponents.get_length(); ++j)
-                                                        {
-                                                            CL_DomElement component = normalComponents.item(j).to_element();
-                                                            if (component.get_node_name() == "x")
-                                                            {
-                                                                float x = lexical_cast<float>(component.get_text().c_str());
-                                                                normalsListX.push_back(x);
-                                                            }
-                                                            else if(component.get_node_name() == "y")
-                                                            {
-                                                                float y = lexical_cast<float>(component.get_text().c_str());
-                                                                normalsListY.push_back(y);
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
+                                            /*else if (shapeParam.get_node_name() == "Normals")*/
+                                            //{
+                                                //CL_DomNodeList normalsList = shapeParam.get_child_nodes();
+                                                //normals = new b2Vec2[normalsList.get_length()];
+                                                //for (int i=0; i < normalsList.get_length(); ++i)
+                                                //{
+                                                    //CL_DomElement normal = normalsList.item(i).to_element();
+                                                    //if (normal.get_node_name() == "Normal")
+                                                    //{
+                                                        //CL_DomNodeList normalComponents = normal.get_child_nodes();
+                                                        //for (int j=0; j < normalComponents.get_length(); ++j)
+                                                        //{
+                                                            //float x=0, y=0;
+                                                            //CL_DomElement component = normalComponents.item(j).to_element();
+                                                            //if (component.get_node_name() == "x")
+                                                            //{
+                                                                //x = lexical_cast<float>(component.get_text().c_str());
+                                                            //}
+                                                            //else if(component.get_node_name() == "y")
+                                                            //{
+                                                                //y = lexical_cast<float>(component.get_text().c_str());
+                                                            //}
+                                                            //normals[i].Set(x,y);
+                                                        //}
+                                                    //}
+                                                //}
+                                                //pshape.m_normals = normals;
+                                            /*}*/
                                         }
-
 
                                         //for (unsigned int i=0; i < normalsListX.size(); ++i)
                                             //pshape.m_normals[i].Set(normalsListX[i], normalsListY[i]);
@@ -463,6 +463,7 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
                             }
                             
                             fixture = b2body->CreateFixture(&fixdef);
+                            if(vertices != NULL) delete vertices;
                             
                             partHandle = new BodyPart(fixture, worldManager.mDefaultMaterial);
                         }
@@ -650,7 +651,6 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
 
                     partHandle->setMaterial(materialHandle);
                 } // for (int i=0; i < parts.get_length(); ++i)
-                if(vertices != NULL) delete vertices;
             }
             // END OF PHYSIC PARSING ---------------------------------------------
 
