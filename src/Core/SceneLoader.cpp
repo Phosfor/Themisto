@@ -125,6 +125,7 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
                 b2FixtureDef fixdef;
                 b2CircleShape cshape;
                 b2PolygonShape pshape;
+                b2Vec2* vertices = NULL;
                 b2Fixture *fixture;
                 b2Filter filter;
                 b2Body *b2body;
@@ -374,7 +375,6 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
                                     else if (typeHandle == b2Shape::e_polygon)
                                     {
                                         std::vector<float> verticesListX, verticesListY, normalsListX, normalsListY;
-                                        float x = 0, y = 0;
 
                                         CL_DomNodeList shapeList = fixtureParam.get_child_nodes();
                                         for (int i=0; i < shapeList.get_length(); ++i)
@@ -385,6 +385,7 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
                                                 CL_DomNodeList centerList = shapeParam.get_child_nodes();
                                                 for (int i=0; i < centerList.get_length(); ++i)
                                                 {
+                                                    float x = 0, y = 0;
                                                     CL_DomElement centerCoord = centerList.item(i).to_element();
                                                     if (centerCoord.get_node_name() == "x")
                                                         x = lexical_cast<float>(centerCoord.get_text().c_str());
@@ -397,12 +398,14 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
                                             else if(shapeParam.get_node_name() == "Vertices")
                                             {
                                                 CL_DomNodeList verticesList = shapeParam.get_child_nodes();
+                                                vertices = new b2Vec2[verticesList.get_length()];
                                                 for (int i=0; i < verticesList.get_length(); ++i)
                                                 {
                                                     CL_DomElement vertex = verticesList.item(i).to_element();
                                                     if (vertex.get_node_name() == "Vertex")
                                                     {
                                                         CL_DomNodeList vertexComponents = vertex.get_child_nodes();
+                                                        float x = 0, y = 0;
                                                         for (int j=0; j < vertexComponents.get_length(); ++j)
                                                         {
                                                             CL_DomElement component = vertexComponents.item(j).to_element();
@@ -417,8 +420,10 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
                                                                 verticesListY.push_back(y);
                                                             }
                                                         }
+                                                        vertices[i].Set(x,y);
                                                     }
                                                 }
+                                                pshape.Set(vertices, verticesList.get_length());
                                             }
                                             // Parse polygon normals
                                             else if (shapeParam.get_node_name() == "Normals")
@@ -449,18 +454,16 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
                                             }
                                         }
 
-                                        for (unsigned int i=0; i < verticesListX.size(); ++i)
-                                            pshape.m_vertices[i].Set(verticesListX[i], verticesListY[i]);
-                                        pshape.m_vertexCount = verticesListX.size();
 
-                                        for (unsigned int i=0; i < normalsListX.size(); ++i)
-                                            pshape.m_normals[i].Set(normalsListX[i], normalsListY[i]);
+                                        //for (unsigned int i=0; i < normalsListX.size(); ++i)
+                                            //pshape.m_normals[i].Set(normalsListX[i], normalsListY[i]);
                                         fixdef.shape = &pshape;
                                     }
                                 }
                             }
                             
                             fixture = b2body->CreateFixture(&fixdef);
+                            
                             partHandle = new BodyPart(fixture, worldManager.mDefaultMaterial);
                         }
                         else if(partChild.get_node_name() == "MaxKindleLevel")
@@ -647,6 +650,7 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
 
                     partHandle->setMaterial(materialHandle);
                 } // for (int i=0; i < parts.get_length(); ++i)
+                if(vertices != NULL) delete vertices;
             }
             // END OF PHYSIC PARSING ---------------------------------------------
 

@@ -34,19 +34,19 @@
                                 <Type>e_polygon</Type>
                                 <Vertices>
                                     <Vertex>
-                                        <x>-30.0</x>
+                                        <x>1.0</x>
                                         <y>0.0</y>
                                     </Vertex>
                                     <Vertex>
-                                        <x>30.0</x>
+                                        <x>20.0</x>
                                         <y>0.0</y>
                                     </Vertex>
                                      <Vertex>
-                                        <x>30.0</x>
+                                        <x>20.0</x>
                                         <y>0.1</y>
                                     </Vertex>
                                     <Vertex>
-                                        <x>-30.0</x>
+                                        <x>1.0</x>
                                         <y>0.1</y>
                                     </Vertex>
                                 </Vertices>
@@ -92,28 +92,15 @@
                     <Part>
                         <b2Fixture>
                             <Friction>0.3</Friction>
-                            <Restitution>0.1</Restitution>
-                            <Density>0.5</Density>
+                            <Restitution>0.3</Restitution>
+                            <Density>0.3</Density>
                             <Shape>
-                                <Type>e_polygon</Type>
-                                <Vertices>
-                                    <Vertex>
-                                        <x>-1.0</x>
-                                        <y>0.0</y>
-                                    </Vertex>
-                                    <Vertex>
-                                        <x>1.0</x>
-                                        <y>0.0</y>
-                                    </Vertex>
-                                    <Vertex>
-                                        <x>0.0</x>
-                                        <y>1.0</y>
-                                    </Vertex>
-                                </Vertices>
+                                <Type>e_circle</Type>
+                                <Radius>0.6</Radius>
                             </Shape>
                         </b2Fixture>
                     </Part>
-                </Body>
+                  </Body>
              </Object>
         </Objects>
 
