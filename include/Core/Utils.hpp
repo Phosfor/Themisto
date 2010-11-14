@@ -8,6 +8,7 @@
 #include <boost/algorithm/string.hpp>
 
 #include "Core/LogManager.hpp"
+#include "Core/ConfigManager.hpp"
 
 using namespace std;
 

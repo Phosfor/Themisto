@@ -2,11 +2,14 @@
 
 
 
-void AreaManager::init(b2World *world, float sellSize)
+void AreaManager::init(b2World *world, float cellSize)
 {
+    
+    cout<<"1!!!!!!!!!!!!\n";
+    mCellSize = cellSize;
     mWorld = world;
-    float areaWidth = 1280;
-    float areaHeight = 1024;
+    float areaWidth = ScreenResolutionX;
+    float areaHeight = ScreenResolutionY;
     mArea = new b2AABB;
     mArea->lowerBound.Set(0, 0);
     mArea->upperBound.Set(0,0);
@@ -25,6 +28,7 @@ void AreaManager::init(b2World *world, float sellSize)
     mRegionUpdated.invoke(getCellRegion());
     //mRegionUpdated = new CL_Signal_v1<b2AABB*>;
 
+    cout<<"!!!!!!!!2\n";
 }
 
 CellRegion AreaManager::getCellRegion()
@@ -85,22 +89,26 @@ AreaManager::~AreaManager()
  CellInfo*** AreaManager::getMatrix(int& x, int& y)
  {
      CellInfo*** matrix = NULL;
-     if(x < mSecondMatrixBegin)
+     if(mArea->lowerBound.x < x && x < mArea->upperBound.x &&
+        mArea->lowerBound.y < y && y < mArea->upperBound.y)
      {
-         matrix = mFirstMatrix;
+         if(x < mSecondMatrixBegin)
+         {
+             matrix = mFirstMatrix;
+         }
+         else if(x < mThirdMatrixBegin)
+         {
+             matrix = mSecondMatrix;
+             x -=mSecondMatrixBegin;
+         }
+         else  
+         {
+             matrix = mThirdMatrix;
+             x -= mThirdMatrixBegin;
+         }
+         x = floor(x/mCellSize);
+         y = floor(y/mCellSize);
      }
-     else if(x < mThirdMatrixBegin)
-     {
-         matrix = mSecondMatrix;
-         x -=mSecondMatrixBegin;
-     }
-     else
-     {
-         matrix = mThirdMatrix;
-         x -= mThirdMatrixBegin;
-     }
-     x = floor(x/mCellSize);
-     y = floor(y/mCellSize);
      return matrix;
  }
 
@@ -113,30 +121,33 @@ void AreaManager::setWindImpact(Impact* impact, int _x, int _y)
 {
     int x = _x, y = _y;
     CellInfo*** matrix = getMatrix(x, y);
-    if(matrix[x][y] == NULL)
+    if(matrix != NULL)
     {
-        CellInfo* cell = new CellInfo;
-        cell->WindImpact = impact;
-        cell->OccupyingFixture = NULL;
-        matrix[x][y] = cell;
-    }
-    else
-    {
-        matrix[x][y]->WindImpact = impact;
+        if(matrix[x][y] == NULL)
+        {
+            CellInfo* cell = new CellInfo;
+            cell->WindImpact = impact;
+            cell->OccupyingFixture = NULL;
+            matrix[x][y] = cell;
+        }
+        else
+        {
+            matrix[x][y]->WindImpact = impact;
+        }
     }
 }
 Impact*  AreaManager::getWindImpact(int _x, int _y)
 {
     int x = _x, y = _y;
     CellInfo*** matrix = getMatrix(x, y);
-    if(matrix[x][y] != NULL)
+    if(matrix != NULL)
     {
-        return matrix[x][y]->WindImpact;
+        if(matrix[x][y] != NULL)
+        {
+            return matrix[x][y]->WindImpact;
+        }
     }
-    else
-    {
-        return NULL;
-    }
+    return NULL;
 }
 
 
@@ -144,14 +155,14 @@ b2Fixture* AreaManager::getCellFixture(int _x, int _y)
 {
     int x = _x, y = _y;
     CellInfo*** matrix = getMatrix(x, y);
-    if(matrix[x][y] != NULL)
+    if(matrix != NULL)
     {
-        return matrix[x][y]->OccupyingFixture;
+        if(matrix[x][y] != NULL)
+        {
+            return matrix[x][y]->OccupyingFixture;
+        }
     }
-    else
-    {
-        return NULL;
-    }
+    return NULL;
 }
 void AreaManager::reportNewFixtureLocation(const b2AABB *oldLocation, const b2AABB *newLocation, b2Fixture* body)
 {
@@ -179,9 +190,12 @@ void AreaManager::reportNewFixtureLocation(const b2AABB *oldLocation, const b2AA
             {
                 int _x = x, _y = y;
                 CellInfo*** matrix = getMatrix(_x,_y);
-                if(matrix[_x][_y] != NULL)
+                if(matrix != NULL)
                 {
-                    matrix[_x][_y]->OccupyingFixture = NULL;
+                    if(matrix[_x][_y] != NULL)
+                    {
+                        matrix[_x][_y]->OccupyingFixture = NULL;
+                    }
                 }
             }
         }

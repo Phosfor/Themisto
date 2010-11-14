@@ -107,7 +107,7 @@
                                 <Type>e_polygon</Type>
                                 <Vertices>
                                     <Vertex>
-                                        <x>0.0</x>
+                                        <x>1.0</x>
                                         <y>1.0</y>
                                     </Vertex>
                                     <Vertex>
@@ -116,7 +116,7 @@
                                     </Vertex>
                                     <Vertex>
                                         <x>1.0</x>
-                                        <y>1.0</y>
+                                        <y>2.0</y>
                                     </Vertex>
                                 </Vertices>
                                  <Normals>
