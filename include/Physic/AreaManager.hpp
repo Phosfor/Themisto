@@ -36,7 +36,7 @@ boost::serialization::singleton<AreaManager>
 {
     private:
         b2World *mWorld;
-        float mSellSize;
+        float mCellSize;
         CellInfo*** mThirdMatrix;
         CellInfo*** mSecondMatrix;
         CellInfo*** mFirstMatrix;
@@ -48,7 +48,7 @@ boost::serialization::singleton<AreaManager>
 
         CellInfo*** createMatrix(int width, int height);
         void disposeMatrix(CellInfo*** matrix);
-        CellInfo*** getMatrix(int x, int y);
+        CellInfo*** getMatrix(int& x, int& y);
         void activeRegionMoved(const b2AABB* newLocation);
         void resetMatrix(CellInfo*** matrix);
         void scanArea(b2AABB* region);

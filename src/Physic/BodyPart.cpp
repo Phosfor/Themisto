@@ -15,6 +15,8 @@ BodyPart::BodyPart(b2Fixture* fixture, BodyMaterial* material)
     world= &worldManager;
     mStaticCollisions = new list<BodyPart*>;
     mContactImpacts = new std::map<b2Fixture*, Impact*>;
+    mRainImpact = NULL;
+    mWindImpact = NULL;
     findStaticCollisions();
 }
 BodyPart::~BodyPart()

@@ -13,8 +13,8 @@ void AreaManager::init(b2World *world, float sellSize)
     mSecondMatrixBegin = 0;
     mThirdMatrixBegin = 0;
 
-    mMatrixWidth = floor(areaWidth / mSellSize + 0.5);
-    mMatrixHeight = floor(areaHeight / mSellSize + 0.5);
+    mMatrixWidth = floor(areaWidth / mCellSize + 0.5);
+    mMatrixHeight = floor(areaHeight / mCellSize + 0.5);
 
     mSecondMatrix = createMatrix(mMatrixWidth, mMatrixHeight);
     mThirdMatrix  = createMatrix(mMatrixWidth, mMatrixHeight);
@@ -82,7 +82,7 @@ AreaManager::~AreaManager()
     //delete mRegionUpdated;
 }
 
- CellInfo*** AreaManager::getMatrix(int x, int y)
+ CellInfo*** AreaManager::getMatrix(int& x, int& y)
  {
      CellInfo*** matrix = NULL;
      if(x < mSecondMatrixBegin)
@@ -92,21 +92,26 @@ AreaManager::~AreaManager()
      else if(x < mThirdMatrixBegin)
      {
          matrix = mSecondMatrix;
+         x -=mSecondMatrixBegin;
      }
      else
      {
          matrix = mThirdMatrix;
+         x -= mThirdMatrixBegin;
      }
+     x = floor(x/mCellSize);
+     y = floor(y/mCellSize);
      return matrix;
  }
 
 float AreaManager::getCellSize()
 {
-    return mSellSize;
+    return mCellSize;
 }
 
-void AreaManager::setWindImpact(Impact* impact, int x, int y)
+void AreaManager::setWindImpact(Impact* impact, int _x, int _y)
 {
+    int x = _x, y = _y;
     CellInfo*** matrix = getMatrix(x, y);
     if(matrix[x][y] == NULL)
     {
@@ -120,8 +125,9 @@ void AreaManager::setWindImpact(Impact* impact, int x, int y)
         matrix[x][y]->WindImpact = impact;
     }
 }
-Impact*  AreaManager::getWindImpact(int x, int y)
+Impact*  AreaManager::getWindImpact(int _x, int _y)
 {
+    int x = _x, y = _y;
     CellInfo*** matrix = getMatrix(x, y);
     if(matrix[x][y] != NULL)
     {
@@ -134,8 +140,9 @@ Impact*  AreaManager::getWindImpact(int x, int y)
 }
 
 
-b2Fixture* AreaManager::getCellFixture(int x, int y)
+b2Fixture* AreaManager::getCellFixture(int _x, int _y)
 {
+    int x = _x, y = _y;
     CellInfo*** matrix = getMatrix(x, y);
     if(matrix[x][y] != NULL)
     {
@@ -170,10 +177,11 @@ void AreaManager::reportNewFixtureLocation(const b2AABB *oldLocation, const b2AA
         {
             for(int y=oldRegion.lowerY; y<oldRegion.upperY + 0.5; y++)
             {
-                CellInfo*** matrix = getMatrix(x,y);
-                if(matrix[x][y] != NULL)
+                int _x = x, _y = y;
+                CellInfo*** matrix = getMatrix(_x,_y);
+                if(matrix[_x][_y] != NULL)
                 {
-                    matrix[x][y]->OccupyingFixture = NULL;
+                    matrix[_x][_y]->OccupyingFixture = NULL;
                 }
             }
         }
@@ -203,17 +211,18 @@ void AreaManager::reportNewFixtureLocation(const b2AABB *oldLocation, const b2AA
         {
             for(int y=newRegion.lowerY; y<newRegion.upperY; ++y)
             {
-                CellInfo*** matrix = getMatrix(x,y);
-                if(matrix[x][y] != NULL)
+                int _x = x, _y = y;
+                CellInfo*** matrix = getMatrix(_x,_y);
+                if(matrix[_x][_y] != NULL)
                 {
-                    matrix[x][y]->OccupyingFixture = body;
+                    matrix[_x][_y]->OccupyingFixture = body;
                 }
                 else
                 {
                     CellInfo *cell = new CellInfo;
                     cell->OccupyingFixture = body;
                     cell->WindImpact = NULL;
-                    matrix[x][y] = cell;
+                    matrix[_x][_y] = cell;
                 }
             }
         }

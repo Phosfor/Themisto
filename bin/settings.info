@@ -1,7 +1,7 @@
 window
 {
-    width "1152"
-    height "864"
+    width "1024"
+    height "600"
     fullscreen "false"
 }
 

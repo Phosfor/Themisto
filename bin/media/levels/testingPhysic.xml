@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<ThemistoLevel version="0.1" authors="Wincode team">
+    <World size_width="1024" size_height="800">
+
+        <Environ active="false">
+            <Rain enabled="true" limit="50" />
+            <Clouds enabled="true" />
+            <Lightnings enabled="true" />
+            <Sky enabled="true" />
+            <Moon enabled="true" />
+            <Leaves enabled="true" limit="5" />
+            <Stars enabled="true" />
+            <Birds enabled="true" />
+            <Wind power="-2" />
+        </Environ>
+
+
+        <Objects>
+            <Object name="ground" physic_body="true">
+             	<Body>
+                    <b2Body>
+                        <Position>
+                            <x>0.0</x>
+                            <y>10.0</y>
+                        </Position>
+                        <Type>StaticBody</Type>
+                    </b2Body>
+                    <Part>
+                        <b2Fixture>
+                            <Friction>0.3</Friction>
+                            <Restitution>0.3</Restitution>
+                            <Shape>
+                                <Type>e_polygon</Type>
+                                <Vertices>
+                                    <Vertex>
+                                        <x>0.0</x>
+                                        <y>0.0</y>
+                                    </Vertex>
+                                    <Vertex>
+                                        <x>50.0</x>
+                                        <y>0.0</y>
+                                    </Vertex>
+                                     <Vertex>
+                                        <x>50.0</x>
+                                        <y>0.1</y>
+                                    </Vertex>
+                                    <Vertex>
+                                        <x>0.0</x>
+                                        <y>0.1</y>
+                                    </Vertex>
+                                </Vertices>
+                                 
+                               
+                            </Shape>
+                        </b2Fixture>
+                    </Part>
+                </Body>
+             </Object>
+
+             <Object name="test1" physic_body="true">
+             	<Body>
+                    <b2Body>
+                        <Position>
+                            <x>2.0</x>
+                            <y>2.0</y>
+                        </Position>
+                        <Type>DynamicBody</Type>
+                        <Angle>0.2</Angle>
+                        <LinearVelocity>
+                            <x>1.0</x>
+                            <y>0.1</y>
+                        </LinearVelocity>
+                        <AngularVelocity>0.4</AngularVelocity>
+                        <LinearDamping>0.1</LinearDamping>
+                        <AllowSleep>true</AllowSleep>
+                        <Awake>true</Awake>
+                        <FixedRotation>false</FixedRotation>
+                        <Bullet>false</Bullet>
+                        <Active>true</Active>
+                    </b2Body>
+                    <Part>
+                        <b2Fixture>
+                            <Friction>0.3</Friction>
+                            <Restitution>0.3</Restitution>
+                            <Density>0.3</Density>
+                            <IsSensor>false</IsSensor>
+                            <Filter>
+                                <CategoryBits>0x12ff</CategoryBits>
+                                <MaskBits>0x12FF</MaskBits>
+                                <GroupIndex>-1</GroupIndex>
+                            </Filter>
+                            <Shape>
+                                <Type>e_circle</Type>
+                                <Radius>0.6</Radius>
+                                <Center>
+                                    <x>0.0</x>
+                                    <y>0.0</y>
+                                </Center>
+                            </Shape>
+                        </b2Fixture>
+                    </Part>
+                    <Part>
+                        <b2Fixture>
+                            <Density>0.5</Density>
+                            <Shape>
+                                <Type>e_polygon</Type>
+                                <Vertices>
+                                    <Vertex>
+                                        <x>0.0</x>
+                                        <y>1.0</y>
+                                    </Vertex>
+                                    <Vertex>
+                                        <x>2.0</x>
+                                        <y>0.0</y>
+                                    </Vertex>
+                                    <Vertex>
+                                        <x>1.0</x>
+                                        <y>1.0</y>
+                                    </Vertex>
+                                </Vertices>
+                                 <Normals>
+                                    <Normal>
+                                        <x>1.0</x>
+                                        <y>0.0</y>
+                                    </Normal>
+                                    <Normal>
+                                        <x>-1.0</x>
+                                        <y>0.0</y>
+                                    </Normal>
+                                    <Normal>
+                                        <x>0.0</x>
+                                        <y>1.0</y>
+                                    </Normal>
+                                </Normals>
+                                <Center>
+                                    <x>0.0</x>
+                                    <y>0.0</y>
+                                </Center>
+                            </Shape>
+                        </b2Fixture>
+                        <MaxKindleLevel>0.9999</MaxKindleLevel>
+                        <MaxDampness>0.6</MaxDampness>
+                        <AcceptsCord>true</AcceptsCord>
+                        <Material>
+                            <Name>Ferum</Name>
+                            <KindleTemperature>0.6</KindleTemperature>
+                            <KindleReceptivity>0.6</KindleReceptivity>
+                            <SelfFlareUpRate>0.6</SelfFlareUpRate>
+                            <CarbonizeRate>0.6</CarbonizeRate>
+                            <ElectricalConductivity>0.6</ElectricalConductivity>
+                            <ThermalReceptivity>0.6</ThermalReceptivity>
+                            <DampReceptivity>0.6</DampReceptivity>
+                            <FrozingTemperature>0.6</FrozingTemperature>
+                            <InflDampnessToFriction>0.6</InflDampnessToFriction>
+                            <InflDampnessToKindleTemperature>0.6</InflDampnessToKindleTemperature>
+                            <InflDampnessToMaxKindle>0.6</InflDampnessToMaxKindle>
+                            <InflDampnessToKindleReceptivity>0.6</InflDampnessToKindleReceptivity>
+                            <InflDampnessToFrozingTemperature>0.6</InflDampnessToFrozingTemperature>
+                            <InflCarbonizeLevelToMaxKindle>0.6</InflCarbonizeLevelToMaxKindle>
+                            <InflCarbonizeLevelToMaxDampness>0.6</InflCarbonizeLevelToMaxDampness>
+                            <InflCarbonizeLevelToElecticalConductivity>0.6</InflCarbonizeLevelToElecticalConductivity>
+                            <InflMoistenToKindleLevel>0.6</InflMoistenToKindleLevel>
+                            <InflTemperatureToDampness>0.6</InflTemperatureToDampness>
+                        </Material>
+                        <State>
+                            <Dampness>0.6</Dampness>
+                            <KindleLevel>0.6</KindleLevel>
+                            <Temperature>0.6</Temperature>
+                            <CarbonizeLevel>0.6</CarbonizeLevel>
+                            <IsFrozen>false</IsFrozen>
+                        </State>
+                        <StaticImpacts>
+                            <Impact>
+                                <Type>Moisten</Type>
+                                <Intensity>0.2</Intensity>
+                                <Dirrection>
+                                    <x>0.0</x>
+                                    <y>0.0</y>
+                                </Dirrection>
+                                <ImpactPoint>
+                                    <x>0.0</x>
+                                    <y>0.0</y>
+                                </ImpactPoint>
+                            </Impact>
+                        </StaticImpacts>
+                    </Part>
+                </Body>
+             </Object>
+        </Objects>
+
+    </World>
+</ThemistoLevel>

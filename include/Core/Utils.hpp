@@ -25,8 +25,8 @@ using namespace std;
 #define Randf(lower) ((float)(rand()%10 + (float)lower)/10.0f)
 
 // Game window resolution (height)
-#define ScreenResolutionY CONFIG("window.height", int, 1024)
-#define ScreenResolutionX CONFIG("window.width", int, 768)
+#define ScreenResolutionY (CONFIG("window.height", int, 1024))
+#define ScreenResolutionX (CONFIG("window.width", int, 768))
 
 /////////////////////////////////////////////////////////////////////////
 /////////////////////// GAME MAGNITUDES /////////////////////////////////

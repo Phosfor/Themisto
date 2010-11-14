@@ -245,6 +245,7 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
                 b2body = physicManager.getWorld().CreateBody(&bdef);
                 bodyHandle = new Body(b2body);
                 physicManager.registerBody(bodyHandle);
+                
 
                 // Go through all physic parts
                 CL_DomNodeList parts = body.get_elements_by_tag_name("Part");
@@ -457,7 +458,7 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
                                     }
                                 }
                             }
-
+                            
                             fixture = b2body->CreateFixture(&fixdef);
                             partHandle = new BodyPart(fixture, worldManager.mDefaultMaterial);
                         }
@@ -476,6 +477,7 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
                             bool value = partChild.get_text() == "true";
                             partHandle->mAcceptsCord = value;
                         }
+                        
                         else if(partChild.get_node_name() == "State")
                         {
                             stateHandle = partHandle->getState();
@@ -505,8 +507,8 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
                                 }
                                 else if (stateElement.get_node_name() == "IsFrozen")
                                 {
-                                    float value = lexical_cast<float>(stateElement.get_text().c_str());
-                                    stateHandle->IsFrozen = value;
+                                    //bool value = lexical_cast<bool>(stateElement.get_text().c_str());
+                                    //stateHandle->IsFrozen = value;
                                 }
                             }
                         }
@@ -521,7 +523,7 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
                             /*}*/
                         }
                     }
-
+                    
                     // Parse material
                     CL_DomNodeList matList = physicPart.get_elements_by_tag_name("Material");
 
