@@ -227,16 +227,19 @@ void AreaManager::reportNewFixtureLocation(const b2AABB *oldLocation, const b2AA
             {
                 int _x = x, _y = y;
                 CellInfo*** matrix = getMatrix(_x,_y);
-                if(matrix[_x][_y] != NULL)
+                if(matrix != NULL)
                 {
-                    matrix[_x][_y]->OccupyingFixture = body;
-                }
-                else
-                {
-                    CellInfo *cell = new CellInfo;
-                    cell->OccupyingFixture = body;
-                    cell->WindImpact = NULL;
-                    matrix[_x][_y] = cell;
+                    if(matrix[_x][_y] != NULL)
+                    {
+                        matrix[_x][_y]->OccupyingFixture = body;
+                    }
+                    else
+                    {
+                        CellInfo *cell = new CellInfo;
+                        cell->OccupyingFixture = body;
+                        cell->WindImpact = NULL;
+                        matrix[_x][_y] = cell;
+                    }
                 }
             }
         }

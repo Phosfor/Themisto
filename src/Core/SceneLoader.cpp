@@ -123,6 +123,8 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
                 // Physic body variables
                 b2BodyDef bdef;
                 b2FixtureDef fixdef;
+                b2CircleShape cshape;
+                b2PolygonShape pshape;
                 b2Fixture *fixture;
                 b2Filter filter;
                 b2Body *b2body;
@@ -359,14 +361,14 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
                                                         x = lexical_cast<float>(centerCoord.get_text().c_str());
                                                     if(centerCoord.get_node_name() == "y")
                                                         y = lexical_cast<float>(centerCoord.get_text().c_str());
+                                                    
                                                 }
                                             }
                                         }
 
-                                        b2CircleShape *shapeHandle = new b2CircleShape();
-                                        shapeHandle->m_radius = radius;
-                                        shapeHandle->m_p.Set(x, y);
-                                        fixdef.shape = shapeHandle;
+                                        cshape.m_radius = radius;
+                                        cshape.m_p.Set(x, y);
+                                        fixdef.shape = &cshape;
                                     }
                                     // The shape is a polygon
                                     else if (typeHandle == b2Shape::e_polygon)
@@ -388,6 +390,7 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
                                                         x = lexical_cast<float>(centerCoord.get_text().c_str());
                                                     if(centerCoord.get_node_name() == "y")
                                                         y = lexical_cast<float>(centerCoord.get_text().c_str());
+                                                    pshape.m_centroid.Set(x,y);
                                                 }
                                             }
                                             // Parse polygon vertices
@@ -446,15 +449,13 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
                                             }
                                         }
 
-                                        b2PolygonShape *shapeHandle = new b2PolygonShape();
                                         for (unsigned int i=0; i < verticesListX.size(); ++i)
-                                            shapeHandle->m_vertices[i].Set(verticesListX[i], verticesListY[i]);
-                                        shapeHandle->m_vertexCount = verticesListX.size();
+                                            pshape.m_vertices[i].Set(verticesListX[i], verticesListY[i]);
+                                        pshape.m_vertexCount = verticesListX.size();
 
                                         for (unsigned int i=0; i < normalsListX.size(); ++i)
-                                            shapeHandle->m_normals[i].Set(normalsListX[i], normalsListY[i]);
-                                        shapeHandle->m_centroid.Set(x, y);
-                                        fixdef.shape = shapeHandle;
+                                            pshape.m_normals[i].Set(normalsListX[i], normalsListY[i]);
+                                        fixdef.shape = &pshape;
                                     }
                                 }
                             }

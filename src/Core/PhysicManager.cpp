@@ -3,7 +3,7 @@
 PhysicManager::PhysicManager()
 {
     b2Vec2 gravity(0.0f, 10.0f);
-    mWorld = new b2World(gravity, false);
+    mWorld = new b2World(gravity, true);
     mTimeStep = 1.0f / 60.0f;
     mVelocityIterations = 6;
     mPositionIterations = 4;
@@ -51,9 +51,10 @@ std::list<Body*>& PhysicManager::getBodies()
 
 void PhysicManager::step()
 {
+    float elapsed = app->getElapsed();
     for (std::list<Body*>::iterator body=mBodies->begin(); body!=mBodies->end(); ++body)
     {
-        (*body)->step(app->getElapsed());
+        (*body)->step(elapsed);
     }
     mWorld->Step(mTimeStep, mVelocityIterations, mPositionIterations);
     mWorld->ClearForces();
