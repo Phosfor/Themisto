@@ -48,8 +48,10 @@ class Body
         // Default is true
         bool mShouldFreeB2Body;
 
-        // 0 - body will sink, more - stronger force will pop body from water
+        // 0 - body will sink, more - stronger force would pop body from water
         float mBuoyancy;
+        
+        string mName;
 
 };
 

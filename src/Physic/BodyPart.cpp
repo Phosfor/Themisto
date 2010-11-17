@@ -18,6 +18,7 @@ BodyPart::BodyPart(b2Fixture* fixture, BodyMaterial* material)
     mRainImpact = NULL;
     mWindImpact = NULL;
     findStaticCollisions();
+    mName = world->generateUniqueID();
 }
 BodyPart::~BodyPart()
 {

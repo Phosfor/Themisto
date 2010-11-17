@@ -86,7 +86,7 @@ class BodyPart
         // Possible to cord up body
         bool mAcceptsCord;
 
-
+        string mName;
 
 };
 

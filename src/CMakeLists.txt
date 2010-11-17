@@ -12,6 +12,7 @@ set(Themisto_srcs
     Core/EnvironManager.cpp
     Core/InputManager.cpp
     Core/ObjectsManager.cpp
+    Core/DebugWatcher.cpp
 
     # Environ
     World/WorldManager.cpp

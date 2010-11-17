@@ -13,6 +13,7 @@ Body::Body(b2Body* body)
     mParentWorld= mBody->GetWorld();
     mLastLocation = calculateLocation();
     world= &worldManager;
+    mName = world->generateUniqueID();
 }
 Body::~Body()
 {

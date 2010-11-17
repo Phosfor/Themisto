@@ -5,7 +5,6 @@
 void AreaManager::init(b2World *world, float cellSize)
 {
     
-    cout<<"1!!!!!!!!!!!!\n";
     mCellSize = cellSize;
     mWorld = world;
     float areaWidth = ScreenResolutionX;
@@ -26,9 +25,6 @@ void AreaManager::init(b2World *world, float cellSize)
     scanArea(mArea);
 
     mRegionUpdated.invoke(getCellRegion());
-    //mRegionUpdated = new CL_Signal_v1<b2AABB*>;
-
-    cout<<"!!!!!!!!2\n";
 }
 
 CellRegion AreaManager::getCellRegion()
