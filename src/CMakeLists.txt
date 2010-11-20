@@ -48,6 +48,9 @@ set(Themisto_srcs
     Physic/PhysicRain.cpp
     Physic/PhysicWind.cpp
     Physic/BodyPart.cpp
+    
+    # Debug
+    DebugConsole/DebugIO.cpp
 
     main.cpp
 )
@@ -78,6 +81,7 @@ target_link_libraries(Themisto
 # ----------------------------------------------------
 set(DebugConsole_srcs
 	DebugConsole/DebugConsole.cpp
+	
 )
 
 add_executable(DebugConsole

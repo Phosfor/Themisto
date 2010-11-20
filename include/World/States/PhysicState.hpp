@@ -7,6 +7,8 @@
 #include "Core/SceneLoader.hpp"
 #include "Physic/DebugDraw.hpp"
 #include "Physic/DebugInstruments.hpp"
+#include "Core/DebugWatcher.hpp"
+#include "DebugConsole/DebugIO.hpp"
 
 #include <ClanLib/core.h>
 #include <ClanLib/display.h>
