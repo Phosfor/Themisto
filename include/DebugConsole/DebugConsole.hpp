@@ -1,19 +1,42 @@
-#ifndef _CORE_DEBUG_CONSOLE_HPP_
-#define _CORE_DEBUG_CONSOLE_HPP_
+#ifndef _DEBUG_CONSOLE_HPP_
+#define _DEBUG_CONSOLE_HPP_
 
-#include <ClanLib/display.h>
 #include <ClanLib/core.h>
-#include <ClanLib/application.h>
+#include <ClanLib/network.h>
+// Some stuff goes here...
 
-class DebugConsole
+const static CL_String SERVER_PORT = "1992";
+const static CL_String SERVER_HOST = "127.0.0.1";
+
+class Client
 {
-    private:
-        CL_ConsoleWindow *mConsoleWindow;
+public:
+    Client();
+    ~Client();
 
-    public:
-        ~DebugConsole();
-        void initConsoleWindow(const std::string &title, int width = 800, int height = 600);
-        CL_ConsoleWindow &getConsoleWindow();
+    void exec();
+
+private:
+    void connect_to_server();
+
+    void on_connected();
+    void on_disconnected();
+
+    void on_event_received(const CL_NetGameEvent &e);
+
+    void on_event_login_success(const CL_NetGameEvent &e);
+    void on_event_login_fail(const CL_NetGameEvent &e);
+
+private:
+    CL_NetGameClient network_client;
+    CL_SlotContainer slots;
+
+    CL_NetGameEventDispatcher_v0 login_events;
+    CL_NetGameEventDispatcher_v0 game_events;
+
+    bool quit;
+
+    bool logged_in;
 };
 
-#endif /* _CORE_DEBUG_CONSOLE_HPP_ */
+#endif /* _DEBUG_CONSOLE_HPP_ */
