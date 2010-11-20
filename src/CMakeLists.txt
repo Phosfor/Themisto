@@ -1,3 +1,6 @@
+# ----------------------------------------------------
+# Executable for the Themisto
+# ----------------------------------------------------
 set(Themisto_srcs
     # Core
     Core/ConfigManager.cpp
@@ -66,6 +69,31 @@ target_link_libraries(Themisto
     ${Boost_LIBRARIES}
     ${ClanLib_LIBRARIES}
     ${BOX2D_LIBRARY}
+    fontconfig
+    pthread
+)
+
+# ----------------------------------------------------
+# Executable for the DebugConsole
+# ----------------------------------------------------
+set(DebugConsole_srcs
+	DebugConsole/DebugConsole.cpp
+)
+
+add_executable(DebugConsole
+	${DebugConsole_srcs}
+)
+
+target_link_libraries(DebugConsole
+    ${X11_LIBRARIES}
+    ${FREETYPE_LIBRARIES}
+    ${FREEIMAGE_LIBRARY}
+    ${FREETYPE_LIBRARIES}
+    ${OPENGL_LIBRARIES}
+    ${ZLIB_LIBRARIES}
+    ${PNG_LIBRARIES}
+    ${JPEG_LIBRARIES}
+    ${ClanLib_LIBRARIES}
     fontconfig
     pthread
 )

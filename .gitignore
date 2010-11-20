@@ -7,3 +7,4 @@ gmon.out
 bin/*.log
 bin/Themisto
 additional/*
+bin/DebugConsole
