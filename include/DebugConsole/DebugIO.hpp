@@ -23,6 +23,7 @@ class DebugIO : public boost::serialization::singleton<DebugIO>
         void eventHandler( CL_NetGameConnection * connection,const CL_NetGameEvent &event);
     public:
         void init();
+        void step();
         void addWatch(string id, string name, string value, string parent);
         void updateWatch(string id, string newVal);
         void removeWatch(string id);

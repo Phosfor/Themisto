@@ -12,6 +12,10 @@ void DebugIO::init()
     }
     slotEventReceived = mServer.sig_event_received().connect(this, &DebugIO::eventHandler);
 }
+void DebugIO::step()
+{
+    mServer.process_events();
+}
 
 void DebugIO::eventHandler( CL_NetGameConnection *connection,const CL_NetGameEvent &event)
 {
@@ -23,7 +27,6 @@ void DebugIO::eventHandler( CL_NetGameConnection *connection,const CL_NetGameEve
             //string answer = mCommand.invoke(event.get_argument(0));
             //CL_NetGameEvent response("Answer", answer);
             
-            //response.add_argument(CL_NetGameEventValue(CL_String(answer)));
 			//connection->send_event(response);
         }
         

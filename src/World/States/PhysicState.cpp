@@ -20,7 +20,7 @@ void PhysicState::init()
     physicManager.getWorld().SetDebugDraw(&mDebugDrawHandle);
 
     debugWatcher.init();
-    
+    debugIO.init();
 }
 
 
@@ -41,10 +41,7 @@ void PhysicState::update()
     mStatFont->draw_text(appManager.getGraphic(), 10, 25,
             CL_String(cl_format("elapsed: %1", int(floor(appManager.getElapsed()+0.5)))), CL_Colorf::white);
     
-    string command;
-    cin >> command;
-    debugWatcher.parseCommand(command);
-    debugWatcher.step();
+    debugIO.step();
 }
 
 string PhysicState::type()
