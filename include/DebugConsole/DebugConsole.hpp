@@ -5,7 +5,7 @@
 #include <ClanLib/network.h>
 #include <iostream>
 #include <string>
-// Some stuff goes here...
+#include <boost/algorithm/string.hpp>
 
 const static CL_String SERVER_PORT = "1992";
 const static CL_String SERVER_HOST = "localhost";
@@ -19,6 +19,7 @@ public:
     ~Client();
 
     void exec();
+    void process_net_events(const std::string command = "-1");
 
 private:
     void connect_to_server();
@@ -39,7 +40,6 @@ private:
     CL_NetGameEventDispatcher_v0 game_events;
 
     bool connected;
-    bool quit;
 
     bool logged_in;
 };
