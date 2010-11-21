@@ -5,6 +5,20 @@ void Utils::setMediaFolder(const string &path)
     mMediaFolder = path;
 }
 
+string Utils::intToStr(int p)
+{
+    std::ostringstream out;
+    out << p;
+    return out.str(); 
+}
+
+string Utils::floatToStr(float p)
+{
+    std::ostringstream out;
+    out << p;
+    return out.str(); 
+}
+
 string Utils::getMediaFolder()
 {
     return mMediaFolder;

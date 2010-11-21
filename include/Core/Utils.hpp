@@ -91,6 +91,9 @@ using namespace std;
 // Get number of game seconds to achive passed real hours
 #define Hours2Seconds(realHours) ((float)(Minutes2Seconds(realHours * 60.0f)))
 
+#define IntToStr(p) (utils.intToStr(p))
+#define FloatToStr(p) (utils.floatToStr(p))
+
 #define utils (Utils::get_mutable_instance())
 #define utilsConst (Utils::get_const_instance())
 
@@ -110,6 +113,8 @@ class Utils : public boost::serialization::singleton<Utils>
         ptime getCurrentTime() const;
         void writeTimestamp();
         string getTimeDifference();
+        string intToStr(int p);
+        string floatToStr(float p);
 };
 
 #endif

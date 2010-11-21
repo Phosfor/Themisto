@@ -18,19 +18,19 @@ public:
     Client();
     ~Client();
 
-    void exec();
-    void process_net_events(const std::string command = "-1");
+    void step(const std::string command);
+
+    bool connected;
+    bool quit;
+
+    void connect_to_server();
+    void disconnect();
 
 private:
-    void connect_to_server();
-
     void on_connected();
     void on_disconnected();
 
     void on_event_received(const CL_NetGameEvent &e);
-
-    void on_event_login_success(const CL_NetGameEvent &e);
-    void on_event_login_fail(const CL_NetGameEvent &e);
 
 private:
     CL_NetGameClient network_client;
@@ -38,10 +38,6 @@ private:
 
     CL_NetGameEventDispatcher_v0 login_events;
     CL_NetGameEventDispatcher_v0 game_events;
-
-    bool connected;
-
-    bool logged_in;
 };
 
 #endif /* _DEBUG_CONSOLE_HPP_ */

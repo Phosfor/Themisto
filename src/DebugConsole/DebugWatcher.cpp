@@ -52,6 +52,7 @@ void DebugWatcher::parseCommand(string command, string* _answer)
     else if( commandSet[0] == "close")
     {
         appManager.setRunning(false);
+        answer += "Programm terminated.\n";
     }
     else if(commandSet[0] == "every")
     {
@@ -60,12 +61,15 @@ void DebugWatcher::parseCommand(string command, string* _answer)
             if(commandSet[1] == "step")
             {
                 mTimeout = -1;
+                answer += "Update every step setted. \n";
             }
             else
             {
                 try
                 {
-                    mTimeout = boost::lexical_cast<int>(commandSet[1]);                   
+                    mTimeout = boost::lexical_cast<int>(commandSet[1]);
+                    answer += "Update timeout set to " + IntToStr(mTimeout) + 
+                    "; Note, that update intervals not certain equal to timeout. \n";                   
                 }
                 catch(boost::bad_lexical_cast &)
                 {
@@ -86,10 +90,6 @@ void DebugWatcher::parseCommand(string command, string* _answer)
     {
         answer += "Coming soon... :)\n.";
     }
-    else if(commandSet[0] == "quit")
-    {
-         appManager.setRunning(false);
-    }
     else if(commandSet[0] == "hello")
     {
         answer += "Hello! How are you?";
@@ -102,7 +102,9 @@ void DebugWatcher::parseCommand(string command, string* _answer)
 
 string DebugWatcher::addWatchCommon(Watch* watch, vector<string> &commandSet)
 {
-    string error = "";
+    watch->ID = worldManager.generateUniqueID();
+    string answer = "";
+    bool watchNormal = false;
     for(vector<string>::iterator it = ++(commandSet.begin()); it != commandSet.end(); ++it)
     {
         string command = *it;
@@ -115,7 +117,7 @@ string DebugWatcher::addWatchCommon(Watch* watch, vector<string> &commandSet)
             }
             else
             {
-                error += "Error: argument not specified for 'as' parameter.\n";
+                answer += "Error: argument not specified for 'as' parameter.\n";
             }
         }
         else if( command == "to")
@@ -124,7 +126,8 @@ string DebugWatcher::addWatchCommon(Watch* watch, vector<string> &commandSet)
         //material and others commands can contain brakes at end
         else if( command.find("material") != command.npos)
         {
-            error += process_material(watch, commandSet);
+            answer += process_material(watch, commandSet);
+            watchNormal = true;
         }
         else if( command.find("state") != command.npos)
         {
@@ -142,18 +145,17 @@ string DebugWatcher::addWatchCommon(Watch* watch, vector<string> &commandSet)
         {
         }     
     }
-    mWatches.push_back(watch);
-    return error;
-}
-string intToStr(int p)
-{
-    std::ostringstream out;
-    out << p;
-    return out.str(); 
+    if(watch->Type != NotAWatch && watchNormal)
+    {
+        mWatches.push_back(watch);
+        answer += "Added result watch with id = '" + watch->ID + "'.\n";
+    }
+    return answer;
 }
 
 
-map<Target, string>& DebugWatcher::getTargets(vector<string> &commandSet, TargetType type, string& error)
+
+map<Target, string>& DebugWatcher::getTargets(vector<string> &commandSet, TargetType type, string& answer)
 {
     map<Target, string>* result = new map<Target, string>();
     if(type & tApplicationManager)
@@ -165,161 +167,158 @@ map<Target, string>& DebugWatcher::getTargets(vector<string> &commandSet, Target
         result->insert(pair<Target, string>( &environManager, "EnvironManager"));
     }
     // Commands synapsis: pam pam of objName(fixture_number_or_name)
-    if(commandSet.size() > 3)
+    if(commandSet.size() > 2)
     {
         if( commandSet[2] == "of")
         {
-            string targetSpecifier = commandSet[3];
-            std::vector<std::string> objNameAndFixtures;
-            boost::split(objNameAndFixtures, targetSpecifier, boost::is_any_of("(,)"));
-            string objName = objNameAndFixtures[0];
-            list<Body*> bodies = physicManager.getBodies();
-            list<Body*>::iterator it;
-            for(it = bodies.begin(); it != bodies.end(); ++it)
+            if(commandSet.size() > 3)
             {
-                if((*it)->mName == objName)
+                string targetSpecifier = commandSet[3];
+                std::vector<std::string> objNameAndFixtures;
+                boost::split(objNameAndFixtures, targetSpecifier, boost::is_any_of("(,)"));
+                string objName = objNameAndFixtures[0];
+                list<Body*> bodies = physicManager.getBodies();
+                list<Body*>::iterator it;
+                for(it = bodies.begin(); it != bodies.end(); ++it)
                 {
-                    Body* obj = *it;
-                    if(type & tBody)
+                    if((*it)->mName == objName)
                     {
-                       result->insert(pair<Target, string>(obj, objName));
-                    }
-                    if(type & tb2Body)
-                    {
-                        result->insert(pair<Target, string>(obj->getb2Body(), objName));
-                    }
-                    // If parts specified
-                    if(objNameAndFixtures.size() > 1)
-                    {
-                        vector<string>::iterator it;
-                        for(it = ++(objNameAndFixtures.begin()); 
-                              it != objNameAndFixtures.end(); ++it)
+                        Body* obj = *it;
+                        if(type & tBody)
                         {
-                            string partID = *it;
-                            b2Fixture* fixture = getFixture(obj, partID);
-                            if(fixture != NULL)
+                           result->insert(pair<Target, string>(obj, objName));
+                        }
+                        if(type & tb2Body)
+                        {
+                            result->insert(pair<Target, string>(obj->getb2Body(), objName));
+                        }
+                        // If parts specified
+                        if(objNameAndFixtures.size() > 1)
+                        {
+                            vector<string>::iterator it;
+                            for(it = ++(objNameAndFixtures.begin()); 
+                                  it != objNameAndFixtures.end(); ++it)
                             {
-                                if(type & tb2Fixture)
+                                string partID = *it;
+                                b2Fixture* fixture = getFixture(obj, partID);
+                                if(fixture != NULL)
                                 {
-                                    result->insert(pair<Target, string>(fixture, partID));
+                                    if(type & tb2Fixture)
+                                    {
+                                        result->insert(pair<Target, string>(fixture, partID));
+                                    }
+                                    BodyPart* part = (BodyPart*)fixture->GetUserData();
+                                    if(part != NULL)
+                                    {
+                                        if(type & tBodyPart)
+                                        {
+                                            result->insert(pair<Target, string>(part, partID));
+                                        }
+                                        if(type & tBodyMaterial)
+                                        {
+                                            result->insert(pair<Target, string>(part->getMaterial(), partID));
+                                        }
+                                        if(type & tBodyState)
+                                        {
+                                            result->insert(pair<Target, string>(part->getState(), partID));
+                                        }                                    
+                                    }
                                 }
+                                else
+                                {
+                                    answer += "Error: no part indetified as '" + partID + "'.\n";
+                                    //continue
+                                }
+                            }
+                        }//if(objNameAndFixtures.size() > 1) 
+                        else 
+                        {
+                            // Get all parts
+                            b2Body* body = obj->getb2Body();
+                            int i = 0;
+                            for(b2Fixture* fixture = body->GetFixtureList(); 
+                                     fixture != NULL; fixture = fixture->GetNext())
+                            {
+                                string id = IntToStr(i);
+                               
                                 BodyPart* part = (BodyPart*)fixture->GetUserData();
                                 if(part != NULL)
                                 {
+                                    id = part->mName;
                                     if(type & tBodyPart)
                                     {
-                                        result->insert(pair<Target, string>(part, partID));
+                                        result->insert(pair<Target, string>(part, id));
                                     }
                                     if(type & tBodyMaterial)
                                     {
-                                        result->insert(pair<Target, string>(part->getMaterial(), partID));
+                                        result->insert(pair<Target, string>(part->getMaterial(), id));
                                     }
                                     if(type & tBodyState)
                                     {
-                                        result->insert(pair<Target, string>(part->getState(), partID));
+                                        result->insert(pair<Target, string>(part->getState(), id));
                                     }                                    
-                                }
-                            }
-                            else
-                            {
-                                error += "Error: no part indetified as '" + partID + "'.\n";
-                                //continue
+                                }     
+                                if(type & tb2Fixture)
+                                {
+                                    result->insert(pair<Target, string>(fixture, id));
+                                } 
+                                ++i;     
                             }
                         }
-                    }//if(objNameAndFixtures.size() > 1) 
-                    else 
-                    {
-                        // Get all parts
-                        b2Body* body = obj->getb2Body();
-                        int i = 0;
-                        for(b2Fixture* fixture = body->GetFixtureList(); 
-                                 fixture != NULL; fixture = fixture->GetNext())
-                        {
-                            string id = intToStr(i);
-                           
-                            BodyPart* part = (BodyPart*)fixture->GetUserData();
-                            if(part != NULL)
-                            {
-                                id = part->mName;
-                                if(type & tBodyPart)
-                                {
-                                    result->insert(pair<Target, string>(part, id));
-                                }
-                                if(type & tBodyMaterial)
-                                {
-                                    result->insert(pair<Target, string>(part->getMaterial(), id));
-                                }
-                                if(type & tBodyState)
-                                {
-                                    result->insert(pair<Target, string>(part->getState(), id));
-                                }                                    
-                            }     
-                            if(type & tb2Fixture)
-                            {
-                                result->insert(pair<Target, string>(fixture, id));
-                            } 
-                            ++i;     
-                        }
-                    }
-                }//if((*it)->mName == "objName")
-            }//for(it = bodies.begin(); it != bodies.end(); ++it)
+                    }//if((*it)->mName == "objName")
+                }//for(it = bodies.begin(); it != bodies.end(); ++it)
+            }//if( commandSet.size() > 3)
+            else
+            {
+                answer += "Error: argument for parameter 'of' not specified.\n";
+            }
        
         }//if( commandSet[2] == "of")
         else
         {
-             error += "Error: parameter 'of' not specified.\n";
+             answer += "Error: parameter 'of' not specified.\n";
         }
     } //if(commandSet.size() > 3)
     else
     {
-        error += "Error: parameter 'of' not specified.\n";
+        answer += "Error: parameter 'of' not specified.\n";
     }
     return *result;
 }
 
-string floatToStr(float p)
-{
-    std::ostringstream out;
-    out << p;
-    return out.str(); 
-}
-
-
-
-
 string evalute_material(Watch* watch)
 {
     string name = watch->MemberName;
-    string result = "error, member not found";
+    string result = "Error, member not found";
     BodyMaterial* m = boost::get<BodyMaterial*>(watch->Object);
     if(name == "Name") result = m->Name;
-    else if(name == "KindleTemperature") result = floatToStr(m->KindleTemperature);
-    else if(name == "KindleReceptivity") result = floatToStr(m->KindleReceptivity);
-    else if(name == "FlameTemperature") result = floatToStr(m->FlameTemperature);
-    else if(name == "SelfFlareUpRate") result = floatToStr(m->SelfFlareUpRate);
-    else if(name == "CarbonizeRate") result = floatToStr(m->CarbonizeRate);
-    else if(name == "ElectricalConductivity") result = floatToStr(m->ElectricalConductivity);
-    else if(name == "ThermalReceptivity") result = floatToStr(m->ThermalReceptivity);
-    else if(name == "DampReceptivity") result = floatToStr(m->DampReceptivity);
-    else if(name == "FrozingTemperature") result = floatToStr(m->FrozingTemperature);
-    else if(name == "InflDampnessToFriction") result = floatToStr(m->InflDampnessToFriction);
-    else if(name == "InflDampnessToKindleTemperature") result = floatToStr(m->InflDampnessToKindleTemperature);
-    else if(name == "InflDampnessToMaxKindle") result = floatToStr(m->InflDampnessToMaxKindle);
-    else if(name == "InflDampnessToKindleReceptivity") result = floatToStr(m->InflDampnessToKindleReceptivity);
-    else if(name == "InflDampnessToFrozingTemperature") result = floatToStr(m->InflDampnessToFrozingTemperature);
-    else if(name == "InflCarbonizeLevelToMaxKindle") result = floatToStr(m->InflCarbonizeLevelToMaxKindle);
-    else if(name == "InflCarbonizeLevelToMaxDampness") result = floatToStr(m->InflCarbonizeLevelToMaxDampness);
-    else if(name == "InflCarbonizeLevelToElecticalConductivity") result = floatToStr(m->InflCarbonizeLevelToElecticalConductivity);
-    else if(name == "InflMoistenToKindleLevel") result = floatToStr(m->InflMoistenToKindleLevel);
-    else if(name == "InflTemperatureToDampness") result = floatToStr(m->InflTemperatureToDampness);  
+    else if(name == "KindleTemperature") result = FloatToStr(m->KindleTemperature);
+    else if(name == "KindleReceptivity") result = FloatToStr(m->KindleReceptivity);
+    else if(name == "FlameTemperature") result = FloatToStr(m->FlameTemperature);
+    else if(name == "SelfFlareUpRate") result = FloatToStr(m->SelfFlareUpRate);
+    else if(name == "CarbonizeRate") result = FloatToStr(m->CarbonizeRate);
+    else if(name == "ElectricalConductivity") result = FloatToStr(m->ElectricalConductivity);
+    else if(name == "ThermalReceptivity") result = FloatToStr(m->ThermalReceptivity);
+    else if(name == "DampReceptivity") result = FloatToStr(m->DampReceptivity);
+    else if(name == "FrozingTemperature") result = FloatToStr(m->FrozingTemperature);
+    else if(name == "InflDampnessToFriction") result = FloatToStr(m->InflDampnessToFriction);
+    else if(name == "InflDampnessToKindleTemperature") result = FloatToStr(m->InflDampnessToKindleTemperature);
+    else if(name == "InflDampnessToMaxKindle") result = FloatToStr(m->InflDampnessToMaxKindle);
+    else if(name == "InflDampnessToKindleReceptivity") result = FloatToStr(m->InflDampnessToKindleReceptivity);
+    else if(name == "InflDampnessToFrozingTemperature") result = FloatToStr(m->InflDampnessToFrozingTemperature);
+    else if(name == "InflCarbonizeLevelToMaxKindle") result = FloatToStr(m->InflCarbonizeLevelToMaxKindle);
+    else if(name == "InflCarbonizeLevelToMaxDampness") result = FloatToStr(m->InflCarbonizeLevelToMaxDampness);
+    else if(name == "InflCarbonizeLevelToElecticalConductivity") result = FloatToStr(m->InflCarbonizeLevelToElecticalConductivity);
+    else if(name == "InflMoistenToKindleLevel") result = FloatToStr(m->InflMoistenToKindleLevel);
+    else if(name == "InflTemperatureToDampness") result = FloatToStr(m->InflTemperatureToDampness);  
     
     return result;
 }
 
 string DebugWatcher::process_material(Watch* watch, vector<string> &commandSet)
 {
-    addWatchToConsole(watch);
-    string error = "";
+    
+    string answer = "";
     string materialCommand = commandSet[1];
     unsigned int startParamBraket = materialCommand.find("(");
     string fields[20] = {
@@ -345,56 +344,74 @@ string DebugWatcher::process_material(Watch* watch, vector<string> &commandSet)
         "InflTemperatureToDampness"
     };
     
-    map<Target, string> targets = getTargets(commandSet, tBodyMaterial, error);
-    map<Target, string>::iterator it;
-    if(startParamBraket == materialCommand.npos)
+    map<Target, string> targets = getTargets(commandSet, tBodyMaterial, answer);
+    answer += "Selected " + IntToStr(targets.size()) + " body parts.\n";
+    if(targets.size() > 0)
     {
-        for(it = targets.begin(); it != targets.end(); ++it)
+        watch->Active = false;
+        addWatchToConsole(watch);
+        map<Target, string>::iterator it;
+        if(startParamBraket == materialCommand.npos)
         {
-            Target material = it->first;
-            string watchName = it->second; 
-            for(int i = 0; i<20; i++)
+            for(it = targets.begin(); it != targets.end(); ++it)
             {
-                Watch* child = new Watch(*watch);
-                child->Name = watchName + "(" + fields[i] + ")";
-                child->Object = material;
-                child->Expression = evalute_material;
-                child->MemberName = fields[i];
-                child->Parent = watch;
-                watch->Children.push_back(child);
-                child->ID = watch->ID + "." + watchName + "(" + fields[i] + ")";
-                mWatches.push_back(child);
-                addWatchToConsole(child);
-            } 
+                Target material = it->first;
+                string watchName = it->second; 
+                for(int i = 0; i<20; i++)
+                {
+                    Watch* child = new Watch(*watch);
+                    child->Name = watchName + "(" + fields[i] + ")";
+                    child->Object = material;
+                    child->Expression = evalute_material;
+                    child->MemberName = fields[i];
+                    child->Parent = watch;
+                    watch->Children.push_back(child);
+                    child->ID = watch->ID + "." + watchName + "(" + fields[i] + ")";
+                    mWatches.push_back(child);
+                    addWatchToConsole(child);
+                } 
+            }
+            answer += "All material properties added to watch.\n";
         }
-    }
-    else
-    {
-        std::vector<std::string> fields;
-        boost::split(fields, materialCommand, boost::is_any_of("(,)"));
-        for(it = targets.begin(); it != targets.end(); ++it)
+        else
         {
-            Target material = it->first;
-            string watchName = it->second; 
+            std::vector<std::string> fields;
+            boost::split(fields, materialCommand, boost::is_any_of("(,)"));
+            for(it = targets.begin(); it != targets.end(); ++it)
+            {
+                Target material = it->first;
+                string watchName = it->second; 
+                vector<string>::iterator it;
+                for(it = ++(fields.begin()); it != fields.end(); ++it)
+                { 
+                    Watch* child = new Watch(*watch);
+                    string field = *it;
+                    boost::trim(field);
+                    child->Name = watchName + "(" + field + ")";;
+                    child->Object = material;
+                    child->Expression = evalute_material;
+                    child->MemberName = field;
+                    child->Parent = watch;
+                    watch->Children.push_back(child);
+                    child->ID = watch->ID + "." + watchName + "(" + field + ")";
+                    mWatches.push_back(child);
+                    addWatchToConsole(child);
+                }
+            }
+            answer += "To watch added next properties of material: ";
             vector<string>::iterator it;
             for(it = ++(fields.begin()); it != fields.end(); ++it)
-            { 
-                Watch* child = new Watch(*watch);
-                string field = *it;
-                boost::trim(field);
-                child->Name = watchName + "(" + field + ")";;
-                child->Object = material;
-                child->Expression = evalute_material;
-                child->MemberName = field;
-                child->Parent = watch;
-                watch->Children.push_back(child);
-                child->ID = watch->ID + "." + watchName + "(" + field + ")";
-                mWatches.push_back(child);
-                addWatchToConsole(child);
-            }
+            {
+                answer += *it;
+            } 
+            answer += ". \n";
         }
+    }//if(targets.size() > 0)
+    else
+    {
+        watch->Type = NotAWatch;
     }
-    return error;
+    return answer;
 }
 
 b2Fixture* DebugWatcher::getFixture(Body* obj, string partID)
@@ -450,7 +467,8 @@ b2Fixture* DebugWatcher::getFixture(Body* obj, string partID)
 
 string DebugWatcher::process_hide(vector<string>& commandSet)
 {
-    string error = "";
+    string answer = "";
+    int removed = 0;
     if(commandSet.size() > 1)
     {
         string param = commandSet[1];
@@ -460,12 +478,13 @@ string DebugWatcher::process_hide(vector<string>& commandSet)
             {
                 Watch* watch = mWatches.back();
                 removeWatchFromConsole(watch);
+                removed++;
                 mWatches.remove(watch);
                 delete watch;
             }
             else 
             {
-                error += "Error: can't hide last watch: no one exists.\n";
+                answer += "Error: can't hide last watch: no one exists.\n";
             }
         }
         else if(param == "all")
@@ -474,13 +493,14 @@ string DebugWatcher::process_hide(vector<string>& commandSet)
             {
                 Watch* watch = mWatches.back();
                 removeWatchFromConsole(watch);
+                removed++;
                 delete watch;
             }
             mWatches.clear();
         }
         else if(param == "selected")
         {
-             error += "Error: not supported yet.\n";
+             answer += "Error: not supported yet.\n";
         }
         else
         {
@@ -489,24 +509,27 @@ string DebugWatcher::process_hide(vector<string>& commandSet)
             {
                 mWatches.remove(watch);
                 removeWatchFromConsole(watch);
+                removed++;
                 delete watch;
             }
             else
             {
-                 error += "Error: watch with id '" + param + "' not exist.\n";
+                 answer += "Error: watch with id '" + param + "' not exist.\n";
             }
         }
     }
     else
     {
-        error += "Error: argument not specified for 'hide' command.\n";
+        answer += "Error: argument not specified for 'hide' command.\n";
     }
-    return error;
+    answer += "Hiden " + IntToStr(removed) + " watches.\n";
+    return answer;
 }
 
 string DebugWatcher::process_stop(vector<string>& commandSet)
 {
-    string error = "";
+    string answer = "";
+    int stopped = 0;
     if(commandSet.size() > 1)
     {
         string param = commandSet[1];
@@ -520,13 +543,14 @@ string DebugWatcher::process_stop(vector<string>& commandSet)
                 if(watch->Type == WriteWatch)
                 {
                     watch->Active = false;
+                    stopped++;
                     found = true;
                     break;
                 }   
             }
             if(!found)
             {
-                error += "Error: can't stop writing last watch: no one exists.\n";
+                answer += "Error: can't stop writing last watch: no one exists.\n";
             }
         }
         else if(param == "all")
@@ -537,13 +561,14 @@ string DebugWatcher::process_stop(vector<string>& commandSet)
                 if(watch->Type == WriteWatch)
                 {
                     watch->Active = false;
+                    stopped++;
                 }   
             }
             
         }
         else if(param == "selected")
         {
-            error += "Error: not supported yet.\n";
+            answer += "Error: not supported yet.\n";
         }
         else
         {
@@ -553,23 +578,25 @@ string DebugWatcher::process_stop(vector<string>& commandSet)
                 if(watch->Type == WriteWatch)
                 {
                     watch->Active = false;
+                    stopped++;
                 }   
                 else
                 {
-                    error += "Error: watch with id '" + param + "' is not writing (it is showing, use hide).\n";
+                    answer += "Error: watch with id '" + param + "' is not writing (it is showing, use hide).\n";
                 }
             }
             else
             {
-                error += "Error: watch with id '" + param + "' not found.\n";
+                answer += "Error: watch with id '" + param + "' not found.\n";
             }
         }
     }
     else
     {
-        error += "Error: argument not specified for 'stop writing' command.\n";
+        answer += "Error: argument not specified for 'stop writing' command.\n";
     }
-    return error;
+    answer += "Stopped " + IntToStr(stopped) + " watches.\n";
+    return answer;
 }
 
 Watch* DebugWatcher::getWatchByID(string id)
@@ -642,7 +669,7 @@ Watch::Watch()
     MemberName = "";
     OutFile = "";
     Parent = NULL;
-    Type = ShowWatch;
+    Type = NotAWatch;
     ID = "";
     Name = "";
     Expression = nope;
@@ -656,15 +683,15 @@ void DebugWatcher::addWatchToConsole(Watch* watch)
     {
         parentID = watch->Parent->ID;
     }
-    //addWatch(watch->ID, watch->Name, watch->Expression(), parentID);
+    debugIO.addWatch(watch->ID, watch->Name, watch->Expression(watch), parentID);
 }
 void DebugWatcher::updateWatchInConsole(Watch* watch)
 {
-    //updateWatch(watch->ID, watch->Expression());
+    debugIO.updateWatch(watch->ID, watch->Expression(watch));
 }
 void DebugWatcher::removeWatchFromConsole(Watch* watch)
 {
-    //removeWatch(watch->ID);
+    debugIO.removeWatch(watch->ID);
 }
 
 

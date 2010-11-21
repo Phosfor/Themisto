@@ -18,6 +18,7 @@
 #include "Physic/Body.hpp"
 #include "Core/ApplicationManager.hpp"
 #include "Core/EnvironManager.hpp"
+#include "Core/Utils.hpp"
 #include "DebugConsole/DebugIO.hpp"
 
 #include "Core/PhysicManager.hpp"
@@ -31,6 +32,7 @@ using namespace std;
 
 enum WatchType
 {
+    NotAWatch,
     ShowWatch,
     WriteWatch
 };

@@ -2,64 +2,37 @@
 
 void DebugIO::init()
 {
-    console_events.func_event("Command").set(this, &DebugIO::asyncCommandHandler);
+    mVisualisatorConnection = NULL;
+    console_events.func_event("Command").set(this, &DebugIO::commandHandler);
+    console_events.func_event("Hello").set(this, &DebugIO::parter);
+    
     try
     {
         mConsoleServer.start(SERVER_HOST, CONSOLE_PORT);
-        //mVisualServer.start(SERVER_HOST, VISUAL_PORT);
     }
     catch(CL_Exception& e)
     {
-        LOG("torubles with standing debug server");
+        LOG("Torubles with standing debug server");
         LOG(e.what()); 
     }
     slotEventReceived = mConsoleServer.sig_event_received().connect(this, &DebugIO::eventHandler);
 }
 
-void DebugIO::mainLoop()
-{
-	while(appManager.getRunning())
-	{
-		// Wait till we receive any network events
-		CL_Event::wait(mConsoleServer.get_event_arrived());
-		
-	}
-
-	mConsoleServer.stop();
-}
-
 void DebugIO::step()
 {
-    mConsoleServer.process_events();
-    //CL_MutexSection mutex_lock(&mMutex);
-   
+    mConsoleServer.process_events();  
 }
 
 void DebugIO::eventHandler( CL_NetGameConnection *connection,const CL_NetGameEvent &event)
-{
-    LOG("event");
-    /*string type = event.get_name();
-    
-     while(mReceivedEvents.size() > 0)
-    {
-        //EventInfo eventInfo = mReceivedEvents.front();
-        //ReceivedEvents.pop();
-        //CL_NetGameConnection *connection = eventInfo.first;
-        //const CL_NetGameEvent &event = eventInfo.second;
-        
-        
-    }*/
-    
+{    
     if(!console_events.dispatch(event, connection))
     {
         LOG("Unhandled event.");
     }
 }
 
-void DebugIO::asyncCommandHandler(const CL_NetGameEvent &event,  CL_NetGameConnection *connection)
+void DebugIO::commandHandler(const CL_NetGameEvent &event,  CL_NetGameConnection *connection)
 {
-    //CL_MutexSection mutex_lock(&mMutex);
-    //mReceivedEvents.push(EventInfo(connection, event));
     CL_String type = event.get_name();
     
     if(event.get_argument_count() > 0)
@@ -71,43 +44,82 @@ void DebugIO::asyncCommandHandler(const CL_NetGameEvent &event,  CL_NetGameConne
     } 
 }
 
+
+void DebugIO::parter(const CL_NetGameEvent &event,  CL_NetGameConnection *connection)
+{
+    if(event.get_argument_count() > 0)
+    {
+        if(event.get_argument(0).is_string())
+        {
+            if(event.get_argument(0).to_string() == "I am Visualisator")
+            {
+                mVisualisatorConnection = connection;
+            }
+        }
+    } 
+}
+
 void DebugIO::addWatch(string id, string name, string value, string parent)
 {
     CL_NetGameEvent addWatchRequest(CL_String("Add"), CL_String(id),
          CL_String(name), CL_String(value), CL_String(parent));
-    try
+    if(mVisualisatorConnection!= NULL)
     {
-        mVisualServer.send_event(addWatchRequest);    
+        try
+        {
+            mVisualisatorConnection->send_event(addWatchRequest);    
+        }
+        catch(CL_Exception& e)
+        {
+            string msg = e.what();
+            LOG("Error: Can't add watch to visualiser; Reason: " + msg);
+        }
     }
-    catch(CL_Exception& e)
+    else
     {
-        string msg = e.what();
-        LOG("Error: Can't add watch to visualiser; Reason: " + msg);
+        //LOG("Error: visualiser not available.");
+        LOG("[" + parent + ":" + id + "] " + name + " = " + value);
     }
 }
 void DebugIO::updateWatch(string id, string newVal)
 {
     CL_NetGameEvent updateWatchRequest(CL_String("Update"), CL_String(id), CL_String(newVal));
-    try
+    if(mVisualisatorConnection!= NULL)
     {
-        mVisualServer.send_event(updateWatchRequest);  
+        try
+        {
+            mVisualisatorConnection->send_event(updateWatchRequest);  
+        }
+        catch(CL_Exception& e)
+        {
+            string msg = e.what();
+            LOG("Error: Can't update watch in visualiser; Reason: " + msg);
+        } 
     }
-    catch(CL_Exception& e)
+    else
     {
-        string msg = e.what();
-        LOG("Error: Can't update watch in visualiser; Reason: " + msg);
-    }  
+        //LOG("Error: visualiser not available.");
+        LOG("[" + id + "] " + " = " + newVal);
+    } 
 }
 void DebugIO::removeWatch(string id)
 {
     CL_NetGameEvent removeWatchRequest(CL_String("Remove"), CL_String(id));
-    try
+    if(mVisualisatorConnection!= NULL)
     {
-        mVisualServer.send_event(removeWatchRequest);  
-    }
-    catch(CL_Exception& e)
+        try
+        {
+            mVisualisatorConnection->send_event(removeWatchRequest);  
+        }
+        catch(CL_Exception& e)
+        {
+            string msg = e.what();
+            LOG("Error: Can't remove watch from visualiser; Reason: " + msg);
+        }  
+     }
+    else
     {
-        string msg = e.what();
-        LOG("Error: Can't remove watch from visualiser; Reason: " + msg);
-    }    
+        //LOG("Error: visualiser not available.");
+        LOG("[" + id + "] " + "removed ");
+    }  
 }

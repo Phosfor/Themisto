@@ -8,6 +8,7 @@
 #include <queue>
 #include "Core/ApplicationManager.hpp"
 
+
 #define debugIO (DebugIO::get_mutable_instance())
 #define debugIOConst (DebugIO::get_const_instance())
 
@@ -21,7 +22,7 @@ class DebugIO : public boost::serialization::singleton<DebugIO>
 {
     private:
         CL_NetGameServer mConsoleServer;
-        CL_NetGameServer mVisualServer;
+        CL_NetGameConnection *mVisualisatorConnection;
         CL_Slot slotEventReceived;
         CL_SetupCore setup_core;
         CL_SetupNetwork setup_network;
@@ -31,7 +32,8 @@ class DebugIO : public boost::serialization::singleton<DebugIO>
         
         void mainLoop();
         void eventHandler( CL_NetGameConnection * connection,const CL_NetGameEvent &event);
-        void asyncCommandHandler(const CL_NetGameEvent &event, CL_NetGameConnection * connection);
+        void commandHandler(const CL_NetGameEvent &event, CL_NetGameConnection * connection);
+        void parter(const CL_NetGameEvent &event, CL_NetGameConnection * connection);
     public:
         void init();
         void step();
