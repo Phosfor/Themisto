@@ -27,9 +27,11 @@ class DebugIO : public boost::serialization::singleton<DebugIO>
         CL_SetupNetwork setup_network;
         CL_Mutex mMutex;
         std::queue< EventInfo > mReceivedEvents;
+        CL_NetGameEventDispatcher_v1<CL_NetGameConnection *> console_events;
         
         void mainLoop();
-        void asyncEventHandler( CL_NetGameConnection * connection,const CL_NetGameEvent &event);
+        void eventHandler( CL_NetGameConnection * connection,const CL_NetGameEvent &event);
+        void asyncCommandHandler(const CL_NetGameEvent &event, CL_NetGameConnection * connection);
     public:
         void init();
         void step();

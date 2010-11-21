@@ -45,12 +45,13 @@ void DebugWatcher::parseCommand(string command, string* _answer)
         watch->Type = WriteWatch;	
         answer += addWatchCommon(watch, commandSet);
     }
-    else if(commandSet[0] == "stop write")
+    else if(commandSet[0] == "stop")
     {
         answer = process_stop(commandSet);
     }
     else if( commandSet[0] == "close")
     {
+        appManager.setRunning(false);
     }
     else if(commandSet[0] == "every")
     {
@@ -89,13 +90,13 @@ void DebugWatcher::parseCommand(string command, string* _answer)
     {
          appManager.setRunning(false);
     }
-    else if(commandSet[0] == "say hello")
+    else if(commandSet[0] == "hello")
     {
-        LOG("\nHello\n");
+        answer += "Hello! How are you?";
     }
     else
     {
-        answer += "Error: unknown command '" + commandSet[0] + "'\n.";
+        answer += "Error: unknown command '" + commandSet[0] + "'.\n";
     }
 }
 

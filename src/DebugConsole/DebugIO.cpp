@@ -2,6 +2,7 @@
 
 void DebugIO::init()
 {
+    console_events.func_event("Command").set(this, &DebugIO::asyncCommandHandler);
     try
     {
         mConsoleServer.start(SERVER_HOST, CONSOLE_PORT);
@@ -9,9 +10,10 @@ void DebugIO::init()
     }
     catch(CL_Exception& e)
     {
+        LOG("torubles with standing debug server");
         LOG(e.what()); 
     }
-    slotEventReceived = mConsoleServer.sig_event_received().connect(this, &DebugIO::asyncEventHandler);
+    slotEventReceived = mConsoleServer.sig_event_received().connect(this, &DebugIO::eventHandler);
 }
 
 void DebugIO::mainLoop()
@@ -29,36 +31,44 @@ void DebugIO::mainLoop()
 void DebugIO::step()
 {
     mConsoleServer.process_events();
-    CL_MutexSection mutex_lock(&mMutex);
-    while(mReceivedEvents.size() > 0)
+    //CL_MutexSection mutex_lock(&mMutex);
+   
+}
+
+void DebugIO::eventHandler( CL_NetGameConnection *connection,const CL_NetGameEvent &event)
+{
+    LOG("event");
+    /*string type = event.get_name();
+    
+     while(mReceivedEvents.size() > 0)
     {
-        EventInfo eventInfo = mReceivedEvents.front();
-        mReceivedEvents.pop();
-        CL_NetGameConnection *connection = eventInfo.first;
-        const CL_NetGameEvent &event = eventInfo.second;
+        //EventInfo eventInfo = mReceivedEvents.front();
+        //ReceivedEvents.pop();
+        //CL_NetGameConnection *connection = eventInfo.first;
+        //const CL_NetGameEvent &event = eventInfo.second;
         
-        CL_String type = event.get_name();
-        cout<< "\n Count: " << event.get_argument_count() << "\n";
-        if( type == "Command")
-        {
-            if(event.get_argument_count() > 0)
-            {
-                string answer;
-                cout<< "\n First is string: " << event.get_argument(0).is_string() << "\n";
-                
-                mCommand.invoke((string)event.get_argument(0).to_string(), &answer);
-                CL_NetGameEvent response(CL_String("Answer"), CL_String(answer));
-			    connection->send_event(response);
-            }
-            
-        }
+        
+    }*/
+    
+    if(!console_events.dispatch(event, connection))
+    {
+        LOG("Unhandled event.");
     }
 }
 
-void DebugIO::asyncEventHandler( CL_NetGameConnection *connection,const CL_NetGameEvent &event)
+void DebugIO::asyncCommandHandler(const CL_NetGameEvent &event,  CL_NetGameConnection *connection)
 {
-    CL_MutexSection mutex_lock(&mMutex);
-    mReceivedEvents.push(EventInfo(connection, event));
+    //CL_MutexSection mutex_lock(&mMutex);
+    //mReceivedEvents.push(EventInfo(connection, event));
+    CL_String type = event.get_name();
+    
+    if(event.get_argument_count() > 0)
+    {
+        string answer;
+        mCommand.invoke((string)event.get_argument(0).to_string(), &answer);
+        CL_NetGameEvent response(CL_String("Answer"), CL_String(answer));
+	    connection->send_event(response);
+    } 
 }
 
 void DebugIO::addWatch(string id, string name, string value, string parent)

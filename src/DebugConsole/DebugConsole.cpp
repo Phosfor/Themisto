@@ -30,6 +30,7 @@ void Client::exec()
     }
     while (!quit)
     {
+        //cout<< "I'm ready for commands\n";
         string command;
         cin>>command;
         if(command == "quit")
@@ -42,7 +43,9 @@ void Client::exec()
             commandNotice.add_argument(CL_String(command));
             try
             {
+                //cout<< "Sending command...\n";
                 network_client.send_event(commandNotice);
+                //cout<< "Command sent, wait answer... \n";
                 CL_Event::wait(network_client.get_event_arrived());
                 network_client.process_events();
             }
@@ -81,7 +84,7 @@ void Client::on_event_received(const CL_NetGameEvent &e)
     //std::cout << "Received event from server: ";
     if(e.get_name() == "Answer")
     {
-        std::cout << "\n" << (string)e.get_argument(0).to_string(); 
+        std::cout << (string)e.get_argument(0).to_string() <<"\n"; 
     }
     //bool handled_event = false;
     //handled_event = login_events.dispatch(e);
