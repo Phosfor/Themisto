@@ -28,6 +28,10 @@ void Client::exec()
         CL_Event::wait(network_client.get_event_arrived());
         network_client.process_events();
     }
+    CL_NetGameEvent handshake(CL_String("Hello, I am Console"));
+    network_client.send_event(handshake);
+    network_client.process_events();
+    
     while (!quit)
     {
         //cout<< "I'm ready for commands\n";
