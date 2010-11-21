@@ -8,10 +8,6 @@ Client::Client()
     slots.connect(network_client.sig_connected(), this, &Client::on_connected);
     slots.connect(network_client.sig_disconnected(), this, &Client::on_disconnected);
 
-    // Set up event dispatchers to route incoming events to functions
-    login_events.func_event("Login-Success").set(this, &Client::on_event_login_success);
-    login_events.func_event("Login-Fail").set(this, &Client::on_event_login_fail);
-
     quit = false;
     connected = false;
 }
@@ -30,18 +26,18 @@ void Client::step(const std::string command)
     }
     catch(CL_Exception& e)
     {
-        cout << "Error: can't send command to server; Reason: " <<  e.what();
+        cout << "-->Error: can't send command to server; Reason: " <<  e.what();
     }
 }
 
 void Client::connect_to_server()
 {
-    std::cout << "Trying to connect to the main application...\n";
+    std::cout << "-->Trying to connect to the main application...\n";
 
     try {
         network_client.connect(SERVER_HOST, SERVER_PORT);
     } catch(const CL_Exception &e) {
-        cl_log_event("Error during connecting to server.", e.message);
+        cl_log_event("-->Error during connecting to server.", e.message);
     }
 
     while(!connected)
@@ -53,13 +49,13 @@ void Client::connect_to_server()
 
 void Client::on_connected()
 {
-    std::cout << "Sucessfully connected to the server!\n";
+    std::cout << "-->Sucessfully connected to the server!\n";
     connected = true;
 }
 
 void Client::on_disconnected()
 {
-    std::cout << "Disconnecting from server...\n";
+    std::cout << "-->Disconnecting from server...\n";
     quit = true;
 }
 
@@ -67,16 +63,6 @@ void Client::on_event_received(const CL_NetGameEvent &e)
 {
     if(e.get_name() == "Answer")
         std::cout << "-->" << (string)e.get_argument(0).to_string() <<"\n"; 
-}
-
-void Client::on_event_login_success(const CL_NetGameEvent &e)
-{
-    logged_in = true;
-}
-
-void Client::on_event_login_fail(const CL_NetGameEvent &e)
-{
-    CL_String fail_reason = e.get_argument(0);
 }
 
 int main()
@@ -95,11 +81,10 @@ int main()
         std::getline(std::cin, command, '\n');
         boost::to_lower(command);
 
-        cout << "The command is: " << command << "\n";
-
         if (command == "quit")
         {
             client.quit = true;
+            continue;
         }
         else if (command == "connect" && !client.connected)
         {
