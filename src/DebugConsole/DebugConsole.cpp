@@ -56,13 +56,20 @@ void Client::on_connected()
 void Client::on_disconnected()
 {
     std::cout << "-->Disconnecting from server...\n";
-    quit = true;
+    connected = false;
 }
 
 void Client::on_event_received(const CL_NetGameEvent &e) 
 {
     if(e.get_name() == "Answer")
         std::cout << "-->" << (string)e.get_argument(0).to_string() <<"\n"; 
+}
+
+void Client::disconnect()
+{
+    std::cout << "-->Disconnecting from server...\n";
+    network_client.disconnect();
+    connected = false;
 }
 
 int main()
@@ -84,6 +91,11 @@ int main()
         if (command == "quit")
         {
             client.quit = true;
+            continue;
+        }
+        else if (command == "disconnect" && client.connected)
+        {
+            client.disconnect();
             continue;
         }
         else if (command == "connect" && !client.connected)

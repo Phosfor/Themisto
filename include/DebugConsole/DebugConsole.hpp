@@ -24,6 +24,7 @@ public:
     bool quit;
 
     void connect_to_server();
+    void disconnect();
 
 private:
     void on_connected();
