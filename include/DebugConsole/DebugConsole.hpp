@@ -3,10 +3,14 @@
 
 #include <ClanLib/core.h>
 #include <ClanLib/network.h>
+#include <iostream>
+#include <string>
 // Some stuff goes here...
 
 const static CL_String SERVER_PORT = "1992";
-const static CL_String SERVER_HOST = "127.0.0.1";
+const static CL_String SERVER_HOST = "localhost";
+
+using namespace std;
 
 class Client
 {
@@ -34,6 +38,7 @@ private:
     CL_NetGameEventDispatcher_v0 login_events;
     CL_NetGameEventDispatcher_v0 game_events;
 
+    bool connected;
     bool quit;
 
     bool logged_in;

@@ -18,6 +18,7 @@
 #include "Physic/Body.hpp"
 #include "Core/ApplicationManager.hpp"
 #include "Core/EnvironManager.hpp"
+#include "DebugConsole/DebugIO.hpp"
 
 #include "Core/PhysicManager.hpp"
 
@@ -81,22 +82,27 @@ boost::serialization::singleton<DebugWatcher>
 {
     private:
         list<Watch*> mWatches;
-        CL_Timer mTimer;
         int mTimeout; // Mileseconds, if less then zero, then every step
-
-        void parseCommand(string command);
-        void process_hide(vector<string>& commandSet);
-        void process_stop(vector<string>& commandSet);
-        map<Target, string>& getTargets(vector<string> &commandSet, TargetType type);
-        void process_material(Watch* watch, vector<string> &commandSet);
+        int mLeftFromLastUpdate;
+        ApplicationManager* _appManager;
+        CL_Slot mCommandSlot;
+        
+        string process_hide(vector<string>& commandSet);
+        string process_stop(vector<string>& commandSet);
+        map<Target, string>& getTargets(vector<string> &commandSet, TargetType type, string& error);
+        string process_material(Watch* watch, vector<string> &commandSet);
         b2Fixture* getFixture(Body* body, string partID);
-        void addWatchCommon(Watch* watch, vector<string> &commandSet);
+        string addWatchCommon(Watch* watch, vector<string> &commandSet);
         //string evalute_material(Watch* watch);
         //string floatToStr(float p);
         Watch* getWatchByID(string id);
         void update();
-        void addWatch(Watch* watch, vector<string> commandSet);
+        void addWatchToConsole(Watch* watch);
+        void updateWatchInConsole(Watch* watch);
+        void removeWatchFromConsole(Watch* watch);
+
     public:
+        void parseCommand(string command, string* answer);
         void init();
         void step();
 };

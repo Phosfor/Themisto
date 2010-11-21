@@ -1,4 +1,4 @@
-#include "Physic/DebugInstruments.hpp"
+#include "DebugConsole/DebugInstruments.hpp"
 
 void DebugDragAndDrop::init()
 {

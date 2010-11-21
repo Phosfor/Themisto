@@ -1,5 +1,5 @@
 #include "DebugConsole/DebugConsole.hpp"
-#include <iostream>
+
 
 Client::Client()
 {
@@ -13,6 +13,7 @@ Client::Client()
     login_events.func_event("Login-Fail").set(this, &Client::on_event_login_fail);
 
     quit = false;
+    connected = false;
 }
 
 Client::~Client() { }
@@ -22,10 +23,34 @@ void Client::exec()
     std::cout << "Trying to connect to the main application...\n";
 
     connect_to_server();
-    while (!quit)
+    while(!connected)
     {
         CL_Event::wait(network_client.get_event_arrived());
         network_client.process_events();
+    }
+    while (!quit)
+    {
+        string command;
+        cin>>command;
+        if(command == "quit")
+        {
+            quit = true;
+        }
+        else
+        {
+            CL_NetGameEvent commandNotice(CL_String("Command"));
+            commandNotice.add_argument(CL_String(command));
+            try
+            {
+                network_client.send_event(commandNotice);
+                CL_Event::wait(network_client.get_event_arrived());
+                network_client.process_events();
+            }
+            catch(CL_Exception& e)
+            {
+                cout << "Error: can't send command to server; Reason: " <<  e.what();
+            }
+        }
     }
 }
 
@@ -41,6 +66,7 @@ void Client::connect_to_server()
 void Client::on_connected()
 {
     std::cout << "Sucessfully connected to the server!\n";
+    connected =true;
     // network_client.send_event(CL_NetGameEvent("Login", "my user name"));
 }
 
@@ -52,11 +78,13 @@ void Client::on_disconnected()
 
 void Client::on_event_received(const CL_NetGameEvent &e) 
 {
-    std::cout << "Received event from server: ";
-    std::cout << e.to_string().c_str() << "\n";
-
-    bool handled_event = false;
-    handled_event = login_events.dispatch(e);
+    //std::cout << "Received event from server: ";
+    if(e.get_name() == "Answer")
+    {
+        std::cout << "\n" << (string)e.get_argument(0).to_string(); 
+    }
+    //bool handled_event = false;
+    //handled_event = login_events.dispatch(e);
 }
 
 void Client::on_event_login_success(const CL_NetGameEvent &e)

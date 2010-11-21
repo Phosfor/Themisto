@@ -5,9 +5,9 @@
 #include "Core/ApplicationManager.hpp"
 #include "Core/PhysicManager.hpp"
 #include "Core/SceneLoader.hpp"
-#include "Physic/DebugDraw.hpp"
-#include "Physic/DebugInstruments.hpp"
-#include "Core/DebugWatcher.hpp"
+#include "DebugConsole/DebugDraw.hpp"
+#include "DebugConsole/DebugInstruments.hpp"
+#include "DebugConsole/DebugWatcher.hpp"
 #include "DebugConsole/DebugIO.hpp"
 
 #include <ClanLib/core.h>

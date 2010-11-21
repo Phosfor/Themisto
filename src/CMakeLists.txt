@@ -15,7 +15,7 @@ set(Themisto_srcs
     Core/EnvironManager.cpp
     Core/InputManager.cpp
     Core/ObjectsManager.cpp
-    Core/DebugWatcher.cpp
+    
 
     # Environ
     World/WorldManager.cpp
@@ -41,8 +41,6 @@ set(Themisto_srcs
     Physic/BodyVisual.cpp
     Physic/BodyMaterial.cpp
     Physic/Impact.cpp
-    Physic/DebugDraw.cpp
-    Physic/DebugInstruments.cpp
     Physic/BodyState.cpp
     Physic/AreaManager.cpp
     Physic/PhysicRain.cpp
@@ -51,7 +49,10 @@ set(Themisto_srcs
     
     # Debug
     DebugConsole/DebugIO.cpp
-
+    DebugConsole/DebugDraw.cpp
+    DebugConsole/DebugInstruments.cpp
+    DebugConsole/DebugWatcher.cpp
+    
     main.cpp
 )
 
