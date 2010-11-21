@@ -32,7 +32,12 @@ void Client::step(const std::string command)
 
 void Client::connect_to_server()
 {
+<<<<<<< HEAD
     network_client.process_events();
+=======
+    std::cout << "-->Trying to connect to the main application...\n";
+
+>>>>>>> 12879b88c7a1a4196e0a90b9a63a5f48fb6711d6
     try {
         network_client.connect(SERVER_HOST, SERVER_PORT);
     } catch(const CL_Exception &e) {
@@ -48,13 +53,21 @@ void Client::connect_to_server()
 
 void Client::on_connected()
 {
+<<<<<<< HEAD
     std::cout << "-->Sucessfully connected to the server.\n";
+=======
+    std::cout << "-->Sucessfully connected to the server!\n";
+>>>>>>> 12879b88c7a1a4196e0a90b9a63a5f48fb6711d6
     connected = true;
 }
 
 void Client::on_disconnected()
 {
+<<<<<<< HEAD
     std::cout << "-->Disconnected from server.\n";
+=======
+    std::cout << "-->Disconnecting from server...\n";
+>>>>>>> 12879b88c7a1a4196e0a90b9a63a5f48fb6711d6
     connected = false;
 }
 
@@ -85,6 +98,7 @@ int main()
     {
         cout << ">";
         std::getline(std::cin, command, '\n');
+<<<<<<< HEAD
         
 
         if (command == "quit" || command == "q")
@@ -110,6 +124,29 @@ int main()
             {
                 client.step(command);
             }
+=======
+        boost::to_lower(command);
+
+        if (command == "quit")
+        {
+            client.quit = true;
+            continue;
+        }
+        else if (command == "disconnect" && client.connected)
+        {
+            client.disconnect();
+            continue;
+>>>>>>> 12879b88c7a1a4196e0a90b9a63a5f48fb6711d6
+        }
+        else if (command == "connect" && !client.connected)
+        {
+            client.connect_to_server();
+            continue;
+        }
+
+        if (client.connected)
+        {
+            client.step(command);
         }
     }
 
