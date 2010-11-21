@@ -18,12 +18,14 @@ public:
     Client();
     ~Client();
 
-    void exec();
-    void process_net_events(const std::string command = "-1");
+    void step(const std::string command);
 
-private:
+    bool connected;
+    bool quit;
+
     void connect_to_server();
 
+private:
     void on_connected();
     void on_disconnected();
 
@@ -38,8 +40,6 @@ private:
 
     CL_NetGameEventDispatcher_v0 login_events;
     CL_NetGameEventDispatcher_v0 game_events;
-
-    bool connected;
 
     bool logged_in;
 };
