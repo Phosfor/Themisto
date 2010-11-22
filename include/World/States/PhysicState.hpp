@@ -5,10 +5,10 @@
 #include "Core/ApplicationManager.hpp"
 #include "Core/PhysicManager.hpp"
 #include "Core/SceneLoader.hpp"
-#include "DebugConsole/DebugDraw.hpp"
-#include "DebugConsole/DebugInstruments.hpp"
-#include "DebugConsole/DebugWatcher.hpp"
-#include "DebugConsole/DebugIO.hpp"
+#include "Debug/DebugDraw.hpp"
+#include "Debug/DebugInstruments.hpp"
+#include "Debug/DebugWatcher.hpp"
+#include "Debug/DebugIO.hpp"
 
 #include <ClanLib/core.h>
 #include <ClanLib/display.h>

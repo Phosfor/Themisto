@@ -24,8 +24,6 @@ add_definitions(-Wall -pg -g)
 set(CMAKE_BUILD_TYPE "Debug")
 set(CMAKE_EXE_LINKER_FLAGS "-pg")
 
-message( ${FREEIMAGE_LIBRARY} )
-
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/bin)
 set(LIBRARY_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/lib)
 

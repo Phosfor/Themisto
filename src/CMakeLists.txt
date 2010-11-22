@@ -48,10 +48,10 @@ set(Themisto_srcs
     Physic/BodyPart.cpp
     
     # Debug
-    DebugConsole/DebugIO.cpp
-    DebugConsole/DebugDraw.cpp
-    DebugConsole/DebugInstruments.cpp
-    DebugConsole/DebugWatcher.cpp
+    Debug/DebugIO.cpp
+    Debug/DebugDraw.cpp
+    Debug/DebugInstruments.cpp
+    Debug/DebugWatcher.cpp
     
     main.cpp
 )
@@ -81,7 +81,7 @@ target_link_libraries(Themisto
 # Executable for the DebugConsole
 # ----------------------------------------------------
 set(DebugConsole_srcs
-	DebugConsole/DebugConsole.cpp
+	Debug/DebugConsole.cpp
 	
 )
 
