@@ -8,3 +8,4 @@ bin/*.log
 bin/Themisto
 additional/*
 bin/DebugConsole
+bin/DebugVisualisator
