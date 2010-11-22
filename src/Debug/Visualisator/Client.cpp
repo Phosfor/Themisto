@@ -4,9 +4,9 @@
 
 Client::Client()
 {
-    events.func_event("Add").set(this, &DebugIO::add);
-    events.func_event("Update").set(this, &DebugIO::update);
-    events.func_event("Remove").set(this, &DebugIO::remove);
+    events.func_event("Add").set(this, &Client::add);
+    events.func_event("Update").set(this, &Client::update);
+    events.func_event("Remove").set(this, &Client::remove);
 
     // Connect essential signals - connecting, disconnecting and receiving events
     slots.connect(network_client.sig_event_received(), this, &Client::on_event_received);
@@ -15,28 +15,28 @@ Client::Client()
 
 }
 
-void add(const CL_NetGameEvent &event)
+void Client::add(const CL_NetGameEvent &event)
 {
-    string watchID = event.get_argument(0).to_string().c_str();
-    string watchName = event.get_argument(1).to_string().c_str();
-    string watchValue = event.get_argument(2).to_string().c_str();
-    string watchParent = event.get_argument(3).to_string().c_str();
+    std::string watchID = event.get_argument(0).to_string().c_str();
+    std::string watchName = event.get_argument(1).to_string().c_str();
+    std::string watchValue = event.get_argument(2).to_string().c_str();
+    std::string watchParent = event.get_argument(3).to_string().c_str();
     
-    cout<< "Add watch ID = " << watchID << " Name = " 
+    std::cout<< "Add watch ID = " << watchID << " Name = "
         <<  watchName << " Value = " << watchValue << " Parent = " <<watchParent;
 }
-void update(const CL_NetGameEvent &event)
+void Client::update(const CL_NetGameEvent &event)
 {
-    string watchID = event.get_argument(0).to_string().c_str();
-    string watchValue = event.get_argument(1).to_string().c_str();
+    std::string watchID = event.get_argument(0).to_string().c_str();
+    std::string watchValue = event.get_argument(1).to_string().c_str();
     
-    cout<< "Update watch ID = " << watchID << " New Value = " << watchValue;
+    std::cout<< "Update watch ID = " << watchID << " New Value = " << watchValue;
 }
-void remove(const CL_NetGameEvent &event)
+void Client::remove(const CL_NetGameEvent &event)
 {
-    string watchID = event.get_argument(0).to_string().c_str();
+    std::string watchID = event.get_argument(0).to_string().c_str();
     
-    cout<< "Remove watch ID = " << watchID;
+    std::cout<< "Remove watch ID = " << watchID;
 }
 
 void Client::checkEvents()
@@ -46,6 +46,7 @@ void Client::checkEvents()
 
 void Client::waitEvents()
 {
+    network_client.process_events();
     CL_Event::wait(network_client.get_event_arrived());
     network_client.process_events();
 }
@@ -65,6 +66,8 @@ void Client::connect_to_server()
         CL_Event::wait(network_client.get_event_arrived());
         network_client.process_events();
     }
+    CL_NetGameEvent hello(CL_String("Hello"), CL_String("I am Visualisator"));
+    network_client.send_event(hello);
 }
 
 void Client::on_connected()

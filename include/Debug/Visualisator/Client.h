@@ -21,6 +21,8 @@ public:
     void waitEvents();
     void disconnect();
 
+    bool connected;
+
 private:
     void on_connected();
     void on_disconnected();
