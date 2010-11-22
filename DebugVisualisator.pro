@@ -18,9 +18,11 @@ LIBS += -lpthread \
     -lclan22App \
     -lclan22Core \
     -lclan22Network
+
 OBJECTS_DIR = build/Visualisator/Objects-files
 MOC_DIR = build/Visualisator/Moc-files
 RCC_DIR = build/Visualisator/Rcc-files
+UI_DIR = build/Visualisator/UI
 
 # Location of the binary file
 DESTDIR = bin
