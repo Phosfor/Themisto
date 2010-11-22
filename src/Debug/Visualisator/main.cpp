@@ -9,6 +9,11 @@ int main(int argc, char *argv[])
     CL_SetupCore setup_core;
     CL_SetupNetwork setup_network;
     Client client;
+    client.connect_to_server();
+    while(true)
+    {
+        client.waitEvents();
+    }
 
     QApplication a(argc, argv);
     MainWindow w;

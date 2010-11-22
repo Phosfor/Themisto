@@ -16,12 +16,9 @@ public:
     Client();
     ~Client();
 
-    void step(const std::string command);
-
-    bool connected;
-    bool quit;
-
     void connect_to_server();
+    void checkEvents();
+    void waitEvents();
     void disconnect();
 
 private:
@@ -29,13 +26,17 @@ private:
     void on_disconnected();
 
     void on_event_received(const CL_NetGameEvent &e);
+    
+    // Command handlers
+    void add(const CL_NetGameEvent &event);
+    void update(const CL_NetGameEvent &event);
+    void remove(const CL_NetGameEvent &event);
 
 private:
     CL_NetGameClient network_client;
     CL_SlotContainer slots;
 
-    CL_NetGameEventDispatcher_v0 login_events;
-    CL_NetGameEventDispatcher_v0 game_events;
+    CL_NetGameEventDispatcher_v0 events;
 };
 
 #endif // CLIENT_H
