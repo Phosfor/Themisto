@@ -5,7 +5,6 @@ Themisto is an open-source 2D indie game.
 The source is contributed under GPL license.
 
 ©Wincode team: Tyslenko Max and Pavel Bogatirev
-<a href="http://wincode.org">Our site wincode.org</a>
 
 <h2>Building</h2>
 To build it follow such comands:
@@ -18,6 +17,7 @@ cmake ../ && make
 To build it succesfull, you have to install these packages:
 ClanLib >= 2.2.4
 boost-all-dev >= 1.42
+<a href='http://www.highscore.de/boost/process/'>boost.process(additional library)</a>
 x11-dev
 libmikmod-dev
 db4.8-util
