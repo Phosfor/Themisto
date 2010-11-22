@@ -100,12 +100,195 @@ void DebugWatcher::parseCommand(string command, string* _answer)
     }
 }
 
+string evalute_material(Watch* watch)
+{
+    string name = watch->MemberName;
+    string result = "Error, member not found";
+    BodyMaterial* m = boost::get<BodyMaterial*>(watch->Object);
+    if(name == "Name") result = m->Name;
+    else if(name == "KindleTemperature") result = FloatToStr(m->KindleTemperature);
+    else if(name == "KindleReceptivity") result = FloatToStr(m->KindleReceptivity);
+    else if(name == "FlameTemperature") result = FloatToStr(m->FlameTemperature);
+    else if(name == "SelfFlareUpRate") result = FloatToStr(m->SelfFlareUpRate);
+    else if(name == "CarbonizeRate") result = FloatToStr(m->CarbonizeRate);
+    else if(name == "ElectricalConductivity") result = FloatToStr(m->ElectricalConductivity);
+    else if(name == "ThermalReceptivity") result = FloatToStr(m->ThermalReceptivity);
+    else if(name == "DampReceptivity") result = FloatToStr(m->DampReceptivity);
+    else if(name == "FrozingTemperature") result = FloatToStr(m->FrozingTemperature);
+    else if(name == "InflDampnessToFriction") result = FloatToStr(m->InflDampnessToFriction);
+    else if(name == "InflDampnessToKindleTemperature") result = FloatToStr(m->InflDampnessToKindleTemperature);
+    else if(name == "InflDampnessToMaxKindle") result = FloatToStr(m->InflDampnessToMaxKindle);
+    else if(name == "InflDampnessToKindleReceptivity") result = FloatToStr(m->InflDampnessToKindleReceptivity);
+    else if(name == "InflDampnessToFrozingTemperature") result = FloatToStr(m->InflDampnessToFrozingTemperature);
+    else if(name == "InflCarbonizeLevelToMaxKindle") result = FloatToStr(m->InflCarbonizeLevelToMaxKindle);
+    else if(name == "InflCarbonizeLevelToMaxDampness") result = FloatToStr(m->InflCarbonizeLevelToMaxDampness);
+    else if(name == "InflCarbonizeLevelToElecticalConductivity") result = FloatToStr(m->InflCarbonizeLevelToElecticalConductivity);
+    else if(name == "InflMoistenToKindleLevel") result = FloatToStr(m->InflMoistenToKindleLevel);
+    else if(name == "InflTemperatureToDampness") result = FloatToStr(m->InflTemperatureToDampness);  
+    
+    return result;
+}
+
+string evalute_state(Watch* watch)
+{
+    string name = watch->MemberName;
+    string result = "Error, member not found";
+    BodyState* m = boost::get<BodyState*>(watch->Object); 
+    if(name == "IsFrozen") result = FloatToStr(m->IsFrozen);
+    else if(name == "KindleLevel") result = FloatToStr(m->KindleLevel);
+    else if(name == "CarbonizeLevel") result = FloatToStr(m->CarbonizeLevel);
+    else if(name == "Temperature") result = FloatToStr(m->Temperature);
+    else if(name == "Dampness") result = FloatToStr(m->Dampness);
+    return result;
+}
+
+string evalute_b2Fixture(Watch* watch)
+{
+    string name = watch->MemberName;
+    string result = "";
+    b2Fixture* m = boost::get<b2Fixture*>(watch->Object); 
+                        
+             
+    string shapeTypePrefix = "", shapeVetexCountPrefix = "",
+        shapeVerticesPrefix = "", shapeRadiusPrefix = "", shapeCenterPrefix = "";
+    bool shape = false;
+    b2Shape* xshape = m->GetShape();
+    if(name == "Shape")
+    {
+        shape = true;
+        shapeTypePrefix = "Type = ";
+        shapeVetexCountPrefix = ", VertexCount = ";
+        shapeVerticesPrefix = ", Vertices = ";
+        shapeRadiusPrefix = ", Radius = ";
+        shapeCenterPrefix = ", Center = ";
+    }
+    if(name == "Shape.Type" || shape)
+    {
+        string type = "";
+        if(xshape->GetType() == b2Shape::e_unknown) type = "e_unknown";
+        else if(xshape->GetType() == b2Shape::e_circle) type = "e_circle";
+        else if(xshape->GetType() == b2Shape::e_polygon) type = "e_polygon";
+        else if(xshape->GetType() == b2Shape::e_typeCount) type = "e_typeCount";
+        result += shapeTypePrefix + type;
+    }
+    if(name == "Shape.Center" || shape)
+    {
+        if(xshape->GetType() == b2Shape::e_circle) 
+        {
+            b2CircleShape* cshape= (b2CircleShape*)xshape;
+            result += shapeCenterPrefix + VectorToStr(cshape->m_p);
+        }
+        else if(xshape->GetType() == b2Shape::e_polygon)
+        {
+            b2PolygonShape* pshape= (b2PolygonShape*)xshape;
+            result += shapeCenterPrefix + VectorToStr(pshape->m_centroid);
+        }
+    }
+    if(name == "Shape.Radius" || shape) result += shapeRadiusPrefix + FloatToStr(m->GetShape()->m_radius);
+    if(name == "Shape.VertexCount" || shape)
+    {
+        if(xshape->GetType() == b2Shape::e_polygon)
+        {
+            b2PolygonShape* pshape= (b2PolygonShape*)xshape;
+            result += shapeVetexCountPrefix + IntToStr(pshape->m_vertexCount);
+        }
+        else 
+        {
+            if(!shape)
+            {
+                result = "shape is circle";
+            }
+        }
+    }
+    if(name == "Shape.Vertices" || shape)
+    {
+        if(xshape->GetType() == b2Shape::e_polygon)
+        {
+            b2PolygonShape* pshape= (b2PolygonShape*)xshape;
+            result += shapeVerticesPrefix;
+            for(int i =0; i<pshape->m_vertexCount; ++i)
+            {
+                result += VectorToStr(pshape->m_vertices[i]);
+                result += " ";
+            }
+        }
+        else 
+        {
+            if(!shape)
+            {
+                result = "shape is circle";
+            }
+        }
+    }
+    else if(name == "IsSensor") result = FloatToStr(m->IsSensor());
+    bool filter = false;
+    string filterCategoryPrefix = "", filterMaskPrefix = "", filterGroupPrefix = "";
+    if(name == "Filter")
+    {
+        filter = true;
+        filterCategoryPrefix = "CategoryBits = ";
+        filterMaskPrefix = "MaskBits = ";
+        filterGroupPrefix = "GroupIndex = ";
+    }               
+    if( name == "Filter.CategoryBits" || filter) 
+        result += filterCategoryPrefix + IntToStr(m->GetFilterData().categoryBits);
+    if( name == "Filter.MaskBits" || filter) 
+        result += filterMaskPrefix + HexToStr(m->GetFilterData().maskBits);
+    if( name == "Filter.GroupIndex") 
+        result += filterGroupPrefix + IntToStr(m->GetFilterData().groupIndex);  
+    else if(name == "ParentBody")
+    {
+        Body* body = (Body*)m->GetBody()->GetUserData();
+        if(body != NULL)
+            result = body->mName;
+        else
+            result = "Has no atached Body object";
+    }
+    bool mass = false;
+    string massValuePrefix = "", massCenterPrefix = "", massRotationInertiaPrefix = "";
+    b2MassData massData;
+    m->GetMassData(&massData);
+    if( result == "Mass")
+    {
+        mass = true;
+        massValuePrefix = "Value = ";
+        massCenterPrefix = "Center = ";
+        massRotationInertiaPrefix = "RotationInertia = ";
+    }
+    if( result == "Mass.Value" || mass) result += massValuePrefix + FloatToStr(massData.mass);
+    if( result == "Mass.Center" || mass) result += massCenterPrefix + VectorToStr(massData.center);
+    if( result == "Mass.RotationInertia" || mass) 
+        result += massRotationInertiaPrefix + FloatToStr(massData.I);
+    
+    else if(name == "Density") result = FloatToStr(m->GetDensity());
+    else if(name == "Restitution") result = FloatToStr(m->GetRestitution());
+    else if(name == "Friction") result = FloatToStr(m->GetFriction());
+    
+    bool aabb = false;
+    string aabbTopPrefix = "", aabbBottomPrefix = "", aabbLeftPrefix = "", aabbRightPrefix = "";
+    if( name == "AABB" )
+    {
+        aabb = true;
+        aabbTopPrefix = "Top = ";
+        aabbBottomPrefix = "Bottom = ";
+        aabbLeftPrefix = "Left = ";
+        aabbRightPrefix = "Right = ";
+    }
+    if( name == "AABB.Top" || aabb) result += aabbTopPrefix + FloatToStr(m->GetAABB().upperBound.y);
+    if( name == "AABB.Bottom" || aabb) result += aabbBottomPrefix + FloatToStr(m->GetAABB().lowerBound.y);
+    if( name == "AABB.Left" || aabb) result += aabbLeftPrefix + FloatToStr(m->GetAABB().upperBound.x);
+    if( name == "AABB.Right" || aabb) result += aabbRightPrefix + FloatToStr(m->GetAABB().upperBound.x);
+    
+    if( result == "") result = "Erorr, can't evalute";
+    return result;
+}
+
 string DebugWatcher::addWatchCommon(Watch* watch, vector<string> &commandSet)
 {
     watch->ID = worldManager.generateUniqueID();
     string answer = "";
     bool watchNormal = false;
-    for(vector<string>::iterator it = ++(commandSet.begin()); it != commandSet.end(); ++it)
+    for(StrIterator it = ++(commandSet.begin()); it != commandSet.end(); ++it)
     {
         string command = *it;
         if(command == "as")
@@ -126,23 +309,124 @@ string DebugWatcher::addWatchCommon(Watch* watch, vector<string> &commandSet)
         //material and others commands can contain brakes at end
         else if( command.find("material") != command.npos)
         {
-            answer += process_material(watch, commandSet);
+            map<Target, string> targets = getTargets(it+1, commandSet.end(), tBodyMaterial, answer);
+            const int count = 20;
+            string fields[count] = {
+                "Name",
+                "KindleTemperature",
+                "KindleReceptivity",
+                "FlameTemperature",
+                "SelfFlareUpRate",
+                "CarbonizeRate",
+                "ElectricalConductivity",
+                "ThermalReceptivity",
+                "DampReceptivity",
+                "FrozingTemperature",
+                "InflDampnessToFriction",
+                "InflDampnessToKindleTemperature",
+                "InflDampnessToMaxKindle",
+                "InflDampnessToKindleReceptivity",
+                "InflDampnessToFrozingTemperature",
+                "InflCarbonizeLevelToMaxKindle",
+                "InflCarbonizeLevelToMaxDampness",
+                "InflCarbonizeLevelToElecticalConductivity",
+                "InflMoistenToKindleLevel",
+                "InflTemperatureToDampness"
+            };
+            vector<string> members(count);
+            BOOST_FOREACH(string member, fields)
+            {
+                members.push_back(member);
+            }
+            add_member_watch(watch, *it, members, targets, evalute_material);
             watchNormal = true;
         }
         else if( command.find("state") != command.npos)
         {
+            map<Target, string> targets = getTargets(it+1, commandSet.end(), tBodyState, answer);
+            const int count = 5;
+            string fields[count] = {
+                "IsFrozen",
+                "KindleLevel",
+                "CarbonizeLevel",
+                "Temperature",
+                "Dampness"        
+            };
+            vector<string> members(count);
+            BOOST_FOREACH(string member, fields)
+            {
+                members.push_back(member);
+            }
+            add_member_watch(watch, *it, members, targets, evalute_state);
+            watchNormal = true;
         }
         else if( command.find("b2param") != command.npos)
         {
+            // Solve, what user want b2Fixture or b2Body parameter
+            if(it +2 != commandSet.end())
+            {
+                string targetSpecifier =  *(it+2);
+                // If exists squares in target definition
+                if(targetSpecifier.find("(") != targetSpecifier.npos)
+                {
+                    // b2Fixture
+                    map<Target, string> targets = getTargets(it+1, commandSet.end(), tb2Fixture, answer);
+                    const int count = 23;
+                    string fields[count] = {
+                        "Shape",
+                        "Shape.Type",
+                        "Shape.VertexCount",
+                        "Shape.Vertices",
+                        "Shape.Radius",
+                        "Shape.Center",
+                        "IsSensor",
+                        "Filter",
+                        "Filter.CategoryBits",
+                        "Filter.MaskBits",
+                        "Filter.GroupIndex",
+                        "ParentBody",
+                        "Mass",
+                        "Mass.Center",
+                        "Mass.RotationInertia",
+                        "Density",
+                        "Restitution",
+                        "Friction",
+                        "AABB",
+                        "AABB.Top",
+                        "AABB.Bottom",
+                        "AABB.Left",
+                        "AABB.Right"
+                    };
+                    vector<string> members(count);
+                    BOOST_FOREACH(string member, fields)
+                    {
+                        members.push_back(member);
+                    }
+                    add_member_watch(watch, *it, members, targets, evalute_b2Fixture);
+                    watchNormal = true;
+                }
+                else
+                {
+                    // b2Body
+                    answer += "Coming soon...";
+                }                
+            }
+            else
+            {
+                answer += "Error: unspecified 'of' parameter or it's argument.\n";
+            }           
         }
         else if( command.find("param") != command.npos)
         {
+            answer += "Coming soon...";
         }
         else if( command.find("environ") != command.npos)
         {
+            answer += "Coming soon...";
         }
         else if( command.find("elapsed") != command.npos)
         {
+            answer += "Coming soon...";
         }     
     }
     if(watch->Type != NotAWatch && watchNormal)
@@ -155,7 +439,7 @@ string DebugWatcher::addWatchCommon(Watch* watch, vector<string> &commandSet)
 
 
 
-map<Target, string>& DebugWatcher::getTargets(vector<string> &commandSet, TargetType type, string& answer)
+map<Target, string>& DebugWatcher::getTargets(StrIterator command, StrIterator end, TargetType type, string& answer)
 {
     map<Target, string>* result = new map<Target, string>();
     if(type & tApplicationManager)
@@ -167,13 +451,14 @@ map<Target, string>& DebugWatcher::getTargets(vector<string> &commandSet, Target
         result->insert(pair<Target, string>( &environManager, "EnvironManager"));
     }
     // Commands synapsis: pam pam of objName(fixture_number_or_name)
-    if(commandSet.size() > 2)
+    if(command != end)
     {
-        if( commandSet[2] == "of")
+        if( *command == "of")
         {
-            if(commandSet.size() > 3)
+            StrIterator argument = command +1;
+            if(argument != end)
             {
-                string targetSpecifier = commandSet[3];
+                string targetSpecifier = *argument;
                 std::vector<std::string> objNameAndFixtures;
                 boost::split(objNameAndFixtures, targetSpecifier, boost::is_any_of("(,)"));
                 string objName = objNameAndFixtures[0];
@@ -286,124 +571,88 @@ map<Target, string>& DebugWatcher::getTargets(vector<string> &commandSet, Target
     return *result;
 }
 
-string evalute_material(Watch* watch)
+string DebugWatcher::add_member_watch(Watch* watch, string command,
+         vector<string>& members, map<Target, string> targets, EvaluteFunction evalute)
 {
-    string name = watch->MemberName;
-    string result = "Error, member not found";
-    BodyMaterial* m = boost::get<BodyMaterial*>(watch->Object);
-    if(name == "Name") result = m->Name;
-    else if(name == "KindleTemperature") result = FloatToStr(m->KindleTemperature);
-    else if(name == "KindleReceptivity") result = FloatToStr(m->KindleReceptivity);
-    else if(name == "FlameTemperature") result = FloatToStr(m->FlameTemperature);
-    else if(name == "SelfFlareUpRate") result = FloatToStr(m->SelfFlareUpRate);
-    else if(name == "CarbonizeRate") result = FloatToStr(m->CarbonizeRate);
-    else if(name == "ElectricalConductivity") result = FloatToStr(m->ElectricalConductivity);
-    else if(name == "ThermalReceptivity") result = FloatToStr(m->ThermalReceptivity);
-    else if(name == "DampReceptivity") result = FloatToStr(m->DampReceptivity);
-    else if(name == "FrozingTemperature") result = FloatToStr(m->FrozingTemperature);
-    else if(name == "InflDampnessToFriction") result = FloatToStr(m->InflDampnessToFriction);
-    else if(name == "InflDampnessToKindleTemperature") result = FloatToStr(m->InflDampnessToKindleTemperature);
-    else if(name == "InflDampnessToMaxKindle") result = FloatToStr(m->InflDampnessToMaxKindle);
-    else if(name == "InflDampnessToKindleReceptivity") result = FloatToStr(m->InflDampnessToKindleReceptivity);
-    else if(name == "InflDampnessToFrozingTemperature") result = FloatToStr(m->InflDampnessToFrozingTemperature);
-    else if(name == "InflCarbonizeLevelToMaxKindle") result = FloatToStr(m->InflCarbonizeLevelToMaxKindle);
-    else if(name == "InflCarbonizeLevelToMaxDampness") result = FloatToStr(m->InflCarbonizeLevelToMaxDampness);
-    else if(name == "InflCarbonizeLevelToElecticalConductivity") result = FloatToStr(m->InflCarbonizeLevelToElecticalConductivity);
-    else if(name == "InflMoistenToKindleLevel") result = FloatToStr(m->InflMoistenToKindleLevel);
-    else if(name == "InflTemperatureToDampness") result = FloatToStr(m->InflTemperatureToDampness);  
-    
-    return result;
-}
-
-string DebugWatcher::process_material(Watch* watch, vector<string> &commandSet)
-{
-    
     string answer = "";
-    string materialCommand = commandSet[1];
-    unsigned int startParamBraket = materialCommand.find("(");
-    string fields[20] = {
-        "Name",
-        "KindleTemperature",
-        "KindleReceptivity",
-        "FlameTemperature",
-        "SelfFlareUpRate",
-        "CarbonizeRate",
-        "ElectricalConductivity",
-        "ThermalReceptivity",
-        "DampReceptivity",
-        "FrozingTemperature",
-        "InflDampnessToFriction",
-        "InflDampnessToKindleTemperature",
-        "InflDampnessToMaxKindle",
-        "InflDampnessToKindleReceptivity",
-        "InflDampnessToFrozingTemperature",
-        "InflCarbonizeLevelToMaxKindle",
-        "InflCarbonizeLevelToMaxDampness",
-        "InflCarbonizeLevelToElecticalConductivity",
-        "InflMoistenToKindleLevel",
-        "InflTemperatureToDampness"
-    };
-    
-    map<Target, string> targets = getTargets(commandSet, tBodyMaterial, answer);
-    answer += "Selected " + IntToStr(targets.size()) + " body parts.\n";
+    answer += "Selected " + IntToStr(targets.size()) + " targets.\n";
     if(targets.size() > 0)
     {
         watch->Active = false;
         addWatchToConsole(watch);
         map<Target, string>::iterator it;
-        if(startParamBraket == materialCommand.npos)
+        unsigned int startParamBraket = command.find("(");
+        // If members not specified, add to watch all members
+        if(startParamBraket == command.npos)
         {
             for(it = targets.begin(); it != targets.end(); ++it)
             {
-                Target material = it->first;
+                Target target = it->first;
                 string watchName = it->second; 
-                for(int i = 0; i<20; i++)
+                BOOST_FOREACH(string memberName, members)
                 {
                     Watch* child = new Watch(*watch);
-                    child->Name = watchName + "(" + fields[i] + ")";
-                    child->Object = material;
-                    child->Expression = evalute_material;
-                    child->MemberName = fields[i];
+                    child->Name = memberName;
+                    child->Object = target;
+                    child->Expression = evalute;
+                    child->MemberName = memberName;
                     child->Parent = watch;
                     watch->Children.push_back(child);
-                    child->ID = watch->ID + "." + watchName + "(" + fields[i] + ")";
+                    child->ID = watch->ID + "." + watchName + "(" + memberName + ")";
                     mWatches.push_back(child);
                     addWatchToConsole(child);
                 } 
             }
-            answer += "All material properties added to watch.\n";
+            answer += "All members added to watch.\n";
         }
+        // Look specified members only
         else
         {
-            std::vector<std::string> fields;
-            boost::split(fields, materialCommand, boost::is_any_of("(,)"));
+            std::vector<std::string> specMembers;
+            // Command looks like command(Member1, Member2)
+            boost::split(specMembers, command, boost::is_any_of("(,)"));
+            if( specMembers.size() > 2)
+            {
+                // First element in split is command
+                specMembers.erase(specMembers.begin());
+                // Last element is epmty
+                specMembers.erase(--specMembers.end());
+            }
+            string added = "";
             for(it = targets.begin(); it != targets.end(); ++it)
             {
-                Target material = it->first;
+                Target target = it->first;
                 string watchName = it->second; 
-                vector<string>::iterator it;
-                for(it = ++(fields.begin()); it != fields.end(); ++it)
-                { 
-                    Watch* child = new Watch(*watch);
-                    string field = *it;
-                    boost::trim(field);
-                    child->Name = watchName + "(" + field + ")";;
-                    child->Object = material;
-                    child->Expression = evalute_material;
-                    child->MemberName = field;
-                    child->Parent = watch;
-                    watch->Children.push_back(child);
-                    child->ID = watch->ID + "." + watchName + "(" + field + ")";
-                    mWatches.push_back(child);
-                    addWatchToConsole(child);
+                added = "";
+                BOOST_FOREACH(string memberName, specMembers)
+                {                   
+                    boost::trim(memberName);  
+                    added += memberName + ", ";
+                    // Check, if member name is normal
+                    if(find(members.begin(), members.end(), memberName) != members.end())
+                    {
+                        Watch* child = new Watch(*watch);
+                        child->Name = memberName;
+                        child->Object = target;
+                        child->Expression = evalute;
+                        child->MemberName = memberName;
+                        child->Parent = watch;
+                        watch->Children.push_back(child);
+                        child->ID = watch->ID + "." + watchName + "(" + memberName + ")";
+                        mWatches.push_back(child);
+                        addWatchToConsole(child);
+                    }
+                    else
+                    {
+                        answer += "Error: member " + memberName + " not exists.\n";
+                    }
                 }
             }
-            answer += "To watch added next properties of material: ";
-            vector<string>::iterator it;
-            for(it = ++(fields.begin()); it != fields.end(); ++it)
-            {
-                answer += *it;
-            } 
+            //Remove last comma and space
+            if( added.size() > 2) 
+                added.erase(added.end() - 2, added.end());
+            answer += "To watch added next properties of material: " + added + ". \n";
+           
             answer += ". \n";
         }
     }//if(targets.size() > 0)
@@ -411,6 +660,8 @@ string DebugWatcher::process_material(Watch* watch, vector<string> &commandSet)
     {
         watch->Type = NotAWatch;
     }
+
+
     return answer;
 }
 

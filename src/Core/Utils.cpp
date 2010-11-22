@@ -12,6 +12,23 @@ string Utils::intToStr(int p)
     return out.str(); 
 }
 
+string Utils::vectorToStr(b2Vec2 p)
+{
+    std::ostringstream out;
+    out<< "(" << p.x << "," << p.y << ")";
+    return out.str();
+}
+
+string Utils::hexToStr(int p)
+{
+    std::ostringstream out;
+    cout.flags(ios::hex);
+    cout.fill('0');
+    cout.width(6);
+    out<< p;
+    return out.str();
+}
+
 string Utils::floatToStr(float p)
 {
     std::ostringstream out;

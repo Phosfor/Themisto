@@ -6,6 +6,7 @@
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/date_time/posix_time/posix_time_types.hpp>
 #include <boost/algorithm/string.hpp>
+#include <Box2D/Box2D.h>
 
 #include "Core/LogManager.hpp"
 #include "Core/ConfigManager.hpp"
@@ -93,9 +94,12 @@ using namespace std;
 
 #define IntToStr(p) (utils.intToStr(p))
 #define FloatToStr(p) (utils.floatToStr(p))
+#define VectorToStr(p) (utils.vectorToStr(p));
+#define HexToStr(p) (utils.hexToStr(p));
 
 #define utils (Utils::get_mutable_instance())
 #define utilsConst (Utils::get_const_instance())
+
 
 class Utils : public boost::serialization::singleton<Utils>
 {
@@ -114,7 +118,9 @@ class Utils : public boost::serialization::singleton<Utils>
         void writeTimestamp();
         string getTimeDifference();
         string intToStr(int p);
+        string hexToStr(int p);
         string floatToStr(float p);
+        string vectorToStr(b2Vec2 p);
 };
 
 #endif

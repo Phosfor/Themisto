@@ -13,22 +13,31 @@
 #include <boost/algorithm/string/trim.hpp>
 #include <ClanLib/core.h>
 #include <sstream>
-
+#include <boost/foreach.hpp>
+#include <boost/lambda/lambda.hpp>
+#include <Box2D/Collision/Shapes/b2Shape.h>
 
 #include "Physic/Body.hpp"
+
 #include "Core/ApplicationManager.hpp"
 #include "Core/EnvironManager.hpp"
 #include "Core/Utils.hpp"
 #include "DebugConsole/DebugIO.hpp"
 
+
 #include "Core/PhysicManager.hpp"
 
 using namespace std;
+using namespace boost::lambda;
 
 #define debugWatcher (DebugWatcher::get_mutable_instance())
 #define debugWatcherConst (DebugWatcher::get_const_instance())
 
 #define DEFAULT_TIMEOUT 500;
+struct Watch;
+
+typedef boost::function<string (Watch*)> EvaluteFunction;
+typedef vector<string>::iterator StrIterator;
 
 enum WatchType
 {
@@ -72,7 +81,7 @@ struct Watch
     string OutFile;
     Target Object;
     string MemberName;
-    boost::function<string (Watch*)> Expression;
+    EvaluteFunction Expression;
     Watch* Parent;
     list<Watch*> Children;  
     
@@ -91,10 +100,12 @@ boost::serialization::singleton<DebugWatcher>
         
         string process_hide(vector<string>& commandSet);
         string process_stop(vector<string>& commandSet);
-        map<Target, string>& getTargets(vector<string> &commandSet, TargetType type, string& error);
+       map<Target, string>& getTargets(StrIterator command, StrIterator end, TargetType type, string& answer);
         string process_material(Watch* watch, vector<string> &commandSet);
         b2Fixture* getFixture(Body* body, string partID);
         string addWatchCommon(Watch* watch, vector<string> &commandSet);
+        string add_member_watch(Watch* watch, string command, 
+            vector<string>& members, map<Target, string> targets, EvaluteFunction evalute);
         //string evalute_material(Watch* watch);
         //string floatToStr(float p);
         Watch* getWatchByID(string id);
