@@ -42,6 +42,7 @@ void PhysicState::update()
             CL_String(cl_format("elapsed: %1", int(floor(appManager.getElapsed()+0.5)))), CL_Colorf::white);
     
     debugIO.step();
+    debugWatcher.step();
 }
 
 string PhysicState::type()

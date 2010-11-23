@@ -105,7 +105,7 @@ boost::serialization::singleton<DebugWatcher>
         b2Fixture* getFixture(Body* body, string partID);
         string addWatchCommon(Watch* watch, vector<string> &commandSet);
         string add_member_watch(Watch* watch, string command, 
-            vector<string>& members, map<Target, string> targets, EvaluteFunction evalute);
+            vector<string>& members, map<Target, string>& targets, EvaluteFunction evalute);
         //string evalute_material(Watch* watch);
         //string floatToStr(float p);
         Watch* getWatchByID(string id);

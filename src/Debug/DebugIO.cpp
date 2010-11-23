@@ -78,7 +78,7 @@ void DebugIO::addWatch(string id, string name, string value, string parent)
     else
     {
         //LOG("Error: visualiser not available.");
-        LOG("[" + parent + ":" + id + "] " + name + " = " + value);
+        LOG("[" + id + "] " + name + " = " + value);
     }
 }
 void DebugIO::updateWatch(string id, string newVal)
@@ -119,7 +119,7 @@ void DebugIO::removeWatch(string id)
      }
     else
     {
-        //LOG("Error: visualiser not available.");
+        LOG("Error: visualiser not available.");
         LOG("[" + id + "] " + "removed ");
     }  
 }
