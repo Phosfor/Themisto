@@ -17,9 +17,20 @@ cmake ../ && make
 To build it succesfull, you have to install these packages:
 ClanLib >= 2.2.4
 boost-all-dev >= 1.42
-<a href='http://www.highscore.de/boost/process/'>boost.process(additional library)</a>
 x11-dev
 libmikmod-dev
 db4.8-util
 libpng-dev
 fontconfig
+
+Debug tools:
+<a href='http://www.highscore.de/boost/process/'>boost.process(additional library)</a>
+ReadLine utility, for installing process this lines:
+<div style='border: 1px solid black; background-color: gray;'>
+ftp://ftp.cwru.edu/pub/bash/readline-6.1.tar.gz
+cd readline-6.1
+./configure --prefix=/usr/
+make
+make install
+sudo apt-get install libncurses5-dev
+</div>
