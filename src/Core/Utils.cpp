@@ -19,6 +19,12 @@ string Utils::vectorToStr(b2Vec2 p)
     return out.str();
 }
 
+string Utils::boolToStr(bool p)
+{
+    if(p) return "true";
+    else return "false";
+}
+
 string Utils::hexToStr(int p)
 {
     std::ostringstream out;

@@ -302,6 +302,59 @@ string evalute_b2Fixture(Watch* watch)
     if( result == "") result = "Erorr, can't evalute";
     return result;
 }
+string evalute_b2Body(Watch* watch)
+{
+    string name = watch->MemberName;
+    string result = "";
+    b2Body* body = boost::get<b2Body*>(watch->Object); 
+    
+    if( name == "Type")
+    {
+        b2BodyType type = body->GetType();
+        switch(type)
+        {
+            case b2_staticBody: result = "StaticBody"; break;
+            case b2_dynamicBody: result = "DynamicBody"; break;
+            case b2_kinematicBody: result = "KinematicBody"; break;
+            default: result = "Unknown type";
+        }
+    }
+    else if(name == "Position") result = VectorToStr(body->GetPosition());
+    else if(name == "Angle") result = FloatToStr(body->GetAngle());
+    else if(name == "WorldCenter") result = VectorToStr(body->GetWorldCenter());
+    else if(name == "LocalCenter") result = VectorToStr(body->GetLocalCenter());
+    else if(name == "LinearVelocity") result = VectorToStr(body->GetLinearVelocity());
+    else if(name == "AngularVelocity") result = FloatToStr(body->GetAngularVelocity());
+    else if(name == "Inertia") result = FloatToStr(body->GetInertia());
+    else if(name == "LinearDamping") result = FloatToStr(body->GetLinearDamping());
+    else if(name == "AngularDamping")result = FloatToStr(body->GetAngularDamping());
+    else if(name == "Bullet") result = BoolToStr(body->IsBullet());
+    else if(name == "SleepingAllowed") result = BoolToStr(body->IsSleepingAllowed());
+    else if(name == "Awake") result = BoolToStr(body->IsAwake());
+    else if(name == "Active") result = BoolToStr(body->IsActive());
+    else if(name == "FixedRotation") result = BoolToStr(body->IsFixedRotation());
+    bool mass = false;
+    string massValuePrefix = "", massCenterPrefix = "", massRotationInertiaPrefix = "";
+    b2MassData massData;
+    body->GetMassData(&massData);
+    if( name == "Mass")
+    {
+        mass = true;
+        result = "{ ";
+        massValuePrefix = "Value = ";
+        massCenterPrefix = ", Center = ";
+        massRotationInertiaPrefix = ", RotationInertia = ";
+    }
+    if( name == "Mass.Value" || mass) result += massValuePrefix + FloatToStr(massData.mass);
+    if( name == "Mass.Center" || mass) result += massCenterPrefix + VectorToStr(massData.center);
+    if( name == "Mass.RotationInertia" || mass) 
+        result += massRotationInertiaPrefix + FloatToStr(massData.I);
+    if(mass) result += " }";   
+    
+    if(result == "") result = "Can't evalute";
+    
+    return result;    
+}
 
 string DebugWatcher::addWatchCommon(Watch* watch, vector<string> &commandSet)
 {
@@ -429,7 +482,35 @@ string DebugWatcher::addWatchCommon(Watch* watch, vector<string> &commandSet)
                 else
                 {
                     // b2Body
-                    answer += "Coming soon...";
+                    map<Target, string> targets = getTargets(it+1, commandSet.end(), tb2Body, answer);
+                    const int count = 18;
+                    string fields[count] = {
+                        "Type",
+                        "Position",
+                        "Angle",
+                        "WorldCenter",
+                        "LocalCenter",
+                        "LinearVelocity",
+                        "AngularVelocity",
+                        "Mass",
+                        "Mass.Center",
+                        "Mass.RotationInertia",
+                        "Inertia",
+                        "LinearDamping",
+                        "AngularDamping",
+                        "Bullet",
+                        "SleepingAllowed",
+                        "Awake",
+                        "Active",
+                        "FixedRotation"
+                    };
+                    vector<string> members;
+                    BOOST_FOREACH(string member, fields)
+                    {
+                        members.push_back(member);
+                    }
+                    answer += add_member_watch(watch, *it, members, targets, evalute_b2Body);
+                    watchNormal = true;
                 }                
             }
             else
