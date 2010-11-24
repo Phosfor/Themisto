@@ -380,6 +380,18 @@ string evalute_BodyPart(Watch* watch)
     return result;
 }
 
+string evalute_Body(Watch* watch)
+{
+    string name = watch->MemberName;
+    string result = "";
+    Body* body = boost::get<Body*>(watch->Object); 
+    if( name == "Buoyancy") result = FloatToStr(body->mBuoyancy);
+    else if( name == "Name") result = body->mName;
+    
+    if(result == "") result = "Can't evalute";
+    return result;                    
+}
+
 string DebugWatcher::addWatchCommon(Watch* watch, vector<string> &commandSet)
 {
     watch->ID = worldManager.generateUniqueID();
@@ -572,7 +584,19 @@ string DebugWatcher::addWatchCommon(Watch* watch, vector<string> &commandSet)
                 else
                 {
                     //Body
-                    answer += "Coming soon...\n";
+                    map<Target, string> targets = getTargets(it+1, commandSet.end(), tBody, answer);
+                    const int count = 2;
+                    string fields[count] = {
+                        "Buoyancy",
+                        "Name",
+                    };
+                    vector<string> members;
+                    BOOST_FOREACH(string member, fields)
+                    {
+                        members.push_back(member);
+                    }
+                    answer += add_member_watch(watch, *it, members, targets, evalute_Body);
+                    watchNormal = true;
                 }
             }
             else
