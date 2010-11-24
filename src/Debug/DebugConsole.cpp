@@ -83,8 +83,12 @@ int main()
 
     while (!client.quit)
     {
-        cout << ">";
-        std::getline(std::cin, command, '\n');
+
+        command = readline(">");
+        if( command != "" ) 
+        {
+            add_history(command.c_str());
+        }
 
         if (command == "quit" || command == "q")
         {

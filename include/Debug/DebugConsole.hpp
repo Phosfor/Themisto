@@ -6,6 +6,9 @@
 #include <iostream>
 #include <string>
 #include <boost/algorithm/string.hpp>
+#include <readline/readline.h>
+#include <readline/history.h>
+
 
 const static CL_String SERVER_PORT = "1992";
 const static CL_String SERVER_HOST = "localhost";

@@ -99,6 +99,10 @@ target_link_libraries(DebugConsole
     ${PNG_LIBRARIES}
     ${JPEG_LIBRARIES}
     ${ClanLib_LIBRARIES}
+    ${READLINE_LIBRARIES}
+    readline
+    history
+    ncurses
     fontconfig
     pthread
 )
