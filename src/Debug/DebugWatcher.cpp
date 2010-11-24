@@ -392,6 +392,42 @@ string evalute_Body(Watch* watch)
     return result;                    
 }
 
+string evalute_EnvironObject(Watch* watch)
+{
+    string name = watch->MemberName;
+    string result = "";
+    EnvironObject* obj = boost::get<EnvironObject*>(watch->Object); 
+    if(name == "Enabled") result = BoolToStr(obj->getEnabled());
+    else if(name == "Limit") result = IntToStr(obj->getLimit());
+    
+    if(result == "") result = "Can't evalute";
+    
+    return result;
+}
+
+EnvironObject* getEnvironObject(string _name)
+{
+    string name(_name);
+    boost::to_lower(name);
+    EnvironObject* result = NULL;
+    if(name == "sky")result = environManager.getTypeHandle(Environ_Sky);
+    else if(name == "stars")result = environManager.getTypeHandle(Environ_Stars);  
+    else if(name == "moon")result = environManager.getTypeHandle(Environ_Moon);  
+    else if(name == "lightnings")result = environManager.getTypeHandle(Environ_Lightnings);   
+    else if(name == "rain")result = environManager.getTypeHandle(Environ_Rain);  
+    else if(name == "clouds")result = environManager.getTypeHandle(Environ_Clouds);  
+    else if(name == "leaves")result = environManager.getTypeHandle(Environ_Leaves); 
+    else if(name == "birds")result = environManager.getTypeHandle(Environ_Birds); 
+    
+    return result;
+}
+
+string evalute_elapsed(Watch* watch)
+{
+    ApplicationManager* app = boost::get<ApplicationManager*>(watch->Object); 
+    return IntToStr(app->getElapsed());
+}
+
 string DebugWatcher::addWatchCommon(Watch* watch, vector<string> &commandSet)
 {
     watch->ID = worldManager.generateUniqueID();
@@ -606,11 +642,30 @@ string DebugWatcher::addWatchCommon(Watch* watch, vector<string> &commandSet)
         }
         else if( command.find("environ") != command.npos)
         {
-            answer += "Coming soon...";
+            map<Target, string> targets = getTargets(it+1, commandSet.end(), tEnvironObject, answer);
+            const int count = 2;
+            string fields[count] = {
+                "Enabled",
+                "Limit"
+            };
+            vector<string> members;
+            BOOST_FOREACH(string member, fields)
+            {
+                members.push_back(member);
+            }
+            answer += add_member_watch(watch, *it, members, targets, evalute_EnvironObject);
+            watchNormal = true;
         }
         else if( command.find("elapsed") != command.npos)
         {
-            answer += "Coming soon...";
+            watch->Name = "Elapsed";
+            watch->Active = true;
+            watch->Object = &appManager;
+            watch->Expression = evalute_elapsed;
+            watch->MemberName = "Elapsed";
+            mWatches.push_back(watch);
+            addWatchToConsole(watch);
+            watchNormal = true;
         }     
     }
     if(watch->Type != NotAWatch && watchNormal)
@@ -640,8 +695,31 @@ map<Target, string>& DebugWatcher::getTargets(StrIterator command, StrIterator e
     }
     if(type & tEnvironObject)
     {
-        result->insert(pair<Target, string>( &environManager, "EnvironManager"));
-    }
+        if( *command == "of")
+        {
+            StrIterator argument = command +1;
+            if(argument != end)
+            {
+                EnvironObject* target = getEnvironObject(*argument);
+                if(target != NULL)
+                {
+                    result->insert(pair<Target, string>(target, *argument));
+                }  
+                else
+                {
+                    answer += "Error: invalid argument '" + *argument + "'.\n";
+                }              
+            }
+            else
+            {
+                 answer += "Error: parameter 'of' not specified.\n";
+            }
+        } 
+        else
+        {
+            answer += "Error: parameter 'of' not specified.\n";
+        } 
+    }//if(type & tEnvironObject)
     // Commands synapsis: pam pam of objName(fixture_number_or_name)
     if(command != end)
     {
@@ -753,12 +831,12 @@ map<Target, string>& DebugWatcher::getTargets(StrIterator command, StrIterator e
                 answer += "Error: argument for parameter 'of' not specified!\n";
             }
        
-        }//if( commandSet[2] == "of")
+        }//if( *command == "of")
         else
         {
              answer += "Error: parameter 'of' not specified.\n";
         }
-    } //if(commandSet.size() > 3)
+    } // if(command != end)
     else
     {
         answer += "Error: parameter 'of' not specified.\n";
