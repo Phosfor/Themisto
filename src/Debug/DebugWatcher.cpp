@@ -29,6 +29,14 @@ void DebugWatcher::parseCommand(string command, string* _answer)
     {
         boost::replace_all(command, " ,", ",");
     }
+    while(command.find(" )") != command.npos)
+    {
+        boost::replace_all(command, " )", ")");
+    }
+     while(command.find("( ") != command.npos)
+    {
+        boost::replace_all(command, "( ", "(");
+    }
     LOG(command);
     
     std::vector<std::string> commandSet;
@@ -356,6 +364,22 @@ string evalute_b2Body(Watch* watch)
     return result;    
 }
 
+string evalute_BodyPart(Watch* watch)
+{
+    string name = watch->MemberName;
+    string result = "";
+    BodyPart* part = boost::get<BodyPart*>(watch->Object); 
+    
+    if( name == "IsDefaultMaterial") result = BoolToStr(part->mIsDefaultMaterial);
+    else if( name == "MaxKindleLevel") result = FloatToStr(part->mMaxKindleLevel);
+    else if( name == "MaxDampness") result = FloatToStr(part->mMaxDampness);
+    else if( name == "AcceptsCord") result = BoolToStr(part->mAcceptsCord);
+    else if( name == "Name") result = part->mName;
+    
+    if(result == "") result = "Can't evalute";
+    return result;
+}
+
 string DebugWatcher::addWatchCommon(Watch* watch, vector<string> &commandSet)
 {
     watch->ID = worldManager.generateUniqueID();
@@ -520,7 +544,41 @@ string DebugWatcher::addWatchCommon(Watch* watch, vector<string> &commandSet)
         }
         else if( command.find("param") != command.npos)
         {
-            answer += "Coming soon...";
+            // Solve, what user want b2Fixture or b2Body parameter
+            if(it +2 != commandSet.end())
+            {
+                string targetSpecifier =  *(it+2);
+                // If exists squares in target definition
+                if(targetSpecifier.find("(") != targetSpecifier.npos)
+                {
+                    //BodyPart
+                    map<Target, string> targets = getTargets(it+1, commandSet.end(), tBodyPart, answer);
+                    const int count = 5;
+                    string fields[count] = {
+                        "IsDefaultMaterial",
+                        "MaxKindleLevel",
+                        "MaxDampness",
+                        "AcceptsCord",
+                        "Name"
+                    };
+                    vector<string> members;
+                    BOOST_FOREACH(string member, fields)
+                    {
+                        members.push_back(member);
+                    }
+                    answer += add_member_watch(watch, *it, members, targets, evalute_BodyPart);
+                    watchNormal = true;
+                }
+                else
+                {
+                    //Body
+                    answer += "Coming soon...\n";
+                }
+            }
+            else
+            {
+                answer += "Error: unspecified 'of' parameter or it's argument.\n";
+            }   
         }
         else if( command.find("environ") != command.npos)
         {
@@ -597,7 +655,7 @@ map<Target, string>& DebugWatcher::getTargets(StrIterator command, StrIterator e
                                 string partID = *it;
                                 if(partID != "")
                                 {
-                                    b2Fixture* fixture = getFixture(obj, partID);
+                                    b2Fixture* fixture = getFixture(obj, &partID);
                                     if(fixture != NULL)
                                     {
                                         if(type & tb2Fixture)
@@ -786,7 +844,7 @@ string DebugWatcher::add_member_watch(Watch* watch, string command,
     return answer;
 }
 
-b2Fixture* DebugWatcher::getFixture(Body* obj, string partID)
+b2Fixture* DebugWatcher::getFixture(Body* obj, string* partID)
 {
     b2Fixture* result = NULL;
     b2Body* body = obj->getb2Body();
@@ -795,7 +853,7 @@ b2Fixture* DebugWatcher::getFixture(Body* obj, string partID)
     int partNumber = 0;
     try
     {
-        partNumber = boost::lexical_cast<int>(partID);
+        partNumber = boost::lexical_cast<int>(*partID);
         numberID = true;
     }
     catch(boost::bad_lexical_cast &e)
@@ -811,6 +869,12 @@ b2Fixture* DebugWatcher::getFixture(Body* obj, string partID)
             if(currentPartNumber == partNumber)
             {
                 result = fixture;
+                BodyPart* part = (BodyPart*)fixture->GetUserData();
+                if(part!= NULL)
+                {
+                    partID->assign(part->mName);
+                }
+                break;
             }
             currentPartNumber++;       
         }
@@ -823,9 +887,11 @@ b2Fixture* DebugWatcher::getFixture(Body* obj, string partID)
             BodyPart* part = (BodyPart*)fixture->GetUserData();
             if(part != NULL)
             {
-                if(part->mName == partID)
+                if(part->mName == *partID)
                 {
                     result = fixture;
+                    partID->assign(part->mName);
+                    break;
                 }
             }
         }

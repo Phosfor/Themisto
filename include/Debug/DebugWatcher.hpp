@@ -102,7 +102,7 @@ boost::serialization::singleton<DebugWatcher>
         string process_stop(vector<string>& commandSet);
        map<Target, string>& getTargets(StrIterator command, StrIterator end, TargetType type, string& answer);
         string process_material(Watch* watch, vector<string> &commandSet);
-        b2Fixture* getFixture(Body* body, string partID);
+        b2Fixture* getFixture(Body* body, string* partID);
         string addWatchCommon(Watch* watch, vector<string> &commandSet);
         string add_member_watch(Watch* watch, string command, 
             vector<string>& members, map<Target, string>& targets, EvaluteFunction evalute);
