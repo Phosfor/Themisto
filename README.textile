@@ -15,20 +15,20 @@ cmake ../ && make
 
 <h2>Required packages</h2>
 To build it succesfull, you have to install these packages:
-ClanLib >= 2.2.4
-boost-all-dev >= 1.42
-x11-dev
-libmikmod-dev
-db4.8-util
-libpng-dev
-fontconfig
+@ClanLib >= 2.2.4@
+@boost-all-dev >= 1.42@
+@x11-dev@
+@libmikmod-dev@
+@db4.8-util@
+@libpng-dev@
+@fontconfig@
 
 <b>Debug tools</b>:
 <a href='http://www.highscore.de/boost/process/'>boost.process(additional library)</a>
 ReadLine utility, for installing process this lines:
-@ftp://ftp.cwru.edu/pub/bash/readline-6.1.tar.gz@
+@ftp://ftp.cwru.edu/pub/bash/readline-6.1.tar.gz
 cd readline-6.1
 ./configure --prefix=/usr/
 make
 make install
-sudo apt-get install libncurses5-dev
+sudo apt-get install libncurses5-dev@
