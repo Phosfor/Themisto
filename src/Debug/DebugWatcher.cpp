@@ -13,7 +13,7 @@ void DebugWatcher::init()
 DebugWatcher::~DebugWatcher()
 {
     string answer = "";
-    parseCommand("hide all", answer);
+    parseCommand("hide all", &answer);
     LOG("~DebugWatcher: " + answer);
 }
 
