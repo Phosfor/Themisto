@@ -26,7 +26,7 @@ void Client::step(const std::string command)
     }
     catch(CL_Exception& e)
     {
-        cout << "-->Error: can't send command to server; Reason: " <<  e.what();
+        cout << "-->Error: can't send command to Themisto; Reason: " <<  e.what();
     }
 }
 
@@ -36,7 +36,7 @@ void Client::connect_to_server()
     try {
         network_client.connect(SERVER_HOST, SERVER_PORT);
     } catch(const CL_Exception &e) {
-        cl_log_event("-->Error during connecting to server.", e.message);
+        cl_log_event("-->Error during connecting to Themisto.", e.message);
     }
 
     while(!connected)
@@ -48,25 +48,29 @@ void Client::connect_to_server()
 
 void Client::on_connected()
 {
-    std::cout << "-->Sucessfully connected to the server.\n";
+    std::cout << "-->Sucessfully connected to the Themisto.\n";
     connected = true;
 }
 
 void Client::on_disconnected()
 {
-    std::cout << "-->Disconnected from server.\n";
+    std::cout << "-->Disconnected from Themisto.\n";
     connected = false;
 }
 
 void Client::on_event_received(const CL_NetGameEvent &e) 
 {
     if(e.get_name() == "Answer")
-        std::cout << "-->" << (string)e.get_argument(0).to_string() <<"\n"; 
+    {
+        string answer = (string)e.get_argument(0).to_string(); 
+        if( *(answer.rbegin()) != '\n') answer += "\n";
+        std::cout << "-->" << answer;
+    }
 }
 
 void Client::disconnect()
 {
-    std::cout << "-->Disconnecting from server...\n";
+    std::cout << "-->Disconnecting from Themisto...\n";
     network_client.disconnect();
     connected = false;
 }
@@ -98,7 +102,7 @@ char* readCommand()
     return (line_read);
 }
 
-int main()
+int main(int argc, char* argv[])
 {
     CL_SetupCore setup_core;
     CL_SetupNetwork setup_network;
@@ -106,28 +110,30 @@ int main()
     std::cout << "\t========= Welcome to Themisto DebugConsole =========\n";
 
     Client client;
-    std::string command;
+    std::string command = "";
+    
+    for(int i=1; i<argc; ++i)
+    {
+        command.append(argv[i]);
+        command.append(" ");
+    }
+    boost::trim(command);
+    if( command == "") command = "nope";
 
     while (!client.quit)
     {
-
-        command = readCommand();
-        if( command != "" ) 
-        {
-            add_history(command.c_str());
-        }
-
-        if (command == "quit" || command == "q")
-        {
-            client.quit = true;
-        }
-        else if ((command == "disconnect") && client.connected)
+        if ((command == "disconnect") && client.connected)
         {
             client.disconnect();
         }
         else if((command == "connect") && !client.connected)
         {
             client.connect_to_server();
+        }
+        else if(command == "execute" || command == "exe")
+        {
+            // Execute script
+            cout << "Coming soon..";
         }
         else if(command == "build" || command == "b")
         {
@@ -150,9 +156,9 @@ int main()
                 std::cout << "Update failed." << std::endl;*/
         }
         //...else if Other commands, that not need connection
-        else
+        else if( command != "nope")
         {
-            if (!client.connected) //(command == "connect" || command == "c") &&
+            if (!client.connected)
             {
                 client.connect_to_server();
             }
@@ -161,6 +167,13 @@ int main()
                 client.step(command);
             }
         }
+
+        command = readCommand();
+        if (command == "quit" || command == "q")
+        {
+            client.quit = true;
+        }
+        
     }
 
     return 0;
