@@ -16,6 +16,7 @@
 #include <boost/foreach.hpp>
 #include <boost/lambda/lambda.hpp>
 #include <Box2D/Collision/Shapes/b2Shape.h>
+#include <fstream>
 
 #include "Physic/Body.hpp"
 
@@ -23,70 +24,24 @@
 #include "Core/EnvironManager.hpp"
 #include "Core/Utils.hpp"
 #include "Debug/DebugIO.hpp"
-
+#include "Debug/EvaluteFunctions.hpp"
+#include "Debug/Watch.hpp"
 
 #include "Core/PhysicManager.hpp"
 
 using namespace std;
+using namespace evalute;
 using namespace boost::lambda;
 
 #define debugWatcher (DebugWatcher::get_mutable_instance())
 #define debugWatcherConst (DebugWatcher::get_const_instance())
 
 #define DEFAULT_TIMEOUT 500;
-struct Watch;
 
-typedef boost::function<string (Watch*)> EvaluteFunction;
+
+
 typedef vector<string>::iterator StrIterator;
 
-enum WatchType
-{
-    NotAWatch,
-    ShowWatch,
-    WriteWatch
-};
-
-typedef boost::variant<
-   BodyMaterial*,
-   BodyState*,
-   b2Body*,
-   b2Fixture*,
-   Body*,
-   BodyPart*,
-   ApplicationManager*,
-   EnvironObject*,
-   void*
-> Target;
-
-enum TargetType
-{
-    tError = 0,
-    tBody=1,
-    tBodyPart=2,
-    tBodyMaterial=4,
-    tBodyState=8,
-    tb2Body=16,
-    tb2Fixture=32,
-    tApplicationManager=64,
-    tEnvironObject=128
-};
-   
-
-struct Watch
-{
-    WatchType Type;
-    string ID;
-    string Name;
-    bool Active;
-    string OutFile;
-    Target Object;
-    string MemberName;
-    EvaluteFunction Expression;
-    Watch* Parent;
-    list<Watch*> Children;  
-    
-    Watch();  
-};
 
 class DebugWatcher: public
 boost::serialization::singleton<DebugWatcher>
@@ -97,17 +52,24 @@ boost::serialization::singleton<DebugWatcher>
         int mLeftFromLastUpdate;
         ApplicationManager* _appManager;
         CL_Slot mCommandSlot;
+        std::map<string, ofstream*> mFiles;
+        std::map<ofstream*, int> mFilesUsing;
         
-        string process_hide(vector<string>& commandSet);
-        string process_stop(vector<string>& commandSet);
-       map<Target, string>& getTargets(StrIterator command, StrIterator end, TargetType type, string& answer);
+        string assignWatchToFile(Watch* watch, string file);
+        string assignWatchToFile(Watch* watch, ofstream* file);
+        string unassignWatchFromFile(Watch* watch);
+
+        vector<Watch*> getWatches(StrIterator specIt, StrIterator endIt, string& answer);
+        
+        string process_hide(StrIterator commandIt, StrIterator endIt);
+        string process_stop(StrIterator commandIt, StrIterator endIt);
+        map<Target, string> getTargets(StrIterator command, StrIterator end, TargetType type, string& answer);
         string process_material(Watch* watch, vector<string> &commandSet);
-        b2Fixture* getFixture(Body* body, string partID);
+        b2Fixture* getFixture(Body* body, string* partID);
         string addWatchCommon(Watch* watch, vector<string> &commandSet);
         string add_member_watch(Watch* watch, string command, 
-            vector<string>& members, map<Target, string>& targets, EvaluteFunction evalute);
-        //string evalute_material(Watch* watch);
-        //string floatToStr(float p);
+            const string members[], const int memberCount, map<Target, string>& targets, EvaluteFunction evalute);
+
         Watch* getWatchByID(string id);
         void update();
         void addWatchToConsole(Watch* watch);
@@ -118,6 +80,7 @@ boost::serialization::singleton<DebugWatcher>
         void parseCommand(string command, string* answer);
         void init();
         void step();
+        ~DebugWatcher();
 };
 
 

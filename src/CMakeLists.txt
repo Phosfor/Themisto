@@ -51,7 +51,9 @@ set(Themisto_srcs
     Debug/DebugIO.cpp
     Debug/DebugDraw.cpp
     Debug/DebugInstruments.cpp
+    Debug/EvaluteFunctions.cpp
     Debug/DebugWatcher.cpp
+    Debug/Watch.cpp   
     
     main.cpp
 )

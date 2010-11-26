@@ -3,7 +3,7 @@
 <ThemistoLevel version="0.1" authors="Wincode team">
     <World size_width="1024" size_height="600">
 
-        <Environ active="false">
+        <Environ active="true">
             <Rain enabled="true" limit="50" />
             <Clouds enabled="true" />
             <Lightnings enabled="true" />

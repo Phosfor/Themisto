@@ -94,8 +94,9 @@ using namespace std;
 
 #define IntToStr(p) (utils.intToStr(p))
 #define FloatToStr(p) (utils.floatToStr(p))
-#define VectorToStr(p) (utils.vectorToStr(p));
-#define HexToStr(p) (utils.hexToStr(p));
+#define VectorToStr(p) (utils.vectorToStr(p))
+#define HexToStr(p) (utils.hexToStr(p))
+#define BoolToStr(p) (utils.boolToStr(p))
 
 #define utils (Utils::get_mutable_instance())
 #define utilsConst (Utils::get_const_instance())
@@ -121,6 +122,7 @@ class Utils : public boost::serialization::singleton<Utils>
         string hexToStr(int p);
         string floatToStr(float p);
         string vectorToStr(b2Vec2 p);
+        string boolToStr(bool p);
 };
 
 #endif
