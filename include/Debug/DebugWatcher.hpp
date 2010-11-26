@@ -36,7 +36,6 @@ using namespace boost::lambda;
 #define debugWatcher (DebugWatcher::get_mutable_instance())
 #define debugWatcherConst (DebugWatcher::get_const_instance())
 
-#define DEFAULT_TIMEOUT 500;
 
 
 
@@ -71,7 +70,7 @@ boost::serialization::singleton<DebugWatcher>
             const string members[], const int memberCount, map<Target, string>& targets, EvaluteFunction evalute);
 
         Watch* getWatchByID(string id);
-        void update();
+        void update(Watch* watch);
         void addWatchToConsole(Watch* watch);
         void updateWatchInConsole(Watch* watch);
         void removeWatchFromConsole(Watch* watch);

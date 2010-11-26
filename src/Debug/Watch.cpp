@@ -16,6 +16,8 @@ Watch::Watch()
     ID = "";
     Name = "";
     Expression = nope;
+    UpdateInterval = DEFAULT_TIMEOUT;
+    LeftFromLastUpdate = 0;
 }
 
 Watch::~Watch()

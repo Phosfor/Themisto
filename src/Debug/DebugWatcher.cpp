@@ -17,12 +17,13 @@ DebugWatcher::~DebugWatcher()
     LOG("~DebugWatcher: " + answer);
 }
 
-void DebugWatcher::parseCommand(string command, string* _answer)
+void DebugWatcher::parseCommand(string _command, string* _answer)
 {
     
-    if(command.size() == 0) return;
+    if(_command.size() == 0) return;
     string& answer = *_answer;
     // Normalize command
+    string command(_command);
     boost::trim(command);
     while(command.find("  ") != command.npos)
     {
@@ -54,6 +55,7 @@ void DebugWatcher::parseCommand(string command, string* _answer)
     {
         watch = new Watch();
         watch->Type = ShowWatch;
+        watch->Name = _command;
         answer += addWatchCommon(watch, commandSet);
     }
     else if(firstWord == "hide")
@@ -62,12 +64,16 @@ void DebugWatcher::parseCommand(string command, string* _answer)
     }
     else if(firstWord == "update")
     {
-        update();
+        BOOST_FOREACH(Watch* watch, mWatches)
+        {
+            update(watch);
+        }
     }
     else if(firstWord == "write")
     {
         watch = new Watch();
         watch->Type = WriteWatch;   
+        watch->Name = _command;
         answer += addWatchCommon(watch, commandSet);
     }
     else if(firstWord == "stop")
@@ -170,6 +176,7 @@ string DebugWatcher::addWatchCommon(Watch* watch, vector<string> &commandSet)
                 if(it != commandSet.end())
                 {
                     string file = *it;
+                    boost::trim(file);
                     answer += assignWatchToFile(watch, file);
                     BOOST_FOREACH(Watch* child, watch->Children)
                     {
@@ -186,6 +193,55 @@ string DebugWatcher::addWatchCommon(Watch* watch, vector<string> &commandSet)
                 answer += "Error: parameter 'to' allowed only for 'write' command.\n";
             }
             watchNormal = true;
+        }
+        else if( command == "every" )
+        {
+            StrIterator argIt = ++it;
+            if(argIt != commandSet.end())
+            {
+                string arg = *argIt;
+                int interval = DEFAULT_TIMEOUT;
+                bool argOk = false;
+                if(arg == "step")
+                {
+                    interval = EVERY_STEP;
+                    argOk = true;
+                }
+                else if(arg == "eon" || arg == "aeon")
+                {
+                    interval = AEON;
+                    argOk = true;
+                }                
+                else
+                {                    
+                    try
+                    {
+                        interval = boost::lexical_cast<int>(arg);
+                        argOk = true;
+                    }
+                    catch(boost::bad_lexical_cast &e)
+                    {
+                        argOk = false;
+                    }                   
+                }
+                if(argOk)
+                {
+                    watch->UpdateInterval = interval;
+                    BOOST_FOREACH(Watch* child, watch->Children)
+                    {
+                        child->UpdateInterval = interval;
+                    }
+                }
+                else
+                {
+                    answer = "Error: bad argument for every parameter.\n";
+                }
+                               
+            }
+            else
+            {
+                answer += "Error: argument for every not specified.\n";
+            }
         }
         //material and others commands can contain brakes at end
         else if( command.find("material") != command.npos)
@@ -298,6 +354,7 @@ string DebugWatcher::add_member_watch(Watch* watch, string command,
         addWatchToConsole(watch);
         map<Target, string>::iterator it;
         unsigned int startParamBraket = command.find("(");
+        string added = "";
         // If members not specified, add to watch all members
         if(startParamBraket == command.npos)
         {
@@ -322,14 +379,14 @@ string DebugWatcher::add_member_watch(Watch* watch, string command,
                         child->Parent = watch;
                         watch->Children.push_back(child);
                         child->ID = watch->ID + "." + watchName + "(" + memberName + ")";
+                        child->UpdateInterval =  watch->UpdateInterval;
                         answer += assignWatchToFile(child, watch->OutFile);
                         mWatches.push_back(child);
                         addWatchToConsole(child);
-                        answer += "Added member " + memberName + " for " + watchName + " target.\n";
+                        added += memberName + ", ";
                     }
                 } 
             }
-            answer += "All members added to watch.\n";
         }
         // Look specified members only
         else
@@ -344,12 +401,12 @@ string DebugWatcher::add_member_watch(Watch* watch, string command,
                 // Last element is epmty
                 specMembers.erase(--specMembers.end());
             }
-            string added = "";
+            
             for(it = targets.begin(); it != targets.end(); ++it)
             {
                 Target target = it->first;
                 string watchName = it->second; 
-                added = "";
+                
                 BOOST_FOREACH(string memberName, specMembers)
                 {                   
                     boost::trim(memberName);  
@@ -376,6 +433,7 @@ string DebugWatcher::add_member_watch(Watch* watch, string command,
                         child->Parent = watch;
                         watch->Children.push_back(child);
                         child->ID = watch->ID + "." + watchName + "(" + memberName + ")";
+                        child->UpdateInterval =  watch->UpdateInterval;
                         answer += assignWatchToFile(child, watch->OutFile);
                         mWatches.push_back(child);
                         addWatchToConsole(child);
@@ -385,15 +443,21 @@ string DebugWatcher::add_member_watch(Watch* watch, string command,
                     {
                         answer += "Error: member " + memberName + " not exists.\n";
                     }
-                }
-            }
-            //Remove last comma and space
-            if( added.size() > 2) 
-                added.erase(added.end() - 2, added.end());
-            answer += "To watch added next properties of material: " + added + ". \n";
-           
-            answer += ". \n";
+                }// BOOST_FOREACH(string memberName, specMembers)
+            }//for(it = targets.begin(); it != targets.end(); ++it)
         }
+        //Remove last comma and space
+        if( added.size() > 2) 
+        {
+            added.erase(added.end() - 2, added.end());
+            answer += "To watch added next properties: " + added + ". \n";
+        }
+        else
+        {
+            answer += "Error: nothing added to watch.\n";
+            watch->Type = NotAWatch;
+        }
+        
     }//if(targets.size() > 0)
     else
     {
@@ -710,20 +774,61 @@ string DebugWatcher::process_stop(StrIterator commandIt, StrIterator endIt)
 {
     string answer = "";
     int stopped = 0;
-    vector<Watch*> watches = getWatches(commandIt + 1, endIt, answer);
-    BOOST_FOREACH(Watch* watch, watches)
+    StrIterator argIt = commandIt + 1;
+    if(argIt != endIt)
     {
-        if(watch->Active)
+        if(*argIt == "file")
         {
-            watch->Active = false;
-            stopped++;
+            StrIterator filePathIt = argIt + 1;
+            if(filePathIt != endIt)
+            {
+                string path = *filePathIt;
+                boost::trim(path);
+                map<string, ofstream*>::iterator fit = mFiles.find(path);
+                if(fit != mFiles.end())
+                {
+                    ofstream* fs = fit->second;
+                    BOOST_FOREACH(Watch* watch, mWatches)
+                    {
+                        if(watch->OutFile == fs)
+                        {
+                            watch->Active = false;
+                            answer += unassignWatchFromFile(watch);
+                            stopped++;
+                        }
+                    }
+                }
+                else
+                {
+                    answer += "Error: file '"+ path +"' is not using now.\n";
+                }
+            }
+            else
+            {
+                answer += "Error: file path not specified for 'stop file' command.\n";
+            }
         }
-        
-        if(watch->OutFile != NULL)
+        else
         {
-            answer += unassignWatchFromFile(watch);
+            vector<Watch*> watches = getWatches(argIt, endIt, answer);
+            BOOST_FOREACH(Watch* watch, watches)
+            {
+                if(watch->Active)
+                {
+                    watch->Active = false;
+                    stopped++;
+                }
+                
+                if(watch->OutFile != NULL)
+                {
+                    answer += unassignWatchFromFile(watch);
+                }
+            }
         }
-       
+    }
+    else
+    {
+        answer += "Error: argument not specified for command 'stop'.\n";
     }
     answer += "Stopped " + IntToStr(stopped) + " watches.\n"; 
     return answer;
@@ -848,72 +953,65 @@ string DebugWatcher::unassignWatchFromFile(Watch* watch)
                 fileUseIt->first->flush();
             }
         }
-        answer += "Watch with id = '"+watch->ID+"' detached from file '"+ filePath+"'.\n";
+        answer += "Watch with id = '"+ watch->ID +"' detached from file '"+ filePath+"'.\n";
     }
     return answer;
 }
 
 void DebugWatcher::step()
 {
-
-    //every step enabled
-    if(mTimeout<0)
+    int elapsed = _appManager->getElapsed();
+    BOOST_FOREACH(Watch* watch, mWatches)
     {
-        update();
-    }
-    else
-    {
-        if(mLeftFromLastUpdate >= mTimeout)
+        if(watch->UpdateInterval == EVERY_STEP)
         {
-            mLeftFromLastUpdate = 0;
-            update();
+            update(watch);
         }
         else
         {
-            mLeftFromLastUpdate += _appManager->getElapsed();
+            watch->LeftFromLastUpdate += elapsed;
+            if(watch->LeftFromLastUpdate >= watch->UpdateInterval)
+            {
+                watch->LeftFromLastUpdate = 0;
+                update(watch);
+            }
         }
     }
 }
 
-void DebugWatcher::update()
+void DebugWatcher::update(Watch* watch)
 {
-    list<Watch*>::iterator it;
-    for(it = mWatches.begin(); it != mWatches.end(); ++it)
+    if( watch->Active)
     {
-        Watch* watch = *it;
 
-        if( watch->Active)
+        if( watch->Type == ShowWatch)
         {
 
-            if( watch->Type == ShowWatch)
+            updateWatchInConsole(watch);
+        }
+        else if(watch->Type == WriteWatch)
+        {
+            if(watch->OutFile == NULL)
             {
-
-                updateWatchInConsole(watch);
+                Watch* next = new Watch(*watch);
+                next->ID = watch->ID + "." + worldManager.generateUniqueID();
+                next->Parent = watch;
+                watch->Children.push_back(next);
+                addWatchToConsole(next);
             }
-            else if(watch->Type == WriteWatch)
+            else
             {
-                if(watch->OutFile == NULL)
+                if(watch->OutFile->is_open())
                 {
-                    Watch* next = new Watch(*watch);
-                    next->ID = watch->ID + "." + worldManager.generateUniqueID();
-                    next->Parent = watch;
-                    watch->Children.push_back(next);
-                    addWatchToConsole(next);
+                    string record = "";
+                    string time = boost::posix_time::to_simple_string(microsec_clock::local_time());
+                    record = time + " : [" + watch->ID + "] " + watch->Name + " = " + watch->Expression(watch)+ "\n";
+                    watch->OutFile->write(record.c_str(), record.size());                        
                 }
                 else
                 {
-                    if(watch->OutFile->is_open())
-                    {
-                        string record = "";
-                        string time = boost::posix_time::to_simple_string(microsec_clock::local_time());
-                        record = time + " : [" + watch->ID + "] " + watch->Name + " = " + watch->Expression(watch)+ "\n";
-                        watch->OutFile->write(record.c_str(), record.size());                        
-                    }
-                    else
-                    {
-                        LOG("Error: file was closed for '" + watch->ID + "' watch. Deacitvating watch...");
-                        watch->Active = false;
-                    }
+                    LOG("Error: file was closed for '" + watch->ID + "' watch. Deacitvating watch...");
+                    watch->Active = false;
                 }
             }
         }
