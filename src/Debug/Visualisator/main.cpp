@@ -18,7 +18,7 @@ public:
             Client mClient;
             mClient.connect_to_server();
 
-            CL_DisplayWindow window("Debug Visualisator", 640, 480);
+            CL_DisplayWindow window("Debug Visualisator", 640, 700);
             CL_GraphicContext gc = window.get_gc();
             CL_InputDevice keyboard = window.get_ic().get_keyboard();
             CL_Font font(gc, "Tahoma", 20);
@@ -28,12 +28,11 @@ public:
                 mClient.checkEvents();
                 gc.clear(CL_Colorf::black);
 
-                int offset = 10;
-                std::map<std::string, watch>::const_iterator it = mClient.mWatchesHandles.begin();
-                for (; it != mClient.mWatchesHandles.end(); ++it)
+                int offset = 20;
+                for (unsigned int i=0; i < mClient.mWatchesHandles.size(); ++i)
                 {
-                    std::string data = mClient.mWatchesHandles[it->first].name + " : " +
-                        mClient.mWatchesHandles[it->first].value;
+                    std::string data = mClient.mWatchesHandles[i].name + " : " +
+                        mClient.mWatchesHandles[i].value;
                     font.draw_text(gc, 10, offset, data, CL_Colorf::white);
                     offset += 20;
                 }
