@@ -21,14 +21,23 @@ public:
             CL_DisplayWindow window("Debug Visualisator", 640, 480);
             CL_GraphicContext gc = window.get_gc();
             CL_InputDevice keyboard = window.get_ic().get_keyboard();
-            CL_Font font(gc, "Tahoma", 30);
+            CL_Font font(gc, "Tahoma", 20);
 
             while (!keyboard.get_keycode(CL_KEY_ESCAPE))
             {
                 mClient.checkEvents();
                 gc.clear(CL_Colorf::black);
-                CL_Draw::line(gc, 0, 110, 640, 110, CL_Colorf::yellow);
-                font.draw_text(gc, 100, 100, "Hello World!", CL_Colorf::lightseagreen);
+
+                int offset = 10;
+                std::map<std::string, watch>::const_iterator it = mClient.mWatchesHandles.begin();
+                for (; it != mClient.mWatchesHandles.end(); ++it)
+                {
+                    std::string data = mClient.mWatchesHandles[it->first].name + " : " +
+                        mClient.mWatchesHandles[it->first].value;
+                    font.draw_text(gc, 10, offset, data, CL_Colorf::white);
+                    offset += 20;
+                }
+
                 window.flip();
                 CL_KeepAlive::process();
                 CL_System::sleep(10);

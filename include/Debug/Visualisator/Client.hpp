@@ -30,6 +30,7 @@ public:
     void disconnect();
 
     bool connected;
+    std::map<std::string, watch> mWatchesHandles;
 
 private:
     void on_connected();
@@ -47,7 +48,6 @@ private:
     CL_SlotContainer slots;
 
     CL_NetGameEventDispatcher_v0 events;
-    std::map<std::string, watch> mWatchesHandles;
 };
 
 #endif // CLIENT_H
