@@ -694,11 +694,11 @@ vector<Watch*> DebugWatcher::getWatches(StrIterator specIt, StrIterator endIt, s
             if(mWatches.size() > 0)
             {
                 Watch* watch = mWatches.back();
-                watches.push_back(watch);
                 BOOST_FOREACH(Watch* child, watch->Children)
                 {
                     watches.push_back(child);
                 }
+                watches.push_back(watch);
             }
             else 
             {
@@ -721,11 +721,11 @@ vector<Watch*> DebugWatcher::getWatches(StrIterator specIt, StrIterator endIt, s
            Watch* watch = getWatchByID(param);
            if(watch != NULL)
             {
-                watches.push_back(watch);
                 BOOST_FOREACH(Watch* child, watch->Children)
                 {
                     watches.push_back(child);
                 }
+                watches.push_back(watch);
             }
             else
             {
