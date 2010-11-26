@@ -15,13 +15,16 @@ public:
 
         try
         {
+            CL_Font_System::register_font("media/fonts/ubuntu.ttf", "Ubuntu");
             Client mClient;
             mClient.connect_to_server();
 
             CL_DisplayWindow window("Debug Visualisator", 640, 700);
             CL_GraphicContext gc = window.get_gc();
             CL_InputDevice keyboard = window.get_ic().get_keyboard();
-            CL_Font font(gc, "Tahoma", 20);
+            CL_Font font(gc, "Ubuntu", 25);
+
+            CL_Colorf label(127/255.0f, 229/225.0f, 127/225.0f);
 
             while (!keyboard.get_keycode(CL_KEY_ESCAPE))
             {
@@ -31,10 +34,16 @@ public:
                 int offset = 20;
                 for (unsigned int i=0; i < mClient.mWatchesHandles.size(); ++i)
                 {
-                    std::string data = mClient.mWatchesHandles[i].name + " : " +
-                        mClient.mWatchesHandles[i].value;
-                    font.draw_text(gc, 10, offset, data, CL_Colorf::white);
-                    offset += 20;
+                    std::string data = 
+                        "[" + mClient.mWatchesHandles[i].id + "] " +
+                        mClient.mWatchesHandles[i].name + " : ";
+                    font.draw_text(gc, 10, offset, data, label);
+
+                    int width = data.length() * 10;
+                    std::string value = mClient.mWatchesHandles[i].value;
+                    font.draw_text(gc, 10 + width, offset, value, CL_Colorf::white);
+
+                    offset += 25;
                 }
 
                 window.flip();

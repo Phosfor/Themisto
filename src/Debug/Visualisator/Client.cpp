@@ -20,17 +20,13 @@ void Client::add(const CL_NetGameEvent &event)
     std::string watchValue = event.get_argument(2).to_string().c_str();
     std::string watchParent = event.get_argument(3).to_string().c_str();
 
-    bool add = true;
-    for (int i=0; i < mWatchesHandles.size(); ++i)
-        if (mWatchesHandles[i].id == watchID)
-            add = false;
-
-    if (add)
-        mWatchesHandles.insert(std::make_pair(mCounter, 
-            watch(watchID, watchName, watchValue, watchParent)) );
+    mWatchesHandles.insert(std::make_pair(mCounter, 
+        watch(watchID, watchName, watchValue, watchParent)) );
 
     std::cout<< "Add watch ID = " << watchID << " Name = "
         <<  watchName << " Value = " << watchValue << " Parent = " << watchParent << "\n";
+
+    mCounter++;
 }
 void Client::update(const CL_NetGameEvent &event)
 {
