@@ -108,3 +108,32 @@ target_link_libraries(DebugConsole
     fontconfig
     pthread
 )
+
+# ----------------------------------------------------
+# Executable for the DebugVisualisator
+# ----------------------------------------------------
+set(DebugVisualisator_srcs
+	Debug/Visualisator/main.cpp
+	Debug/Visualisator/Client.cpp
+	
+)
+
+add_executable(DebugVisualisator
+	${DebugVisualisator_srcs}
+)
+
+target_link_libraries(DebugVisualisator
+    ${X11_LIBRARIES}
+    ${FREETYPE_LIBRARIES}
+    ${FREEIMAGE_LIBRARY}
+    ${FREETYPE_LIBRARIES}
+    ${OPENGL_LIBRARIES}
+    ${ZLIB_LIBRARIES}
+    ${PNG_LIBRARIES}
+    ${JPEG_LIBRARIES}
+    ${ClanLib_LIBRARIES}
+    ${READLINE_LIBRARIES}
+    fontconfig
+    pthread
+)
+
