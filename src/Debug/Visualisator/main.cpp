@@ -3,6 +3,8 @@
 #include <ClanLib/gl.h>
 #include <ClanLib/application.h>
 #include "Debug/Visualisator/Client.hpp"
+#include <algorithm>
+#include <boost/algorithm/string.hpp>
 
 class DebugVisualisator
 {
@@ -19,7 +21,7 @@ public:
             Client mClient;
             mClient.connect_to_server();
 
-            CL_DisplayWindow window("Debug Visualisator", 640, 700);
+            CL_DisplayWindow window("Debug Visualisator", 500, 700);
             CL_GraphicContext gc = window.get_gc();
             CL_InputDevice keyboard = window.get_ic().get_keyboard();
             CL_Font font(gc, "Ubuntu", 25);
@@ -31,20 +33,54 @@ public:
                 mClient.checkEvents();
                 gc.clear(CL_Colorf::black);
 
+                std::vector<unsigned int> shownElements;
                 int offset = 20;
+                // How many elements with height 25 could be rendered
+                unsigned int maxElements = window.get_geometry().get_height() / 25;
                 for (unsigned int i=0; i < mClient.mWatchesHandles.size(); ++i)
                 {
-                    std::string data = 
-                        "[" + mClient.mWatchesHandles[i].id + "] " +
-                        mClient.mWatchesHandles[i].name + " : ";
-                    font.draw_text(gc, 10, offset, data, label);
+                    if (i > maxElements ||
+                        (std::find(shownElements.begin(), shownElements.end(), i) != shownElements.end())) break;
 
-                    int width = data.length() * 10;
-                    std::string value = mClient.mWatchesHandles[i].value;
-                    font.draw_text(gc, 10 + width, offset, value, CL_Colorf::white);
+                    int offsetLeft = 10;
 
-                    offset += 25;
+                    // If this is parent, add Id string for it
+                    if (mClient.mWatchesHandles[i].parent == "")
+                    {
+                        std::string data = "[" + mClient.mWatchesHandles[i].id + "] ";
+                        data += mClient.mWatchesHandles[i].name + " : ";
+                        font.draw_text(gc, offsetLeft, offset, data, label);
+
+                        int width = data.length() * 8;
+                        std::string value = mClient.mWatchesHandles[i].value;
+                        font.draw_text(gc, offsetLeft + width, offset, value, CL_Colorf::white);
+
+                        shownElements.push_back(i);
+                        offset += 25;
+
+                        // If this is parent, it could contain some children, find them
+                        for (unsigned int j = i; j < mClient.mWatchesHandles.size(); ++j)
+                        {
+                            if (std::find(shownElements.begin(), shownElements.end(), j) != shownElements.end()) continue;
+                            std::string id = mClient.mWatchesHandles[j].id;
+
+                            if (mClient.mWatchesHandles[j].parent == mClient.mWatchesHandles[i].id)
+                            {
+                                std::string childData = mClient.mWatchesHandles[j].name + " : ";
+                                font.draw_text(gc, offsetLeft + 15, offset, childData, label);
+
+                                int widthChild = childData.length() * 8;
+                                std::string childValue = mClient.mWatchesHandles[j].value;
+                                font.draw_text(gc, offsetLeft + widthChild + 15, offset, childValue, CL_Colorf::white);
+
+                                shownElements.push_back(j);
+                                offset += 25;
+                            }
+                        }
+                    }
                 }
+
+                shownElements.clear();
 
                 window.flip();
                 CL_KeepAlive::process();
