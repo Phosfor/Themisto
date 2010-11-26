@@ -40,7 +40,7 @@ public:
                 for (unsigned int i=0; i < mClient.mWatchesHandles.size(); ++i)
                 {
                     if (i > maxElements ||
-                        (std::find(shownElements.begin(), shownElements.end(), i) != shownElements.end())) break;
+                        (std::find(shownElements.begin(), shownElements.end(), i) != shownElements.end())) continue;
 
                     int offsetLeft = 10;
 
@@ -67,11 +67,11 @@ public:
                             if (mClient.mWatchesHandles[j].parent == mClient.mWatchesHandles[i].id)
                             {
                                 std::string childData = mClient.mWatchesHandles[j].name + " : ";
-                                font.draw_text(gc, offsetLeft + 15, offset, childData, label);
+                                font.draw_text(gc, offsetLeft + 20, offset, childData, label);
 
                                 int childWidth = font.get_text_size(gc, childData).width;
                                 std::string childValue = mClient.mWatchesHandles[j].value;
-                                font.draw_text(gc, offsetLeft + childWidth + 15, offset, childValue, CL_Colorf::white);
+                                font.draw_text(gc, offsetLeft + childWidth + 20, offset, childValue, CL_Colorf::white);
 
                                 shownElements.push_back(j);
                                 offset += 25;
