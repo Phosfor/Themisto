@@ -24,6 +24,7 @@ class DebugIO : public boost::serialization::singleton<DebugIO>
         CL_NetGameServer mConsoleServer;
         CL_NetGameConnection *mVisualisatorConnection;
         CL_Slot slotEventReceived;
+        CL_Slot slotDisconnect;
         CL_SetupCore setup_core;
         CL_SetupNetwork setup_network;
         CL_Mutex mMutex;
@@ -34,6 +35,7 @@ class DebugIO : public boost::serialization::singleton<DebugIO>
         void eventHandler( CL_NetGameConnection * connection,const CL_NetGameEvent &event);
         void commandHandler(const CL_NetGameEvent &event, CL_NetGameConnection * connection);
         void parter(const CL_NetGameEvent &event, CL_NetGameConnection * connection);
+        void on_disconnected(CL_NetGameConnection * connection);
     public:
         void init();
         void step();

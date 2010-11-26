@@ -16,6 +16,15 @@ void DebugIO::init()
         LOG(e.what()); 
     }
     slotEventReceived = mConsoleServer.sig_event_received().connect(this, &DebugIO::eventHandler);
+    slotDisconnect = mConsoleServer.sig_client_disconnected().connect(this, &DebugIO::on_disconnected);
+}
+
+void DebugIO::on_disconnected(CL_NetGameConnection * connection)
+{
+    if(connection == mVisualisatorConnection)
+    {
+        mVisualisatorConnection = NULL;
+    }
 }
 
 void DebugIO::step()
