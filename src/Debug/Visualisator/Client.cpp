@@ -1,6 +1,7 @@
 #include "Debug/Visualisator/Client.hpp"
 
 Client::Client()
+    : mCounter(0)
 {
     events.func_event("Add").set(this, &Client::add);
     events.func_event("Update").set(this, &Client::update);
@@ -19,31 +20,30 @@ void Client::add(const CL_NetGameEvent &event)
     std::string watchValue = event.get_argument(2).to_string().c_str();
     std::string watchParent = event.get_argument(3).to_string().c_str();
 
-    if (mWatchesHandles.find(watchID) == mWatchesHandles.end())
-    {
-        mWatchesHandles.insert(std::make_pair(watchID, 
-                    watch(watchID, watchName, watchValue, watchParent)) );
-    }
+    mWatchesHandles.insert(std::make_pair(mCounter, 
+        watch(watchID, watchName, watchValue, watchParent)) );
 
     std::cout<< "Add watch ID = " << watchID << " Name = "
         <<  watchName << " Value = " << watchValue << " Parent = " << watchParent << "\n";
+
+    mCounter++;
 }
 void Client::update(const CL_NetGameEvent &event)
 {
     std::string watchID = event.get_argument(0).to_string().c_str();
     std::string watchValue = event.get_argument(1).to_string().c_str();
 
-    std::map<std::string, watch>::iterator it = mWatchesHandles.find(watchID);
-    if (it != mWatchesHandles.end())
-        it->second.value = watchValue;
+    for (unsigned int i=0; i < mWatchesHandles.size(); ++i)
+        if (mWatchesHandles[i].id == watchID)
+            mWatchesHandles[i].value = watchValue;
 }
 void Client::remove(const CL_NetGameEvent &event)
 {
     std::string watchID = event.get_argument(0).to_string().c_str();
 
-    std::map<std::string, watch>::iterator it = mWatchesHandles.find(watchID);
-    if (it != mWatchesHandles.end())
-        mWatchesHandles.erase(it);
+    for (unsigned int i=0; i < mWatchesHandles.size(); ++i)
+        if (mWatchesHandles[i].id == watchID)
+            mWatchesHandles.erase(i);
 
     std::cout<< "Remove watch ID = " << watchID << "\n";
 }

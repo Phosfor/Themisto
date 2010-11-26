@@ -30,7 +30,8 @@ public:
     void disconnect();
 
     bool connected;
-    std::map<std::string, watch> mWatchesHandles;
+    std::map<int, watch> mWatchesHandles;
+    int mCounter; // How many watches have been added
 
 private:
     void on_connected();
