@@ -51,7 +51,7 @@ public:
                         data += mClient.mWatchesHandles[i].name + " : ";
                         font.draw_text(gc, offsetLeft, offset, data, label);
 
-                        int width = data.length() * 8;
+                        int width = font.get_text_size(gc, data).width;
                         std::string value = mClient.mWatchesHandles[i].value;
                         font.draw_text(gc, offsetLeft + width, offset, value, CL_Colorf::white);
 
@@ -69,9 +69,9 @@ public:
                                 std::string childData = mClient.mWatchesHandles[j].name + " : ";
                                 font.draw_text(gc, offsetLeft + 15, offset, childData, label);
 
-                                int widthChild = childData.length() * 8;
+                                int childWidth = font.get_text_size(gc, childData).width;
                                 std::string childValue = mClient.mWatchesHandles[j].value;
-                                font.draw_text(gc, offsetLeft + widthChild + 15, offset, childValue, CL_Colorf::white);
+                                font.draw_text(gc, offsetLeft + childWidth + 15, offset, childValue, CL_Colorf::white);
 
                                 shownElements.push_back(j);
                                 offset += 25;
