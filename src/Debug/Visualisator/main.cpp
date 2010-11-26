@@ -8,7 +8,24 @@
 
 class DebugVisualisator
 {
+private:
+    static void onKeyDown(const CL_InputEvent &event, const CL_InputState &state)
+    {
+        if (event.id == CL_MOUSE_WHEEL_DOWN)
+        {
+            if (topOffsetScroll - 5 >= -((numElements-3) * 25))
+                topOffsetScroll -= 5;
+        } else if (event.id == CL_MOUSE_WHEEL_UP)
+        {
+            if (topOffsetScroll + 5 <= windowHeight/25)
+                topOffsetScroll += 5;
+        }
+    }
 public:
+    static int topOffsetScroll;
+    static int windowHeight;
+    static int numElements;
+
     static int main(const std::vector<CL_String> &args)
     {
         CL_SetupCore setup_core;
@@ -24,23 +41,24 @@ public:
             CL_DisplayWindow window("Debug Visualisator", 500, 700);
             CL_GraphicContext gc = window.get_gc();
             CL_InputDevice keyboard = window.get_ic().get_keyboard();
+            CL_Slot slot = window.get_ic().get_mouse().sig_key_down().connect(&DebugVisualisator::onKeyDown);
             CL_Font font(gc, "Ubuntu", 25);
 
+            windowHeight = window.get_geometry().get_height();
             CL_Colorf label(127/255.0f, 229/225.0f, 127/225.0f);
 
             while (!keyboard.get_keycode(CL_KEY_ESCAPE))
             {
                 mClient.checkEvents();
+                numElements = mClient.mWatchesHandles.size();
                 gc.clear(CL_Colorf::black);
+                int offset = 20 + topOffsetScroll;
 
                 std::vector<unsigned int> shownElements;
-                int offset = 20;
-                // How many elements with height 25 could be rendered
-                unsigned int maxElements = window.get_geometry().get_height() / 25;
                 for (unsigned int i=0; i < mClient.mWatchesHandles.size(); ++i)
                 {
-                    if (i > maxElements ||
-                        (std::find(shownElements.begin(), shownElements.end(), i) != shownElements.end())) continue;
+                    if (std::find(shownElements.begin(), shownElements.end(), i) != shownElements.end()) 
+                        continue;
 
                     int offsetLeft = 10;
 
@@ -99,4 +117,7 @@ public:
     }
 };
 
+int DebugVisualisator::topOffsetScroll = 0;
+int DebugVisualisator::windowHeight = 0;
+int DebugVisualisator::numElements = 0;
 CL_ClanApplication app(&DebugVisualisator::main);
