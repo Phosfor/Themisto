@@ -17,6 +17,8 @@ DebugWatcher::~DebugWatcher()
     LOG("~DebugWatcher: " + answer);
 }
 
+
+
 void DebugWatcher::parseCommand(string _command, string* _answer)
 {
     
@@ -128,18 +130,15 @@ void DebugWatcher::parseCommand(string _command, string* _answer)
         }
         if(boost::filesystem::exists("help"))
         {
-            ifstream fs;
-            fs.open("help");
-            if(fs.is_open())
+            ifstream fshelp;
+            fshelp.open("help");
+            if(fshelp.good())
             {
-                char bufer[20];
                 bool found = false;
                 string line;
-                while(!found && !fs.eof())
+                while(!found && !fshelp.eof())
                 {
-                    //fs.getline(bufer, 20, '\n');
-                    //string line(bufer);
-                    fs >> line;
+                    fshelp >> line;
                     boost::trim(line);
                     if(line == param)
                     {
@@ -153,15 +152,19 @@ void DebugWatcher::parseCommand(string _command, string* _answer)
                     do
                     {
                         answer += c;
-                        fs.get(c);                    
+                        fshelp.get(c);                    
                     }
-                    while(c != '$' && !fs.eof());  
+                    while(c != '$' && !fshelp.eof());  
                 }
                 else
                 {
                     answer += "Error: can't find help for '"+ param +"'.\n";
                 }
-                fs.close();       
+                fshelp.close();       
+            }
+            else
+            {
+                answer += "Error: can't read help-file.\n";
             }
         }
         else

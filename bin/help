@@ -28,6 +28,9 @@
         write  -  Create a watch, and write every new value in 
                   own row on screen or in file.
                   
+        get    -  Shows result of some expression in DebugConsole 
+                  (here).
+                  
         update -  Force updating value of watch or set update 
                   value interval.
                   
@@ -35,6 +38,8 @@
                   associated file.
                   
         stop   -  Brakes updating watch value.
+     
+        resume -  Revenants watches, stopped by 'stop' command.
         
         close  -  Terminates Themisto.
         
@@ -50,7 +55,7 @@
     Show command
     
     SYNOPSIS
-       show <expression> [as <name>] [every <milliseconds>|step|eon]
+       show <expression> [as <name>] [every <milliseconds>|step|eon] [parent <watch_id>]
     DESCRIPTION
     Shows result of some expression on screen in format 
     name = value, and updates it every time interval, game 
@@ -65,7 +70,13 @@
         Default value: command text
     every <miliseconds>|step|eon
         Sets update value interval; 'step' means every game loop; 
-        'eon' means never update; default value 500 ms.
+        'eon' means never update. Default value 500 ms.
+    parent <watch_id>
+        Id of the parent watch. In DebugVisualisator child watches 
+        grouped by it's parents in visual way. Also, when you make 
+        some operation with parent (hide, stop, ect.), it applies 
+        to all children.
+        To see awailable parent watches use 'get watches' command.
     ----------------------------------------------------------------
     $
 
@@ -74,15 +85,16 @@
     Hide command
     
     SYNOPSIS
-        hide <name>|all|last|selected
+        hide <id>|all|last|selected
     DESCRIPTION
     Hides watch that displayed show command. 
     OPTIONS 
-    <name>   -  Name of watch. 
-    all      -  All watches.
-    last     -  Last watch.
-    selected -  Watch(es), related with selected object (by mouse 
-                or somehow).
+    <name>|all|last|selected 
+        <id>     -  ID of watch. 
+        all      -  All watches.
+        last     -  Last watch.
+        selected -  Watch(es), related with selected object (by 
+                    mouse or somehow).
     ----------------------------------------------------------------
     $
 
@@ -91,17 +103,26 @@
     Update command
     
     SYNOPSIS
-      update <name>|all|last|selected [every <miliseconds>|step|eon]
+      update <id>|all|last|selected [every <miliseconds>|step|eon] [parent <watch_id>]
     DESCRIPTION
     Force updating value of watch or set update interval.
     OPTIONS 
     <name>|all|last|selected 
-        See hide command.
+        <id>     -  ID of watch. 
+        all      -  All watches.
+        last     -  Last watch.
+        selected -  Watch(es), related with selected object (by 
+                    mouse or somehow).
     every <miliseconds>|step|eon
-        Update value interval in milliseconds; 
-        'step' means every game loop; 
-        'eon' or 'aeon' means never update; 
-        default value is 500 ms.
+        Update value interval in milliseconds; 'step' means every 
+        game loop; 'eon' or 'aeon' means never update; 
+        Default value is 500 ms.
+    parent <watch_id>
+        Id of the parent watch. In DebugVisualisator child watches 
+        grouped by it's parents in visual way. Also, when you make 
+        some operation with parent (hide, stop, ect.), it applies 
+        to all children.
+        To see awailable parent watches use 'get watches' command.
     ----------------------------------------------------------------
     $
 
@@ -110,7 +131,7 @@
     Write command
     
     SYNOPSIS
-        write <expression> [as <name>] [to <file>] [every <miliseconds>|step|eon]
+        write <expression> [as <name>] [to <file>] [every <miliseconds>|step|eon] [parent <watch_id>]
     DESCRIPTION
     Writes result of some expression to file or screen (if to not 
     specified) in format name = value. Unlike show command, write 
@@ -126,7 +147,28 @@
         Default value: command text
     every <miliseconds>|step|eon
         Sets update value interval; 'step' means every game loop; 
-        'eon' means never update; default value 500 ms.
+        'eon' means never update; Default value 500 ms.
+    parent <watch_id>
+        Id of the parent watch. In DebugVisualisator child watches 
+        grouped by it's parents in visual way. Also, when you make 
+        some operation with parent (hide, stop, ect.), it applies 
+        to all children.
+        To see awailable parent watches use 'get watches' command.
+    ----------------------------------------------------------------
+    $
+    
+    @get    
+    ----------------------------------------------------------------
+    Get command
+    
+    SYNOPSIS
+        get <expression>
+    DESCRIPTION
+    Shows result of some expression in DebugConsole (here).
+    OPTIONS 
+    <expression>
+        Some command, that returns value. For details type 
+        'help expression'.
     ----------------------------------------------------------------
     $
 
@@ -135,19 +177,47 @@
     Stop command 
     
     SYNOPSIS
-        stop <name>|all|last|selected
+        stop <id>|all|last|selected
         stop file <file>|all
     DESCRIPTION
     Stopes writing and updating watch(es).
     OPTIONS
     <name>|all|last|selected 
-        See hide command
+        <id>     -  ID of watch. 
+        all      -  All watches.
+        last     -  Last watch.
+        selected -  Watch(es), related with selected object (by 
+                    mouse or somehow).
     <file>
         File patch.
     all
         Close all opened files.
     ----------------------------------------------------------------
     $
+    
+    @resume
+    ----------------------------------------------------------------
+    Resume command 
+    
+    SYNOPSIS
+        resume <id>|all|last|selected
+        resume file <file>|all
+    DESCRIPTION
+    Revenants watches, stopped by 'stop' command.
+    OPTIONS
+    <name>|all|last|selected 
+        <id>     -  ID of watch. 
+        all      -  All watches.
+        last     -  Last watch.
+        selected -  Watch(es), related with selected object (by 
+                    mouse or somehow).
+    <file>
+        File patch.
+    all
+        Resume writing to all files.
+    ----------------------------------------------------------------
+    $
+   
 
     @close
     ----------------------------------------------------------------
@@ -168,12 +238,17 @@
     In show and hide commands excepts <expression> paramter. You may
     use follow:
     
-      material - BodyMaterial of BodyPart fields.
-      state - BodyState of BodyPart fields.
-      b2param - Fields of b2Fixture and b2Body.
-      param - Fields of BodyPart and Body.
-      environ - Fields of EnvironObject.
-      elapsed - Time interval between game loop iterations.
+      material -  BodyMaterial of BodyPart fields.
+      state    -  BodyState of BodyPart fields.
+      b2param  -  Fields of b2Fixture and b2Body.
+      param    -  Fields of BodyPart and Body.
+      environ  -  Fields of EnvironObject.
+      elapsed  -  Time interval between game loop iterations.
+      parts    -  BodyParts of some Body.
+      bodies   -  Enum all Body objects.
+      watches  -  Enum all awailable watches.
+      fields   -  Enum awailable properties for some expression.
+      nothing  -  Nothing. Use it for creating empty parent watches.
       
     For details type 'help xxx', where xxx is name of parameter (ma-
     terial, state or other).
@@ -195,7 +270,7 @@
         If option not set, returns all fields.
     <name>
         Name of physic Body.
-    <number>
+    <number>|<name>
         Zero based index or name of BodyPart. If not specified, then
         means all BodyPart's.
     selected
@@ -218,7 +293,7 @@
         If option not set, returns all fields.
     <name>
         Name of physic Body.
-    <number>
+    <number>|<name>
         Zero based index or name of BodyPart. If not specified, then
         means all BodyPart's.
     selected
@@ -242,7 +317,7 @@
         If option not set, returns all fields.
     <name>
         Name of related Body object.
-    <number>
+    <number>|<name>
         Zero based index or name of related BodyPart. 
         If specified, then means parameters of that b2Fixture, else 
         of b2Body.
@@ -267,7 +342,7 @@
         If option not set, returns all fields.
     <name>
         Name of Body object.
-    <number>
+    <number>|<name>
         Zero based index or name of BodyPart. 
         If specified, then means parameters of that BodyPart, else 
         of Body.
@@ -303,10 +378,77 @@
     ----------------------------------------------------------------
     $  
 
+    @parts
+    ----------------------------------------------------------------
+    Parts expression
+    
+    SYNOPSIS
+        parts of <name>|selected
+    DESCRIPTION
+    Returns set of names of BodyPart objects associated with speci-
+    fied Body. Order matches (you can use it to examine zero-based 
+    index of the part).
+    OPTIONS
+    <fiedls>
+        Set of field names, splitted by comma. For example material
+        (mKindleReceptivity, mDampnessReceptivity).
+        If option not set, returns all fields.
+    <name>
+        Name of physic Body.
+    selected
+        Selected by mouse (or somehow).
+    ----------------------------------------------------------------
+    $
 
+    @bodies
+    ----------------------------------------------------------------
+    Bodies expression
+    
+    SYNOPSIS
+        bodies
+    DESCRIPTION
+    Returns set of names of Body objects loaded to scene.
+    ----------------------------------------------------------------
+    $
+    
+    @watches
+    ----------------------------------------------------------------
+    Watches expression
+    
+    SYNOPSIS
+        watches
+    DESCRIPTION
+    Returns set of id+name of awailable parent watches.
+    ----------------------------------------------------------------
+    $
 
+    @fields
+    ----------------------------------------------------------------
+    Fields expression
+    
+    SYNOPSIS
+        fields of <expression_name>
+    DESCRIPTION
+    Returns set of awailable properties for some expression.
+    OPTIONS
+    <expression_name>
+        Name of some expression (for example 'material' or 
+        'b2param'). Type 'help expression' to see all possible.
+    ----------------------------------------------------------------
+    $
 
-
-
+    @nothing
+    ----------------------------------------------------------------
+    Nothing expression
+    
+    SYNOPSIS
+        nothing
+    DESCRIPTION
+    Returns empty string. Use it for creating parent watches without
+    any value (for grouping purposes). It would be useful to specify
+    'as' parameter for them (see show, hide and update commands for 
+    details).
+    ----------------------------------------------------------------
+    $
 
 
