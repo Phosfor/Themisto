@@ -1,0 +1,312 @@
+    @
+    ----------------------------------------------------------------
+    Welcome to Themisto debug console help!
+
+    Debug console is program, that allow you to see some game values
+    online. You should type command here, and see result in 
+    DebugVisualisator window.
+
+    To examine some value, you should create a 'watch'. It is a pair 
+    of name and value specified by some ID. To create watch use show 
+    and write commands. Show makes watch, and shows it's value dyna-
+    micly in only row in DebugVisualisator window. Write command 
+    allow you see the change of watch value by time. It writes every 
+    new value on own row. You can write to file or to visualisator 
+    window. For details type 'help show' and 'help write'.
+
+    Added watches you can stop and hide. Stop means break updating 
+    of value (if watch associated with file, file will be closed). 
+    Hide means remove watch. If it is writing to file, file will be 
+    closed, else if it is showing on screen, it will be hiden. After 
+    you hide some watch, it no more awailable. 
+    For details type 'help hide' and 'help stop'.
+
+    Here complete list of commands:
+
+        show   -  Create a watch, and show it in one row at screen.
+        
+        write  -  Create a watch, and write every new value in 
+                  own row on screen or in file.
+                  
+        update -  Force updating value of watch or set update 
+                  value interval.
+                  
+        hide   -  Removes the watch from screen and closes 
+                  associated file.
+                  
+        stop   -  Brakes updating watch value.
+        
+        close  -  Terminates Themisto.
+        
+        hello  -  Check, if Themisto is ready to talk.
+
+    For help about concrete command type 'help xxx' where xxx is 
+    command name.
+    ----------------------------------------------------------------
+    $
+
+    @show
+    ----------------------------------------------------------------
+    Show command
+    
+    SYNOPSIS
+       show <expression> [as <name>] [every <milliseconds>|step|eon]
+    DESCRIPTION
+    Shows result of some expression on screen in format 
+    name = value, and updates it every time interval, game 
+    loop step or oncly.
+    OPTIONS
+    <expression>
+        Some command, that returns value. For details type 
+        'help expression'.
+    as <name>
+        Associates name with expression.  This name also is 
+        indetificator of this watch.
+        Default value: command text
+    every <miliseconds>|step|eon
+        Sets update value interval; 'step' means every game loop; 
+        'eon' means never update; default value 500 ms.
+    ----------------------------------------------------------------
+    $
+
+    @hide
+    ----------------------------------------------------------------
+    Hide command
+    
+    SYNOPSIS
+        hide <name>|all|last|selected
+    DESCRIPTION
+    Hides watch that displayed show command. 
+    OPTIONS 
+    <name>   -  Name of watch. 
+    all      -  All watches.
+    last     -  Last watch.
+    selected -  Watch(es), related with selected object (by mouse 
+                or somehow).
+    ----------------------------------------------------------------
+    $
+
+    @update
+    ----------------------------------------------------------------
+    Update command
+    
+    SYNOPSIS
+      update <name>|all|last|selected [every <miliseconds>|step|eon]
+    DESCRIPTION
+    Force updating value of watch or set update interval.
+    OPTIONS 
+    <name>|all|last|selected 
+        See hide command.
+    every <miliseconds>|step|eon
+        Update value interval in milliseconds; 
+        'step' means every game loop; 
+        'eon' or 'aeon' means never update; 
+        default value is 500 ms.
+    ----------------------------------------------------------------
+    $
+
+    @write    
+    ----------------------------------------------------------------
+    Write command
+    
+    SYNOPSIS
+        write <expression> [as <name>] [to <file>] [every <miliseconds>|step|eon]
+    DESCRIPTION
+    Writes result of some expression to file or screen (if to not 
+    specified) in format name = value. Unlike show command, write 
+    do not updates printed once value, but writes new one in next
+    row, and also adds time of print.
+    OPTIONS 
+    <expression>
+        Some command, that returns value. For details type 
+        'help expression'.
+    as <name>
+        Associates name with expression. This name also is indeti-
+        ficator of this watch.
+        Default value: command text
+    every <miliseconds>|step|eon
+        Sets update value interval; 'step' means every game loop; 
+        'eon' means never update; default value 500 ms.
+    ----------------------------------------------------------------
+    $
+
+    @stop
+    ----------------------------------------------------------------
+    Stop command 
+    
+    SYNOPSIS
+        stop <name>|all|last|selected
+        stop file <file>|all
+    DESCRIPTION
+    Stopes writing and updating watch(es).
+    OPTIONS
+    <name>|all|last|selected 
+        See hide command
+    <file>
+        File patch.
+    all
+        Close all opened files.
+    ----------------------------------------------------------------
+    $
+
+    @close
+    ----------------------------------------------------------------
+    Close command
+    
+    SYNOPSIS
+        close
+    DESCRIPTION
+    Terminates Themisto.
+    ----------------------------------------------------------------
+    $
+        
+        
+    @expression
+    ----------------------------------------------------------------
+    Expressions
+    
+    In show and hide commands excepts <expression> paramter. You may
+    use follow:
+    
+      material - BodyMaterial of BodyPart fields.
+      state - BodyState of BodyPart fields.
+      b2param - Fields of b2Fixture and b2Body.
+      param - Fields of BodyPart and Body.
+      environ - Fields of EnvironObject.
+      elapsed - Time interval between game loop iterations.
+      
+    For details type 'help xxx', where xxx is name of parameter (ma-
+    terial, state or other).
+    ----------------------------------------------------------------
+    $
+
+    @material
+    ----------------------------------------------------------------
+    Material expression
+    
+    SYNOPSIS
+        material[(<fields>)] of <name>[(<number>|<name>)]|selected
+    DESCRIPTION
+    Returns BodyPart material parameters (fields of BodyMaterial).
+    OPTIONS
+    <fiedls>
+        Set of field names, splitted by comma. For example material
+        (mKindleReceptivity, mDampnessReceptivity).
+        If option not set, returns all fields.
+    <name>
+        Name of physic Body.
+    <number>
+        Zero based index or name of BodyPart. If not specified, then
+        means all BodyPart's.
+    selected
+        Selected by mouse (or somehow).
+    ----------------------------------------------------------------
+    $
+        
+    @state
+    ----------------------------------------------------------------
+    State expression
+    
+    SYNOPSIS
+        state[(<fields>)] of <name>[(<number>|<name>)]|selected
+    DESCRIPTION
+    Returns state of BodyPart (fields of BodyState).
+    OPTIONS
+    <fiedls>
+        Set of field names, splitted by comma. For example material
+        (mKindleReceptivity, mDampnessReceptivity).
+        If option not set, returns all fields.
+    <name>
+        Name of physic Body.
+    <number>
+        Zero based index or name of BodyPart. If not specified, then
+        means all BodyPart's.
+    selected
+        Selected by mouse (or somehow).
+    ----------------------------------------------------------------
+    $
+
+    @b2param
+    ----------------------------------------------------------------
+    b2param expression
+    
+    SYNOPSIS
+        b2param[(<fields>)] of <name>[(<number>|<name>)]|selected
+    DESCRIPTION
+    Returns Box2D parameters of body or fixture. If <number> set, 
+    then parameters of fixture, else of body.
+    OPTIONS
+    <fiedls>
+        Set of field names, splitted by comma. For example material
+        (mKindleReceptivity, mDampnessReceptivity).
+        If option not set, returns all fields.
+    <name>
+        Name of related Body object.
+    <number>
+        Zero based index or name of related BodyPart. 
+        If specified, then means parameters of that b2Fixture, else 
+        of b2Body.
+    selected
+        Selected by mouse (or somehow).
+    ----------------------------------------------------------------
+    $
+
+    @param
+    ----------------------------------------------------------------
+    Param expression
+    
+    SYNOPSIS
+        param[(<fields>)] of <name>[(<number>|<name>)]|selected
+    DESCRIPTION
+    Returns field values of Body or BodyPart. If <number> set, then 
+    parameters of BodyPart, else of Body.
+    OPTIONS
+    <fiedls>
+        Set of field names, splitted by comma. For example material
+        (mKindleReceptivity, mDampnessReceptivity).
+        If option not set, returns all fields.
+    <name>
+        Name of Body object.
+    <number>
+        Zero based index or name of BodyPart. 
+        If specified, then means parameters of that BodyPart, else 
+        of Body.
+    selected
+        Selected by mouse (or somehow).
+    ----------------------------------------------------------------
+    $
+
+    @elapsed
+    ----------------------------------------------------------------
+    Elapsed expression
+    
+    SYNOPSIS
+        elapsed
+    DESCRIPTION
+    Milliseconds between iterations of game loop.
+    ----------------------------------------------------------------
+    $
+
+    @environ
+    ----------------------------------------------------------------
+    Environ expression
+    
+    SYNOPSIS
+        environ[(<objects>)]
+    DESCRIPTION
+    Returns limit parameter of environ object.
+    OPTIONS
+    <objects>
+        Names of environ objects, splitted by comma. For example 
+        Wind, Rain, Birds.
+        If not specified, then means all known objects.
+    ----------------------------------------------------------------
+    $  
+
+
+
+
+
+
+
+

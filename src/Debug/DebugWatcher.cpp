@@ -64,9 +64,41 @@ void DebugWatcher::parseCommand(string _command, string* _answer)
     }
     else if(firstWord == "update")
     {
-        BOOST_FOREACH(Watch* watch, mWatches)
+        StrIterator argIt = commandSet.begin()+1;
+        if(argIt == commandSet.end())
         {
-            update(watch);
+            BOOST_FOREACH(Watch* watch, mWatches)
+            {
+                update(watch);
+            }
+            answer += "All watches updated.\n";
+        }
+        else
+        {
+            vector<Watch*> watches = getWatches(argIt, commandSet.end(), answer);
+            StrIterator everyIt = argIt +1;
+            bool simpleUpdate = true;
+            if(everyIt != commandSet.end())
+            {
+                if(*everyIt == "every")
+                {
+                    simpleUpdate = false;
+                    int every = processEvery(argIt +1, commandSet.end(), answer);
+                    BOOST_FOREACH(Watch* watch, watches)
+                    {
+                        watch->UpdateInterval = every;
+                    }
+                    answer += "Update interval setted for "+ IntToStr(watches.size()) +" watches.\n";
+                }
+            }
+            if(simpleUpdate)
+            {
+                BOOST_FOREACH(Watch* watch, watches)
+                {
+                    update(watch);
+                }
+                answer += "Updated " + IntToStr(watches.size()) + " watches.\n";
+            }
         }
     }
     else if(firstWord == "write")
@@ -85,37 +117,57 @@ void DebugWatcher::parseCommand(string _command, string* _answer)
         appManager.setRunning(false);
         answer += "Programm terminated.\n";
     }
-    else if(firstWord == "every")
+    else if(firstWord == "help")
     {
-        if(commandSet.size() > 1)
+        string param = "@";
+        StrIterator argIt = commandSet.begin() +1;
+        if(argIt != commandSet.end())
         {
-            if(commandSet[1] == "step")
+            param += *argIt;
+            boost::trim(param);
+        }
+        if(boost::filesystem::exists("help"))
+        {
+            ifstream fs;
+            fs.open("help");
+            if(fs.is_open())
             {
-                mTimeout = -1;
-                answer += "Update every step setted. \n";
-            }
-            else
-            {
-                try
+                char bufer[20];
+                bool found = false;
+                string line;
+                while(!found && !fs.eof())
                 {
-                    mTimeout = boost::lexical_cast<int>(commandSet[1]);
-                    answer += "Update timeout set to " + IntToStr(mTimeout) + 
-                    "; Note, that update intervals not certain equal to timeout. \n";                   
+                    //fs.getline(bufer, 20, '\n');
+                    //string line(bufer);
+                    fs >> line;
+                    boost::trim(line);
+                    if(line == param)
+                    {
+                        found = true;
+                    }
+                    LOG(line);
                 }
-                catch(boost::bad_lexical_cast &)
+                if(found)
                 {
-                    answer += "Error: bad argument for 'every' command (excepted 'step' or number of milleseconds).\n";
+                    char c = '\n';
+                    do
+                    {
+                        answer += c;
+                        fs.get(c);                    
+                    }
+                    while(c != '$' && !fs.eof());  
                 }
+                else
+                {
+                    answer += "Error: can't find help for '"+ param +"'.\n";
+                }
+                fs.close();       
             }
         }
         else
         {
-            answer += "Error: argument not specified for 'every' command.\n";
+            answer += "Error: can't find help-file.\n";
         }
-    }
-    else if(firstWord == "help")
-    {
-        answer += "Coming soon... :)\n.";
     }
     else if(firstWord == "hello")
     {
@@ -127,7 +179,42 @@ void DebugWatcher::parseCommand(string _command, string* _answer)
     }
 }
 
-
+int DebugWatcher::processEvery(StrIterator everyIt, StrIterator end, string& answer)
+{
+    int result = DEFAULT_TIMEOUT;
+    StrIterator argIt = everyIt +1;
+    if(argIt != end)
+    {
+        string arg = *argIt;
+        if(arg == "step")
+        {
+            result = EVERY_STEP;
+            answer += "Update every step setted.\n";
+        }
+        else if(arg == "eon" || arg == "aeon")
+        {
+            result = AEON;
+            answer += "Update interval setted to infinity.\n";
+        }
+        else
+        {
+            try
+            {
+                result = boost::lexical_cast<int>(arg);
+                answer += "Update timeout set to " + IntToStr(mTimeout) + ".\n";                   
+            }
+            catch(boost::bad_lexical_cast &)
+            {
+                answer += "Error: bad argument for 'every' command (excepted 'step' or number of milleseconds).\n";
+            }
+        }
+    }
+    else
+    {
+        answer += "Error: argument not specified for 'every' command.\n";
+    }
+    return result;
+}
 
 EnvironObject* getEnvironObject(string _name)
 {
@@ -783,14 +870,11 @@ string DebugWatcher::process_stop(StrIterator commandIt, StrIterator endIt)
             if(filePathIt != endIt)
             {
                 string path = *filePathIt;
-                boost::trim(path);
-                map<string, ofstream*>::iterator fit = mFiles.find(path);
-                if(fit != mFiles.end())
+                if(path == "all")
                 {
-                    ofstream* fs = fit->second;
                     BOOST_FOREACH(Watch* watch, mWatches)
                     {
-                        if(watch->OutFile == fs)
+                        if(watch->OutFile != NULL)
                         {
                             watch->Active = false;
                             answer += unassignWatchFromFile(watch);
@@ -800,7 +884,25 @@ string DebugWatcher::process_stop(StrIterator commandIt, StrIterator endIt)
                 }
                 else
                 {
-                    answer += "Error: file '"+ path +"' is not using now.\n";
+                    boost::trim(path);
+                    map<string, ofstream*>::iterator fit = mFiles.find(path);
+                    if(fit != mFiles.end())
+                    {
+                        ofstream* fs = fit->second;
+                        BOOST_FOREACH(Watch* watch, mWatches)
+                        {
+                            if(watch->OutFile == fs)
+                            {
+                                watch->Active = false;
+                                answer += unassignWatchFromFile(watch);
+                                stopped++;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        answer += "Error: file '"+ path +"' is not using now.\n";
+                    }
                 }
             }
             else
