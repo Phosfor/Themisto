@@ -7,31 +7,17 @@ PhysicManager::PhysicManager()
     mTimeStep = 1.0f / 60.0f;
     mVelocityIterations = 6;
     mPositionIterations = 4;
-    mBodies = new std::list<Body*>;
-    app = &appManager;
 }
 
 PhysicManager::~PhysicManager()
 {
     disposeScene();
-
-    delete mBodies;
-    delete mWorld;
 }
 
 void PhysicManager::disposeScene()
 {
-    Body* b ;
-    for (std::list<Body*>::iterator body=mBodies->begin(); body!=mBodies->end(); )
-    {
-        b = *body;
-        ++body;
-        mBodies->remove(b);
-
-        delete b;
-
-    };
-    mBodies->clear();
+    delete mWorld;
+    mWorld = NULL;
 }
 
 b2World& PhysicManager::getWorld()
@@ -39,31 +25,22 @@ b2World& PhysicManager::getWorld()
     return *mWorld;
 }
 
-void PhysicManager::registerBody(Body* body)
+std::list<Body*> PhysicManager::getBodies()
 {
-    mBodies->push_front(body);
+    std::list<Body*> result;
+    for(b2Body* body = mWorld->GetBodyList(); body != NULL; body = body->GetNext())
+    {
+        if(body->GetUserData() != NULL)
+        {
+            result.push_back((Body*)body->GetUserData());
+        }
+    }
+    return result;
 }
-
-std::list<Body*>& PhysicManager::getBodies()
-{
-    return *mBodies;
-}
-
+    
 void PhysicManager::step()
 {
-    float elapsed = app->getElapsed();
-    for (std::list<Body*>::iterator body=mBodies->begin(); body!=mBodies->end(); ++body)
-    {
-        (*body)->step(elapsed);
-    }
     mWorld->Step(mTimeStep, mVelocityIterations, mPositionIterations);
     mWorld->ClearForces();
 }
 
-void PhysicManager::updateVisual()
-{
-    for (std::list<Body*>::iterator body=mBodies->begin(); body!=mBodies->end(); ++body)
-    {
-        (*body)->updateVisual();
-    }
-}

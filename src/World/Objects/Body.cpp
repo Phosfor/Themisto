@@ -5,7 +5,8 @@
 Body::Body(b2Body* body)
 {
     mBody = body;
-
+    
+    mType = PhysicBodyObject;
     body->SetUserData(this);
     mBodyVisual = NULL;
     mShouldFreeBodyVisual = true;
@@ -15,16 +16,23 @@ Body::Body(b2Body* body)
     world= &worldManager;
     mName = world->generateUniqueID();
 }
+
+
 Body::~Body()
 {
     if(mShouldFreeBodyVisual) if(mBodyVisual != NULL) delete mBodyVisual;
     if(mShouldFreeB2Body) mParentWorld->DestroyBody(mBody);
 }
 
+CL_Pointf Body::getPosition()
+{
+    b2Vec2 position = mBody->GetPosition();
+    return CL_Pointf(position.x, position.y);
+}
+
 void Body::setVisual(BodyVisual* visualiser)
 {
     mBodyVisual = visualiser;
-
 }
 
 b2Body* Body::getb2Body()

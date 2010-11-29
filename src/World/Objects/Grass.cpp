@@ -1,8 +1,9 @@
 #include "World/Objects/Grass.hpp"
 
-Grass::Grass()
+Grass::Grass(CL_Pointf position)
 {
-    mType = "Object_Grass";
+    mPosition = position;
+    mType = GrassObject;
     mGC = appManager.getGraphic();
     mImageHandle = CL_Sprite(mGC, "media/plants/3.png");
 
@@ -54,7 +55,7 @@ void Grass::drawTexture(const CL_Rectf &rect, const CL_Rectf &texture_unit1_coor
     mGC.draw_primitives(cl_triangles, 6, prim_array);
 }
 
-void Grass::update()
+void Grass::update(float elapsed)
 {
     mTime += appManager.getElapsed() / 20.0f;
 

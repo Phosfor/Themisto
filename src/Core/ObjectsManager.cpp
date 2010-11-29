@@ -3,6 +3,7 @@
 ObjectsManager::ObjectsManager()
 {
     mNumObjects = 0;
+    mAppManager = &appManager;
 }
 
 void ObjectsManager::update()
@@ -11,7 +12,7 @@ void ObjectsManager::update()
             it != mObjects.end(); ++it)
     {
         /*TODO: Check whether object is out of screen */
-        it->second->update();
+        it->second->update(mAppManager->getElapsed());
     }
 }
 

@@ -238,7 +238,6 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
 
                 b2body = physicManager.getWorld().CreateBody(&bdef);
                 bodyHandle = new Body(b2body);
-                physicManager.registerBody(bodyHandle);
                 
 
                 // Go through all physic parts
@@ -470,17 +469,17 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
                         else if(partChild.get_node_name() == "MaxKindleLevel")
                         {
                             float value = lexical_cast<float>(partChild.get_text().c_str());
-                            partHandle->mMaxKindleLevel = value;
+                            partHandle->setMaxKindleLevel(value);
                         }
                         else if(partChild.get_node_name() == "MaxDampness")
                         {
                             float value = lexical_cast<float>(partChild.get_text().c_str());
-                            partHandle->mMaxDampness = value;
+                            partHandle->setMaxDampness(value);
                         }
                         else if(partChild.get_node_name() == "AcceptsCord")
                         {
                             bool value = partChild.get_text() == "true";
-                            partHandle->mAcceptsCord = value;
+                            partHandle->setAcceptsCord(value);
                         }
                         
                         else if(partChild.get_node_name() == "State")
@@ -537,13 +536,11 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
                     {
                         materialHandle = worldManager.mDefaultMaterial;
                         partHandle->mShouldFreeBodyMaterial = false;
-                        partHandle->mIsDefaultMaterial = true;
                     }
                     else
                     {
                         materialHandle = new BodyMaterial();
                         partHandle->mShouldFreeBodyMaterial = true;
-                        partHandle->mIsDefaultMaterial = false;
                         materialHandle->Name = matList.item(0).to_element().get_child_string("Name");
 
                         CL_DomNodeList matChildList = matList.item(0).get_child_nodes();
@@ -649,7 +646,7 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
                         } // for (int i=0; i < matChildList.get_length(); ++i)
                     } // if (matList.get_length() <= 0)
 
-                    partHandle->setMaterial(materialHandle);
+                    partHandle->setMaterial(materialHandle, materialHandle == worldManager.mDefaultMaterial );
                 } // for (int i=0; i < parts.get_length(); ++i)
             }
             // END OF PHYSIC PARSING ---------------------------------------------

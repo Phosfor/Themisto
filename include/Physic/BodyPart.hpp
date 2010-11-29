@@ -31,6 +31,12 @@ class BodyPart
         std::list<BodyPart*> *mStaticCollisions;
         std::map<b2Fixture*, Impact*>* mContactImpacts;
         BodyMaterial *mMaterial;
+        string mName;
+        
+        float mMaxKindleLevel;
+        float mMaxDampness;
+        bool mAcceptsCord;
+        bool mIsDefaultMaterial;
 
         float mCurrentMaxKindle;
         float mCurrentKindleTemperature;
@@ -54,7 +60,7 @@ class BodyPart
     public:
         BodyPart(b2Fixture* fixture, BodyMaterial* material);
         ~BodyPart();
-        void setMaterial(BodyMaterial *material);
+        void setMaterial(BodyMaterial *material, bool isDefault);
         BodyState *getState();
         BodyMaterial* getMaterial();
         b2Fixture* getFixture();
@@ -71,22 +77,27 @@ class BodyPart
         
         // Applied material to body or not
         // Notice, that defaut material is one object for all
-        bool mIsDefaultMaterial;
+        bool IsDefaultMaterial(){ return mIsDefaultMaterial;}
+        
 
         // Sould boyd free memory under mMaterial object at sestroing
         // By default is false
         bool mShouldFreeBodyMaterial;
 
         // How big flame can store this body
-        float mMaxKindleLevel;
+        float getMaxKindleLevel() { return mMaxKindleLevel; }
+        void setMaxKindleLevel(float value) { mMaxKindleLevel = value; }
 
         // How many water body can soak up
-        float mMaxDampness;
+        float getMaxDampness(){ return mMaxDampness; }
+        void setMaxDampness(float value){ mMaxDampness = value; }
 
         // Possible to cord up body
-        bool mAcceptsCord;
+        bool getAcceptsCord() { return mAcceptsCord; }
+        void setAcceptsCord(bool value) { mAcceptsCord = value; }
 
-        string mName;
+        string getName() { return mName; }
+        void setName(string value){ mName = value; }
 
 };
 

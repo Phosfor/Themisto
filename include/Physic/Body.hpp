@@ -12,16 +12,22 @@
 #include "Physic/BodyVisual.hpp"
 #include "World/WorldManager.hpp"
 #include "Physic/AreaManager.hpp"
+#include "World/Objects/Object.hpp"
 #include "Physic/BodyPart.hpp"
 #include <iostream>
 #include <list>
 
-class Body
+class Body: public Object
 {
     private:
         BodyVisual *mBodyVisual;
         b2AABB mLastLocation;
         b2AABB calculateLocation();
+        
+
+
+        // 0 - body will sink, more - stronger force would pop body from water
+        float mBuoyancy;
 
     protected:
 
@@ -34,24 +40,26 @@ class Body
         Body(b2Body* body);
         ~Body();
 
+        // Get/set 
         void setVisual(BodyVisual* visualiser);
         b2Body* getb2Body();
+        float getBuoyancy() { return mBuoyancy; }
+        void setBuoyancy(float value) { mBuoyancy = value; }
 
         void updateVisual();
         void step(float32 elapsed);
-
+        
         // Should body free memory under mBodyVisual object at destroing
         // Default value is true
         bool mShouldFreeBodyVisual;
 
         // Should body free memory under mBody object at destroing
         // Default is true
-        bool mShouldFreeB2Body;
-
-        // 0 - body will sink, more - stronger force would pop body from water
-        float mBuoyancy;
+        bool mShouldFreeB2Body; 
         
-        string mName;
+        // --- Object implementation ---
+        CL_Pointf getPosition();
+        void update(float elapsed) { step(elapsed); }
 
 };
 

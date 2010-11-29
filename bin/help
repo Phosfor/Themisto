@@ -17,13 +17,13 @@
     Added watches you can stop and hide. Stop means break updating 
     of value (if watch associated with file, file will be closed). 
     Hide means remove watch. If it is writing to file, file will be 
-    closed, else if it is showing on screen, it will be hiden. After 
-    you hide some watch, it no more awailable. 
+    closed, else if it is showing on screen, it will be hiden.
     For details type 'help hide' and 'help stop'.
 
     Here complete list of commands:
 
         show   -  Create a watch, and show it in one row at screen.
+                  Also, show hidden watch.
         
         write  -  Create a watch, and write every new value in 
                   own row on screen or in file.
@@ -37,6 +37,9 @@
         hide   -  Removes the watch from screen and closes 
                   associated file.
                   
+        remove -  Stopes, hides and disposes watch. Removed watch is 
+                  not more awailable.         
+                  
         stop   -  Brakes updating watch value.
      
         resume -  Revenants watches, stopped by 'stop' command.
@@ -44,6 +47,8 @@
         close  -  Terminates Themisto.
         
         hello  -  Check, if Themisto is ready to talk.
+        
+        select -  Selects some object (using by 'selected' argumnet).
 
     For help about concrete command type 'help xxx' where xxx is 
     command name.
@@ -56,14 +61,18 @@
     
     SYNOPSIS
        show <expression> [as <name>] [every <milliseconds>|step|eon] [parent <watch_id>]
+       show <hiden_watch_id> [as <name>] [every <milliseconds>|step|eon] [parent <watch_id>]
     DESCRIPTION
-    Shows result of some expression on screen in format 
+    First form shows result of some expression on screen in format 
     name = value, and updates it every time interval, game 
-    loop step or oncly.
+    loop step or oncly. Second makes visible or resumes hiden earlier 
+    watch.
     OPTIONS
     <expression>
         Some command, that returns value. For details type 
         'help expression'.
+    <hiden_watch_id>
+        Id of watch, that was hiden by 'hide' command.
     as <name>
         Associates name with expression.  This name also is 
         indetificator of this watch.
@@ -86,8 +95,11 @@
     
     SYNOPSIS
         hide <id>|all|last|selected
+        hide children of <id>|all|last|selected
     DESCRIPTION
-    Hides watch that displayed show command. 
+    Frist form stopes (see 'stop' command) and hides watch that 
+    displayed at DebugConsole window. Second make same for all 
+    watches, that have parent specified in argument.
     OPTIONS 
     <name>|all|last|selected 
         <id>     -  ID of watch. 
@@ -97,6 +109,65 @@
                     mouse or somehow).
     ----------------------------------------------------------------
     $
+    
+    @remove
+    ----------------------------------------------------------------
+    Remove command
+    
+    SYNOPSIS
+        remove <id>|all|last|selected
+    DESCRIPTION
+    Stopes, hides and disposes watch. Removed watch is not more 
+    awailable.         
+    OPTIONS 
+    <name>|all|last|selected 
+        <id>     -  ID of watch. 
+        all      -  All watches.
+        last     -  Last watch.
+        selected -  Watch(es), related with selected (by 
+                    mouse or somehow) object.
+    ----------------------------------------------------------------
+    $
+    
+    @select
+    ----------------------------------------------------------------
+    Select command
+    
+    SYNOPSIS
+        select <target>
+    DESCRIPTION
+    Selects some object (using by 'selected' argumnet).
+    OPTIONS 
+    <target>
+        Object to select. See 'help target' for details.
+    ----------------------------------------------------------------
+    $
+    
+    @target
+    ----------------------------------------------------------------
+    Target specifier
+    
+    SYNOPSIS
+        <target_type> <object_name>[(<part_index>|<part_name>)]
+    DESCRIPTION
+    This construction indetifies some Themisto object. 
+    Here complete list of possible values of <target_type>:
+      b2Body
+      b2Fixture
+      Body
+      BodyPart
+      EnvironObject
+     
+    OPTIONS 
+    <target_type>
+        What kind of object you want select. For possible values see
+        'help targets'
+    <object_name>
+        Name of object (of Body or EnvironObject for expamle).
+    <part_index>
+        Zero-based index of BodyPart.
+    <part_name>
+        Name of BodyPart.
 
     @update
     ----------------------------------------------------------------
@@ -105,7 +176,8 @@
     SYNOPSIS
       update <id>|all|last|selected [every <miliseconds>|step|eon] [parent <watch_id>]
     DESCRIPTION
-    Force updating value of watch or set update interval.
+    Force updating value of watch, set update interval or/and change
+    watch parent.
     OPTIONS 
     <name>|all|last|selected 
         <id>     -  ID of watch. 

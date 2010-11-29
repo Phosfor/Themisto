@@ -11,6 +11,7 @@
 #include "Core/ConfigManager.hpp"
 #include "Core/LogManager.hpp"
 #include "World/Objects/Object.hpp"
+#include "Core/ApplicationManager.hpp"
 
 #include <map>
 #include <utility>
@@ -23,6 +24,7 @@ class ObjectsManager : public boost::serialization::singleton<ObjectsManager>
     private:
         ObjectMapType mObjects;
         unsigned int mNumObjects;
+        ApplicationManager* mAppManager;
 
     public:
         ObjectsManager();

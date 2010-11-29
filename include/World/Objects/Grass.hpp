@@ -7,12 +7,14 @@
 #include "Core/Utils.hpp"
 #include "Core/ApplicationManager.hpp"
 #include "Core/GuiManager.hpp"
+#include "World/Objects/ObjectTypes.hpp"
 
 #include "World/Objects/Object.hpp"
 
 class Grass : public Object
 {
     private:
+        CL_Pointf mPosition;
         CL_Sprite mImageHandle;
         CL_GraphicContext mGC;
 
@@ -25,13 +27,18 @@ class Grass : public Object
         void drawTexture(const CL_Rectf &rect, const CL_Rectf &texture_unit1_coords);
 
     public:
+        Grass(CL_Pointf position);
+    
         float getAmp() { return mAmplitudeFactor; }
         float getStretcH() { return mYStretch; }
         void setAmp(float amp) { mAmplitudeFactor = amp; }
         void setStretch(float amp) { mYStretch = amp; }
-
+        
+        CL_Pointf getPosition() { return mPosition; }
+        void setPosition(CL_Pointf point) { mPosition = point; }
+        
         Grass();
-        void update();
+        void update(float elapsed);
 };
 
 #endif /* _ENVIRON_GRASS_HPP_ */

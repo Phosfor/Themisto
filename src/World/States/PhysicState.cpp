@@ -35,7 +35,6 @@ void PhysicState::update()
     mGC.clear(CL_Colorf::black);
 
     physicManager.step();
-    physicManager.updateVisual();
     physicManager.getWorld().DrawDebugData();
 
     mStatFont->draw_text(appManager.getGraphic(), 10, 25,

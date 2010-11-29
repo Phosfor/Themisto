@@ -31,13 +31,13 @@ set(Themisto_srcs
 
     # Objects
     World/Objects/Grass.cpp
+    World/Objects/Body.cpp
 
     # States
     World/States/MenuState.cpp
     World/States/PhysicState.cpp
 
-    # Physic
-    Physic/Body.cpp
+    # Physic   
     Physic/BodyVisual.cpp
     Physic/BodyMaterial.cpp
     Physic/Impact.cpp

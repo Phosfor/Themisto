@@ -19,8 +19,6 @@ boost::serialization::singleton<PhysicManager>
 {
     private:
         b2World* mWorld;
-        std::list<Body*>* mBodies;
-        ApplicationManager* app;
 
     public:
         float32 mTimeStep;
@@ -31,10 +29,8 @@ boost::serialization::singleton<PhysicManager>
         ~PhysicManager();
 
         b2World& getWorld();
-        void registerBody(Body* body);
-        std::list<Body*>& getBodies();
+        std::list<Body*> getBodies();
         void step();
-        void updateVisual();
         void disposeScene();
 };
 

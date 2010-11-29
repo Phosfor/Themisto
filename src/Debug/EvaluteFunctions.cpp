@@ -148,7 +148,7 @@ string evalute::evalute_b2Fixture(Watch* watch)
     {
         Body* body = (Body*)m->GetBody()->GetUserData();
         if(body != NULL)
-            result = body->mName;
+            result = body->getName();
         else
             result = "Has no atached Body object";
     }
@@ -254,11 +254,11 @@ string evalute::evalute_BodyPart(Watch* watch)
     string result = "";
     BodyPart* part = boost::get<BodyPart*>(watch->Object); 
     
-    if( name == "IsDefaultMaterial") result = BoolToStr(part->mIsDefaultMaterial);
-    else if( name == "MaxKindleLevel") result = FloatToStr(part->mMaxKindleLevel);
-    else if( name == "MaxDampness") result = FloatToStr(part->mMaxDampness);
-    else if( name == "AcceptsCord") result = BoolToStr(part->mAcceptsCord);
-    else if( name == "Name") result = part->mName;
+    if( name == "IsDefaultMaterial") result = BoolToStr(part->IsDefaultMaterial());
+    else if( name == "MaxKindleLevel") result = FloatToStr(part->getMaxKindleLevel());
+    else if( name == "MaxDampness") result = FloatToStr(part->getMaxDampness());
+    else if( name == "AcceptsCord") result = BoolToStr(part->getAcceptsCord());
+    else if( name == "Name") result = part->getName();
     
     if(result == "") result = "Can't evalute";
     return result;
@@ -269,8 +269,8 @@ string evalute::evalute_Body(Watch* watch)
     string name = watch->MemberName;
     string result = "";
     Body* body = boost::get<Body*>(watch->Object); 
-    if( name == "Buoyancy") result = FloatToStr(body->mBuoyancy);
-    else if( name == "Name") result = body->mName;
+    if( name == "Buoyancy") result = FloatToStr(body->getBuoyancy());
+    else if( name == "Name") result = body->getName();
     
     if(result == "") result = "Can't evalute";
     return result;                    

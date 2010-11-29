@@ -609,7 +609,7 @@ map<Target, string> DebugWatcher::getTargets(StrIterator command, StrIterator en
                 list<Body*>::iterator it;
                 for(it = bodies.begin(); it != bodies.end(); ++it)
                 {
-                    if((*it)->mName == objName)
+                    if((*it)->getName() == objName)
                     {
                         Body* obj = *it;
                         if(type & tBody)
@@ -675,7 +675,7 @@ map<Target, string> DebugWatcher::getTargets(StrIterator command, StrIterator en
                                 BodyPart* part = (BodyPart*)fixture->GetUserData();
                                 if(part != NULL)
                                 {
-                                    id = part->mName;
+                                    id = part->getName();
                                     if(type & tBodyPart)
                                     {
                                         result.insert(pair<Target, string>(part, id));
@@ -746,7 +746,7 @@ b2Fixture* DebugWatcher::getFixture(Body* obj, string* partID)
                 BodyPart* part = (BodyPart*)fixture->GetUserData();
                 if(part!= NULL)
                 {
-                    partID->assign(part->mName);
+                    partID->assign(part->getName());
                 }
                 break;
             }
@@ -761,10 +761,10 @@ b2Fixture* DebugWatcher::getFixture(Body* obj, string* partID)
             BodyPart* part = (BodyPart*)fixture->GetUserData();
             if(part != NULL)
             {
-                if(part->mName == *partID)
+                if(part->getName() == *partID)
                 {
                     result = fixture;
-                    partID->assign(part->mName);
+                    partID->assign(part->getName());
                     break;
                 }
             }

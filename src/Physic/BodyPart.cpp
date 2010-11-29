@@ -67,9 +67,10 @@ b2Fixture* BodyPart::getFixture()
     return mFixture;
 }
 
-void BodyPart::setMaterial(BodyMaterial *material)
+void BodyPart::setMaterial(BodyMaterial *material, bool isDefault)
 {
     mMaterial = material;
+    mIsDefaultMaterial = isDefault;
 }
 
 BodyMaterial* BodyPart::getMaterial()
