@@ -5,7 +5,7 @@
 #include <ClanLib/core.h>
 #include <Box2D/Box2D.h>
 
-#include "Physic/Body.hpp"
+#include "World/Objects/Body.hpp"
 #include "Core/Utils.hpp"
 
 #define areaManager (AreaManager::get_mutable_instance())

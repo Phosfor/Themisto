@@ -4,7 +4,7 @@
 #include "Core/ApplicationManager.hpp"
 #include "Core/EnvironManager.hpp"
 #include "Core/Utils.hpp"
-#include "Physic/Body.hpp"
+#include "World/Objects/Body.hpp"
 #include <vector>
 #include <boost/variant.hpp>
 #include <fstream>

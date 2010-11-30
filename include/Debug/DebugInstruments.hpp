@@ -2,7 +2,7 @@
 #define _DEGUG_INSTRUMENTS_HPP
 
 #include <Box2D/Dynamics/b2World.h>
-#include <Physic/Body.hpp>
+#include "World/Objects/Body.hpp"
 #include "Core/ApplicationManager.hpp"
 #include "Core/PhysicManager.hpp"
 #include "Core/InputManager.hpp"

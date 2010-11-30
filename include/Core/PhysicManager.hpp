@@ -6,7 +6,7 @@
 
 #include <list>
 
-#include "Physic/Body.hpp"
+#include "World/Objects/Body.hpp"
 #include "Core/Utils.hpp"
 #include "Core/ApplicationManager.hpp"
 

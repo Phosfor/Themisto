@@ -7,6 +7,7 @@
 #include <Box2D/Common/b2Math.h>
 
 #include "Physic/BodyMaterial.hpp"
+
 #include "Physic/Impact.hpp"
 #include "Physic/BodyState.hpp"
 #include "Physic/BodyVisual.hpp"
@@ -24,8 +25,6 @@ class Body: public Object
         b2AABB mLastLocation;
         b2AABB calculateLocation();
         
-
-
         // 0 - body will sink, more - stronger force would pop body from water
         float mBuoyancy;
 

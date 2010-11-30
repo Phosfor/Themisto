@@ -10,7 +10,7 @@
 #include "World/Environ/Types.hpp"
 #include "World/Objects/ObjectTypeBuilder.hpp"
 
-#include "Physic/Body.hpp"
+#include "World/Objects/Body.hpp"
 #include <map>
 
 #define sceneLoader (SceneLoader::get_mutable_instance())

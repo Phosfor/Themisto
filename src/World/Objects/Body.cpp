@@ -1,4 +1,4 @@
-#include "Physic/Body.hpp"
+#include "World/Objects/Body.hpp"
 
 
 
@@ -13,8 +13,8 @@ Body::Body(b2Body* body)
     mShouldFreeB2Body = true;
     mParentWorld= mBody->GetWorld();
     mLastLocation = calculateLocation();
-    world= &worldManager;
-    mName = world->generateUniqueID();
+    world = &worldManager;
+    mName = worldManager.generateUniqueID();
 }
 
 

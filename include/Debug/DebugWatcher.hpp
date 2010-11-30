@@ -18,7 +18,7 @@
 #include <Box2D/Collision/Shapes/b2Shape.h>
 #include <fstream>
 
-#include "Physic/Body.hpp"
+#include "World/Objects/Body.hpp"
 
 #include "Core/ApplicationManager.hpp"
 #include "Core/EnvironManager.hpp"
