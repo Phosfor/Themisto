@@ -3,6 +3,7 @@
 
 #include <boost/function.hpp>
 #include <map>
+#include <utility>
 #include <ClanLib/core.h>
 
 enum ObjectTypes
@@ -19,6 +20,12 @@ static inline parserPointer getParserCallback(ObjectTypes &type)
 {
     if (ObjectsParser.find(type) != ObjectsParser.end())
         return ObjectsParser[type];
+}
+
+static inline void insertParserCallback(ObjectTypes &type, parserPointer &p)
+{
+    if (ObjectsParser.find(type) != ObjectsParser.end())
+        ObjectsParser.insert(std::make_pair(type, p));
 }
 
 #endif
