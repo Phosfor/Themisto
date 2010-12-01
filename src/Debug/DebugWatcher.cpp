@@ -17,8 +17,6 @@ DebugWatcher::~DebugWatcher()
     LOG("~DebugWatcher: " + answer);
 }
 
-
-
 void DebugWatcher::parseCommand(string _command, string* _answer)
 {
     
@@ -123,11 +121,11 @@ void DebugWatcher::parseCommand(string _command, string* _answer)
         else
         {
             vector<Watch*> watches = getWatches(argIt, commandSet.end(), answer);
-            StrIterator everyIt = argIt +1;
+            StrIterator parIt = argIt +1;
             bool simpleUpdate = true;
-            if(everyIt != commandSet.end())
+            if(parIt != commandSet.end())
             {
-                if(*everyIt == "every")
+                if(*parIt == "every")
                 {
                     simpleUpdate = false;
                     int every = processEvery(argIt +1, commandSet.end(), answer);
@@ -136,6 +134,19 @@ void DebugWatcher::parseCommand(string _command, string* _answer)
                         watch->UpdateInterval = every;
                     }
                     answer += "Update interval setted for "+ IntToStr(watches.size()) +" watches.\n";
+                }
+                else if(*parIt == "parent")
+                {
+                    simpleUpdate = false;
+                    BOOST_FOREACH(Watch* watch, watches)
+                    {
+                        answer += process_parent(parIt, commandSet.end(), watch);
+                    }
+                    answer += "Parent setted for "+ IntToStr(watches.size()) +" watches.\n";
+                }
+                else
+                {
+                    answer += "Error: unknown argument '"+ *parIt +"' for write command.\n";
                 }
             }
             if(simpleUpdate)
@@ -229,6 +240,36 @@ void DebugWatcher::parseCommand(string _command, string* _answer)
     {
         answer += "Error: unknown command '" + commandSet[0] + "'.\n";
     }
+}
+
+string DebugWatcher::process_parent(StrIterator cmdIt, StrIterator endIt, Watch* watch)
+{
+    string answer = "";
+    if(cmdIt+1 != endIt)
+    {
+        vector<Watch*> specifiedParent = getWatches(cmdIt +1, endIt, answer);
+        if(specifiedParent.size() == 1)
+        {
+            Watch* parent = specifiedParent[0];
+            watch->Parent = parent;
+            parent->Children.push_back(watch);
+            notifyConsoleChangedParent(watch);
+        }
+        else if(specifiedParent.size() == 0)
+        {
+            answer += "Error: not found any watch, specified as parent.\n";
+        }
+        else
+        {
+            answer += "Error: too many parents.\n";
+        }
+        
+    }
+    else
+    {
+        answer += "Error: argument not specified for 'parent' parameter.\n";
+    }
+    return answer;
 }
 
 int DebugWatcher::processEvery(StrIterator everyIt, StrIterator end, string& answer)
@@ -332,6 +373,10 @@ string DebugWatcher::addWatchCommon(Watch* watch, vector<string> &commandSet)
                 answer += "Error: parameter 'to' allowed only for 'write' command.\n";
             }
             watchNormal = true;
+        }
+        else if( command == "parent")
+        {
+            answer += process_parent(commandSet.begin() +2, commandSet.end(), watch);
         }
         else if( command == "every" )
         {
@@ -1295,7 +1340,10 @@ void DebugWatcher::removeWatchFromConsole(Watch* watch)
     debugIO.removeWatch(watch->ID);
 }
 
-
+void DebugWatcher::notifyConsoleChangedParent(Watch* watch)
+{
+    LOG("Changing parent for " + watch->ID);
+}
 
 
 

@@ -64,6 +64,7 @@ boost::serialization::singleton<DebugWatcher>
         string process_hide(StrIterator commandIt, StrIterator endIt);
         string process_remove(StrIterator commandIt, StrIterator endIt);
         string process_stop_resume(StrIterator commandIt, StrIterator endIt, bool stop);
+        string process_parent(StrIterator cmdIt, StrIterator endIt, Watch* watch);
         map<Target, string> getTargets(StrIterator command, StrIterator end, TargetType type, string& answer);
         string process_material(Watch* watch, vector<string> &commandSet);
         b2Fixture* getFixture(Body* body, string* partID);
@@ -76,6 +77,7 @@ boost::serialization::singleton<DebugWatcher>
         void addWatchToConsole(Watch* watch);
         void updateWatchInConsole(Watch* watch);
         void removeWatchFromConsole(Watch* watch);
+        void notifyConsoleChangedParent(Watch* watch);
 
     public:
         void parseCommand(string command, string* answer);
