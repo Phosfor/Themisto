@@ -50,6 +50,8 @@ enum TargetType
     tApplicationManager=64,
     tEnvironObject=128
 };
+
+string nope_evalute(Watch* watch);
    
 
 struct Watch

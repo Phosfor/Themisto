@@ -3,7 +3,7 @@
 
 int Application::main(const std::vector<CL_String> &args)
 {
-
+    insertParserCallback("Body", (parserPointer&)Body::ParseBody);
 
     // Main environment handlers
     CL_SetupCore coreHandle;

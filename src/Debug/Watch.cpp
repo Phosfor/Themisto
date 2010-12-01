@@ -1,6 +1,6 @@
 #include "Debug/Watch.hpp"
 
-string nope(Watch* watch)
+string nope_evalute(Watch* watch)
 {
     return "";
 }
@@ -15,7 +15,7 @@ Watch::Watch()
     Type = NotAWatch;
     ID = "";
     Name = "";
-    Expression = nope;
+    Expression = nope_evalute;
     UpdateInterval = DEFAULT_TIMEOUT;
     LeftFromLastUpdate = 0;
 }

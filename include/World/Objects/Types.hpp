@@ -14,15 +14,25 @@ enum ObjectTypes
 };
 
 typedef boost::function<void (CL_DomElement*)> parserPointer;
-static std::map<ObjectTypes, parserPointer> ObjectsParser;
+static std::map<string, parserPointer> ObjectsParser;
 
-static inline parserPointer getParserCallback(ObjectTypes &type)
+//void empty_parser(CL_DomElement* p)
+//{
+//}
+
+static inline parserPointer getParserCallback(string type)
 {
     if (ObjectsParser.find(type) != ObjectsParser.end())
+    {
         return ObjectsParser[type];
+    }
+    //else
+    //{
+        //return empty_parser;
+    //}
 }
 
-static inline void insertParserCallback(ObjectTypes &type, parserPointer &p)
+static inline void insertParserCallback(string type, parserPointer &p)
 {
     if (ObjectsParser.find(type) != ObjectsParser.end())
         ObjectsParser.insert(std::make_pair(type, p));

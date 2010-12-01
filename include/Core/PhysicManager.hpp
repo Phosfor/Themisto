@@ -13,6 +13,7 @@
 #define physicManager (PhysicManager::get_mutable_instance())
 #define physicManagerConst (PhysicManager::get_const_instance())
 
+class Body;
 
 class PhysicManager : public
 boost::serialization::singleton<PhysicManager>
