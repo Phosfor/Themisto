@@ -112,7 +112,11 @@ void DebugWatcher::parseCommand(string _command, string* _answer)
     }
     else if(firstWord == "stop")
     {
-        answer += process_stop(commandSet.begin(), commandSet.end());
+        answer += process_stop_resume(commandSet.begin(), commandSet.end(), true);
+    }
+    else if(firstWord == "resume")
+    {
+        answer +=  process_stop_resume(commandSet.begin(), commandSet.end(), false);
     }
     else if(firstWord == "close")
     {
@@ -860,10 +864,10 @@ string DebugWatcher::process_hide(StrIterator commandIt, StrIterator endIt)
 
 
 
-string DebugWatcher::process_stop(StrIterator commandIt, StrIterator endIt)
+string DebugWatcher::process_stop_resume(StrIterator commandIt, StrIterator endIt, bool stop)
 {
     string answer = "";
-    int stopped = 0;
+    int processed = 0;
     StrIterator argIt = commandIt + 1;
     if(argIt != endIt)
     {
@@ -879,9 +883,12 @@ string DebugWatcher::process_stop(StrIterator commandIt, StrIterator endIt)
                     {
                         if(watch->OutFile != NULL)
                         {
-                            watch->Active = false;
-                            answer += unassignWatchFromFile(watch);
-                            stopped++;
+                            watch->Active = !stop;
+                            if(stop)
+                            {
+                              answer += unassignWatchFromFile(watch);
+                            }
+                            processed++;
                         }
                     }
                 }
@@ -896,9 +903,12 @@ string DebugWatcher::process_stop(StrIterator commandIt, StrIterator endIt)
                         {
                             if(watch->OutFile == fs)
                             {
-                                watch->Active = false;
-                                answer += unassignWatchFromFile(watch);
-                                stopped++;
+                                watch->Active = !stop;
+                                if(stop)
+                                {
+                                  answer += unassignWatchFromFile(watch);
+                                }
+                                processed++;
                             }
                         }
                     }
@@ -910,7 +920,7 @@ string DebugWatcher::process_stop(StrIterator commandIt, StrIterator endIt)
             }
             else
             {
-                answer += "Error: file path not specified for 'stop file' command.\n";
+                answer += "Error: file path not specified for 'stop file' or 'resume file' command.\n";
             }
         }
         else
@@ -918,24 +928,28 @@ string DebugWatcher::process_stop(StrIterator commandIt, StrIterator endIt)
             vector<Watch*> watches = getWatches(argIt, endIt, answer);
             BOOST_FOREACH(Watch* watch, watches)
             {
-                if(watch->Active)
+                if(watch->Active == stop)
                 {
-                    watch->Active = false;
-                    stopped++;
+                    watch->Active = !stop;
+                    processed++;
                 }
                 
                 if(watch->OutFile != NULL)
                 {
-                    answer += unassignWatchFromFile(watch);
+                    if(stop)
+                    {
+                        answer += unassignWatchFromFile(watch);
+                    }
                 }
             }
         }
     }
     else
     {
-        answer += "Error: argument not specified for command 'stop'.\n";
+        answer += "Error: argument not specified for command 'stop' or 'resume'.\n";
     }
-    answer += "Stopped " + IntToStr(stopped) + " watches.\n"; 
+    string processedStr = (stop)? "Stopped ":"Resumed ";
+    answer += processedStr + IntToStr(processed) + " watches.\n"; 
     return answer;
 }
 

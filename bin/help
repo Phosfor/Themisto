@@ -3,8 +3,8 @@
     Welcome to Themisto debug console help!
 
     Debug console is program, that allow you to see some game values
-    online. You should type command here, and see result in 
-    DebugVisualisator window.
+    and manage world online. To expamine value, you should type 
+    command here, and see result in DebugVisualisator window.
 
     To examine some value, you should create a 'watch'. It is a pair 
     of name and value specified by some ID. To create watch use show 
@@ -19,6 +19,12 @@
     Hide means remove watch. If it is writing to file, file will be 
     closed, else if it is showing on screen, it will be hiden.
     For details type 'help hide' and 'help stop'.
+    
+    Apart from watches, you can add objects to world ('add' command),
+    remove them ('remove'), set value of some parameter ('set') and 
+    impact to physic objects ('apply'). Command 'close' terminates 
+    Themisto.
+    
 
     Here complete list of commands:
 
@@ -37,8 +43,8 @@
         hide   -  Removes the watch from screen and closes 
                   associated file.
                   
-        remove -  Stopes, hides and disposes watch. Removed watch is 
-                  not more awailable.         
+        remove -  Stopes, hides and disposes watch or removes object 
+                  from world. Removed item is not more awailable.         
                   
         stop   -  Brakes updating watch value.
      
@@ -49,6 +55,14 @@
         hello  -  Check, if Themisto is ready to talk.
         
         select -  Selects some object (using by 'selected' argumnet).
+        
+        apply  -  Applies force, impuls or impact to some body or part.
+        
+        cancel -  Cancels force or impact for some body or part.
+        
+        set    -  Sets value of some parameter.
+        
+        add    -  Addes some object to the world.
 
     For help about concrete command type 'help xxx' where xxx is 
     command name.
@@ -97,7 +111,7 @@
         hide <id>|all|last|selected
         hide children of <id>|all|last|selected
     DESCRIPTION
-    Frist form stopes (see 'stop' command) and hides watch that 
+    First form stopes (see 'stop' command) and hides watch that 
     displayed at DebugConsole window. Second make same for all 
     watches, that have parent specified in argument.
     OPTIONS 
@@ -115,17 +129,19 @@
     Remove command
     
     SYNOPSIS
-        remove <id>|all|last|selected
+        remove watch(<id>|all|last|selected)|object(<obj_name>|all)
     DESCRIPTION
-    Stopes, hides and disposes watch. Removed watch is not more 
-    awailable.         
+    Stopes, hides and disposes watch or removes object from world. 
+    Removed item is not more awailable.     
     OPTIONS 
-    <name>|all|last|selected 
+    <id>|all|last|selected 
         <id>     -  ID of watch. 
         all      -  All watches.
         last     -  Last watch.
         selected -  Watch(es), related with selected (by 
                     mouse or somehow) object.
+    <obj_name>
+        Name of object to remove.
     ----------------------------------------------------------------
     $
     
@@ -148,26 +164,27 @@
     Target specifier
     
     SYNOPSIS
-        <target_type> <object_name>[(<part_index>|<part_name>)]
+        <body_name>[(<part_index>|<part_name>|all)]|selected|all
     DESCRIPTION
-    This construction indetifies some Themisto object. 
-    Here complete list of possible values of <target_type>:
-      b2Body
-      b2Fixture
-      Body
-      BodyPart
-      EnvironObject
-     
+    This construction indetifies one of next Themisto objects: b2Body, 
+    b2Fixture, Body, BodyPart. Dependent to context, specifying only 
+    <body_name> may means Body with such name or b2Body associated 
+    with it. If after <body_name> specify squares, it will mean that 
+    you want BodyPart or b2Fixture.     
     OPTIONS 
-    <target_type>
-        What kind of object you want select. For possible values see
-        'help targets'
     <object_name>
-        Name of object (of Body or EnvironObject for expamle).
+        Name of Body object.
+    selected
+        Selected Body (b2Body) or BodyPart (b2Fixture).
+     all
+        All Bodies.
     <part_index>
-        Zero-based index of BodyPart.
+        Zero-based index of BodyPart (b2Fixture).
     <part_name>
         Name of BodyPart.
+    <body_name>(all)
+        All BodyPart (b2Fixture) of Body (b2Body).
+   
 
     @update
     ----------------------------------------------------------------
@@ -301,14 +318,76 @@
     Terminates Themisto.
     ----------------------------------------------------------------
     $
+    
+    @apply
+    ----------------------------------------------------------------
+    Apply command 
+    
+    SYNOPSIS
+        apply force(<force_dirrection>, <force_module>)|impuls(<impuls_dirrection>, <impuls_module>)|impact(<impact_type>, <intensity>) to <target>
+    DESCRIPTION
+    Applies force, impuls or impact to body or body part.
+    OPTIONS
+    <force_dirrection>
+        Force dirrection vector in format (x.x, x.x).
+    <force_module>
+        Force module.  
+    <impuls_dirrection>
+        Impuls dirrection vector in format (x.x, x.x).  
+    <impuls_module>
+        Impuls module.
+    <impact_type>
+        Type of impact (Moisten, Heat, Cool, Wind, Electricity).
+    <intensity>
+        Impact intensity.
+    <target>
+        Body, b2Body, BodyPart or b2Fixture.
+    ----------------------------------------------------------------
+    $
+    
+    @set
+    ----------------------------------------------------------------
+    Set command 
+    
+    SYNOPSIS
+        set <value> to <expression> 
+    DESCRIPTION
+    Sets value to some parameter.
+    OPTIONS
+    <value>
+        Some value. It may be integer, float value, vector (in 
+        format (x,x) ) or some string.
+    <expression>
+        Specifies parameter, to what you want set new value. Not all
+        expressions allowed (use logic).
+    ----------------------------------------------------------------
+    $
+    
+    @add    
+    ----------------------------------------------------------------
+    Add command
+    
+    SYNOPSIS
+        add object(<template>, <position>)
+    DESCRIPTION
+    Addes some object to the scene.
+    OPTIONS 
+    <template>
+        Template of new object (type of object gets from 
+        template.target attribute). You may specify file, where 
+        template declared with file/template syntax.
+    <position>
+        Coordinates in the world. Syntax: (x,x).
+    ----------------------------------------------------------------
+    $
         
         
     @expression
     ----------------------------------------------------------------
     Expressions
     
-    In show and hide commands excepts <expression> paramter. You may
-    use follow:
+    In show, hide and set commands excepts <expression> paramter. You 
+    may use follow:
     
       material -  BodyMaterial of BodyPart fields.
       state    -  BodyState of BodyPart fields.
@@ -320,6 +399,7 @@
       bodies   -  Enum all Body objects.
       watches  -  Enum all awailable watches.
       fields   -  Enum awailable properties for some expression.
+      mouse    -  Coordinates of cursor.
       nothing  -  Nothing. Use it for creating empty parent watches.
       
     For details type 'help xxx', where xxx is name of parameter (ma-
@@ -332,21 +412,16 @@
     Material expression
     
     SYNOPSIS
-        material[(<fields>)] of <name>[(<number>|<name>)]|selected
+        material[(<fields>)] of <target>
     DESCRIPTION
     Returns BodyPart material parameters (fields of BodyMaterial).
     OPTIONS
     <fiedls>
         Set of field names, splitted by comma. For example material
-        (mKindleReceptivity, mDampnessReceptivity).
+        (KindleReceptivity, DampnessReceptivity).
         If option not set, returns all fields.
-    <name>
-        Name of physic Body.
-    <number>|<name>
-        Zero based index or name of BodyPart. If not specified, then
-        means all BodyPart's.
-    selected
-        Selected by mouse (or somehow).
+    <target>
+        BodyPart object. See 'help target' for details.
     ----------------------------------------------------------------
     $
         
@@ -355,21 +430,16 @@
     State expression
     
     SYNOPSIS
-        state[(<fields>)] of <name>[(<number>|<name>)]|selected
+        state[(<fields>)] of <target>
     DESCRIPTION
     Returns state of BodyPart (fields of BodyState).
     OPTIONS
     <fiedls>
-        Set of field names, splitted by comma. For example material
-        (mKindleReceptivity, mDampnessReceptivity).
+        Set of field names, splitted by comma. For example state
+        (KindleLevel, Temperature).
         If option not set, returns all fields.
-    <name>
-        Name of physic Body.
-    <number>|<name>
-        Zero based index or name of BodyPart. If not specified, then
-        means all BodyPart's.
-    selected
-        Selected by mouse (or somehow).
+     <target>
+        BodyPart object. See 'help target' for details.
     ----------------------------------------------------------------
     $
 
@@ -378,23 +448,16 @@
     b2param expression
     
     SYNOPSIS
-        b2param[(<fields>)] of <name>[(<number>|<name>)]|selected
+        b2param[(<fields>)] of <target>
     DESCRIPTION
-    Returns Box2D parameters of body or fixture. If <number> set, 
-    then parameters of fixture, else of body.
+    Returns Box2D parameters of body or fixture.
     OPTIONS
     <fiedls>
-        Set of field names, splitted by comma. For example material
-        (mKindleReceptivity, mDampnessReceptivity).
+        Set of field names, splitted by comma. For example b2param
+        (LinearVelocity, AngularVelocity).
         If option not set, returns all fields.
-    <name>
-        Name of related Body object.
-    <number>|<name>
-        Zero based index or name of related BodyPart. 
-        If specified, then means parameters of that b2Fixture, else 
-        of b2Body.
-    selected
-        Selected by mouse (or somehow).
+     <target>
+        b2Body or b2Fixture object. See 'help target' for details.
     ----------------------------------------------------------------
     $
 
@@ -403,23 +466,16 @@
     Param expression
     
     SYNOPSIS
-        param[(<fields>)] of <name>[(<number>|<name>)]|selected
+        param[(<fields>)] of <target>
     DESCRIPTION
-    Returns field values of Body or BodyPart. If <number> set, then 
-    parameters of BodyPart, else of Body.
+    Returns field values of Body or BodyPart.
     OPTIONS
     <fiedls>
-        Set of field names, splitted by comma. For example material
-        (mKindleReceptivity, mDampnessReceptivity).
+        Set of field names, splitted by comma. For example param
+        (Dampness, KindleLevel).
         If option not set, returns all fields.
-    <name>
-        Name of Body object.
-    <number>|<name>
-        Zero based index or name of BodyPart. 
-        If specified, then means parameters of that BodyPart, else 
-        of Body.
-    selected
-        Selected by mouse (or somehow).
+    <target>
+        Body or BodyPart object. See 'help target' for details.
     ----------------------------------------------------------------
     $
 
@@ -455,20 +511,14 @@
     Parts expression
     
     SYNOPSIS
-        parts of <name>|selected
+        parts of <target>
     DESCRIPTION
     Returns set of names of BodyPart objects associated with speci-
     fied Body. Order matches (you can use it to examine zero-based 
     index of the part).
     OPTIONS
-    <fiedls>
-        Set of field names, splitted by comma. For example material
-        (mKindleReceptivity, mDampnessReceptivity).
-        If option not set, returns all fields.
-    <name>
-        Name of physic Body.
-    selected
-        Selected by mouse (or somehow).
+     <target>
+        Body object. See 'help target' for details.
     ----------------------------------------------------------------
     $
 
@@ -477,9 +527,12 @@
     Bodies expression
     
     SYNOPSIS
-        bodies
+        bodies [<name>]
     DESCRIPTION
     Returns set of names of Body objects loaded to scene.
+    OPTIONS
+    <name>
+        Body name.
     ----------------------------------------------------------------
     $
     
@@ -506,6 +559,17 @@
     <expression_name>
         Name of some expression (for example 'material' or 
         'b2param'). Type 'help expression' to see all possible.
+    ----------------------------------------------------------------
+    $
+    
+    @mouse
+    ----------------------------------------------------------------
+    Mouse expression
+    
+    SYNOPSIS
+        mouse
+    DESCRIPTION
+    Returns coordinates of cursor (dependent to Themisto window).
     ----------------------------------------------------------------
     $
 
