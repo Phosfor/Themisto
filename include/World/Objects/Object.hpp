@@ -2,7 +2,7 @@
 #define _WORLD_OBJECT_HPP_
 
 #include <ClanLib/core.h>
-#include "World/Objects/ObjectTypes.hpp"
+#include "World/Objects/Types.hpp"
 
 class Object
 {

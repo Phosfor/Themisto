@@ -7,7 +7,7 @@
 #include "Core/Utils.hpp"
 #include "Core/ApplicationManager.hpp"
 #include "Core/GuiManager.hpp"
-#include "World/Objects/ObjectTypes.hpp"
+#include "World/Objects/Types.hpp"
 
 #include "World/Objects/Object.hpp"
 
