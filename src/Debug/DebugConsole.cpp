@@ -1,5 +1,5 @@
 #include "Debug/DebugConsole.hpp"
-//#include <boost/process.hpp>
+#include <stdio.h>
 
 Client::Client()
 {
@@ -75,7 +75,6 @@ void Client::disconnect()
     connected = false;
 }
 
-	
 // A static variable for holding the line. 
 static char *line_read = (char *)NULL;
 
@@ -102,6 +101,19 @@ char* readCommand()
     return (line_read);
 }
 
+std::string exec(const std::string cmd) {
+    FILE* pipe = popen(cmd.c_str(), "r");
+    if (!pipe) return "ERROR";
+    char buffer[128];
+    std::string result = "";
+    while(!feof(pipe)) {
+        if(fgets(buffer, 128, pipe) != NULL)
+                result += buffer;
+    }
+    pclose(pipe);
+    return result;
+}
+
 int main(int argc, char* argv[])
 {
     CL_SetupCore setup_core;
@@ -111,14 +123,14 @@ int main(int argc, char* argv[])
 
     Client client;
     std::string command = "";
-    
+
     for(int i=1; i<argc; ++i)
     {
         command.append(argv[i]);
         command.append(" ");
     }
     boost::trim(command);
-    if( command == "") command = "nope";
+    if (command == "") command = "nope";
 
     while (!client.quit)
     {
@@ -130,30 +142,13 @@ int main(int argc, char* argv[])
         {
             client.connect_to_server();
         }
-        else if(command == "execute" || command == "exe")
+        else if(command == "execute" || command == "exe" || command == "run")
         {
-            // Execute script
-            cout << "Coming soon..";
+            std::cout << exec("./Themisto &") << std::endl;
         }
         else if(command == "build" || command == "b")
         {
-            //namespace bp = ::boost::processes;
-            /*bp::command_line buildCMD("make");
-            buildCMD.argument("-C");
-            buildCMD.argument("build/");
-
-            bp::launcher buildLauncher;
-            buildLauncher.set_stdout_behavior(bp::redirect_stream);
-            buildLauncher.set_merge_out_err(true);
-            buildLauncher.set_work_directory("../"); // Themisto root
-
-            bp::child buildProcess = buildLauncher.start(buildCMD);
-
-            bp::status s = c.wait();
-            if (s.exited() && s.exit_status() == EXIT_SUCCESS)
-                std::cout << "Directory updated successfully." << std::endl;
-            else
-                std::cout << "Update failed." << std::endl;*/
+            std::cout << exec("make -C ../build &") << std::endl;
         }
         //...else if Other commands, that not need connection
         else if( command != "nope")
@@ -173,7 +168,6 @@ int main(int argc, char* argv[])
         {
             client.quit = true;
         }
-        
     }
 
     return 0;

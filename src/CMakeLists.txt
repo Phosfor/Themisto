@@ -102,6 +102,7 @@ target_link_libraries(DebugConsole
     ${JPEG_LIBRARIES}
     ${ClanLib_LIBRARIES}
     ${READLINE_LIBRARIES}
+    ${Boost_LIBRARIES}
     readline
     history
     ncurses
