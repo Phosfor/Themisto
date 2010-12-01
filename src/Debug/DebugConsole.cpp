@@ -101,14 +101,17 @@ char* readCommand()
     return (line_read);
 }
 
-std::string exec(const std::string cmd) {
+std::string exec(const std::string cmd, bool read) {
     FILE* pipe = popen(cmd.c_str(), "r");
     if (!pipe) return "ERROR";
     char buffer[128];
     std::string result = "";
-    while(!feof(pipe)) {
-        if(fgets(buffer, 128, pipe) != NULL)
-                result += buffer;
+    if(read)
+    {
+        while(!feof(pipe)) {
+            if(fgets(buffer, 128, pipe) != NULL)
+                    result += buffer;
+        }
     }
     pclose(pipe);
     return result;
@@ -142,13 +145,21 @@ int main(int argc, char* argv[])
         {
             client.connect_to_server();
         }
-        else if(command == "execute" || command == "exe" || command == "run")
+        else if(command == "execute" || command == "exe")
         {
-            std::cout << exec("./Themisto &") << std::endl;
+            // run script
+        }
+        else if(command == "rv")
+        {
+            std::cout << exec("gnome-terminal -e ./DebugVisualisator &", false) << std::endl;
+        }
+        else if(command == "run" || command == "r")
+        {
+            std::cout << exec("gnome-terminal -e ./Themisto physic &", false) << std::endl;
         }
         else if(command == "build" || command == "b")
         {
-            std::cout << exec("make -C ../build &") << std::endl;
+            std::cout << exec("make -C ../build &", true) << std::endl;
         }
         //...else if Other commands, that not need connection
         else if( command != "nope")
