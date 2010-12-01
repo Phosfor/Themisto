@@ -54,9 +54,10 @@ boost::serialization::singleton<DebugWatcher>
         std::map<string, ofstream*> mFiles;
         std::map<ofstream*, int> mFilesUsing;
         
-        string assignWatchToFile(Watch* watch, string file);
-        string assignWatchToFile(Watch* watch, ofstream* file);
-        string unassignWatchFromFile(Watch* watch);
+        string assignWatchToFile(Watch* watch, string file, bool rewrite);
+        string assignWatchToFile(Watch* watch, ofstream* file, bool rewrite);
+        string unassignWatchFromFile(Watch* watch, bool dispose);
+        string getFileName(ofstream* file);
 
         vector<Watch*> getWatches(StrIterator specIt, StrIterator endIt, string& answer);
         int processEvery(StrIterator everyIt, StrIterator end, string& answer);

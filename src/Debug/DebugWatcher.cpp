@@ -271,10 +271,10 @@ string DebugWatcher::addWatchCommon(Watch* watch, vector<string> &commandSet)
                 {
                     string file = *it;
                     boost::trim(file);
-                    answer += assignWatchToFile(watch, file);
+                    answer += assignWatchToFile(watch, file, true);
                     BOOST_FOREACH(Watch* child, watch->Children)
                     {
-                        answer += assignWatchToFile(child, file);
+                        answer += assignWatchToFile(child, file, true);
                     }
                 }
                 else
@@ -474,7 +474,7 @@ string DebugWatcher::add_member_watch(Watch* watch, string command,
                         watch->Children.push_back(child);
                         child->ID = watch->ID + "." + watchName + "(" + memberName + ")";
                         child->UpdateInterval =  watch->UpdateInterval;
-                        answer += assignWatchToFile(child, watch->OutFile);
+                        answer += assignWatchToFile(child, watch->OutFile, true);
                         mWatches.push_back(child);
                         addWatchToConsole(child);
                         added += memberName + ", ";
@@ -528,7 +528,7 @@ string DebugWatcher::add_member_watch(Watch* watch, string command,
                         watch->Children.push_back(child);
                         child->ID = watch->ID + "." + watchName + "(" + memberName + ")";
                         child->UpdateInterval =  watch->UpdateInterval;
-                        answer += assignWatchToFile(child, watch->OutFile);
+                        answer += assignWatchToFile(child, watch->OutFile, true);
                         mWatches.push_back(child);
                         addWatchToConsole(child);
                         added += memberName + ", ";
@@ -843,7 +843,7 @@ string DebugWatcher::process_hide(StrIterator commandIt, StrIterator endIt)
     {
         if(watch->OutFile != NULL)
         {
-            answer += unassignWatchFromFile(watch);
+            answer += unassignWatchFromFile(watch, false);
         }
         removeWatchFromConsole(watch);
         removed++;
@@ -886,7 +886,11 @@ string DebugWatcher::process_stop_resume(StrIterator commandIt, StrIterator endI
                             watch->Active = !stop;
                             if(stop)
                             {
-                              answer += unassignWatchFromFile(watch);
+                              answer += unassignWatchFromFile(watch, false);
+                            }
+                            else
+                            {
+                                answer += assignWatchToFile(watch, watch->OutFile, false);
                             }
                             processed++;
                         }
@@ -906,7 +910,11 @@ string DebugWatcher::process_stop_resume(StrIterator commandIt, StrIterator endI
                                 watch->Active = !stop;
                                 if(stop)
                                 {
-                                  answer += unassignWatchFromFile(watch);
+                                  answer += unassignWatchFromFile(watch, false);
+                                }
+                                else
+                                {
+                                    answer += assignWatchToFile(watch, watch->OutFile, false);
                                 }
                                 processed++;
                             }
@@ -917,12 +925,12 @@ string DebugWatcher::process_stop_resume(StrIterator commandIt, StrIterator endI
                         answer += "Error: file '"+ path +"' is not using now.\n";
                     }
                 }
-            }
+            }//if(filePathIt != endIt)
             else
             {
                 answer += "Error: file path not specified for 'stop file' or 'resume file' command.\n";
             }
-        }
+        }//if(*argIt == "file")
         else
         {
             vector<Watch*> watches = getWatches(argIt, endIt, answer);
@@ -938,12 +946,16 @@ string DebugWatcher::process_stop_resume(StrIterator commandIt, StrIterator endI
                 {
                     if(stop)
                     {
-                        answer += unassignWatchFromFile(watch);
+                        answer += unassignWatchFromFile(watch, false);
+                    }
+                    else
+                    {   
+                        answer += assignWatchToFile(watch, watch->OutFile, false);
                     }
                 }
             }
         }
-    }
+    }//if(argIt != endIt)
     else
     {
         answer += "Error: argument not specified for command 'stop' or 'resume'.\n";
@@ -968,26 +980,49 @@ Watch* DebugWatcher::getWatchByID(string id)
     return watch;
 }
 
-string DebugWatcher::assignWatchToFile(Watch* watch, string file)
+string DebugWatcher::assignWatchToFile(Watch* watch, string file, bool rewrite)
 {
     string answer = "";
-    
+    ofstream *fs = NULL;
+    bool reopen = false;
     if(watch->OutFile != NULL)
     {
-        answer += unassignWatchFromFile(watch);
+        // If assignation to different file
+        if(getFileName(watch->OutFile) != file)
+        {
+            answer += unassignWatchFromFile(watch, false);
+        }
+        else
+        {
+            fs = watch->OutFile;
+            reopen = true;
+        }
     }
     map<string, ofstream*>::iterator fit = mFiles.find(file);
-    if(fit == mFiles.end())
+    if(fit == mFiles.end() || reopen)
     {
-        if (boost::filesystem::exists(file))
+        if (boost::filesystem::exists(file) && rewrite)
         {
             answer += "Rewriting file '"+ file +"'\n";
         }
-        ofstream *fs = new ofstream();
-        fs->open(file.c_str(), ios_base::trunc);
+        if(!reopen)
+        {   
+            fs = new ofstream();
+        }
+        if(rewrite)
+        {
+            fs->open(file.c_str(), ios_base::trunc);
+        }
+        else
+        {
+            fs->open(file.c_str(), ios_base::app);
+        }
         if(fs->is_open())
         {
-            fit = mFiles.insert(pair<string, ofstream*>(file, fs)).first;
+            if(!reopen)
+            {  
+                fit = mFiles.insert(pair<string, ofstream*>(file, fs)).first;
+            }
             answer += "Opened file '" + file + "' for write.\n";
         }
         else
@@ -1013,56 +1048,57 @@ string DebugWatcher::assignWatchToFile(Watch* watch, string file)
     return answer;
 }
 
-string DebugWatcher::assignWatchToFile(Watch* watch, ofstream* file)
+string DebugWatcher::assignWatchToFile(Watch* watch, ofstream* file, bool rewrite)
 {
     string answer = "";
-    map<string, ofstream*>::iterator fit;
-    for(fit = mFiles.begin(); fit != mFiles.end(); ++fit)
-    {
-        if(fit->second == file)
-        {
-            break;
-        }
-    }
-    if(fit != mFiles.end())
-    {
-        string filePath = fit->first;
-        answer += assignWatchToFile( watch, filePath);
-    }
+    answer += assignWatchToFile( watch, getFileName(file), rewrite);
     return answer;
 }
 
-string DebugWatcher::unassignWatchFromFile(Watch* watch)
+string DebugWatcher::unassignWatchFromFile(Watch* watch, bool dispose)
 {
     string answer = "";
     map<ofstream*, int>::iterator fileUseIt = mFilesUsing.find(watch->OutFile);
-    watch->OutFile = NULL;
+    if(dispose)
+    {
+        watch->OutFile = NULL;
+    }
     if(fileUseIt != mFilesUsing.end())
     {
         fileUseIt->second--;
         string filePath = "";
         if(fileUseIt->second == 0)
         {
-            ofstream* fs = fileUseIt->first;       
+            ofstream* fs = fileUseIt->first;  
+                
             map<string, ofstream*>::iterator fit;
-            for(fit = mFiles.begin(); fit != mFiles.end(); ++fit)
+            for(fit = mFiles.begin(); fit != mFiles.end(); )
             {
                 if(fit->second == fs)
                 {
                     break;
                 }
+                ++fit;
             }
-            mFilesUsing.erase(fileUseIt);
-           
             if(fit != mFiles.end())
             {
                 filePath = fit->first;
-                mFiles.erase(fit);
+                if(dispose) 
+                { 
+                    mFiles.erase(fit);
+                }
+            }
+            if(dispose) 
+            { 
+                mFilesUsing.erase(fileUseIt);
             }
             
             fs->flush();
             fs->close();
-            delete fs;
+            if(dispose)
+            {
+                delete fs;
+            }
             answer += "Closed file '" + filePath + "'.\n";
         }
         else
@@ -1075,6 +1111,25 @@ string DebugWatcher::unassignWatchFromFile(Watch* watch)
         answer += "Watch with id = '"+ watch->ID +"' detached from file '"+ filePath+"'.\n";
     }
     return answer;
+}
+
+string DebugWatcher::getFileName(ofstream* file)
+{
+    string result = "";
+    map<string, ofstream*>::iterator fit;
+    for(fit = mFiles.begin(); fit != mFiles.end(); )
+    {
+        if(fit->second == file)
+        {
+            break;
+        }
+        ++fit;
+    }
+    if(fit != mFiles.end())
+    {
+        result = fit->first;
+    }
+    return result;
 }
 
 void DebugWatcher::step()
