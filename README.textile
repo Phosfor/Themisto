@@ -24,7 +24,6 @@ To build it succesfull, you have to install these packages:
 @fontconfig@
 
 <b>Debug tools</b>:
-<a href='http://www.highscore.de/boost/process/'>boost.process(additional library)</a>
 ReadLine utility, for installing process this lines:
 @ftp://ftp.cwru.edu/pub/bash/readline-6.1.tar.gz@
 @cd readline-6.1@
