@@ -62,6 +62,7 @@ boost::serialization::singleton<DebugWatcher>
         vector<Watch*> getWatches(StrIterator specIt, StrIterator endIt, string& answer);
         int processEvery(StrIterator everyIt, StrIterator end, string& answer);
         string process_hide(StrIterator commandIt, StrIterator endIt);
+        string process_remove(StrIterator commandIt, StrIterator endIt);
         string process_stop_resume(StrIterator commandIt, StrIterator endIt, bool stop);
         map<Target, string> getTargets(StrIterator command, StrIterator end, TargetType type, string& answer);
         string process_material(Watch* watch, vector<string> &commandSet);

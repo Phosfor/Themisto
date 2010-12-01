@@ -75,7 +75,7 @@
     
     SYNOPSIS
        show <expression> [as <name>] [every <milliseconds>|step|eon] [parent <watch_id>]
-       show <hiden_watch_id> [as <name>] [every <milliseconds>|step|eon] [parent <watch_id>]
+       show <hiden_watch_id>
     DESCRIPTION
     First form shows result of some expression on screen in format 
     name = value, and updates it every time interval, game 
@@ -129,7 +129,8 @@
     Remove command
     
     SYNOPSIS
-        remove watch(<id>|all|last|selected)|object(<obj_name>|all)
+        remove watch <id>|all|last|selected 
+        remove object <obj_name>|all
     DESCRIPTION
     Stopes, hides and disposes watch or removes object from world. 
     Removed item is not more awailable.     

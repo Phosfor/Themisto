@@ -55,14 +55,59 @@ void DebugWatcher::parseCommand(string _command, string* _answer)
     Watch* watch;
     if(firstWord == "show")
     {
-        watch = new Watch();
-        watch->Type = ShowWatch;
-        watch->Name = _command;
-        answer += addWatchCommon(watch, commandSet);
+        bool newWatch = true;
+        if(commandSet.size() > 1)
+        {
+            if(commandSet[1] == "watch")
+            {
+                newWatch = false;
+                if(commandSet.size() > 2)
+                {
+                    vector<Watch*> watches = getWatches(commandSet.begin() + 2, commandSet.end(),answer);
+                    int showed = 0;
+                    BOOST_FOREACH(Watch* watch, watches)
+                    {
+                        if(watch->Type == ShowWatch)
+                        {
+                            if(!watch->Active)
+                            {
+                                watch->Active = true;
+                                addWatchToConsole(watch);
+                                showed++;
+                            }
+                            else
+                            {
+                                answer += "Watch with id = '" + watch->ID + "' already showing.\n";
+                            }
+                        }
+                        else
+                        {
+                            answer += "Error: can't show watch with id = '" + watch->ID + "' - it is writing watch.\n";
+                        }
+                    }
+                    answer += "Showed '" + IntToStr(showed) +"' watches.\n";
+                }
+                else
+                {
+                    answer += "Error: watch not specified for 'show watch' command.\n";
+                }
+            }
+        }
+        if(newWatch)
+        {
+            watch = new Watch();
+            watch->Type = ShowWatch;
+            watch->Name = _command;
+            answer += addWatchCommon(watch, commandSet);
+        }
     }
     else if(firstWord == "hide")
     {
         answer += process_hide(commandSet.begin(), commandSet.end());
+    }
+    else if(firstWord == "remove")
+    {
+        answer += process_remove(commandSet.begin(), commandSet.end());
     }
     else if(firstWord == "update")
     {
@@ -834,6 +879,53 @@ vector<Watch*> DebugWatcher::getWatches(StrIterator specIt, StrIterator endIt, s
     return watches;
 }
 
+string DebugWatcher::process_remove(StrIterator commandIt, StrIterator endIt)
+{
+    string answer = "";
+    int removed = 0;
+    StrIterator parIt = commandIt +1;
+    if(parIt != endIt)
+    {
+        if(*parIt == "watch")
+        {
+            vector<Watch*> watches = getWatches(parIt + 1, endIt, answer);
+            BOOST_FOREACH(Watch* watch, watches)
+            {
+                if(watch->OutFile != NULL)
+                {
+                    answer += unassignWatchFromFile(watch, false);
+                }
+                removeWatchFromConsole(watch);
+                removed++;
+                mWatches.remove(watch);
+                if(watch->Parent != NULL)
+                {
+                    watch->Parent->Children.remove(watch);
+                    watch->Parent = NULL;
+                }
+            }
+            BOOST_FOREACH(Watch* watch, watches)
+            {
+                delete watch;
+            }
+            answer += "Removed " + IntToStr(removed) + " watches.\n"; 
+        }
+        else if(*parIt == "object")
+        {
+            answer += "Coming soon...\n";
+        }
+        else
+        {
+            answer += "Error: unknown parameter '" + *parIt + "' for command remove.\n";
+        }
+    }
+    else
+    {
+        answer += "Error: parameter not specified for remove comamand.\n";
+    }
+    return answer;
+}
+
 string DebugWatcher::process_hide(StrIterator commandIt, StrIterator endIt)
 {
     string answer = "";
@@ -845,18 +937,10 @@ string DebugWatcher::process_hide(StrIterator commandIt, StrIterator endIt)
         {
             answer += unassignWatchFromFile(watch, false);
         }
+        watch->Active = false;
         removeWatchFromConsole(watch);
         removed++;
-        mWatches.remove(watch);
-        if(watch->Parent != NULL)
-        {
-            watch->Parent->Children.remove(watch);
-            watch->Parent = NULL;
-        }
-    }
-    BOOST_FOREACH(Watch* watch, watches)
-    {
-        delete watch;
+        
     }
     answer += "Hiden " + IntToStr(removed) + " watches.\n"; 
     return answer;
