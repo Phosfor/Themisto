@@ -150,15 +150,16 @@ void Client::parseCommand(std::string command)
     }
     else if(command == "run console" || command == "rc")
     {
-        exec("gnome-terminal -e ./Themisto physic &", false);
+        system("gnome-terminal -e './Themisto physic&' &");
     }
     else if(command == "run here" || command == "rh")
     {
-        exec("./Themisto physic &", true);
+        system("./Themisto physic");
     }
     else if(command == "build" || command == "b" || command == "make")
     {
-        exec("make --quiet -C ../build &", true);
+        system("make --quiet -C ../build &");
+        system("cd ../bin");
     }
     else if(command.find("git") != command.npos)
     {
@@ -168,8 +169,12 @@ void Client::parseCommand(std::string command)
     else if(command[0] == '.')
     {
         command[0] = ' ';
-        exec(command, true);
+        system(command.c_str());
     }   
+    else if(command == "clear")
+    {
+        system("clear");
+    }
     else if(command[0] == '!')
     {
         command[0] = ' ';
@@ -201,8 +206,6 @@ int main(int argc, char* argv[])
     CL_SetupCore setup_core;
     CL_SetupNetwork setup_network;
 
-    std::cout << "\t========= Welcome to Themisto DebugConsole =========\n";
-
     Client client;
     std::string _command = "";
 
@@ -211,6 +214,8 @@ int main(int argc, char* argv[])
         _command.append(argv[i]);
         _command.append(" ");
     }
+    
+    std::cout << "\t========= Welcome to Themisto DebugConsole =========\n";
 
     while (!client.quit)
     {
@@ -258,14 +263,17 @@ int main(int argc, char* argv[])
             }
             else if (command == "q" || command == "quit")
             {
-                break;
+                client.quit = true;
             }
             else if (command != "") 
             {
                 client.parseCommand(command);
             }
         }
-        _command = readCommand();
+        if(!client.quit)
+        {
+            _command = readCommand();
+        }
     }
 
     return 0;

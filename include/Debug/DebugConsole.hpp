@@ -17,6 +17,7 @@
 #include <boost/filesystem.hpp>
 #include <fstream>
 #include <boost/foreach.hpp>
+#include <cstdlib>
 
 const static CL_String SERVER_PORT = "1992";
 const static CL_String SERVER_HOST = "localhost";
