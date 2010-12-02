@@ -974,20 +974,46 @@ string DebugWatcher::process_remove(StrIterator commandIt, StrIterator endIt)
 string DebugWatcher::process_hide(StrIterator commandIt, StrIterator endIt)
 {
     string answer = "";
-    int removed = 0;
-    vector<Watch*> watches = getWatches(commandIt + 1, endIt, answer);
-    BOOST_FOREACH(Watch* watch, watches)
+    int hiden = 0;
+    StrIterator parIt = commandIt +1;
+    bool childrenHide = false;
+    // hide children of <watch>
+    if(parIt != endIt && parIt+1 != endIt && parIt+2 != endIt)
     {
-        if(watch->OutFile != NULL)
+        if(*parIt == "children" && *(parIt+1) == "of")
         {
-            answer += unassignWatchFromFile(watch, false);
+            childrenHide = true;
+            vector<Watch*> watches = getWatches(parIt+2, endIt, answer);
+            BOOST_FOREACH(Watch* watch, watches)
+            {
+                BOOST_FOREACH(Watch* child, watch->Children)
+                {
+                    if(child->OutFile != NULL)
+                    {
+                        answer += unassignWatchFromFile(child, false);
+                    }
+                    child->Active = false;
+                    removeWatchFromConsole(child);
+                    hiden++;
+                }                
+            }
         }
-        watch->Active = false;
-        removeWatchFromConsole(watch);
-        removed++;
-        
     }
-    answer += "Hiden " + IntToStr(removed) + " watches.\n"; 
+    if(!childrenHide)
+    {
+        vector<Watch*> watches = getWatches(commandIt + 1, endIt, answer);
+        BOOST_FOREACH(Watch* watch, watches)
+        {
+            if(watch->OutFile != NULL)
+            {
+                answer += unassignWatchFromFile(watch, false);
+            }
+            watch->Active = false;
+            removeWatchFromConsole(watch);
+            hiden++;            
+        }
+    }
+    answer += "Hiden " + IntToStr(hiden) + " watches.\n"; 
     return answer;
 }
 

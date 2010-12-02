@@ -26,7 +26,7 @@ void Client::step(const std::string command)
     }
     catch(CL_Exception& e)
     {
-        cout << "-->Error: can't send command to Themisto; Reason: " <<  e.what();
+        cout << "#Error: can't send command to Themisto; Reason: " <<  e.what();
     }
 }
 
@@ -36,7 +36,7 @@ void Client::connect_to_server()
     try {
         network_client.connect(SERVER_HOST, SERVER_PORT);
     } catch(const CL_Exception &e) {
-        cl_log_event("-->Error during connecting to Themisto.", e.message);
+        cl_log_event("#Error during connecting to Themisto.", e.message);
     }
 
     while(!connected)
@@ -48,13 +48,13 @@ void Client::connect_to_server()
 
 void Client::on_connected()
 {
-    std::cout << "-->Sucessfully connected to the Themisto.\n";
+    std::cout << "#Sucessfully connected to the Themisto.\n";
     connected = true;
 }
 
 void Client::on_disconnected()
 {
-    std::cout << "-->Disconnected from Themisto.\n";
+    std::cout << "#Disconnected from Themisto.\n";
     connected = false;
 }
 
@@ -64,13 +64,13 @@ void Client::on_event_received(const CL_NetGameEvent &e)
     {
         string answer = (string)e.get_argument(0).to_string(); 
         if( *(answer.rbegin()) != '\n') answer += "\n";
-        std::cout << "-->" << answer;
+        std::cout << "#" << answer;
     }
 }
 
 void Client::disconnect()
 {
-    std::cout << "-->Disconnecting from Themisto...\n";
+    std::cout << "#Disconnecting from Themisto...\n";
     network_client.disconnect();
     connected = false;
 }
@@ -105,16 +105,16 @@ std::string exec(const std::string cmd, bool read) {
     FILE* pipe = popen(cmd.c_str(), "r");
     if (!pipe) return "ERROR";
     char buffer[128];
-    std::string result = "";
+    //std::string result = "";
     if(read)
     {
         while(!feof(pipe)) {
             if(fgets(buffer, 128, pipe) != NULL)
-                    result += buffer;
+                    cout<< buffer;
         }
     }
     pclose(pipe);
-    return result;
+    return "";
 }
 
 int main(int argc, char* argv[])
@@ -151,16 +151,26 @@ int main(int argc, char* argv[])
         }
         else if(command == "rv")
         {
-            std::cout << exec("gnome-terminal -e ./DebugVisualisator &", false) << std::endl;
+            exec("gnome-terminal -e ./DebugVisualisator &", false);
         }
         else if(command == "run" || command == "r")
         {
-            std::cout << exec("gnome-terminal -e ./Themisto physic &", false) << std::endl;
+            exec("gnome-terminal -e ./Themisto physic &", false);
         }
         else if(command == "build" || command == "b")
         {
-            std::cout << exec("make -C ../build &", true) << std::endl;
+            exec("make --quiet -C ../build &", true);
         }
+        else if(command.find("git") != command.npos)
+        {
+            command.insert(0, "cd .. && ");
+            exec(command, true);
+        }     
+        else if(command[0] == '.')
+        {
+            command[0] = ' ';
+            exec(command, true);
+        }   
         //...else if Other commands, that not need connection
         else if( command != "nope")
         {
