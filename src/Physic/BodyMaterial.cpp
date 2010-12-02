@@ -1,5 +1,10 @@
-#include "Physic/BodyMaterial.hpp"
+/*
+ * Copyright (c) 2010 Tyslenko Max (Ockonal), Bogatirev Pavel (PFight)
+ * This file is part of Themisto (Themisto project at https://github.com/Ockonal/Themisto).
+ * Project is contributed with GPL license. For more information, visit project page.
+ */
 
+#include "Physic/BodyMaterial.hpp"
 
 BodyMaterial::BodyMaterial()
 {

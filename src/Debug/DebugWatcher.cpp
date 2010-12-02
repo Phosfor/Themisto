@@ -1,11 +1,17 @@
+/*
+ * Copyright (c) 2010 Tyslenko Max (Ockonal), Bogatirev Pavel (PFight)
+ * This file is part of Themisto (Themisto project at https://github.com/Ockonal/Themisto).
+ * Project is contributed with GPL license. For more information, visit project page.
+ */
+
 #include "Debug/DebugWatcher.hpp"
 
 void DebugWatcher::init()
 {
     //subsribe to commands
     mCommandSlot = debugIO.mCommand.connect(this, &DebugWatcher::parseCommand);
-    
-    mTimeout = DEFAULT_TIMEOUT;   
+
+    mTimeout = DEFAULT_TIMEOUT;
     mLeftFromLastUpdate = 0;
     _appManager = &appManager;
 }
@@ -19,7 +25,6 @@ DebugWatcher::~DebugWatcher()
 
 void DebugWatcher::parseCommand(string _command, string* _answer)
 {
-    
     if(_command.size() == 0) return;
     string& answer = *_answer;
     // Normalize command
@@ -46,7 +51,7 @@ void DebugWatcher::parseCommand(string _command, string* _answer)
         boost::replace_all(command, "( ", "(");
     }
     LOG(command);
-    
+
     std::vector<std::string> commandSet;
     boost::split(commandSet, command, boost::is_any_of(" "));
     string firstWord = commandSet[0];
@@ -212,7 +217,7 @@ void DebugWatcher::parseCommand(string _command, string* _answer)
                     do
                     {
                         answer += c;
-                        fshelp.get(c);                    
+                        fshelp.get(c);
                     }
                     while(c != '$' && !fshelp.eof());  
                 }
@@ -263,7 +268,6 @@ string DebugWatcher::process_parent(StrIterator cmdIt, StrIterator endIt, Watch*
         {
             answer += "Error: too many parents.\n";
         }
-        
     }
     else
     {
@@ -322,7 +326,7 @@ EnvironObject* getEnvironObject(string _name)
     else if(name == "clouds")result = environManager.getTypeHandle(Environ_Clouds);  
     else if(name == "leaves")result = environManager.getTypeHandle(Environ_Leaves); 
     else if(name == "birds")result = environManager.getTypeHandle(Environ_Birds); 
-    
+
     return result;
 }
 
@@ -395,9 +399,9 @@ string DebugWatcher::addWatchCommon(Watch* watch, vector<string> &commandSet)
                 {
                     interval = AEON;
                     argOk = true;
-                }                
+                }
                 else
-                {                    
+                {
                     try
                     {
                         interval = boost::lexical_cast<int>(arg);
@@ -406,7 +410,7 @@ string DebugWatcher::addWatchCommon(Watch* watch, vector<string> &commandSet)
                     catch(boost::bad_lexical_cast &e)
                     {
                         argOk = false;
-                    }                   
+                    }
                 }
                 if(argOk)
                 {
@@ -420,7 +424,6 @@ string DebugWatcher::addWatchCommon(Watch* watch, vector<string> &commandSet)
                 {
                     answer = "Error: bad argument for every parameter.\n";
                 }
-                               
             }
             else
             {
@@ -460,12 +463,12 @@ string DebugWatcher::addWatchCommon(Watch* watch, vector<string> &commandSet)
                     map<Target, string> targets = getTargets(it+1, commandSet.end(), tb2Body, answer);
                     answer += add_member_watch(watch, *it, b2BodyFields,  b2BodyFieldsCount, targets, evalute_b2Body);
                     watchNormal = true;
-                }                
+                }
             }
             else
             {
                 answer += "Error: unspecified 'of' parameter or it's argument.\n";
-            }           
+            }
         }
         else if( command.find("param") != command.npos)
         {
@@ -509,7 +512,7 @@ string DebugWatcher::addWatchCommon(Watch* watch, vector<string> &commandSet)
             watch->MemberName = "Elapsed";
             addWatchToConsole(watch);
             watchNormal = true;
-        }     
+        }
     }
     if(watch->Type != NotAWatch && watchNormal)
     {
@@ -546,7 +549,7 @@ string DebugWatcher::add_member_watch(Watch* watch, string command,
             {
                 Target target = it->first;
                 string watchName = it->second; 
-                
+
                 for(int i=0; i < memberCount; ++i)
                 {
                     const string memberName = members[i];
@@ -588,16 +591,16 @@ string DebugWatcher::add_member_watch(Watch* watch, string command,
                 // Last element is epmty
                 specMembers.erase(--specMembers.end());
             }
-            
+
             for(it = targets.begin(); it != targets.end(); ++it)
             {
                 Target target = it->first;
                 string watchName = it->second; 
-                
+
                 BOOST_FOREACH(string memberName, specMembers)
                 {                   
                     boost::trim(memberName);  
-                    
+
                     // Check, if member name is normal
                     bool normal = false;
                     for(int i=0;i < memberCount; ++i)
@@ -647,13 +650,11 @@ string DebugWatcher::add_member_watch(Watch* watch, string command,
             answer += "Error: nothing added to watch.\n";
             watch->Type = NotAWatch;
         }
-        
     }//if(targets.size() > 0)
     else
     {
         watch->Type = NotAWatch;
     }
-
 
     return answer;
 }
@@ -677,11 +678,11 @@ map<Target, string> DebugWatcher::getTargets(StrIterator command, StrIterator en
                 if(target != NULL)
                 {
                     result.insert(pair<Target, string>(target, *argument));
-                }  
+                }
                 else
                 {
                     answer += "Error: invalid argument '" + *argument + "'.\n";
-                }              
+                }
             }
             else
             {
@@ -771,7 +772,7 @@ map<Target, string> DebugWatcher::getTargets(StrIterator command, StrIterator en
                                      fixture != NULL; fixture = fixture->GetNext())
                             {
                                 string id = IntToStr(i);
-                               
+
                                 BodyPart* part = (BodyPart*)fixture->GetUserData();
                                 if(part != NULL)
                                 {
@@ -787,13 +788,13 @@ map<Target, string> DebugWatcher::getTargets(StrIterator command, StrIterator en
                                     if(type & tBodyState)
                                     {
                                         result.insert(pair<Target, string>(part->getState(), id));
-                                    }                                    
-                                }     
+                                    }
+                                }
                                 if(type & tb2Fixture)
                                 {
                                     result.insert(pair<Target, string>(fixture, id));
-                                } 
-                                ++i;     
+                                }
+                                ++i;
                             }
                         }
                     }//if((*it)->mName == objName)
@@ -803,7 +804,6 @@ map<Target, string> DebugWatcher::getTargets(StrIterator command, StrIterator en
             {
                 answer += "Error: argument for parameter 'of' not specified!\n";
             }
-       
         }//if( *command == "of")
         else
         {
@@ -823,7 +823,7 @@ b2Fixture* DebugWatcher::getFixture(Body* obj, string* partID)
     b2Fixture* result = NULL;
     b2Body* body = obj->getb2Body();
     bool numberID = false;
-    
+
     int partNumber = 0;
     try
     {
@@ -839,7 +839,7 @@ b2Fixture* DebugWatcher::getFixture(Body* obj, string* partID)
         int currentPartNumber = 0;
         for(b2Fixture* fixture = body->GetFixtureList(); 
                  fixture != NULL; fixture = fixture->GetNext())
-        {        
+        {
             if(currentPartNumber == partNumber)
             {
                 result = fixture;
@@ -850,14 +850,14 @@ b2Fixture* DebugWatcher::getFixture(Body* obj, string* partID)
                 }
                 break;
             }
-            currentPartNumber++;       
+            currentPartNumber++;
         }
     }
     else
     {
         for(b2Fixture* fixture = body->GetFixtureList(); 
                  fixture != NULL; fixture = fixture->GetNext())
-        {        
+        {
             BodyPart* part = (BodyPart*)fixture->GetUserData();
             if(part != NULL)
             {
@@ -1102,7 +1102,6 @@ string DebugWatcher::process_stop_resume(StrIterator commandIt, StrIterator endI
                     watch->Active = !stop;
                     processed++;
                 }
-                
                 if(watch->OutFile != NULL)
                 {
                     if(stop)
@@ -1231,7 +1230,7 @@ string DebugWatcher::unassignWatchFromFile(Watch* watch, bool dispose)
         if(fileUseIt->second == 0)
         {
             ofstream* fs = fileUseIt->first;  
-                
+
             map<string, ofstream*>::iterator fit;
             for(fit = mFiles.begin(); fit != mFiles.end(); )
             {
@@ -1253,7 +1252,7 @@ string DebugWatcher::unassignWatchFromFile(Watch* watch, bool dispose)
             { 
                 mFilesUsing.erase(fileUseIt);
             }
-            
+
             fs->flush();
             fs->close();
             if(dispose)
@@ -1376,17 +1375,3 @@ void DebugWatcher::notifyConsoleChangedParent(Watch* watch)
 {
     LOG("Changing parent for " + watch->ID);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2010 Tyslenko Max (Ockonal), Bogatirev Pavel (PFight)
+ * This file is part of Themisto (Themisto project at https://github.com/Ockonal/Themisto).
+ * Project is contributed with GPL license. For more information, visit project page.
+ */
+
 #ifndef _WEATHER_MOON_HPP_
 #define _WEATHER_MOON_HPP_
 

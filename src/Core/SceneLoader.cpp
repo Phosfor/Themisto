@@ -1,9 +1,10 @@
-#include "Core/SceneLoader.hpp"
-
-/* TODO:
- * Parse hex
- * Write destructor and delete dynamic objects
+/*
+ * Copyright (c) 2010 Tyslenko Max (Ockonal), Bogatirev Pavel (PFight)
+ * This file is part of Themisto (Themisto project at https://github.com/Ockonal/Themisto).
+ * Project is contributed with GPL license. For more information, visit project page.
  */
+
+#include "Core/SceneLoader.hpp"
 
 void SceneLoader::loadScene(const std::string &sceneName)
 {
@@ -96,13 +97,12 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
             std::string name = tag.get_attribute("name").c_str();
             std::string type = tag.get_attribute("type").c_str();
             LOG_NOFORMAT(cl_format("- Parsing object `%1` of type `%2`\n", name, type));
-            
+
             Object* object = typesManager.parseObject(&tag);
             if(object != NULL)
             {
                 objectsManager.addObject(object->getName(), object);
             }
-           
         }
     }
     // END OF OBJECTS PARSING -------------------------------------------

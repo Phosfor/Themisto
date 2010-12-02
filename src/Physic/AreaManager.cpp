@@ -1,10 +1,13 @@
+/*
+ * Copyright (c) 2010 Tyslenko Max (Ockonal), Bogatirev Pavel (PFight)
+ * This file is part of Themisto (Themisto project at https://github.com/Ockonal/Themisto).
+ * Project is contributed with GPL license. For more information, visit project page.
+ */
+
 #include "Physic/AreaManager.hpp"
-
-
 
 void AreaManager::init(b2World *world, float cellSize)
 {
-    
     mCellSize = cellSize;
     mWorld = world;
     float areaWidth = ScreenResolutionX;
@@ -330,6 +333,3 @@ bool AreaManagerQueryCallback::ReportFixture (b2Fixture *fixture)
     areaManager.reportNewFixtureLocation(NULL, &fixture->GetAABB(), fixture);
     return true;
 }
-
-
-

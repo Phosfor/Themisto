@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2010 Tyslenko Max (Ockonal), Bogatirev Pavel (PFight)
+ * This file is part of Themisto (Themisto project at https://github.com/Ockonal/Themisto).
+ * Project is contributed with GPL license. For more information, visit project page.
+ */
+
 #ifndef _OBJECT_TYPES_HPP_
 #define _OBJECT_TYPES_HPP_
 
