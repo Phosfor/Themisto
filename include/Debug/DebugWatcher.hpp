@@ -31,7 +31,6 @@
 
 using namespace std;
 using namespace evalute;
-using namespace boost::lambda;
 
 #define debugWatcher (DebugWatcher::get_mutable_instance())
 #define debugWatcherConst (DebugWatcher::get_const_instance())
@@ -59,7 +58,7 @@ boost::serialization::singleton<DebugWatcher>
         string unassignWatchFromFile(Watch* watch, bool dispose);
         string getFileName(ofstream* file);
 
-        vector<Watch*> getWatches(StrIterator specIt, StrIterator endIt, string& answer);
+        vector<Watch*> getWatches(StrIterator specIt, StrIterator endIt, string& answer, bool child);
         int processEvery(StrIterator everyIt, StrIterator end, string& answer);
         string process_hide(StrIterator commandIt, StrIterator endIt);
         string process_remove(StrIterator commandIt, StrIterator endIt);

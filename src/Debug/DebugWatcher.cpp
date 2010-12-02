@@ -61,7 +61,7 @@ void DebugWatcher::parseCommand(string _command, string* _answer)
                 newWatch = false;
                 if(commandSet.size() > 2)
                 {
-                    vector<Watch*> watches = getWatches(commandSet.begin() + 2, commandSet.end(),answer);
+                    vector<Watch*> watches = getWatches(commandSet.begin() + 2, commandSet.end(),answer, true);
                     int showed = 0;
                     BOOST_FOREACH(Watch* watch, watches)
                     {
@@ -120,7 +120,7 @@ void DebugWatcher::parseCommand(string _command, string* _answer)
         }
         else
         {
-            vector<Watch*> watches = getWatches(argIt, commandSet.end(), answer);
+            vector<Watch*> watches = getWatches(argIt, commandSet.end(), answer, true);
             StrIterator parIt = argIt +1;
             bool simpleUpdate = true;
             if(parIt != commandSet.end())
@@ -247,7 +247,7 @@ string DebugWatcher::process_parent(StrIterator cmdIt, StrIterator endIt, Watch*
     string answer = "";
     if(cmdIt+1 != endIt)
     {
-        vector<Watch*> specifiedParent = getWatches(cmdIt +1, endIt, answer);
+        vector<Watch*> specifiedParent = getWatches(cmdIt +1, endIt, answer, true);
         if(specifiedParent.size() == 1)
         {
             Watch* parent = specifiedParent[0];
@@ -873,7 +873,7 @@ b2Fixture* DebugWatcher::getFixture(Body* obj, string* partID)
     return result;
 }
 
-vector<Watch*> DebugWatcher::getWatches(StrIterator specIt, StrIterator endIt, string& answer)
+vector<Watch*> DebugWatcher::getWatches(StrIterator specIt, StrIterator endIt, string& answer, bool children = true)
 {
     vector<Watch*> watches;
     if(specIt != endIt)
@@ -884,11 +884,14 @@ vector<Watch*> DebugWatcher::getWatches(StrIterator specIt, StrIterator endIt, s
             if(mWatches.size() > 0)
             {
                 Watch* watch = mWatches.back();
-                BOOST_FOREACH(Watch* child, watch->Children)
-                {
-                    watches.push_back(child);
-                }
                 watches.push_back(watch);
+                if(children)
+                {
+                    BOOST_FOREACH(Watch* child, watch->Children)
+                    {
+                        watches.push_back(child);
+                    }
+                }
             }
             else 
             {
@@ -911,11 +914,14 @@ vector<Watch*> DebugWatcher::getWatches(StrIterator specIt, StrIterator endIt, s
            Watch* watch = getWatchByID(param);
            if(watch != NULL)
             {
-                BOOST_FOREACH(Watch* child, watch->Children)
-                {
-                    watches.push_back(child);
-                }
                 watches.push_back(watch);
+                if(children)
+                {
+                    BOOST_FOREACH(Watch* child, watch->Children)
+                    {
+                        watches.push_back(child);
+                    }
+                }
             }
             else
             {
@@ -989,7 +995,7 @@ string DebugWatcher::process_hide(StrIterator commandIt, StrIterator endIt)
         if(*parIt == "children" && *(parIt+1) == "of")
         {
             childrenHide = true;
-            vector<Watch*> watches = getWatches(parIt+2, endIt, answer);
+            vector<Watch*> watches = getWatches(parIt+2, endIt, answer, false);
             BOOST_FOREACH(Watch* watch, watches)
             {
                 BOOST_FOREACH(Watch* child, watch->Children)
@@ -1000,7 +1006,7 @@ string DebugWatcher::process_hide(StrIterator commandIt, StrIterator endIt)
                     }
                     child->Active = false;
                     removeWatchFromConsole(child);
-                    hiden++; //TODO exclude children
+                    hiden++; 
                 }                
             }
         }
