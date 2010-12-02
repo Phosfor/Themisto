@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2010 Tyslenko Max (Ockonal), Bogatirev Pavel (PFight)
+ * This file is part of Themisto (Themisto project at https://github.com/Ockonal/Themisto).
+ * Project is contributed with GPL license. For more information, visit project page.
+ */
+
 #include "Debug/DebugConsole.hpp"
 #include <stdio.h>
 
@@ -175,7 +181,7 @@ void Client::parseCommand(std::string command)
         {
             exec("gnome-terminal", false);
         }
-    }   
+    }
     else
     {
         if (!connected)
@@ -204,7 +210,7 @@ int main(int argc, char* argv[])
     {
         _command.append(argv[i]);
         _command.append(" ");
-    }   
+    }
 
     while (!client.quit)
     {
@@ -213,7 +219,7 @@ int main(int argc, char* argv[])
         BOOST_FOREACH(string command, subcommands)
         {
             boost::trim(command);
-            
+
             if( command.find("execute") != command.npos || command.find("exe") != command.npos)
             {
                 std::size_t paramPos = command.find(" ");
@@ -260,7 +266,6 @@ int main(int argc, char* argv[])
             }
         }
         _command = readCommand();
-        
     }
 
     return 0;

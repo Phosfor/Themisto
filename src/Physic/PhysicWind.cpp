@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2010 Tyslenko Max (Ockonal), Bogatirev Pavel (PFight)
+ * This file is part of Themisto (Themisto project at https://github.com/Ockonal/Themisto).
+ * Project is contributed with GPL license. For more information, visit project page.
+ */
+
 #include "Physic/PhysicWind.hpp"
 
 void PhysicWind::init(float power, b2Vec2 dirrection)
@@ -122,5 +128,3 @@ void PhysicWind::setPower(float value)
     mImpact->Intensity = value;
     calculateWeakerImpacts();
 }
-
-

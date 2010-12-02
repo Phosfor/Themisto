@@ -1,5 +1,10 @@
-#include "Debug/EvaluteFunctions.hpp"
+/*
+ * Copyright (c) 2010 Tyslenko Max (Ockonal), Bogatirev Pavel (PFight)
+ * This file is part of Themisto (Themisto project at https://github.com/Ockonal/Themisto).
+ * Project is contributed with GPL license. For more information, visit project page.
+ */
 
+#include "Debug/EvaluteFunctions.hpp"
 
 string evalute::evalute_material(Watch* watch)
 {
@@ -26,7 +31,7 @@ string evalute::evalute_material(Watch* watch)
     else if(name == "InflCarbonizeLevelToElecticalConductivity") result = FloatToStr(m->InflCarbonizeLevelToElecticalConductivity);
     else if(name == "InflMoistenToKindleLevel") result = FloatToStr(m->InflMoistenToKindleLevel);
     else if(name == "InflTemperatureToDampness") result = FloatToStr(m->InflTemperatureToDampness);  
-    
+
     return result;
 }
 
@@ -133,7 +138,7 @@ string evalute::evalute_b2Fixture(Watch* watch)
         filterCategoryPrefix = "CategoryBits = ";
         filterMaskPrefix = ", MaskBits = ";
         filterGroupPrefix = ", GroupIndex = ";
-    }               
+    }
     if( name == "Filter.CategoryBits" || filter) 
         result += filterCategoryPrefix + IntToStr(m->GetFilterData().categoryBits);
     if( name == "Filter.MaskBits" || filter) 
@@ -173,7 +178,7 @@ string evalute::evalute_b2Fixture(Watch* watch)
     else if(name == "Density") result = FloatToStr(m->GetDensity());
     else if(name == "Restitution") result = FloatToStr(m->GetRestitution());
     else if(name == "Friction") result = FloatToStr(m->GetFriction());
-    
+
     bool aabb = false;
     string aabbTopPrefix = "", aabbBottomPrefix = "", aabbLeftPrefix = "", aabbRightPrefix = "";
     if( name == "AABB" )
@@ -190,7 +195,7 @@ string evalute::evalute_b2Fixture(Watch* watch)
     if( name == "AABB.Left" || aabb) result += aabbLeftPrefix + FloatToStr(m->GetAABB().upperBound.x);
     if( name == "AABB.Right" || aabb) result += aabbRightPrefix + FloatToStr(m->GetAABB().upperBound.x);
     if(aabb) result += " }";
-    
+
     if( result == "") result = "Erorr, can't evalute";
     return result;
 }
@@ -199,7 +204,7 @@ string evalute::evalute_b2Body(Watch* watch)
     string name = watch->MemberName;
     string result = "";
     b2Body* body = boost::get<b2Body*>(watch->Object); 
-    
+
     if( name == "Type")
     {
         b2BodyType type = body->GetType();
@@ -241,11 +246,11 @@ string evalute::evalute_b2Body(Watch* watch)
     if( name == "Mass.Center" || mass) result += massCenterPrefix + VectorToStr(massData.center);
     if( name == "Mass.RotationInertia" || mass) 
         result += massRotationInertiaPrefix + FloatToStr(massData.I);
-    if(mass) result += " }";   
-    
+    if(mass) result += " }";
+
     if(result == "") result = "Can't evalute";
-    
-    return result;    
+
+    return result;
 }
 
 string evalute::evalute_BodyPart(Watch* watch)
@@ -253,13 +258,13 @@ string evalute::evalute_BodyPart(Watch* watch)
     string name = watch->MemberName;
     string result = "";
     BodyPart* part = boost::get<BodyPart*>(watch->Object); 
-    
+
     if( name == "IsDefaultMaterial") result = BoolToStr(part->IsDefaultMaterial());
     else if( name == "MaxKindleLevel") result = FloatToStr(part->getMaxKindleLevel());
     else if( name == "MaxDampness") result = FloatToStr(part->getMaxDampness());
     else if( name == "AcceptsCord") result = BoolToStr(part->getAcceptsCord());
     else if( name == "Name") result = part->getName();
-    
+
     if(result == "") result = "Can't evalute";
     return result;
 }
@@ -271,9 +276,9 @@ string evalute::evalute_Body(Watch* watch)
     Body* body = boost::get<Body*>(watch->Object); 
     if( name == "Buoyancy") result = FloatToStr(body->getBuoyancy());
     else if( name == "Name") result = body->getName();
-    
+
     if(result == "") result = "Can't evalute";
-    return result;                    
+    return result;
 }
 
 string evalute::evalute_EnvironObject(Watch* watch)
@@ -283,9 +288,9 @@ string evalute::evalute_EnvironObject(Watch* watch)
     EnvironObject* obj = boost::get<EnvironObject*>(watch->Object); 
     if(name == "Enabled") result = BoolToStr(obj->getEnabled());
     else if(name == "Limit") result = IntToStr(obj->getLimit());
-    
+
     if(result == "") result = "Can't evalute";
-    
+
     return result;
 }
 
