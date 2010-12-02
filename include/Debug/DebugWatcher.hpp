@@ -45,6 +45,7 @@ using namespace evalute;
 
 
 typedef vector<string>::iterator StrIterator;
+typedef pair<string, Body*> TargetInfo; // ID and parent body
 
 
 class DebugWatcher: public
@@ -70,12 +71,12 @@ boost::serialization::singleton<DebugWatcher>
         string process_remove(StrIterator commandIt, StrIterator endIt);
         string process_stop_resume(StrIterator commandIt, StrIterator endIt, bool stop);
         string process_parent(StrIterator cmdIt, StrIterator endIt, Watch* watch);
-        map<Target, string> getTargets(StrIterator command, StrIterator end, TargetType type, string& answer);
+        map<Target, TargetInfo> getTargets(StrIterator command, StrIterator end, TargetType type, string& answer);
         string process_material(Watch* watch, vector<string> &commandSet);
-        b2Fixture* getFixture(Body* body, string* partID);
+        vector<b2Fixture*> getFixtures(Body* body, string* partID);
         string addWatchCommon(Watch* watch, vector<string> &commandSet);
         string add_member_watch(Watch* watch, string command, 
-            const string members[], const int memberCount, map<Target, string>& targets, EvaluteFunction evalute);
+            const string members[], const int memberCount, map<Target, TargetInfo>& targets, EvaluteFunction evalute);
 
         Watch* getWatchByID(string id);
         void update(Watch* watch);

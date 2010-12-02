@@ -433,13 +433,13 @@ string DebugWatcher::addWatchCommon(Watch* watch, vector<string> &commandSet)
         //material and others commands can contain brakes at end
         else if( command.find("material") != command.npos)
         {
-            map<Target, string> targets = getTargets(it+1, commandSet.end(), tBodyMaterial, answer);
+            map<Target, TargetInfo> targets = getTargets(it+1, commandSet.end(), tBodyMaterial, answer);
             answer += add_member_watch(watch, *it, BodyMaterialFields,BodyMaterialFieldsCount, targets, evalute_material);
             watchNormal = true;
         }
         else if( command.find("state") != command.npos)
         {
-            map<Target, string> targets = getTargets(it+1, commandSet.end(), tBodyState, answer);
+            map<Target, TargetInfo> targets = getTargets(it+1, commandSet.end(), tBodyState, answer);
             answer += add_member_watch(watch, *it, BodyStateFields, BodyStateFieldsCount, targets, evalute_state);
             watchNormal = true;
         }
@@ -453,14 +453,14 @@ string DebugWatcher::addWatchCommon(Watch* watch, vector<string> &commandSet)
                 if(targetSpecifier.find("(") != targetSpecifier.npos)
                 {
                     // b2Fixture
-                    map<Target, string> targets = getTargets(it+1, commandSet.end(), tb2Fixture, answer);
+                    map<Target, TargetInfo> targets = getTargets(it+1, commandSet.end(), tb2Fixture, answer);
                     answer += add_member_watch(watch, *it, b2FixtureFields, b2FixtureFieldsCount, targets, evalute_b2Fixture);
                     watchNormal = true;
                 }
                 else
                 {
                     // b2Body
-                    map<Target, string> targets = getTargets(it+1, commandSet.end(), tb2Body, answer);
+                    map<Target, TargetInfo> targets = getTargets(it+1, commandSet.end(), tb2Body, answer);
                     answer += add_member_watch(watch, *it, b2BodyFields,  b2BodyFieldsCount, targets, evalute_b2Body);
                     watchNormal = true;
                 }
@@ -480,14 +480,14 @@ string DebugWatcher::addWatchCommon(Watch* watch, vector<string> &commandSet)
                 if(targetSpecifier.find("(") != targetSpecifier.npos)
                 {
                     //BodyPart
-                    map<Target, string> targets = getTargets(it+1, commandSet.end(), tBodyPart, answer);
+                    map<Target, TargetInfo> targets = getTargets(it+1, commandSet.end(), tBodyPart, answer);
                     answer += add_member_watch(watch, *it, BodyPartFields, BodyPartFieldsCount, targets, evalute_BodyPart);
                     watchNormal = true;
                 }
                 else
                 {
                     //Body
-                    map<Target, string> targets = getTargets(it+1, commandSet.end(), tBody, answer);
+                    map<Target, TargetInfo> targets = getTargets(it+1, commandSet.end(), tBody, answer);
                     answer += add_member_watch(watch, *it, BodyFields,BodyFieldsCount, targets, evalute_Body);
                     watchNormal = true;
                 }
@@ -499,7 +499,7 @@ string DebugWatcher::addWatchCommon(Watch* watch, vector<string> &commandSet)
         }
         else if( command.find("environ") != command.npos)
         {
-            map<Target, string> targets = getTargets(it+1, commandSet.end(), tEnvironObject, answer);           
+            map<Target, TargetInfo> targets = getTargets(it+1, commandSet.end(), tEnvironObject, answer);           
             answer += add_member_watch(watch, *it, EnvironObjectFields, EnvironObjectFieldsCount, targets, evalute_EnvironObject);
             watchNormal = true;
         }
@@ -531,7 +531,7 @@ string DebugWatcher::addWatchCommon(Watch* watch, vector<string> &commandSet)
 }
 
 string DebugWatcher::add_member_watch(Watch* watch, string command,
-         const string members[], const int memberCount, map<Target, string>& targets, EvaluteFunction evalute)
+         const string members[], const int memberCount, map<Target, TargetInfo>& targets, EvaluteFunction evalute)
 {
     string answer = "";
     answer += "Selected " + IntToStr(targets.size()) + " targets.\n";
@@ -541,41 +541,15 @@ string DebugWatcher::add_member_watch(Watch* watch, string command,
         addWatchToConsole(watch);
         map<Target, string>::iterator it;
         unsigned int startParamBraket = command.find("(");
-        string added = "";
+        vector<string> membersToAdd;
+        string membersToAddStr = "";
         // If members not specified, add to watch all members
         if(startParamBraket == command.npos)
         {
-            for(it = targets.begin(); it != targets.end(); ++it)
+            for(int i=0; i < memberCount; ++i)
             {
-                Target target = it->first;
-                string watchName = it->second; 
-
-                for(int i=0; i < memberCount; ++i)
-                {
-                    const string memberName = members[i];
-                    // Watches like Shape.Center are stuff
-                    if(memberName.find(".") == memberName.npos)
-                    {
-                        Watch* child = new Watch(*watch);
-                        child->Name = memberName;
-                        child->Type = watch->Type;
-                        child->Active = true;
-                        child->Object = target;
-                        child->Expression = evalute;
-                        child->MemberName = memberName;
-                        child->Parent = watch;
-                        watch->Children.push_back(child);
-                        child->ID = watch->ID + "." + watchName + "(" + memberName + ")";
-                        child->UpdateInterval =  watch->UpdateInterval;
-                        if(watch->OutFile != NULL)
-                        {
-                            answer += assignWatchToFile(child, watch->OutFile, true);
-                        }
-                        mWatches.push_back(child);
-                        addWatchToConsole(child);
-                        added += memberName + ", ";
-                    }
-                } 
+                membersToAdd.push_back(string(members[i]));
+                membersToAddStr += members[i] + ", ";
             }
         }
         // Look specified members only
@@ -591,65 +565,111 @@ string DebugWatcher::add_member_watch(Watch* watch, string command,
                 // Last element is epmty
                 specMembers.erase(--specMembers.end());
             }
+            BOOST_FOREACH(string memberName, specMembers)
+            {                   
+                boost::trim(memberName);  
 
-            for(it = targets.begin(); it != targets.end(); ++it)
-            {
-                Target target = it->first;
-                string watchName = it->second; 
-
-                BOOST_FOREACH(string memberName, specMembers)
-                {                   
-                    boost::trim(memberName);  
-
-                    // Check, if member name is normal
-                    bool normal = false;
-                    for(int i=0;i < memberCount; ++i)
+                // Check, if member name is normal
+                bool normal = false;
+                for(int i=0;i < memberCount; ++i)
+                {
+                    if(members[i] == memberName) 
                     {
-                        if(members[i] == memberName) 
-                        {
-                            normal = true;
-                            break;
-                        }
+                        normal = true;
+                        break;
                     }
-                    if(normal)
-                    {
-                        Watch* child = new Watch(*watch);
-                        child->Name = memberName;
-                        child->Type = watch->Type;
-                        child->Active = true;
-                        child->Object = target;
-                        child->Expression = evalute;
-                        child->MemberName = memberName;
-                        child->Parent = watch;
-                        watch->Children.push_back(child);
-                        child->ID = watch->ID + "." + watchName + "(" + memberName + ")";
-                        child->UpdateInterval =  watch->UpdateInterval;
-                        if(watch->OutFile != NULL)
-                        {
-                            answer += assignWatchToFile(child, watch->OutFile, true);
-                        }
-                        mWatches.push_back(child);
-                        addWatchToConsole(child);
-                        added += memberName + ", ";
-                    }
-                    else
-                    {
-                        answer += "Error: member " + memberName + " not exists.\n";
-                    }
-                }// BOOST_FOREACH(string memberName, specMembers)
-            }//for(it = targets.begin(); it != targets.end(); ++it)
+                }
+                if(normal)
+                {
+                    membersToAdd.push_back(memberName);
+                    membersToAddStr += memberName + ", ";
+                }
+                else
+                {
+                    answer += "Error: member " + memberName + " not exists.\n";
+                }
+            }            
         }
         //Remove last comma and space
-        if( added.size() > 2) 
+        if( membersToAddStr.size() > 2) 
         {
-            added.erase(added.end() - 2, added.end());
-            answer += "To watch added next properties: " + added + ". \n";
+            membersToAddStr.erase(membersToAddStr.end() - 2, membersToAddStr.end());
+            answer += "Members to watch: " + membersToAddStr + ". \n";
         }
         else
         {
             answer += "Error: nothing added to watch.\n";
             watch->Type = NotAWatch;
+            return answer;
         }
+        
+        string targetsStr = "";
+        map<Body*, Watch*> parentBodyWatches;
+        map<Target, TargetInfo>::iterator tit;
+        for(tit = targets.begin(); tit != targets.end(); ++tit)
+        {
+            Target target = tit->first;
+            string partName = tit->second.first; 
+            Body* parentBody = tit->second.second;
+            bool bodyTarget = target.type() == typeid(parentBody) ||  target.type() == typeid(parentBody->getb2Body());
+            Watch* parentWatch = NULL;
+            map<Body*, Watch*>::iterator parentWatchIt = parentBodyWatches.find(parentBody);
+            if(parentWatchIt == parentBodyWatches.end())
+            {
+                parentWatch = new Watch(*watch);
+                parentWatch->Type = watch->Type;
+                parentWatch->Name = "Body " + parentBody->getName();
+                parentWatch->Active = false;
+                parentWatch->Parent = watch;
+                watch->Children.push_back(parentWatch);
+                parentWatch->ID = watch->ID + "." + parentBody->getName();
+                parentWatch->UpdateInterval =  watch->UpdateInterval;
+                if(watch->OutFile != NULL)
+                {
+                    answer += assignWatchToFile(parentWatch, watch->OutFile, true);
+                }
+                mWatches.push_back(parentWatch);
+                addWatchToConsole(parentWatch);
+                targetsStr += "Body '"+ parentBody->getName() +"'";
+                if(bodyTarget) targetsStr += ", ";
+                else targetsStr += ": ";
+            }
+            else
+            {
+                parentWatch = parentWatchIt->second;
+            }
+            if(!bodyTarget)
+            {
+                targetsStr += "part '"+ partName +"', ";
+            }
+            BOOST_FOREACH(const string memberName, membersToAdd)
+            {
+                // Watches like Shape.Center are stuff
+                if(memberName.find(".") == memberName.npos)
+                {
+                    Watch* child = new Watch(*parentWatch);
+                    child->Name = memberName;
+                    child->Type = parentWatch->Type;
+                    child->Active = true;
+                    child->Object = target;
+                    child->Expression = evalute;
+                    child->MemberName = memberName;
+                    child->Parent = parentWatch;
+                    parentWatch->Children.push_back(child);
+                    child->ID = parentWatch->ID + "." + partName + "(" + memberName + ")";
+                    child->UpdateInterval =  parentWatch->UpdateInterval;
+                    if(parentWatch->OutFile != NULL)
+                    {
+                        answer += assignWatchToFile(child, parentWatch->OutFile, true);
+                    }
+                    mWatches.push_back(child);
+                    addWatchToConsole(child);
+                }
+            }
+        }
+         //Remove last comma and space
+        targetsStr.erase(targetsStr.end() - 2, targetsStr.end());
+        answer += "Targets: " + targetsStr + ". \n"; 
     }//if(targets.size() > 0)
     else
     {
@@ -660,12 +680,12 @@ string DebugWatcher::add_member_watch(Watch* watch, string command,
 }
 
 
-map<Target, string> DebugWatcher::getTargets(StrIterator command, StrIterator end, TargetType type, string& answer)
+map<Target, TargetInfo> DebugWatcher::getTargets(StrIterator command, StrIterator end, TargetType type, string& answer)
 {
-    map<Target, string> result;
+    map<Target, TargetInfo> result;
     if(type & tApplicationManager)
     {
-        result.insert(pair<Target, string>(&appManager, "ApplicationManager"));
+        result.insert(pair<Target, TargetInfo>(&appManager, TargetInfo("ApplicationManager", NULL)));
     }
     if(type & tEnvironObject)
     {
@@ -677,7 +697,7 @@ map<Target, string> DebugWatcher::getTargets(StrIterator command, StrIterator en
                 EnvironObject* target = getEnvironObject(*argument);
                 if(target != NULL)
                 {
-                    result.insert(pair<Target, string>(target, *argument));
+                    result.insert(pair<Target, TargetInfo>(target, TargetInfo(*argument, NULL)));
                 }
                 else
                 {
@@ -694,7 +714,7 @@ map<Target, string> DebugWatcher::getTargets(StrIterator command, StrIterator en
             answer += "Error: parameter 'of' not specified.\n";
         } 
     }//if(type & tEnvironObject)
-    // Commands synapsis: pam pam of objName(fixture_number_or_name)
+    // Commands synapsis: of objName(fixture_number_or_name)
     if(command != end)
     {
         if( *command == "of")
@@ -703,6 +723,7 @@ map<Target, string> DebugWatcher::getTargets(StrIterator command, StrIterator en
             if(argument != end)
             {
                 string targetSpecifier = *argument;
+                bool all = targetSpecifier == "all";
                 std::vector<std::string> objNameAndFixtures;
                 boost::split(objNameAndFixtures, targetSpecifier, boost::is_any_of("(,)"));
                 string objName = objNameAndFixtures[0];
@@ -710,52 +731,52 @@ map<Target, string> DebugWatcher::getTargets(StrIterator command, StrIterator en
                 list<Body*>::iterator it;
                 for(it = bodies.begin(); it != bodies.end(); ++it)
                 {
-                    if((*it)->getName() == objName)
+                    if((*it)->getName() == objName || all)
                     {
                         Body* obj = *it;
                         if(type & tBody)
                         {
-                           result.insert(pair<Target, string>(obj, objName));
+                           result.insert(pair<Target, TargetInfo>(obj, TargetInfo(objName, obj)));
                         }
                         if(type & tb2Body)
                         {
-                            result.insert(pair<Target, string>(obj->getb2Body(), objName));
+                            result.insert(pair<Target, TargetInfo>(obj->getb2Body(), TargetInfo(objName, obj)));
                         }
                         // If parts specified
                         if(objNameAndFixtures.size() > 1)
                         {
-                            vector<string>::iterator it;
-                            for(it = ++(objNameAndFixtures.begin()); 
-                                  it != objNameAndFixtures.end(); ++it)
+                            vector<string>::iterator it2;
+                            for(it2 = ++(objNameAndFixtures.begin()); 
+                                  it2 != objNameAndFixtures.end(); ++it2)
                             {
-                                string partID = *it;
+                                string partID = *it2;
                                 if(partID != "")
                                 {
-                                    b2Fixture* fixture = getFixture(obj, &partID);
-                                    if(fixture != NULL)
+                                    vector<b2Fixture*> fixtures = getFixtures(obj, &partID);
+                                    BOOST_FOREACH(b2Fixture* fixture, fixtures)
                                     {
                                         if(type & tb2Fixture)
                                         {
-                                            result.insert(pair<Target, string>(fixture, partID));
+                                            result.insert(pair<Target, TargetInfo>(fixture, TargetInfo(partID, obj)));
                                         }
                                         BodyPart* part = (BodyPart*)fixture->GetUserData();
                                         if(part != NULL)
                                         {
                                             if(type & tBodyPart)
                                             {
-                                                result.insert(pair<Target, string>(part, partID));
+                                                result.insert(pair<Target, TargetInfo>(part, TargetInfo(partID, obj)));
                                             }
                                             if(type & tBodyMaterial)
                                             {
-                                                result.insert(pair<Target, string>(part->getMaterial(), partID));
+                                                result.insert(pair<Target, TargetInfo>(part->getMaterial(), TargetInfo(partID, obj)));
                                             }
                                             if(type & tBodyState)
                                             {
-                                                result.insert(pair<Target, string>(part->getState(), partID));
+                                                result.insert(pair<Target, TargetInfo>(part->getState(), TargetInfo(partID, obj)));
                                             }                                    
                                         }
                                     }
-                                    else
+                                    if(fixtures.size() == 0)
                                     {
                                         answer += "Error: no part indetified as '" + partID + "'.\n";
                                         //continue
@@ -779,20 +800,20 @@ map<Target, string> DebugWatcher::getTargets(StrIterator command, StrIterator en
                                     id = part->getName();
                                     if(type & tBodyPart)
                                     {
-                                        result.insert(pair<Target, string>(part, id));
+                                        result.insert(pair<Target, TargetInfo>(part, TargetInfo(id, obj)));
                                     }
                                     if(type & tBodyMaterial)
                                     {
-                                        result.insert(pair<Target, string>(part->getMaterial(), id));
+                                        result.insert(pair<Target, TargetInfo>(part->getMaterial(),  TargetInfo(id, obj)));
                                     }
                                     if(type & tBodyState)
                                     {
-                                        result.insert(pair<Target, string>(part->getState(), id));
+                                        result.insert(pair<Target, TargetInfo>(part->getState(),  TargetInfo(id, obj)));
                                     }
                                 }
                                 if(type & tb2Fixture)
                                 {
-                                    result.insert(pair<Target, string>(fixture, id));
+                                    result.insert(pair<Target, TargetInfo>(fixture,  TargetInfo(id, obj)));
                                 }
                                 ++i;
                             }
@@ -818,58 +839,70 @@ map<Target, string> DebugWatcher::getTargets(StrIterator command, StrIterator en
 }
 
 
-b2Fixture* DebugWatcher::getFixture(Body* obj, string* partID)
+vector<b2Fixture*> DebugWatcher::getFixtures(Body* obj, string* partID)
 {
-    b2Fixture* result = NULL;
+    vector<b2Fixture*> result;
     b2Body* body = obj->getb2Body();
-    bool numberID = false;
-
-    int partNumber = 0;
-    try
+    if(*partID == "all")
     {
-        partNumber = boost::lexical_cast<int>(*partID);
-        numberID = true;
-    }
-    catch(boost::bad_lexical_cast &e)
-    {
-        numberID = false;
-    }
-    if(numberID)
-    {
-        int currentPartNumber = 0;
-        for(b2Fixture* fixture = body->GetFixtureList(); 
-                 fixture != NULL; fixture = fixture->GetNext())
-        {
-            if(currentPartNumber == partNumber)
-            {
-                result = fixture;
-                BodyPart* part = (BodyPart*)fixture->GetUserData();
-                if(part!= NULL)
-                {
-                    partID->assign(part->getName());
-                }
-                break;
-            }
-            currentPartNumber++;
-        }
+         for(b2Fixture* fixture = body->GetFixtureList(); 
+                     fixture != NULL; fixture = fixture->GetNext())
+         {
+            result.push_back(fixture);
+         }
     }
     else
     {
-        for(b2Fixture* fixture = body->GetFixtureList(); 
-                 fixture != NULL; fixture = fixture->GetNext())
+        bool numberID = false;
+        int partNumber = 0;
+        try
         {
-            BodyPart* part = (BodyPart*)fixture->GetUserData();
-            if(part != NULL)
+            partNumber = boost::lexical_cast<int>(*partID);
+            numberID = true;
+        }
+        catch(boost::bad_lexical_cast &e)
+        {
+            numberID = false;
+        }
+        if(numberID)
+        {
+            int currentPartNumber = 0;
+            for(b2Fixture* fixture = body->GetFixtureList(); 
+                     fixture != NULL; fixture = fixture->GetNext())
             {
-                if(part->getName() == *partID)
+                if(currentPartNumber == partNumber)
                 {
-                    result = fixture;
-                    partID->assign(part->getName());
+                    result.push_back(fixture);
+                    BodyPart* part = (BodyPart*)fixture->GetUserData();
+                    if(part!= NULL)
+                    {
+                        partID->assign(part->getName());
+                    }
                     break;
+                }
+                currentPartNumber++;
+            }
+        }
+        else
+        {
+            for(b2Fixture* fixture = body->GetFixtureList(); 
+                     fixture != NULL; fixture = fixture->GetNext())
+            {
+                BodyPart* part = (BodyPart*)fixture->GetUserData();
+                if(part != NULL)
+                {
+                    if(part->getName() == *partID)
+                    {
+                        result.push_back(fixture);
+                        partID->assign(part->getName());
+                        break;
+                    }
                 }
             }
         }
     }
+    
+    
     return result;
 }
 
