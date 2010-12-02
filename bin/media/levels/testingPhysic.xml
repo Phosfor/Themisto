@@ -17,7 +17,7 @@
 
 
         <Objects>
-            <Object name="ground" physic_body="true">
+            <Object name="ground" type="PhysicBody">
              	<Body>
                     <b2Body>
                         <Position>
@@ -54,9 +54,9 @@
                         </b2Fixture>
                     </Part>
                 </Body>
-             </Object>
+            </Object>
              
-             <Object name="test1" physic_body="true">
+            <Object name="test1" type="PhysicBody">
              	<Body>
                     <b2Body>
                         <Position>
@@ -79,7 +79,7 @@
                 </Body>
              </Object>
 
-             <Object name="test2" physic_body="true">
+             <Object name="test2" type="PhysicBody">
              	<Body>
                     <b2Body>
                         <Position>

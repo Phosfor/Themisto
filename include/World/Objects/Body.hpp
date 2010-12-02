@@ -22,7 +22,6 @@
 #include "Core/EnvironManager.hpp"
 #include "Core/ObjectsManager.hpp"
 #include "World/Environ/Types.hpp"
-#include "World/Objects/Types.hpp"
 #include <boost/lexical_cast.hpp>
 
 using namespace boost;
@@ -70,7 +69,7 @@ class Body: public Object
         void update(float elapsed) { step(elapsed); }
         
         // Parsing Body object
-        static void ParseBody(CL_DomElement* node);
+        static Object* ParseBody(CL_DomElement* node);
 
 };
 

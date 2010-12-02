@@ -8,8 +8,7 @@
 #include "Core/EnvironManager.hpp"
 #include "Core/ObjectsManager.hpp"
 #include "World/Environ/Types.hpp"
-#include "World/Objects/TypeBuilder.hpp"
-#include "World/Objects/Types.hpp"
+#include "World/Objects/TypesManager.hpp"
 
 #include "World/Objects/Body.hpp"
 #include <map>

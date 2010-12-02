@@ -114,9 +114,28 @@ b2AABB Body::calculateLocation()
 //---------------------------- PARSING-----------------------------
 //----------------------------------------------------------------
 
-void Body::ParseBody(CL_DomElement* _body)
+Object* Body::ParseBody(CL_DomElement* tag)
 {  
-   CL_DomElement body = *_body;
+    float x = 0, y = 0;
+    // Parsing visuals
+    {
+        CL_DomElement visual = tag->get_elements_by_tag_name("Visual").item(0).to_element();
+        CL_DomNodeList childList = visual.get_child_nodes();
+
+        for (int i=0; i < childList.get_length(); ++i)
+        {
+            CL_DomElement tag2 = childList.item(i).to_element();
+            if (tag2.get_node_name() == "Position")
+            {
+                x = lexical_cast<float>(tag2.get_attribute("x").c_str());
+                y = lexical_cast<float>(tag2.get_attribute("y").c_str());
+            }
+        }
+    }
+    
+           
+   CL_DomElement body = tag->get_elements_by_tag_name("Body").item(0).to_element();
+
     // Physic body variables
     b2Body *b2body;
     b2BodyDef bdef;
@@ -643,6 +662,7 @@ void Body::ParseBody(CL_DomElement* _body)
 
         partHandle->setMaterial(materialHandle, materialHandle == worldManager.mDefaultMaterial );
     } // for (int i=0; i < parts.get_length(); ++i)
+    return bodyHandle;
 }
 
 

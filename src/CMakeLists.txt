@@ -32,6 +32,7 @@ set(Themisto_srcs
     # Objects
     World/Objects/Grass.cpp
     World/Objects/Body.cpp
+    World/Objects/TypesManager.cpp
 
     # States
     World/States/MenuState.cpp

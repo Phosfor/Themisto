@@ -151,13 +151,21 @@ int main(int argc, char* argv[])
         }
         else if(command == "rv")
         {
-            exec("gnome-terminal -e ./DebugVisualisator &", false);
+            exec("./DebugVisualisator &", false);
         }
         else if(command == "run" || command == "r")
         {
+            exec("./Themisto physic &", false);
+        }
+        else if(command == "run console" || command == "rc")
+        {
             exec("gnome-terminal -e ./Themisto physic &", false);
         }
-        else if(command == "build" || command == "b")
+        else if(command == "run here" || command == "rh")
+        {
+            exec("./Themisto physic &", true);
+        }
+        else if(command == "build" || command == "b" || command == "make")
         {
             exec("make --quiet -C ../build &", true);
         }
@@ -170,6 +178,18 @@ int main(int argc, char* argv[])
         {
             command[0] = ' ';
             exec(command, true);
+        }   
+        else if(command[0] == '!')
+        {
+            command[0] = ' ';
+            if(command.size() > 1)
+            {
+                exec("gnome-terminal -e " + command, false);
+            }
+            else
+            {
+                exec("gnome-terminal", false);
+            }
         }   
         //...else if Other commands, that not need connection
         else if( command != "nope")

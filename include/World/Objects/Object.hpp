@@ -2,7 +2,13 @@
 #define _WORLD_OBJECT_HPP_
 
 #include <ClanLib/core.h>
-#include "World/Objects/Types.hpp"
+
+enum ObjectTypes
+{
+    NotAnObject = 0,
+    PhysicBodyObject,
+    GrassObject
+};
 
 class Object
 {

@@ -15,7 +15,7 @@
 #include "Core/GuiManager.hpp"
 #include "Core/Utils.hpp"
 #include "Core/InputManager.hpp"
-#include "World/Objects/Types.hpp"
+#include "World/Objects/TypesManager.hpp"
 
 #include "World/States/MenuState.hpp"
 #include "World/States/PhysicState.hpp"

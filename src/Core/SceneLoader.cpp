@@ -88,8 +88,6 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
     {
         using namespace boost;
 
-        float x = 0, y = 0;
-
         CL_DomNodeList childList = objects.get_child_nodes();
         for (int i=0; i < childList.get_length(); ++i)
         {
@@ -97,39 +95,14 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
 
             std::string name = tag.get_attribute("name").c_str();
             std::string type = tag.get_attribute("type").c_str();
-            bool physic = tag.get_attribute("physic_body") == "true";
-            LOG_NOFORMAT(cl_format("- Parsing object `%1` of type `%2`, physic body: `%3`\n", 
-                        name, type, physic));
-
-            // Parsing visuals
+            LOG_NOFORMAT(cl_format("- Parsing object `%1` of type `%2`\n", name, type));
+            
+            Object* object = typesManager.parseObject(&tag);
+            if(object != NULL)
             {
-                CL_DomElement visual = tag.get_elements_by_tag_name("Visual").item(0).to_element();
-                CL_DomNodeList childList = visual.get_child_nodes();
-
-                for (int i=0; i < childList.get_length(); ++i)
-                {
-                    CL_DomElement tag2 = childList.item(i).to_element();
-                    if (tag2.get_node_name() == "Position")
-                    {
-                        x = lexical_cast<float>(tag2.get_attribute("x").c_str());
-                        y = lexical_cast<float>(tag2.get_attribute("y").c_str());
-                    }
-                }
+                objectsManager.addObject(object->getName(), object);
             }
-            
-            // TODO Atention!
-            // Here will be foreaching through all Objects, and watching to the type atribute
-            // Value of this attribute would give to the getParserCallback function
-            CL_DomElement body = tag.get_elements_by_tag_name("Body").item(0).to_element();
-            parserPointer parser = getParserCallback("Body");
-            parser(&body);
-
-            // Creating final object
-            //Object *obj = BuildObjectType(type);
-            //obj->setPosition(CL_Pointf(x, y));
-            
-            //obj->setName(name);
-            //objectsManager.addObject(name, obj);
+           
         }
     }
     // END OF OBJECTS PARSING -------------------------------------------
