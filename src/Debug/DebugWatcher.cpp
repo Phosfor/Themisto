@@ -1336,7 +1336,11 @@ void DebugWatcher::step()
     int elapsed = _appManager->getElapsed();
     BOOST_FOREACH(Watch* watch, mWatches)
     {
-        if(watch->UpdateInterval == EVERY_STEP)
+        if(watch->UpdateInterval == AEON)
+        {
+            continue;
+        }
+        else if(watch->UpdateInterval == EVERY_STEP)
         {
             update(watch);
         }
