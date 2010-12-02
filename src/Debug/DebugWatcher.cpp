@@ -564,7 +564,10 @@ string DebugWatcher::add_member_watch(Watch* watch, string command,
                         watch->Children.push_back(child);
                         child->ID = watch->ID + "." + watchName + "(" + memberName + ")";
                         child->UpdateInterval =  watch->UpdateInterval;
-                        answer += assignWatchToFile(child, watch->OutFile, true);
+                        if(watch->OutFile != NULL)
+                        {
+                            answer += assignWatchToFile(child, watch->OutFile, true);
+                        }
                         mWatches.push_back(child);
                         addWatchToConsole(child);
                         added += memberName + ", ";
@@ -618,7 +621,10 @@ string DebugWatcher::add_member_watch(Watch* watch, string command,
                         watch->Children.push_back(child);
                         child->ID = watch->ID + "." + watchName + "(" + memberName + ")";
                         child->UpdateInterval =  watch->UpdateInterval;
-                        answer += assignWatchToFile(child, watch->OutFile, true);
+                        if(watch->OutFile != NULL)
+                        {
+                            answer += assignWatchToFile(child, watch->OutFile, true);
+                        }
                         mWatches.push_back(child);
                         addWatchToConsole(child);
                         added += memberName + ", ";
@@ -994,7 +1000,7 @@ string DebugWatcher::process_hide(StrIterator commandIt, StrIterator endIt)
                     }
                     child->Active = false;
                     removeWatchFromConsole(child);
-                    hiden++;
+                    hiden++; //TODO exclude children
                 }                
             }
         }

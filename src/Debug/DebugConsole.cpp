@@ -26,7 +26,7 @@ void Client::step(const std::string command)
     }
     catch(CL_Exception& e)
     {
-        cout << "#Error: can't send command to Themisto; Reason: " <<  e.what();
+        cout << "# Error: can't send command to Themisto; Reason: " <<  e.what();
     }
 }
 
@@ -36,7 +36,7 @@ void Client::connect_to_server()
     try {
         network_client.connect(SERVER_HOST, SERVER_PORT);
     } catch(const CL_Exception &e) {
-        cl_log_event("#Error during connecting to Themisto.", e.message);
+        cl_log_event("# Error during connecting to Themisto.", e.message);
     }
 
     while(!connected)
@@ -48,13 +48,13 @@ void Client::connect_to_server()
 
 void Client::on_connected()
 {
-    std::cout << "#Sucessfully connected to the Themisto.\n";
+    std::cout << "# Sucessfully connected to the Themisto.\n";
     connected = true;
 }
 
 void Client::on_disconnected()
 {
-    std::cout << "#Disconnected from Themisto.\n";
+    std::cout << "# Disconnected from Themisto.\n";
     connected = false;
 }
 
@@ -64,16 +64,23 @@ void Client::on_event_received(const CL_NetGameEvent &e)
     {
         string answer = (string)e.get_argument(0).to_string(); 
         if( *(answer.rbegin()) != '\n') answer += "\n";
-        std::cout << "#" << answer;
+        boost::replace_all(answer, "\n", "\n# ");
+        std::size_t posLastEndl = answer.rfind("\n# ");
+        if(posLastEndl != answer.npos)
+        {
+            answer.erase(posLastEndl, answer.npos);
+        }
+        std::cout << "# " << answer << endl;
     }
 }
 
 void Client::disconnect()
 {
-    std::cout << "#Disconnecting from Themisto...\n";
+    std::cout << "# Disconnecting from Themisto...\n";
     network_client.disconnect();
     connected = false;
 }
+
 
 // A static variable for holding the line. 
 static char *line_read = (char *)NULL;
@@ -117,6 +124,72 @@ std::string exec(const std::string cmd, bool read) {
     return "";
 }
 
+void Client::parseCommand(std::string command)
+{
+    if ((command == "disconnect") && connected)
+    {
+        disconnect();
+    }
+    else if((command == "connect") && !connected)
+    {
+        connect_to_server();
+    }
+    else if(command == "rv")
+    {
+        exec("./DebugVisualisator &", false);
+    }
+    else if(command == "run" || command == "r")
+    {
+        exec("./Themisto physic &", false);
+    }
+    else if(command == "run console" || command == "rc")
+    {
+        exec("gnome-terminal -e ./Themisto physic &", false);
+    }
+    else if(command == "run here" || command == "rh")
+    {
+        exec("./Themisto physic &", true);
+    }
+    else if(command == "build" || command == "b" || command == "make")
+    {
+        exec("make --quiet -C ../build &", true);
+    }
+    else if(command.find("git") != command.npos)
+    {
+        command.insert(0, "cd .. && ");
+        exec(command, true);
+    }     
+    else if(command[0] == '.')
+    {
+        command[0] = ' ';
+        exec(command, true);
+    }   
+    else if(command[0] == '!')
+    {
+        command[0] = ' ';
+        if(command.size() > 1)
+        {
+            exec("gnome-terminal -e " + command, false);
+        }
+        else
+        {
+            exec("gnome-terminal", false);
+        }
+    }   
+    else
+    {
+        if (!connected)
+        {
+            connect_to_server();
+        }
+        cout << "# Themisto says:\n";
+        if (connected)
+        {
+            step(command);
+        }
+    }
+}
+
 int main(int argc, char* argv[])
 {
     CL_SetupCore setup_core;
@@ -125,90 +198,69 @@ int main(int argc, char* argv[])
     std::cout << "\t========= Welcome to Themisto DebugConsole =========\n";
 
     Client client;
-    std::string command = "";
+    std::string _command = "";
 
     for(int i=1; i<argc; ++i)
     {
-        command.append(argv[i]);
-        command.append(" ");
-    }
-    boost::trim(command);
-    if (command == "") command = "nope";
+        _command.append(argv[i]);
+        _command.append(" ");
+    }   
 
     while (!client.quit)
     {
-        if ((command == "disconnect") && client.connected)
+        vector<string> subcommands;
+        boost::split(subcommands, _command, boost::is_any_of("&&"));
+        BOOST_FOREACH(string command, subcommands)
         {
-            client.disconnect();
-        }
-        else if((command == "connect") && !client.connected)
-        {
-            client.connect_to_server();
-        }
-        else if(command == "execute" || command == "exe")
-        {
-            // run script
-        }
-        else if(command == "rv")
-        {
-            exec("./DebugVisualisator &", false);
-        }
-        else if(command == "run" || command == "r")
-        {
-            exec("./Themisto physic &", false);
-        }
-        else if(command == "run console" || command == "rc")
-        {
-            exec("gnome-terminal -e ./Themisto physic &", false);
-        }
-        else if(command == "run here" || command == "rh")
-        {
-            exec("./Themisto physic &", true);
-        }
-        else if(command == "build" || command == "b" || command == "make")
-        {
-            exec("make --quiet -C ../build &", true);
-        }
-        else if(command.find("git") != command.npos)
-        {
-            command.insert(0, "cd .. && ");
-            exec(command, true);
-        }     
-        else if(command[0] == '.')
-        {
-            command[0] = ' ';
-            exec(command, true);
-        }   
-        else if(command[0] == '!')
-        {
-            command[0] = ' ';
-            if(command.size() > 1)
+            boost::trim(command);
+            
+            if( command.find("execute") != command.npos || command.find("exe") != command.npos)
             {
-                exec("gnome-terminal -e " + command, false);
+                std::size_t paramPos = command.find(" ");
+                if(paramPos != command.npos)
+                {
+                    string file = command.substr(paramPos+1, command.npos);
+                    if(boost::filesystem::exists(file))
+                    {
+                        ifstream fs;
+                        fs.open(file.c_str(), ifstream::in);
+                        string line;
+                        char bufer[256];
+                        while(fs.good() && !fs.eof())
+                        {
+                            fs.getline(bufer, 256, '\n');
+                            line.assign(bufer);
+                            boost::trim(line);
+                            if(line != "")
+                            {
+                                cout << ">" << line << endl;
+                                add_history(line.c_str());
+                                client.parseCommand(line);
+                            }
+                        }
+                        fs.close();
+                    }
+                    else
+                    {
+                        cout << "# Error: file '"+ file +"' not exists.\n";
+                    }
+                }
+                else
+                {
+                    cout<< "# Error: script-file not specified.\n";
+                }
             }
-            else
+            else if (command == "q" || command == "quit")
             {
-                exec("gnome-terminal", false);
+                break;
             }
-        }   
-        //...else if Other commands, that not need connection
-        else if( command != "nope")
-        {
-            if (!client.connected)
+            else if (command != "") 
             {
-                client.connect_to_server();
-            }
-            if (client.connected)
-            {
-                client.step(command);
+                client.parseCommand(command);
             }
         }
-
-        command = readCommand();
-        if (command == "quit" || command == "q")
-        {
-            client.quit = true;
-        }
+        _command = readCommand();
+        
     }
 
     return 0;

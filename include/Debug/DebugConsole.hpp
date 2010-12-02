@@ -8,12 +8,17 @@
 #include <boost/algorithm/string.hpp>
 #include <readline/readline.h>
 #include <readline/history.h>
+#include <boost/filesystem.hpp>
+#include <fstream>
+#include <boost/foreach.hpp>
+
 
 
 const static CL_String SERVER_PORT = "1992";
 const static CL_String SERVER_HOST = "localhost";
 
 using namespace std;
+
 
 class Client
 {
@@ -28,6 +33,8 @@ public:
 
     void connect_to_server();
     void disconnect();
+    
+    void parseCommand(std::string command);
 
 private:
     void on_connected();
