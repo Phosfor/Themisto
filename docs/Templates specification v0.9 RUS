@@ -1,0 +1,471 @@
+/*
+ * Copyright (c) 2010 Tyslenko Max (Ockonal), Bogatirev Pavel (PFight)
+ * This file is part of Themisto (Themisto project at https://github.com/Ockonal/Themisto).
+ * Project is contributed with GPL license. For more information, visit project page.
+ */
+ 
+Спецификация шаблонов v0.9
+
+
+Содержание
+
+Введение
+1 Определение и использование шаблонов
+1.0 Синтаксис
+1.1 Правило эквивалентности тэгов
+1.2 Использование правила эквивалентности для разрешения конфликтов
+1.2.1 Конфликты
+1.2.2 Разешение конфликтов
+1.3 Рекурсивное применение шаблона
+1.4 Наследование шаблонов
+1.5 Указание нескольких шаблонов
+2 Соглашения
+2.1 Расположение шаблонов
+2.2 Конвенции именования
+3 Примеры использования
+3.1 Простой шаблон Eviron
+3.2 Использование action и id
+
+
+Введение
+
+В связи с тем, что большинство сцен будут использовать похожие объекты, необходимо ввести систему повтороного использования разметки. То есть, должна быть возможность определить объект или его часть в одном месте, и использовать при построении уровней многократно. Вариантом решения данной задачи предлагаю систему шаблонов.
+Шаблоны это понятие уровня XML-разборщика. То есть, синтаксический анализатор XML обрабатывает всю информацию связанную с шаблонами, не уделяя внимания конкретному содержимому разметки. Парсеры конкретных объектов мира не должны ничего знать об этих механизмах.
+Шаблоны это ничто иное, как блок разметки сцены, вынесенный в отдельный файл или в другую часть того же файла. При разборе XML содержимое шаблона простым путем сливается с содержимым тэга файла сцены, с учетом некоторых правил. Например:
+
+<!-- файл сцены -->
+<SomeTag template="Templates.tpl/template1" />
+
+<!-- файл шаблона Templates.tpl -->
+<Template name="template1">
+    <SomeTag atr="val">
+        <SomeChild name="childInTemplate" />
+    </SomeTag>
+</Template>
+
+После обработки файла сцены синтаксическим анализатором, получим следующую картину:
+
+<!-- файл сцены после обработки -->
+<SomeTag atr="val" template="Templates.tpl/template1" >
+    <SomeChild name="childInTemplate" />
+</SomeTag>
+
+
+1 Определение и использование шаблонов
+
+1.0 Синтаксис
+
+Шаблон определяется в тэге Template. Каждый шаблон индетифицируется именем, которое указывается в атрибуте name. Имя должно быть строго уникально (среди шаблонов) в пределах одного файла, и нежелательно, но допустимо повторение имен в разных файлах. При нарушении данного ограничения анализатор должен завершать работу с сообщением об ошибке. Атрибут name является обязательным.
+
+Тэг Template может иметь только однин вложенный тэг, который и будет являться целевым. То есть, шаблон:
+<Template name="template1">
+    <SomeTag>
+        <!-- ... -->
+    </SomeTag>
+</Template>
+Можно применять только для тэгов SomeTag. Применяется шаблон к тэгу посредством атрибута template, в котором указывается имя шаблона и возможно путь к файлу, в котором он определен. Подробнее, об указании местнохождения шаблона см раздел 2 Расположение шаблонов.
+<SomeTag template="template1" />
+
+Возможен также атрибут parent, суть которого описывается в разделе 1.4 Наследование шаблонов. parent не является обязательным.
+
+
+1.1 Правило эквивалентности тэгов
+
+Суть этого правила заключается в том, чтобы считать тэги эквивалентными, если совпадают их имена (SomeChild в примере), плюс значения соотвествующих атрибутов id. То есть, тэги:
+<SomeChild id="child1"/> 
+<SomeChild id="child1" cool="true" />
+Являются эквивалентными. По умолчанию значение id есть пустая строка. Следовательно тэги:
+<SomeChild />
+<SomeChild />
+Также эквивалентны.
+
+
+1.2 Использование правила эквивалентности для разрешения конфликтов
+
+1.2.1 Конфликты
+
+В файле сцены можно задавать часть разметки локально, переопределяя значения из шаблона. Однако в связи с этим возникает неоднозначность: является ли тэг переопределяющим локальным значением или же это дополнение набора тэгов шаблона. Рассмотрим проблему на примере.
+
+<!-- файл сцены -->
+<SomeTag template="Templates.tpl/template1" >
+    <SomeChild>42</SomeChild>
+</SomeTag>
+
+<!-- файл шаблона Templates.tpl -->
+<Template name="template1" >
+    <SomeTag>
+        <SomeChild>666</SomeChild>
+    </SomeTag>
+</Template>
+
+Можно расценить, что SomeChild уже задан локально в SomeTag, переопределяя значение шаблона, и после применения шаблона получить:
+
+<!-- файл сцены после обработки вариант 1 -->
+<SomeTag template="Templates.tpl/template1" >
+    <SomeChild>42</SomeChild>
+</SomeTag>
+
+Или же, что в SomeTag добавиться еще один SomeChild:
+
+<!-- файл сцены после обработки вариант 1 -->
+<SomeTag template="Templates.tpl/template1" >
+    <SomeChild>42</SomeChild>
+    <SomeChild>666</SomeChild>
+</SomeTag>
+
+
+1.2.2 Разешение конфликтов
+
+Для разрешения подобных ситуаций следует использовать эквивалентность тэгов и атрибут action. Чтобы переопределить значение из шаблона, нужно задать локально тэг, эквивалентный тэгу в шаблоне с атрибутом action="override". То есть, чтобы сработал вариант 1 (из предыдущего раздела), нужно определить файл сцены следующим образом:
+
+<!-- файл сцены, сработает вариант 1 -->
+<SomeTag template="Templates.tpl/template1" >
+    <SomeChild action="override">42</SomeChild>
+</SomeTag>
+
+В некоторых случаях, использование atrubute="override" не обязательно, а достаточно просто сделать тэги эквивалентными. Данный случай попадает в их число. Дело в том, по умолчанию action имеет значение merge, что говорит анализатору использльзовать рекурсивное применение шаблона для эквивалентных тэгов. Задание atrubute="override" запрещает рекурсивное применение шаблона (см раздел следующий раздел 1.3 Рекурсивное применение шаблона). 
+
+Чтобы сработал вариант 2, нужно сделать просто сделать тэги не эквивалентными (c разными id):
+
+<!-- файл сцены сработает вариант 2-->
+<SomeTag template="Templates.tpl/template1" >
+    <SomeChild id="addLocal">42</SomeChild>
+</SomeTag>
+
+Конкретное значение id здесь не принципиально, главное, чтобы оно не было равно значению id в шаблоне. В данном случае в шаблоне id не задан, то есть id="".
+
+Еще, нам возможно потребуется, чтобы ни одного SomeChild в SomeTag не добавлялось. Для этого нужно задать локально тэг, эквивалентный тэгу в шаблоне с атрибутом action="ignore":
+
+<!-- файл сцены -->
+<SomeTag template="Templates.tpl/template1" >
+    <SomeChild action="ignore"/>
+</SomeTag>
+
+<!-- файл сцены после обработки, работает вариант 3 -->
+<SomeTag template="Templates.tpl/template1" >
+</SomeTag>
+
+
+1.3 Рекурсивное применение шаблона
+
+До сих пор рассмаривались простые случаи, когда тэг содержит просто значение или не содержит ничего вообще. Рассмотрим случай, когда шаблонизированный тэг имеет вложенное дерево тэгов:
+<!-- файл сцены -->
+<SomeTag template="Templates.tpl/template1" >
+    <SomeChild id="child">
+        <SomeSubChild id="localSubChild">42</SomeSubChild>
+    </SomeChild>
+</SomeTag>
+
+<!-- файл шаблона Templates.tpl -->
+<Template name="template1" >
+    <SomeTag>
+        <SomeChild id="child">
+            <SomeSubChild id="templateSubChild">666</SomeSubChild>
+        </SomeChild>
+    </SomeTag>
+</Template>
+
+Здесь следует рекурсивно спускаться внутрь эквивалентных тэгов, применяя обычные правила для каждого вложенного тэга. В примере выше получиться следующее (обратите внимание, что SomeChild эквивалентны, а SomeSubChild нет):
+
+<!-- файл сцены после обработки -->
+<SomeTag template="Templates.tpl/template1" >
+    <SomeChild id="child">
+        <SomeSubChild id="localSubChild">42</SomeSubChild>
+        <SomeSubChild id="templateSubChild">666</SomeSubChild>
+    </SomeChild>
+</SomeTag>
+
+Соотвественно, если бы SomeChild не были эквивалентными:
+
+<!-- файл сцены -->
+<SomeTag template="Templates.tpl/template1" >
+    <SomeChild id="child1">
+        <SomeSubChild id="localSubChild">42</SomeSubChild>
+    </SomeChild>
+</SomeTag>
+
+<!-- файл шаблона Templates.tpl -->
+<Template name="template1" >
+    <SomeTag>
+        <SomeChild id="child2">
+            <SomeSubChild id="templateSubChild">666</SomeSubChild>
+        </SomeChild>
+    </SomeTag>
+</Template>
+
+То получилось бы следующее:
+
+<!-- файл сцены после обработки -->
+<SomeTag template="Templates.tpl/template1" >
+    <SomeChild id="child1">
+        <SomeSubChild id="localSubChild">42</SomeSubChild>
+    </SomeChild>
+    <SomeChild id="child2">
+        <SomeSubChild id="templateSubChild">666</SomeSubChild>
+    </SomeChild>
+</SomeTag>
+
+Отметчу, что рекурсивное применение шаблона срабатывает при заданном атрибуте action="merge" (по умолчанию). Чтобы запретить его, задайте action="override".
+
+
+1.4 Наследование шаблонов
+
+Некоторые шаблоны могут содержать одинаковую разметку. В этом случае логично вынести повторяющийся блок в отдельный шаблон, и унаследовать наши шаблоны от него. Родительский шаблон указывается в атрибуте parent тэга Template. С технической точки зрения, реализация наследования аналогична применению шаблона к тэгу, только в данному случае один шаблон применяется к другому. Например:
+
+<Template name="t1" >
+    <SomeTag>
+        <SomeChild id="tChild">666</SomeChild>
+    </SomeTag>
+</Template>
+<Template name="t2" >
+    <SomeTag>
+        <SomeChild id="tChild">666</SomeChild>
+        <SomeChild id="tChild2>42</SomeChild>
+    </SomeTag>
+</Template>
+
+Равносильно следующему:
+
+<Template name="parentTpl"  >
+    <SomeTag>
+        <SomeChild id="tChild">666</SomeChild>
+    </SomeTag>
+</Template>
+<Template name="t1" parent="parentTpl" />
+<Template name="t2" parent="parentTpl" >
+    <SomeTag>
+        <SomeChild id="tChild2>42</SomeChild>
+    </SomeTag>
+</Template>
+
+Атрибут parent есть аналог template. То есть, все правила относительно указания шаблона (указание файла, тэг Include) также верны. В качестве базового может выступать только шаблон с таким же целевым тэгом. Опускание целевого тэга допустимо (если добавление новых параметров не нужно).
+
+
+1.5 Указание нескольких шаблонов
+
+В атрибутах template и parent можно указывать сразу несколько шаблонов через запятую. В этом случае условно каждый шаблон указанный левее, считается в данном контексте предком более правого. Например, такая разметка:
+<Template name="t1" >
+    <!-- ... -->
+</Template>
+<Template name="t2" >
+     <!-- ... -->
+</Template>
+<Template name="t3" >
+     <!-- ... -->
+</Template>
+...
+<SomeTag template="t1, t2, t3"  />
+
+Даст в итоге такой же тэг SomeTag как и следующая:
+
+<Template name="t1" >
+     <!-- ... -->
+</Template>
+<Template name="t2" parent="t1" >
+     <!-- ... -->
+</Template>
+<Template name="t3" parent="t2" >
+     <!-- ... -->
+</Template>
+...
+<SomeTag template="t3"  />
+
+Равно как и такая:
+
+<Template name="t1" >
+     <!-- ... -->
+</Template>
+<Template name="t2" >
+     <!-- ... -->
+</Template>
+<Template name="t3" parent="t1,t2" >
+     <!-- ... -->
+</Template>
+...
+<SomeTag template="t3"  />
+
+
+2 Соглашения
+
+2.1 Расположение шаблонов
+
+Шаблоны могут находиться:
+1) непосредственно в файле сцены (тэг ThemistoLevel.Templates)
+2) в специальном файле common.tpl
+3) в любом другом файле *.tpl
+
+Если шаблон определен в файле сцены или в common.tpl, для ссылки на него достаточно его имени. Если шаблон находиться в другом файле, то необходимо указать путь к файлу  перед именем шаблона:
+<SomeTag template="file.tpl/template1" />
+Можно указать некоторый файл в тэге ThemistoLevel.Templates.Include, что делает шаблоны из этого файла также доступными только по имени:
+<Include>file.tpl</Include>
+Отмечу, что в файле .tpl может также встречаться тэг Include (см раздел "Наследование шаблонов").
+При совпадении имен шаблонов, нужно указать явно, откуда следует брать шаблон. Для ссылки на шаблон в файле сцены нужно использовать ключевое слово local:
+<SomeTag tepmlate="local/template1" />
+Для ссылки на шаблон из любого другого файла (в то числе и common.tpl), нужно использовать путь к файлу:
+<SomeTag templae="common.tpl/template1" />
+При наличии неоднозначности (указано просто имя), анализатор должен завершить работу, выдав сообщение об ошибке.
+
+Формат .tpl файла:
+<?xml version="1.0" encoding="UTF-8" ?>
+<Templates version="0.1" authors="Wincode team">
+    <Include>templates2.tpl</Include>
+    <Template name="template1" >
+        <Object >
+            <!-- ... -->
+        </Object>
+    </Template>
+    <Template name="template2" parent="template1" />
+    <!-- ... -->
+</Templates>
+
+Храниться все .tpl файлы могут в следущих локациях (в порядке убывания приоритета):
+1) Та же дирректория, в которой находиться файл сцены
+2) Папка media/templates (и подпапки) 
+То есть, при поиске файла .tpl, синтаксическому анализатору следует сначала рассмотреть путь относительно папки в которой находиться файл сцены, затем относительно media/templates, и если нигде данный файл не найден завершать работу с сообщением об ошибке.
+
+
+2.2 Конвенции именования
+
+Имена шаблонов начинаются с большой буквы, и каждое слово также с большой буквы, без промежуточных символов. Например:
+  GroundTemplate
+  MetalBox
+Значения атрибута id начинаются с маленькой буквы, и каждое последующее слово с большой буквы, без промежуточных символов. Например:
+  ground
+  superBox1
+И имя шаблона и значение id имеют такие же ограничения как в языке С++ (не могут начинаться с цифры и тд.), с отличием в том, что они регистроНЕзависимы. То есть ground и Ground одно и тоже имя.
+
+
+3 Примеры использования
+
+3.1 Простой шаблон Environ
+
+<ThemistoLevel version="0.1" authors="Wincode team">
+    <Templates>
+        <Template name="AllEnabled" >
+            <Environ active="true">
+                <Rain enabled="true" limit="50" />
+                <Clouds enabled="true" />
+                <Lightnings enabled="true" />
+                <Sky enabled="true" />
+                <Moon enabled="true" />
+                <Leaves enabled="true" limit="5" />
+                <Stars enabled="true" />
+                <Birds enabled="true" />
+                <Wind power="-2" />
+            </Environ>
+        </Template>
+    </Templates>
+    <World size_width="1024" size_height="600">
+        <Environ template="AllEnabled">
+            <Wind power="10" />
+        </Environ>
+    </World>
+</ThemistoLevel>
+
+3.2 Использование action и id
+
+<ThemistoLevel version="0.1" authors="Wincode team">
+    <Templates>
+        <Template name="GroundObject">
+            <Object name="Ground" type="PhysicBody">
+             	<Body name="GroundBody">
+                    <b2Body>
+                        <Position>
+                            <x>2.0</x>
+                            <y>10.0</y>
+                        </Position>
+                        <Type>StaticBody</Type>
+                    </b2Body>
+                    <Part id="n1">
+                        <b2Fixture>
+                            <Friction>0.3</Friction>
+                            <Restitution>0.3</Restitution>
+                            <Shape>
+                                <Type>e_polygon</Type>
+                                <Vertices>
+                                    <Vertex id="n1">
+                                        <x>1.0</x>
+                                        <y>0.0</y>
+                                    </Vertex>
+                                    <Vertex id="n2">
+                                        <x>20.0</x>
+                                        <y>0.0</y>
+                                    </Vertex>
+                                    <Vertex id="n3">
+                                        <x>20.0</x>
+                                        <y>0.1</y>
+                                    </Vertex>
+                                    <Vertex id="n4">
+                                        <x>1.0</x>
+                                        <y>0.1</y>
+                                    </Vertex>
+                                </Vertices>
+                            </Shape>
+                        </b2Fixture>
+                    </Part>
+                    <Part id="n2">
+                        <b2Fixture>
+                            <Friction>0.3</Friction>
+                            <Restitution>0.3</Restitution>
+                            <Shape>
+                                <Type>e_polygon</Type>
+                                <Vertices>
+                                    <Vertex id="n1">
+                                        <x>1.0</x>
+                                        <y>10.0</y>
+                                    </Vertex>
+                                    <Vertex id="n2">
+                                        <x>20.0</x>
+                                        <y>10.0</y>
+                                    </Vertex>
+                                    <Vertex id="n3">
+                                        <x>20.0</x>
+                                        <y>10.1</y>
+                                    </Vertex>
+                                    <Vertex id="n4">
+                                        <x>1.0</x>
+                                        <y>10.1</y>
+                                    </Vertex>
+                                </Vertices>
+                            </Shape>
+                        </b2Fixture>
+                    </Part>
+                </Body>
+            </Object>
+        </Template>
+    </Templates>
+    <World size_width="1024" size_height="600">
+        <Objects>
+            <Object template="GroundObject" >
+            	<Body>
+                    <Part id="n1" >
+                        <b2Fixture>
+                            <Shape>
+                                <Vertices action="override">
+                                    <Vertex>
+                                        <x>2.0</x>
+                                        <y>1.0</y>
+                                    </Vertex>
+                                    <Vertex>
+                                        <x>10.0</x>
+                                        <y>1.0</y>
+                                    </Vertex>
+                                    <Vertex>
+                                        <x>2.0</x>
+                                        <y>1.1</y>
+                                    </Vertex>
+                                </Vertices>
+                            </Shape>
+                        </b2Fixture>
+                    </Part>
+                    <Part id=n2 action="ignore"/>
+                </Body>
+            </Object>
+        </Objects>
+    </World>
+</ThemistoLevel>
+
+Обратите внимание, для тэга Part id="n1" не задается action (что аналогично action="merge"). Это говорит о необходимости выполнить рекурсивное применение шаблона. Однако, для тэга Veritces, задано action="override", что освобождает нас от необходимости переопределять нужные нам 3 Vertex, и удалять четвертую (с помощью action="ignore").
+
+
+
