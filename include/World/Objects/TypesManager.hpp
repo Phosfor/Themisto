@@ -28,9 +28,10 @@ class TypesManager : public boost::serialization::singleton<TypesManager>
         std::map<std::string, Parser> ObjectsParser;
         static Object* empty_parser(CL_DomElement* p);
         Parser getParser(std::string type);
-    public:   
-        TypesManager();     
-        Object* parseObject(CL_DomElement* objectTag);
+
+    public:
+        TypesManager();
+        Object* parseObject(CL_DomElement* objectTag, const std::string &type);
         void registerParser(std::string type, Parser p);
 };
 #endif

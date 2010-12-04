@@ -8,36 +8,28 @@
 
 Object* TypesManager::empty_parser(CL_DomElement* p)
 {
-    LOG("empty parser");
+    LOG("Empty parser is called.");
     return NULL;
 }
-
 
 Parser TypesManager::getParser(std::string type)
 {
     if (ObjectsParser.find(type) != ObjectsParser.end())
-    {
         return ObjectsParser[type];
-    }
     else
-    {
-        Parser p = TypesManager::empty_parser;
-        return p;
-    }
+        return TypesManager::empty_parser;
 }
-
 
 TypesManager::TypesManager()
 {
     registerParser("PhysicBody", Body::ParseBody);
 }
-   
-Object* TypesManager::parseObject(CL_DomElement* objectTag)
+
+Object* TypesManager::parseObject(CL_DomElement* objectTag, const std::string &type)
 {
-    std::string type = objectTag->get_attribute("type").c_str();
-    Parser parser = getParser(type);
-    return parser(objectTag);
+    return (getParser(type))(objectTag);
 }
+
 void TypesManager::registerParser(std::string type, Parser p)
 {
     if (ObjectsParser.find(type) == ObjectsParser.end())

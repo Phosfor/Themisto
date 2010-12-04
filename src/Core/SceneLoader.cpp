@@ -98,7 +98,18 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
             std::string type = tag.get_attribute("type").c_str();
             LOG_NOFORMAT(cl_format("- Parsing object `%1` of type `%2`\n", name, type));
 
-            Object* object = typesManager.parseObject(&tag);
+            if (tag.has_attribute("template"))
+            {
+                CL_String templatePath = tag.get_attribute("template");
+                LOG_NOFORMAT(cl_format("\tUses template with name `%1`\n", templatePath));
+
+                if (!boost::filesystem::exists(cl_format("media/templates/%1", templatePath).c_str()))
+                {
+                    std::cout << "Achtung\n";
+                }
+            }
+
+            Object* object = typesManager.parseObject(&tag, type);
             if(object != NULL)
             {
                 objectsManager.addObject(object->getName(), object);
