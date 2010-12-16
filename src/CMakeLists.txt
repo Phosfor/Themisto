@@ -31,8 +31,8 @@ set(Themisto_srcs
 
     # Objects
     World/Objects/Grass.cpp
-    World/Objects/Body.cpp
     World/Objects/TypesManager.cpp
+    World/Objects/PhysicObject.cpp
 
     # States
     World/States/MenuState.cpp
@@ -47,6 +47,7 @@ set(Themisto_srcs
     Physic/PhysicRain.cpp
     Physic/PhysicWind.cpp
     Physic/BodyPart.cpp
+    Physic/Body.cpp
     
     # Debug
     Debug/DebugIO.cpp
@@ -55,6 +56,7 @@ set(Themisto_srcs
     Debug/EvaluteFunctions.cpp
     Debug/DebugWatcher.cpp
     Debug/Watch.cpp   
+    Debug/PhysicTests.cpp
     
     main.cpp
 )

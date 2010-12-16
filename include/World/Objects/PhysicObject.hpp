@@ -4,9 +4,11 @@
  * Project is contributed with GPL license. For more information, visit project page.
  */
 
-#ifndef _PHYSIC_BODY_HPP_
-#define _PHYSIC_BODY_HPP_
 
+#ifndef _PHYSIC_OBJECT_HPP_
+#define _PHYSIC_OBJECT_HPP_
+
+#include "Physic/Body.hpp"
 #include <Box2D/Box2D.h>
 #include <ClanLib/core.h>
 #include <Box2D/Collision/Shapes/b2PolygonShape.h>
@@ -21,46 +23,25 @@
 #include "Physic/AreaManager.hpp"
 #include "World/Objects/Object.hpp"
 #include "Physic/BodyPart.hpp"
-#include <iostream>
-#include <list>
 
-#include "Core/PhysicManager.hpp"
-#include "Core/EnvironManager.hpp"
-#include "Core/ObjectsManager.hpp"
-#include "World/Environ/Types.hpp"
-#include <boost/lexical_cast.hpp>
-
-using namespace boost;
-
-class Body: public Object
+class PhysicObject: public Object
 {
     private:
         BodyVisual *mBodyVisual;
-        b2AABB mLastLocation;
-        b2AABB calculateLocation();
+        Body* mBody;
         
-        // 0 - body will sink, more - stronger force would pop body from water
-        float mBuoyancy;
-
-    protected:
-
-        b2Body *mBody;
-        b2World *mParentWorld;
-        WorldManager* world;
-
-
     public:
-        Body(b2Body* body);
-        ~Body();
+        PhysicObject(Body* body, BodyVisual* visual);
+        ~PhysicObject();
 
         // Get/set 
-        void setVisual(BodyVisual* visualiser);
-        b2Body* getb2Body();
-        float getBuoyancy() { return mBuoyancy; }
-        void setBuoyancy(float value) { mBuoyancy = value; }
+        void setVisual(BodyVisual* visualiser) { mBodyVisual = visualiser; }
+        BodyVisual& getVisual() { return *mBodyVisual; }
+        void setBody(Body* body) { mBody = body; }
+        Body& getBody() { return *mBody; }
 
         void updateVisual();
-        void step(float32 elapsed);
+        void step(float32 elapsed); // Physic
         
         // Should body free memory under mBodyVisual object at destroing
         // Default value is true
@@ -68,17 +49,18 @@ class Body: public Object
 
         // Should body free memory under mBody object at destroing
         // Default is true
-        bool mShouldFreeB2Body; 
+        bool mShouldFreeBody; 
+        
+        // Parsing object
+        static Object* ParsePhysicObject(CL_DomElement* node, std::string &desc);
         
         // --- Object implementation ---
         CL_Pointf getPosition();
-        void update(float elapsed) { step(elapsed); }
+        void update(float elapsed);
         
-        // Parsing Body object
-        static Object* ParseBody(CL_DomElement* node);
+        
 
 };
-
 
 
 #endif

@@ -6,9 +6,9 @@
 
 #include "World/Objects/TypesManager.hpp"
 
-Object* TypesManager::empty_parser(CL_DomElement* p)
+Object* TypesManager::empty_parser(CL_DomElement* p, std::string& desc)
 {
-    LOG("Empty parser is called.");
+    desc += "Error: object type not registered.";
     return NULL;
 }
 
@@ -22,12 +22,12 @@ Parser TypesManager::getParser(std::string type)
 
 TypesManager::TypesManager()
 {
-    registerParser("PhysicBody", Body::ParseBody);
+    registerParser("PhysicBodyObject", PhysicObject::ParsePhysicObject);
 }
 
-Object* TypesManager::parseObject(CL_DomElement* objectTag, const std::string &type)
+Object* TypesManager::parseObject(CL_DomElement* objectTag, const std::string &type, std::string &desc)
 {
-    return (getParser(type))(objectTag);
+    return (getParser(type))(objectTag, desc);
 }
 
 void TypesManager::registerParser(std::string type, Parser p)

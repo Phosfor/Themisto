@@ -12,7 +12,7 @@
 
 #include <list>
 
-#include "World/Objects/Body.hpp"
+#include "Physic/Body.hpp"
 #include "Core/Utils.hpp"
 #include "Core/ApplicationManager.hpp"
 

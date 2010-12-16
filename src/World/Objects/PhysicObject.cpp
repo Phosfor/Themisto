@@ -4,112 +4,59 @@
  * Project is contributed with GPL license. For more information, visit project page.
  */
 
-#include "World/Objects/Body.hpp"
 
-Body::Body(b2Body* body)
+#include "World/Objects/PhysicObject.hpp"
+
+PhysicObject::PhysicObject(Body* body, BodyVisual* visual)
 {
     mBody = body;
-    
-    mType = PhysicBodyObject;
-    body->SetUserData(this);
-    mBodyVisual = NULL;
-    mShouldFreeBodyVisual = true;
-    mShouldFreeB2Body = true;
-    mParentWorld= mBody->GetWorld();
-    mLastLocation = calculateLocation();
-    world = &worldManager;
+    mBodyVisual = visual;
     mName = worldManager.generateUniqueID();
+    mType = PhysicBodyObject;
+    mShouldFreeBodyVisual = mShouldFreeBody = true;
+}
+
+PhysicObject::~PhysicObject()
+{
+    if(mShouldFreeBodyVisual && mBodyVisual != NULL) delete mBodyVisual; 
+    if(mShouldFreeBody && mBody != NULL) delete mBody; 
 }
 
 
-Body::~Body()
-{
-    if(mShouldFreeBodyVisual) if(mBodyVisual != NULL) delete mBodyVisual;
-    if(mShouldFreeB2Body) mParentWorld->DestroyBody(mBody);
-}
-
-CL_Pointf Body::getPosition()
-{
-    b2Vec2 position = mBody->GetPosition();
-    return CL_Pointf(position.x, position.y);
-}
-
-void Body::setVisual(BodyVisual* visualiser)
-{
-    mBodyVisual = visualiser;
-}
-
-b2Body* Body::getb2Body()
-{
-    return mBody;
-}
-
-void Body::updateVisual()
-{
+void PhysicObject::updateVisual() 
+{  
     if(mBodyVisual != NULL)
     {
-        mBodyVisual->redrawBody();
-    }
-}
-
-
-void Body::step(float32 elapsed)
-{
-    
-    for(b2Fixture* fixture = mBody->GetFixtureList();
-            fixture != NULL; fixture = fixture->GetNext())
-    {
-        BodyPart* part = (BodyPart*)fixture->GetUserData();
-        if( part != NULL)
-            part->step(elapsed);
-    }
-
-    b2AABB currentLocation = calculateLocation();
-    
-    b2Vec2 ll = mLastLocation.lowerBound;
-    b2Vec2 cl = currentLocation.lowerBound;
-    float deltaX = cl.x - ll.x;
-    float deltaY = cl.y - ll.y;
-    float cellSize = areaManager.getCellSize();
-    // If body moved father then cell size
-    if( abs(deltaX) > cellSize ||  abs(deltaY) > cellSize)
-    {
-        for(b2Fixture* fixture = mBody->GetFixtureList();
-            fixture != NULL; fixture = fixture->GetNext())
-        {
-            b2AABB lastLocation = fixture->GetAABB();
-            b2Vec2 delta(deltaX, deltaY);
-            lastLocation.lowerBound = lastLocation.lowerBound - delta;
-            lastLocation.upperBound = lastLocation.upperBound - delta;
-            areaManager.reportNewFixtureLocation(&lastLocation, 
-                    &fixture->GetAABB(), fixture);
-        }
-        mLastLocation = currentLocation;
-    }
-}
-
-b2AABB Body::calculateLocation()
-{
-    b2AABB region;
-    b2Fixture* firstFixture = mBody->GetFixtureList();
-    if(firstFixture != NULL)
-    {
-        b2AABB r = firstFixture->GetAABB();
-        region.lowerBound = r.lowerBound;
-        region.upperBound = r.upperBound;
-
-        for(b2Fixture* fixture = firstFixture->GetNext();
-                fixture != NULL; fixture = fixture->GetNext())
-        {
-            region.Combine(region, fixture->GetAABB());
-        }
+        mBodyVisual->redrawBody(); 
     }
     else
     {
-        region.lowerBound.Set(0,0);
-        region.upperBound.Set(0,0);
+        throw new CL_Exception("BodyVisual not set.");
     }
-    return region;
+}
+void PhysicObject::step(float32 elapsed) 
+{ 
+    if(mBody != NULL)
+    {
+        mBody->step(elapsed); 
+    }
+    else
+    {
+        throw new CL_Exception("Body not set.");
+    }
+}
+
+
+CL_Pointf PhysicObject::getPosition()
+{
+    b2Vec2 position = mBody->getb2Body()->GetPosition();
+    return CL_Pointf(position.x, position.y);
+}
+
+void PhysicObject::update(float elapsed) 
+{ 
+    step(elapsed); 
+    updateVisual(); 
 }
 
 
@@ -118,12 +65,20 @@ b2AABB Body::calculateLocation()
 //---------------------------- PARSING-----------------------------
 //----------------------------------------------------------------
 
-Object* Body::ParseBody(CL_DomElement* tag)
+Object* PhysicObject::ParsePhysicObject(CL_DomElement* tag, string& desc)
 {  
+    
+    BodyVisual* visualHandle = new BodyVisual();
     float x = 0, y = 0;
     // Parsing visuals
     {
-        CL_DomElement visual = tag->get_elements_by_tag_name("Visual").item(0).to_element();
+        CL_DomNodeList VisualTags = tag->get_elements_by_tag_name("Visual");
+        if(VisualTags.get_length() > 1 || VisualTags.get_length() == 0)
+        {
+            desc += "Error: One, and only one tag Visual must be in Object.";
+            return NULL;
+        }
+        CL_DomElement visual = VisualTags.item(0).to_element();
         CL_DomNodeList childList = visual.get_child_nodes();
 
         for (int i=0; i < childList.get_length(); ++i)
@@ -137,16 +92,27 @@ Object* Body::ParseBody(CL_DomElement* tag)
         }
     }
     
-           
-   CL_DomElement body = tag->get_elements_by_tag_name("Body").item(0).to_element();
+   CL_DomNodeList BodyTags = tag->get_elements_by_tag_name("Body");
+   if(BodyTags.get_length() > 1 || BodyTags.get_length() == 0)
+   {
+       desc += "Error: one and only one tag Body can appear in Object.";
+       return NULL;
+   }      
+   CL_DomElement body = BodyTags.item(0).to_element();
 
     // Physic body variables
-    b2Body *b2body;
+    b2Body *b2body = NULL;
     b2BodyDef bdef;
-    Body *bodyHandle;    
+    Body *bodyHandle = NULL;    
 
     // b2Body tag
-    CL_DomElement b2BodyTag = body.get_elements_by_tag_name("b2Body").item(0).to_element();
+    CL_DomNodeList b2BodyTags = body.get_elements_by_tag_name("b2Body");
+    if(b2BodyTags.get_length() > 1 || b2BodyTags.get_length() == 0)
+    {
+        desc += "Error: One, and only one tag b2Body must be in Body.";
+        return NULL;
+    }
+    CL_DomElement b2BodyTag = b2BodyTags.item(0).to_element();
     CL_DomNodeList b2BodyTagList = b2BodyTag.get_child_nodes();
     for (int i=0; i < b2BodyTagList.get_length(); ++i)
     {
@@ -265,229 +231,215 @@ Object* Body::ParseBody(CL_DomElement* tag)
         b2FixtureDef fixdef;
         b2CircleShape cshape;
         b2PolygonShape pshape;
-        b2Vec2* vertices = NULL;
+        
         //b2Vec2* normals = NULL;
-        b2Fixture *fixture;
-        BodyMaterial *materialHandle;
-        BodyState *stateHandle;
-        BodyPart *partHandle;
+        b2Fixture *fixture = NULL;
+        BodyMaterial *materialHandle = NULL;
+        BodyState *stateHandle = NULL;
+        BodyPart *partHandle = NULL;
         b2Filter filter;
-
+        
+        // Parse b2Fixture
         CL_DomElement physicPart = parts.item(i).to_element();
+        CL_DomNodeList b2FixtureTags = physicPart.get_elements_by_tag_name("b2Fixture");
+        if(b2FixtureTags.get_length() > 1 || b2FixtureTags.get_length() == 0)
+        {
+            desc += "Error: one and only one b2Fixture tag can appear in Part.";
+            return NULL;
+        }
+        else
+        {
+            CL_DomElement partChild = b2FixtureTags.item(0).to_element();
+            // Go through fixture params list
+            CL_DomNodeList fixtureParamList = partChild.get_child_nodes();
+            for (int i=0; i < fixtureParamList.get_length(); ++i)
+            {
+                CL_DomElement fixtureParam = fixtureParamList.item(i).to_element();
+
+                // Parse fixture friction value
+                if (fixtureParam.get_node_name() == "Friction")
+                {
+                    float value = lexical_cast<float>(fixtureParam.get_text().c_str());
+                    fixdef.friction = value;
+                }
+
+                // Parse restitution value
+                if (fixtureParam.get_node_name() == "Restitution")
+                {
+                    float value = lexical_cast<float>(fixtureParam.get_text().c_str());
+                    fixdef.restitution = value;
+                }
+
+                // Parse density value
+                if (fixtureParam.get_node_name() == "Density")
+                {
+                    float value = lexical_cast<float>(fixtureParam.get_text().c_str());
+                    fixdef.density = value;
+                }
+
+                // Parse sensor value
+                if (fixtureParam.get_node_name() == "IsSensor")
+                {
+                    bool value = fixtureParam.get_text() == "true";
+                    fixdef.isSensor = value;
+                }
+
+                // Parse filter params
+                if (fixtureParam.get_node_name() == "Filter")
+                {
+                    CL_DomNodeList filterList = fixtureParam.get_child_nodes();
+                    for (int i=0; i < filterList.get_length(); ++i)
+                    {
+                        CL_DomElement filterParam = filterList.item(i).to_element();
+                        if (filterParam.get_node_name() == "CategoryBits")
+                        {
+                            std::string value = filterParam.get_text().c_str();
+                            // TODO: Parse hex-value
+                            // filter.categoryBits = uint16
+                        }
+
+                        if (filterParam.get_node_name() == "MaskBits")
+                        {
+                            std::string value = filterParam.get_text().c_str();
+                            // TODO: Parse hex-value
+                            // filter.maskBits = uint16
+                        }
+                        if (filterParam.get_node_name() == "GroupIndex")
+                        {
+                            int value = lexical_cast<int>(filterParam.get_text().c_str());
+                            filter.groupIndex = value;
+                        }
+                    }
+
+                    // Set up filter for the fixture object
+                    fixdef.filter = filter;
+                }
+
+                // Parse body shape
+                if (fixtureParam.get_node_name() == "Shape")
+                {
+                    b2Shape::Type typeHandle;
+
+                    // Parse shape type
+                    CL_DomNodeList TypeTags = fixtureParam.get_elements_by_tag_name("Type");
+                    if(TypeTags.get_length() > 1 || TypeTags.get_length() == 0)
+                    {
+                        desc += "Error: one and only one tag Type can appear in Shape.";
+                        return NULL;
+                    }
+                    CL_DomElement type = TypeTags.item(0).to_element();
+                    if (type.get_text() == "e_circle")
+                        typeHandle = b2Shape::e_circle;
+                    else if(type.get_text() == "e_polygon")
+                        typeHandle = b2Shape::e_polygon;
+
+                    // The shape is a circle
+                    if (typeHandle == b2Shape::e_circle)
+                    {
+                        float radius = 0, x = 0, y = 0;
+                        CL_DomNodeList shapeList = fixtureParam.get_child_nodes();
+                        for (int i=0; i < shapeList.get_length(); ++i)
+                        {
+                            CL_DomElement shapeParam = shapeList.item(i).to_element();
+                            if (shapeParam.get_node_name() == "Radius")
+                            {
+                                radius = lexical_cast<float>(shapeParam.get_text().c_str());
+                            }
+                            else if(shapeParam.get_node_name() == "Center")
+                            {
+                                CL_DomNodeList centerList = shapeParam.get_child_nodes();
+                                for (int i=0; i < centerList.get_length(); ++i)
+                                {
+                                    CL_DomElement centerCoord = centerList.item(i).to_element();
+                                    if (centerCoord.get_node_name() == "x")
+                                        x = lexical_cast<float>(centerCoord.get_text().c_str());
+                                    if(centerCoord.get_node_name() == "y")
+                                        y = lexical_cast<float>(centerCoord.get_text().c_str());
+                                    
+                                }
+                            }
+                        }
+
+                        cshape.m_radius = radius;
+                        cshape.m_p.Set(x, y);
+                        fixdef.shape = &cshape;
+                    }
+                    // The shape is a polygon
+                    else if (typeHandle == b2Shape::e_polygon)
+                    {
+
+                        CL_DomNodeList shapeList = fixtureParam.get_child_nodes();
+                        for (int i=0; i < shapeList.get_length(); ++i)
+                        {
+                            CL_DomElement shapeParam = shapeList.item(i).to_element();
+                            if(shapeParam.get_node_name() == "Center")
+                            {
+                                CL_DomNodeList centerList = shapeParam.get_child_nodes();
+                                for (int i=0; i < centerList.get_length(); ++i)
+                                {
+                                    float x = 0, y = 0;
+                                    CL_DomElement centerCoord = centerList.item(i).to_element();
+                                    if (centerCoord.get_node_name() == "x")
+                                        x = lexical_cast<float>(centerCoord.get_text().c_str());
+                                    if(centerCoord.get_node_name() == "y")
+                                        y = lexical_cast<float>(centerCoord.get_text().c_str());
+                                    pshape.m_centroid.Set(x,y);
+                                }
+                            }
+                            // Parse polygon vertices
+                            else if(shapeParam.get_node_name() == "Vertices")
+                            {
+                                CL_DomNodeList verticesList = shapeParam.get_child_nodes();
+                                b2Vec2 vertices[verticesList.get_length()];
+                                for (int i=0; i < verticesList.get_length(); ++i)
+                                {
+                                    CL_DomElement vertex = verticesList.item(i).to_element();
+                                    if (vertex.get_node_name() == "Vertex")
+                                    {
+                                        CL_DomNodeList vertexComponents = vertex.get_child_nodes();
+                                        float x = 0, y = 0;
+                                        for (int j=0; j < vertexComponents.get_length(); ++j)
+                                        {
+                                            CL_DomElement component = vertexComponents.item(j).to_element();
+                                            if (component.get_node_name() == "x")
+                                            {
+                                                x = lexical_cast<float>(component.get_text().c_str());
+                                            }
+                                            else if(component.get_node_name() == "y")
+                                            {
+                                                y = lexical_cast<float>(component.get_text().c_str());
+                                            }
+                                        }
+                                        vertices[i].Set(x,y);
+                                    }
+                                }
+                                pshape.Set(vertices,verticesList.get_length());
+                            }
+                        }
+                        fixdef.shape = &pshape;
+                    }
+                }
+            }
+            
+            fixture = b2body->CreateFixture(&fixdef);
+            partHandle = new BodyPart(fixture, worldManager.mDefaultMaterial);
+        }
 
         // Go through Part children
         CL_DomNodeList physicPartChildren = physicPart.get_child_nodes();
         for (int i=0; i < physicPartChildren.get_length(); ++i)
         {
             CL_DomElement partChild = physicPartChildren.item(i).to_element();
-            if (partChild.get_node_name() == "b2Fixture")
-            {
-                // Go through fixture params list
-                CL_DomNodeList fixtureParamList = partChild.get_child_nodes();
-                for (int i=0; i < fixtureParamList.get_length(); ++i)
-                {
-                    CL_DomElement fixtureParam = fixtureParamList.item(i).to_element();
-
-                    // Parse fixture friction value
-                    if (fixtureParam.get_node_name() == "Friction")
-                    {
-                        float value = lexical_cast<float>(fixtureParam.get_text().c_str());
-                        fixdef.friction = value;
-                    }
-
-                    // Parse restitution value
-                    if (fixtureParam.get_node_name() == "Restitution")
-                    {
-                        float value = lexical_cast<float>(fixtureParam.get_text().c_str());
-                        fixdef.restitution = value;
-                    }
-
-                    // Parse density value
-                    if (fixtureParam.get_node_name() == "Density")
-                    {
-                        float value = lexical_cast<float>(fixtureParam.get_text().c_str());
-                        fixdef.density = value;
-                    }
-
-                    // Parse sensor value
-                    if (fixtureParam.get_node_name() == "IsSensor")
-                    {
-                        bool value = fixtureParam.get_text() == "true";
-                        fixdef.isSensor = value;
-                    }
-
-                    // Parse filter params
-                    if (fixtureParam.get_node_name() == "Filter")
-                    {
-                        CL_DomNodeList filterList = fixtureParam.get_child_nodes();
-                        for (int i=0; i < filterList.get_length(); ++i)
-                        {
-                            CL_DomElement filterParam = filterList.item(i).to_element();
-                            if (filterParam.get_node_name() == "CategoryBits")
-                            {
-                                std::string value = filterParam.get_text().c_str();
-                                // TODO: Parse hex-value
-                                // filter.categoryBits = uint16
-                            }
-
-                            if (filterParam.get_node_name() == "MaskBits")
-                            {
-                                std::string value = filterParam.get_text().c_str();
-                                // TODO: Parse hex-value
-                                // filter.maskBits = uint16
-                            }
-                            if (filterParam.get_node_name() == "GroupIndex")
-                            {
-                                int value = lexical_cast<int>(filterParam.get_text().c_str());
-                                filter.groupIndex = value;
-                            }
-                        }
-
-                        // Set up filter for the fixture object
-                        fixdef.filter = filter;
-                    }
-
-                    // Parse body shape
-                    if (fixtureParam.get_node_name() == "Shape")
-                    {
-                        b2Shape::Type typeHandle;
-
-                        // Parse shape type
-                        CL_DomElement type = fixtureParam.get_elements_by_tag_name("Type").item(0).to_element();
-                        if (type.get_text() == "e_circle")
-                            typeHandle = b2Shape::e_circle;
-                        else if(type.get_text() == "e_polygon")
-                            typeHandle = b2Shape::e_polygon;
-
-                        // The shape is a circle
-                        if (typeHandle == b2Shape::e_circle)
-                        {
-                            float radius = 0, x = 0, y = 0;
-                            CL_DomNodeList shapeList = fixtureParam.get_child_nodes();
-                            for (int i=0; i < shapeList.get_length(); ++i)
-                            {
-                                CL_DomElement shapeParam = shapeList.item(i).to_element();
-                                if (shapeParam.get_node_name() == "Radius")
-                                {
-                                    radius = lexical_cast<float>(shapeParam.get_text().c_str());
-                                }
-                                else if(shapeParam.get_node_name() == "Center")
-                                {
-                                    CL_DomNodeList centerList = shapeParam.get_child_nodes();
-                                    for (int i=0; i < centerList.get_length(); ++i)
-                                    {
-                                        CL_DomElement centerCoord = centerList.item(i).to_element();
-                                        if (centerCoord.get_node_name() == "x")
-                                            x = lexical_cast<float>(centerCoord.get_text().c_str());
-                                        if(centerCoord.get_node_name() == "y")
-                                            y = lexical_cast<float>(centerCoord.get_text().c_str());
-                                        
-                                    }
-                                }
-                            }
-
-                            cshape.m_radius = radius;
-                            cshape.m_p.Set(x, y);
-                            fixdef.shape = &cshape;
-                        }
-                        // The shape is a polygon
-                        else if (typeHandle == b2Shape::e_polygon)
-                        {
-
-                            CL_DomNodeList shapeList = fixtureParam.get_child_nodes();
-                            for (int i=0; i < shapeList.get_length(); ++i)
-                            {
-                                CL_DomElement shapeParam = shapeList.item(i).to_element();
-                                if(shapeParam.get_node_name() == "Center")
-                                {
-                                    CL_DomNodeList centerList = shapeParam.get_child_nodes();
-                                    for (int i=0; i < centerList.get_length(); ++i)
-                                    {
-                                        float x = 0, y = 0;
-                                        CL_DomElement centerCoord = centerList.item(i).to_element();
-                                        if (centerCoord.get_node_name() == "x")
-                                            x = lexical_cast<float>(centerCoord.get_text().c_str());
-                                        if(centerCoord.get_node_name() == "y")
-                                            y = lexical_cast<float>(centerCoord.get_text().c_str());
-                                        pshape.m_centroid.Set(x,y);
-                                    }
-                                }
-                                // Parse polygon vertices
-                                else if(shapeParam.get_node_name() == "Vertices")
-                                {
-                                    CL_DomNodeList verticesList = shapeParam.get_child_nodes();
-                                    vertices = new b2Vec2[verticesList.get_length()];
-                                    for (int i=0; i < verticesList.get_length(); ++i)
-                                    {
-                                        CL_DomElement vertex = verticesList.item(i).to_element();
-                                        if (vertex.get_node_name() == "Vertex")
-                                        {
-                                            CL_DomNodeList vertexComponents = vertex.get_child_nodes();
-                                            float x = 0, y = 0;
-                                            for (int j=0; j < vertexComponents.get_length(); ++j)
-                                            {
-                                                CL_DomElement component = vertexComponents.item(j).to_element();
-                                                if (component.get_node_name() == "x")
-                                                {
-                                                    x = lexical_cast<float>(component.get_text().c_str());
-                                                }
-                                                else if(component.get_node_name() == "y")
-                                                {
-                                                    y = lexical_cast<float>(component.get_text().c_str());
-                                                }
-                                            }
-                                            vertices[i].Set(x,y);
-                                        }
-                                    }
-                                    pshape.Set(vertices,verticesList.get_length());
-                                }
-                                // Parse polygon normals
-                                /*else if (shapeParam.get_node_name() == "Normals")*/
-                                //{
-                                    //CL_DomNodeList normalsList = shapeParam.get_child_nodes();
-                                    //normals = new b2Vec2[normalsList.get_length()];
-                                    //for (int i=0; i < normalsList.get_length(); ++i)
-                                    //{
-                                        //CL_DomElement normal = normalsList.item(i).to_element();
-                                        //if (normal.get_node_name() == "Normal")
-                                        //{
-                                            //CL_DomNodeList normalComponents = normal.get_child_nodes();
-                                            //for (int j=0; j < normalComponents.get_length(); ++j)
-                                            //{
-                                                //float x=0, y=0;
-                                                //CL_DomElement component = normalComponents.item(j).to_element();
-                                                //if (component.get_node_name() == "x")
-                                                //{
-                                                    //x = lexical_cast<float>(component.get_text().c_str());
-                                                //}
-                                                //else if(component.get_node_name() == "y")
-                                                //{
-                                                    //y = lexical_cast<float>(component.get_text().c_str());
-                                                //}
-                                                //normals[i].Set(x,y);
-                                            //}
-                                        //}
-                                    //}
-                                    //pshape.m_normals = normals;
-                                /*}*/
-                            }
-
-                            //for (unsigned int i=0; i < normalsListX.size(); ++i)
-                                //pshape.m_normals[i].Set(normalsListX[i], normalsListY[i]);
-                            fixdef.shape = &pshape;
-                        }
-                    }
-                }
-                
-                fixture = b2body->CreateFixture(&fixdef);
-                if(vertices != NULL) delete vertices;
-                
-                partHandle = new BodyPart(fixture, worldManager.mDefaultMaterial);
-            }
-            else if(partChild.get_node_name() == "MaxKindleLevel")
+       
+            if(partChild.get_node_name() == "MaxKindleLevel")
             {
                 float value = lexical_cast<float>(partChild.get_text().c_str());
                 partHandle->setMaxKindleLevel(value);
+            }
+            else if(partChild.get_node_name() == "Name")
+            {
+                string value = partChild.get_text().c_str();
+                partHandle->setName(value);
             }
             else if(partChild.get_node_name() == "MaxDampness")
             {
@@ -548,6 +500,11 @@ Object* Body::ParseBody(CL_DomElement* tag)
         
         // Parse material
         CL_DomNodeList matList = physicPart.get_elements_by_tag_name("Material");
+        if(matList.get_length() > 1)
+        {
+            desc += "Error: only one Material tag can apear in Part.";
+            return NULL;
+        }
 
         // The material tag doesn't exist
         if (matList.get_length() <= 0)
@@ -559,9 +516,24 @@ Object* Body::ParseBody(CL_DomElement* tag)
         {
             materialHandle = new BodyMaterial();
             partHandle->mShouldFreeBodyMaterial = true;
-            materialHandle->Name = matList.item(0).to_element().get_child_string("Name");
+            CL_DomElement matElement = matList.item(0).to_element(); // item(0) is ok
+            
+            CL_DomNodeList NameTags = matElement.get_elements_by_tag_name("Name");
+            if(NameTags.get_length() > 1)
+            {
+                desc += "Error: only one tag Name can appear in Material.";
+                return NULL;
+            }
+            else if(NameTags.get_length() > 0)
+            {
+                materialHandle->Name = NameTags.item(0).to_element().get_text();
+            }
+            else
+            {
+                materialHandle->Name = worldManager.generateUniqueID();
+            }
 
-            CL_DomNodeList matChildList = matList.item(0).get_child_nodes();
+            CL_DomNodeList matChildList = matElement.get_child_nodes();
             // Go through material child tags
             for (int i=0; i < matChildList.get_length(); ++i)
             {
@@ -666,20 +638,7 @@ Object* Body::ParseBody(CL_DomElement* tag)
 
         partHandle->setMaterial(materialHandle, materialHandle == worldManager.mDefaultMaterial );
     } // for (int i=0; i < parts.get_length(); ++i)
-    return bodyHandle;
+
+    return new PhysicObject(bodyHandle, visualHandle);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

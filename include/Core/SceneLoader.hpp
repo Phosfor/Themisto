@@ -15,8 +15,6 @@
 #include "Core/ObjectsManager.hpp"
 #include "World/Environ/Types.hpp"
 #include "World/Objects/TypesManager.hpp"
-
-#include "World/Objects/Body.hpp"
 #include <map>
 
 #define sceneLoader (SceneLoader::get_mutable_instance())

@@ -12,12 +12,15 @@
 
 class BodyVisual
 {
+    private:
+        BodyState *mBodyState;
     public:
         BodyVisual();
         void setBodyState(BodyState *state);
+
         void redrawBody();
 
-        BodyState *mBodyState;
+        
 };
 
 

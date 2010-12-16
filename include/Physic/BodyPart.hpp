@@ -48,7 +48,7 @@ class BodyPart
         float mCurrentKindleTemperature;
         float mCurrentKindleReceptivity;
         float mCurrentFrozingTemperature;
-        float mCurrentMaxDumpness;
+        float mCurrentMaxDampness;
         float mCurrentElectricalConductivity;
 
         virtual void calculateImpacts(float32 timeStep);
@@ -56,7 +56,6 @@ class BodyPart
         virtual void calculateMoistenImpact(Impact* impact, float32 timeStep);
         virtual void calculateHeatImpact(Impact* impact, float32 timeStep);
         virtual void calculateCoolImpact(Impact* impact, float32 timeStep);
-        virtual void calculateBeatImpact(Impact* impact, float32 timeStep);
         virtual void calculateWindImpact(Impact* impact, float32 timeStep);
         virtual void calculateElectricityImpact(Impact* impact, float32 timeStep);
 
@@ -103,7 +102,7 @@ class BodyPart
         void setAcceptsCord(bool value) { mAcceptsCord = value; }
 
         string getName() { return mName; }
-        void setName(string value){ mName = value; }
+        void setName(const std::string &value){ mName.assign(value); }
 
 };
 
