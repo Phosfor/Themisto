@@ -13,50 +13,6 @@ void SceneLoader::loadScene(const std::string &sceneName)
     _threadWrapper(sceneName);
 }
 
-void NodeToString(const CL_DomNode& tag, string& result, int level = 0)
-{
-    result += "\n";
-    for(int i =0; i<level*2; i++) 
-    {
-        result += " ";
-    }
-    if (tag.get_node_type() == CL_DomNode::TEXT_NODE)
-    {
-        result += tag.get_node_value();
-        return;
-    }
-    
-    CL_DomNodeList childList = tag.get_child_nodes();
-    
-    result += "<";
-    result += tag.get_node_name();
-    
-    CL_DomNamedNodeMap attributes = tag.get_attributes();
-    for(int i =0; i<attributes.get_length(); ++i)
-    {
-        CL_DomNode atr = attributes.item(i);
-        result += " ";
-        result += atr.get_node_name();
-        result += "=\"";
-        result += atr.get_node_value().c_str();
-        result += "\"";
-    }
-    result += ">";
-    for (int i=0; i < childList.get_length(); ++i)
-    {
-        CL_DomNode child = childList.item(i);
-        NodeToString(child, result, level + 1);
-    }
-    result += "\n";
-    for(int i =0; i<level*2; i++) 
-    {
-        result += " ";
-    }
-    result += "</";
-    result += tag.get_node_name();
-    result += ">";
-}
-
 void SceneLoader::_threadWrapper(const std::string &sceneName)
 {
     //mMutex.lock();
@@ -67,7 +23,7 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
     CL_DomElement root = document.get_document_element();
     string rootString = "";
     NodeToString(root, rootString, 0);
-    cout << " -------- " << sceneName << "--------------- \n";
+    cout << " -------- " << sceneName << " --------------- \n";
     cout << rootString << "\n";
     CL_DomElement world = root.get_elements_by_tag_name("World").item(0).to_element();
     CL_DomElement environ = world.get_elements_by_tag_name("Environ").item(0).to_element();
