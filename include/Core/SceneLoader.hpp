@@ -30,6 +30,10 @@ boost::serialization::singleton<SceneLoader>
 
         void _threadWrapper(const std::string &sceneName);
 
+        void copyAttributes(CL_DomNode parent, CL_DomNode templatePointer);
+        void processTags(CL_DomNode parent, CL_DomNode templatePointer, CL_DomDocument document);
+        void processTemplates(CL_DomDocument document);
+
     public:
         void loadScene(const std::string &sceneName);
 };
