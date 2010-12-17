@@ -9,7 +9,7 @@
 
 #include "Core/LogManager.hpp"
 #include "World/Objects/Object.hpp"
-#include "World/Objects/Body.hpp"
+#include "World/Objects/PhysicObject.hpp"
 #include <boost/function.hpp>
 #include <map>
 #include <utility>
@@ -17,7 +17,7 @@
 #include <string>
 #include <boost/serialization/singleton.hpp>
 
-typedef boost::function<Object* (CL_DomElement*)> Parser;
+typedef boost::function<Object* (CL_DomElement*, string& desc)> Parser;
 
 #define typesManager (TypesManager::get_mutable_instance())
 #define typesManagerConst (TypesManager::get_const_instance())
@@ -26,12 +26,12 @@ class TypesManager : public boost::serialization::singleton<TypesManager>
 {
     private:
         std::map<std::string, Parser> ObjectsParser;
-        static Object* empty_parser(CL_DomElement* p);
+        static Object* empty_parser(CL_DomElement* p, std::string &desc);
         Parser getParser(std::string type);
 
     public:
         TypesManager();
-        Object* parseObject(CL_DomElement* objectTag, const std::string &type);
+        Object* parseObject(CL_DomElement* objectTag, const std::string &type, std::string &desc);
         void registerParser(std::string type, Parser p);
 };
 #endif

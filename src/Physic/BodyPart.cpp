@@ -24,6 +24,9 @@ BodyPart::BodyPart(b2Fixture* fixture, BodyMaterial* material)
     mWindImpact = NULL;
     findStaticCollisions();
     mName = world->generateUniqueID();
+    mMaxKindleLevel = 0;
+    mMaxDampness = 0;
+    mAcceptsCord = 0;
 }
 BodyPart::~BodyPart()
 {
@@ -94,8 +97,9 @@ void BodyPart::cancelImpact(Impact* impact)
 }
 
 
-void BodyPart::step(float32 elapsed)
+void BodyPart::step(float32 _elapsed)
 {
+    float elapsed = _elapsed * 0.001; // In seconds
     calculateInfluences(elapsed);
     calculateImpacts(elapsed);
     calculateThermalTransmissions();
@@ -179,9 +183,6 @@ void BodyPart::calculateImpacts(float32 elapsed)
             case Cool:
                 calculateCoolImpact(*impact, elapsed);
             break;
-            case Beat:
-                calculateBeatImpact(*impact, elapsed);
-            break;
             case Wind:
                 calculateWindImpact(*impact, elapsed);
             break;
@@ -234,7 +235,7 @@ void BodyPart::calculateInfluences(float32 elapsed)
         mState->Dampness * mMaterial->InflDampnessToKindleReceptivity;
     mCurrentFrozingTemperature = mMaterial->FrozingTemperature +
         mState->Dampness * mMaterial->InflDampnessToFrozingTemperature;
-    mCurrentMaxDumpness = mMaxDampness - mState->CarbonizeLevel * mMaterial->InflCarbonizeLevelToMaxDampness;
+    mCurrentMaxDampness = mMaxDampness - mState->CarbonizeLevel * mMaterial->InflCarbonizeLevelToMaxDampness;
     mCurrentElectricalConductivity = mMaterial->ElectricalConductivity -
         mState->CarbonizeLevel * mMaterial->InflCarbonizeLevelToElecticalConductivity;
 }
@@ -242,9 +243,9 @@ void BodyPart::calculateInfluences(float32 elapsed)
 void BodyPart::calculateMoistenImpact(Impact* impact, float32 elapsed)
 {
     mState->Dampness += impact->Intensity * elapsed * mMaterial->DampReceptivity;
-    if(mState->Dampness > mCurrentMaxDumpness)
+    if(mState->Dampness > mCurrentMaxDampness)
     {
-        mState->Dampness = mCurrentMaxDumpness;
+        mState->Dampness = mCurrentMaxDampness;
     }
     if( mState->KindleLevel > 0)
     {
@@ -298,13 +299,6 @@ void BodyPart::calculateMoistenImpact(Impact* impact, float32 elapsed)
             mState->IsFrozen = false;
         }
     }
-}
- void BodyPart::calculateBeatImpact(Impact* impact, float32 elapsed)
-{
-    b2Vec2 direction = impact->Dirrection;
-    direction.Normalize();
-    b2Vec2 impulsVec = impact->Intensity * direction;
-    mFixture->GetBody()->ApplyLinearImpulse(impulsVec, impact->ImpactPoint);
 }
  void BodyPart::calculateWindImpact(Impact* impact, float32 elapsed)
 {

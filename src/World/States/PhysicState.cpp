@@ -27,6 +27,7 @@ void PhysicState::init()
 
     debugWatcher.init();
     debugIO.init();
+    physicTests.RunTest();
 }
 
 
@@ -39,7 +40,8 @@ void PhysicState::shutdown()
 void PhysicState::update()
 {
     mGC.clear(CL_Colorf::black);
-
+    
+    objectsManager.update();
     physicManager.step();
     physicManager.getWorld().DrawDebugData();
 

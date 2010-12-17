@@ -16,7 +16,6 @@ enum ImpactTypes
     Moisten=1,
     Heat=2,
     Cool=3,
-    Beat=4,
     Wind=5,
     Electricity=6
 };

@@ -15,6 +15,7 @@
 #include "Debug/DebugInstruments.hpp"
 #include "Debug/DebugWatcher.hpp"
 #include "Debug/DebugIO.hpp"
+#include "Debug/PhysicTests.hpp"
 
 #include <ClanLib/core.h>
 #include <ClanLib/display.h>

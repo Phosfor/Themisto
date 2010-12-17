@@ -17,8 +17,10 @@
 
 
         <Objects>
-            <Object name="ground" type="PhysicBody">
+            <Object name="ground" type="PhysicBodyObject">
+                <Visual />
              	<Body>
+             	    
                     <b2Body>
                         <Position>
                             <x>2.0</x>
@@ -27,6 +29,8 @@
                         <Type>StaticBody</Type>
                     </b2Body>
                     <Part>
+                        <Name>GroundPart1</Name>
+                        <MaxDampness>10.0</MaxDampness>
                         <b2Fixture>
                             <Friction>0.3</Friction>
                             <Restitution>0.3</Restitution>
@@ -52,11 +56,16 @@
                                 </Vertices>
                             </Shape>
                         </b2Fixture>
+                        <Material>
+                            <DampReceptivity>1</DampReceptivity>
+                            
+                        </Material>
                     </Part>
                 </Body>
             </Object>
              
-            <Object name="test1" type="PhysicBody">
+            <Object name="test1" type="PhysicBodyObject">
+                <Visual />
              	<Body>
                     <b2Body>
                         <Position>
@@ -75,11 +84,13 @@
                                 <Radius>0.6</Radius>
                             </Shape>
                         </b2Fixture>
+                        
                     </Part>
                 </Body>
              </Object>
 
-             <Object name="test2" type="PhysicBody">
+             <Object name="test2" type="PhysicBodyObject">
+                <Visual />
              	<Body>
                     <b2Body>
                         <Position>

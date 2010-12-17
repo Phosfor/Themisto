@@ -513,6 +513,7 @@ string DebugWatcher::addWatchCommon(Watch* watch, vector<string> &commandSet)
             addWatchToConsole(watch);
             watchNormal = true;
         }
+      
     }
     if(watch->Type != NotAWatch && watchNormal)
     {

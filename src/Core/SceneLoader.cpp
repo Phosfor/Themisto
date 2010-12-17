@@ -112,11 +112,17 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
                     std::cout << "Achtung\n";
                 }
             }
-
-            Object* object = typesManager.parseObject(&tag, type);
+            string desc = "";
+            Object* object = typesManager.parseObject(&tag, type, desc);
             if(object != NULL)
             {
                 objectsManager.addObject(object->getName(), object);
+            }
+            else
+            {
+                LOG(desc);
+                LOG("Terminating parsing...");
+                return;
             }
         }
     }
