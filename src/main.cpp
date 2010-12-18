@@ -22,25 +22,25 @@ int Application::main(const std::vector<CL_String> &args)
 
     try
     {
-        string mediaPath = configManager.getValue<string>("application.media-folder", "media");
-        utils.setMediaFolder(mediaPath);
+        string mediaPath = configManager().getValue<string>("application.media-folder", "media");
+        utils().setMediaFolder(mediaPath);
 
-        appManager.initWindow("Themisto");
+        appManager().initWindow("Themisto");
         LOG("The window has been created!");
 
-        inputManager.initInput();
+        inputManager().initInput();
         LOG("Input system is configured");
 
         //guiManager.initGui(appManager.getWindow(), "media/gui_basic/");
         //LOG("The gui has been initialized!");
         //CL_GUIManager gui = guiManager.getHandle();
         //CL_GUIWindowManagerTexture wm = guiManager.getWM();
-        CL_GraphicContext gc = appManager.getGraphic();
+        CL_GraphicContext gc = appManager().getGraphic();
 
-        resourceManager.loadFonts();
+        resourceManager().loadFonts();
 
-        CL_Slot slotQuit = appManager.getWindow().sig_window_close().connect(Application::onWindowClose);
-        CL_Slot slotInput = inputManager.getKeyboard().sig_key_up().connect(Application::onInput);
+        CL_Slot slotQuit = appManager().getWindow().sig_window_close().connect(Application::onWindowClose);
+        CL_Slot slotInput = inputManager().getKeyboard().sig_key_up().connect(Application::onInput);
 
         // Queueing the states
         bool physic = false;
@@ -50,21 +50,21 @@ int Application::main(const std::vector<CL_String> &args)
         }
 
         if (physic)
-           stateManager.push(new PhysicState);
+           stateManager().push(new PhysicState);
         else
-           stateManager.push(new MenuState);
+           stateManager().push(new MenuState);
 
-        while (appManager.getRunning())
+        while (appManager().getRunning())
         {
-            appManager.frameStarted();
-            stateManager.update();
+            appManager().frameStarted();
+            stateManager().update();
 
             //wm.process();
             //wm.draw_windows(gc);
 
-            appManager.getWindow().flip(1);
+            appManager().getWindow().flip(1);
             CL_KeepAlive::process(0);
-            appManager.frameEnded();
+            appManager().frameEnded();
         }
     }
     catch(CL_Exception &error)
@@ -82,13 +82,13 @@ void Application::onInput(const CL_InputEvent &key, const CL_InputState &state)
 {
     if (key.id == CL_KEY_ESCAPE)
     {
-        appManager.setRunning(false);
+        appManager().setRunning(false);
     }
 }
 
 void Application::onWindowClose()
 {
-    appManager.setRunning(false);
+    appManager().setRunning(false);
 }
 
 void Application::doNothing() { }

@@ -10,17 +10,17 @@
 Lightnings::Lightnings()
     : EnvironObject(), mProbability(200), alpha(0)
 {
-    mGC = appManager.getGraphic();
+    mGC = appManager().getGraphic();
 
     for (int i=0; i < 11; ++i)
     {
         mLightningImage[i] = CL_Image(mGC, cl_format("media/lightnings/%1.png", i));
     }
 
-    if (!environManager.getTypeEnabled(Environ_Clouds)) 
+    if (!environManager().getTypeEnabled(Environ_Clouds)) 
         mEnabled = false;
     else
-        mCloudsHandle = dynamic_cast<Clouds*>(environManager.getTypeHandle(Environ_Clouds));
+        mCloudsHandle = dynamic_cast<Clouds*>(environManager().getTypeHandle(Environ_Clouds));
 }
 
 void Lightnings::update(float windPower, float elapsed, float globalTime)

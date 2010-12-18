@@ -22,7 +22,7 @@
 #define VISUAL_PORT "1993"
 #define SERVER_HOST "localhost"
 
-typedef pair<CL_NetGameConnection*,const CL_NetGameEvent&> EventInfo;
+typedef std::pair<CL_NetGameConnection*,const CL_NetGameEvent&> EventInfo;
 
 class DebugIO : public boost::serialization::singleton<DebugIO>
 {
@@ -36,7 +36,7 @@ class DebugIO : public boost::serialization::singleton<DebugIO>
         CL_Mutex mMutex;
         std::queue< EventInfo > mReceivedEvents;
         CL_NetGameEventDispatcher_v1<CL_NetGameConnection *> console_events;
-        
+
         void mainLoop();
         void eventHandler( CL_NetGameConnection * connection,const CL_NetGameEvent &event);
         void commandHandler(const CL_NetGameEvent &event, CL_NetGameConnection * connection);
@@ -45,11 +45,11 @@ class DebugIO : public boost::serialization::singleton<DebugIO>
     public:
         void init();
         void step();
-        void addWatch(string id, string name, string value, string parent);
-        void updateWatch(string id, string newVal);
-        void removeWatch(string id);
-        
-        CL_Signal_v2<string, string*> mCommand;
+        void addWatch(std::string id, std::string name, std::string value, std::string parent);
+        void updateWatch(std::string id, std::string newVal);
+        void removeWatch(std::string id);
+
+        CL_Signal_v2<std::string, std::string*> mCommand;
 };
 
 

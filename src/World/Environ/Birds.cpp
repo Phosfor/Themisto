@@ -48,7 +48,7 @@ void Birds::processBirds(CL_GraphicContext &gc, int width, int height, int i)
 Birds::Birds(int maxBirds)
     : EnvironObject(), mProbability(1000), mFirstTime(true)
 {
-    mGC = appManager.getGraphic();
+    mGC = appManager().getGraphic();
     mMaxObjects = maxBirds;
 
     for (int i=0; i < maxBirds; i++)

@@ -6,71 +6,71 @@
 
 #include "Core/Utils.hpp"
 
-void Utils::setMediaFolder(const string &path)
+void Utils::setMediaFolder(const std::string &path)
 {
     mMediaFolder = path;
 }
 
-string Utils::intToStr(int p)
+std::string Utils::intToStr(int p)
 {
     std::ostringstream out;
     out << p;
     return out.str(); 
 }
 
-string Utils::vectorToStr(b2Vec2 p)
+std::string Utils::vectorToStr(b2Vec2 p)
 {
     std::ostringstream out;
-    out<< "(" << p.x << "," << p.y << ")";
+    out << "(" << p.x << "," << p.y << ")";
     return out.str();
 }
 
-string Utils::boolToStr(bool p)
+std::string Utils::boolToStr(bool p)
 {
     if(p) return "true";
     else return "false";
 }
 
-string Utils::hexToStr(int p)
+std::string Utils::hexToStr(int p)
 {
     std::ostringstream out;
-    cout.flags(ios::hex);
-    cout.fill('0');
-    cout.width(6);
-    out<< p;
+    std::cout.flags(std::ios::hex);
+    std::cout.fill('0');
+    std::cout.width(6);
+    out << p;
     return out.str();
 }
 
-string Utils::floatToStr(float p)
+std::string Utils::floatToStr(float p)
 {
     std::ostringstream out;
     out << p;
     return out.str(); 
 }
 
-string Utils::getMediaFolder()
+std::string Utils::getMediaFolder()
 {
     return mMediaFolder;
 }
 
-ptime Utils::getCurrentTime() const
+boost::posix_time::ptime Utils::getCurrentTime() const
 {
     using namespace boost;
     return posix_time::microsec_clock::local_time();
 }
 
-string Utils::checkLocation(const string &path)
+std::string Utils::checkLocation(const std::string &path)
 {
     using namespace boost;
     if (!filesystem::exists(path))
     {
-        LOG(FORMAT("The path `%1%` could be invalid!", path));
+        LOG(cl_format("The path `%1` could be invalid!", path));
     }
 
     return path;
 }
 
-string Utils::getTimeDifference()
+std::string Utils::getTimeDifference()
 {
     using namespace boost;
     using namespace boost::posix_time;

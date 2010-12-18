@@ -11,15 +11,17 @@ ConfigManager::ConfigManager()
     setPath("settings.info");
 }
 
-void ConfigManager::setPath(const string &path)
+void ConfigManager::setPath(const std::string &path)
 {
     mConfigPath = path;
     read_info(path, mTreeHandle);
 }
 
-vector<string> ConfigManager::getListValue(const string &key)
+std::vector<std::string> ConfigManager::getListValue(const std::string &key)
 {
-    vector<string> listValues;
+    using boost::property_tree::ptree;
+
+    std::vector<std::string> listValues;
     BOOST_FOREACH(ptree::value_type &value, mTreeHandle.get_child(key))
     {
         listValues.push_back(value.second.data());

@@ -12,11 +12,6 @@
 #include <vector>
 #include <boost/serialization/singleton.hpp>
 
-using namespace std;
-
-#define guiManager (GuiManager::get_mutable_instance())
-#define guiManagerConst (GuiManager::get_const_instance())
-
 class GuiManager : public boost::serialization::singleton<GuiManager>
 {
     private:
@@ -24,7 +19,7 @@ class GuiManager : public boost::serialization::singleton<GuiManager>
         CL_GUIWindowManagerTexture *mWm;
         CL_GUIComponent *mWrapper;
 
-        string mThemeName;
+        std::string mThemeName;
 
         void initGuiWrapper(float width, float height);
 
@@ -35,10 +30,12 @@ class GuiManager : public boost::serialization::singleton<GuiManager>
         CL_GUIWindowManagerTexture &getWM();
         CL_GUIComponent &getWrapper();
 
-        string getThemeName();
-        void setThemeName(const string &name);
+        std::string getThemeName();
+        void setThemeName(const std::string &name);
 
-        void initGui(CL_DisplayWindow &window, const string &theme);
+        void initGui(CL_DisplayWindow &window, const std::string &theme);
 };
+
+inline GuiManager &guiManager() { return GuiManager::get_mutable_instance(); }
 
 #endif /* _GUI_MANAGER_HPP_ */

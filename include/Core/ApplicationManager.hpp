@@ -4,8 +4,8 @@
  * Project is contributed with GPL license. For more information, visit project page.
  */
 
-#ifndef _FRAME_MANAGER_H_
-#define _FRAME_MANAGER_H_
+#ifndef _APPLICATION_MANAGER_H_
+#define _APPLICATION_MANAGER_H_
 
 #include <ClanLib/display.h>
 #include <ClanLib/core.h>
@@ -15,9 +15,6 @@
 
 #include <boost/serialization/singleton.hpp>
 #include "Core/ConfigManager.hpp"
-
-#define appManager (ApplicationManager::get_mutable_instance())
-#define appManagerConst (applicationManager::get_const_instance())
 
 class ApplicationManager : public boost::serialization::singleton<ApplicationManager>
 {
@@ -34,7 +31,7 @@ class ApplicationManager : public boost::serialization::singleton<ApplicationMan
     public:
         ~ApplicationManager();
         ApplicationManager();
-        void initWindow(const string &title);
+        void initWindow(const std::string &title);
 
         void frameStarted();
         void frameEnded();
@@ -49,4 +46,6 @@ class ApplicationManager : public boost::serialization::singleton<ApplicationMan
         CL_DisplayWindow &getWindow();
 };
 
-#endif /* _FRAME_MANAGER_H_ */
+inline ApplicationManager &appManager() { return ApplicationManager::get_mutable_instance(); }
+
+#endif /* _APPLICATION_MANAGER_H_ */

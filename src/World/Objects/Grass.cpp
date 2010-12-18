@@ -10,7 +10,7 @@ Grass::Grass(CL_Pointf position)
 {
     mPosition = position;
     mType = GrassObject;
-    mGC = appManager.getGraphic();
+    mGC = appManager().getGraphic();
     mImageHandle = CL_Sprite(mGC, "media/plants/3.png");
 
     mTexture1 = CL_Texture(mGC, mImageHandle.get_width(), mImageHandle.get_height());
@@ -26,7 +26,7 @@ Grass::Grass(CL_Pointf position)
     mShader.bind_attribute_location(0, "Position");
     mShader.bind_attribute_location(1, "TexCoord0");
     if(!mShader.link())
-        cout << "Unable to link shader in Grass class!\n";
+        std::cout << "Unable to link shader in Grass class!\n";
 }
 
 void Grass::drawTexture(const CL_Rectf &rect, const CL_Rectf &texture_unit1_coords)
@@ -63,7 +63,7 @@ void Grass::drawTexture(const CL_Rectf &rect, const CL_Rectf &texture_unit1_coor
 
 void Grass::update(float elapsed)
 {
-    mTime += appManager.getElapsed() / 20.0f;
+    mTime += appManager().getElapsed() / 20.0f;
 
     mGC.set_frame_buffer(mBuf1);
     mGC.clear(CL_Colorf::transparent);

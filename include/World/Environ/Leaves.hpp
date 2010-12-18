@@ -28,7 +28,7 @@ struct LeafData
 class Leaves : public EnvironObject
 {
     private:
-        vector<LeafData> mLeaves;
+        std::vector<LeafData> mLeaves;
         bool mFirstTime;
 
         CL_GraphicContext mGC;

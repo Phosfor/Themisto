@@ -17,9 +17,6 @@
 
 #include <boost/serialization/singleton.hpp>
 
-#define inputManager (InputManager::get_mutable_instance())
-#define inputManagerConst (InputManager::get_const_instance())
-
 class InputManager : public boost::serialization::singleton<InputManager>
 {
     private:
@@ -43,5 +40,7 @@ class InputManager : public boost::serialization::singleton<InputManager>
         CL_Point getMousePos();
         void setMousePos(int x, int y);
 };
+
+inline InputManager &inputManager() { return InputManager::get_mutable_instance(); }
 
 #endif /* _INPUT_MANAGER_HPP_ */

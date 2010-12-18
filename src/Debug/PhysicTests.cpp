@@ -12,7 +12,7 @@ Body* getBody(BodyPart* part)
 void PhysicTests::RunTest()
 {
     Body* testBody = NULL;
-    BOOST_FOREACH(Body* someBody, physicManager.getBodies())
+    BOOST_FOREACH(Body* someBody, physicManager().getBodies())
     {
         if(someBody->getName() == "#1")
         {

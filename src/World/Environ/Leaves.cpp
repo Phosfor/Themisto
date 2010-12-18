@@ -54,7 +54,7 @@ Leaves::Leaves(int maxLeaves)
     : EnvironObject(), mFirstTime(true)
 {
     srand(time(NULL));
-    mGC = appManager.getGraphic();
+    mGC = appManager().getGraphic();
     mMaxObjects = maxLeaves;
 }
 

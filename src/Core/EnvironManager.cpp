@@ -48,7 +48,7 @@ void EnvironManager::setEnvironTime(int _hours, int _minutes, int _seconds)
 
 void EnvironManager::update()
 {
-    float elapsed = appManager.getElapsed();
+    float elapsed = appManager().getElapsed();
     float gameSeconds = GameSeconds(elapsed);
     elapsed /= 1000.f;
 
@@ -132,13 +132,9 @@ int EnvironManager::getLimit(EnvironTypes type)
 bool EnvironManager::getTypeEnabled(EnvironTypes type)
 {
     if (mObjectsMap.find(type) == mObjectsMap.end())
-    {
         return false;
-    }
     else
-    {
         return mObjectsMap[type]->getEnabled();
-    }
 
     return false;
 }

@@ -9,7 +9,6 @@
 ObjectsManager::ObjectsManager()
 {
     mNumObjects = 0;
-    mAppManager = &appManager;
 }
 
 void ObjectsManager::update()
@@ -17,7 +16,7 @@ void ObjectsManager::update()
     for (ObjectMapType::const_iterator it=mObjects.begin();
             it != mObjects.end(); ++it)
     {
-        it->second->update(mAppManager->getElapsed());
+        it->second->update(appManager().getElapsed());
     }
 }
 

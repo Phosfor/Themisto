@@ -20,9 +20,6 @@
 
 #include <vector>
 
-#define resourceManager (ResourceManager::get_mutable_instance())
-#define resourceManagerConst (ResourceManager::get_const_instance())
-
 class ResourceManager : public boost::serialization::singleton<ResourceManager>
 {
     private:
@@ -35,5 +32,6 @@ class ResourceManager : public boost::serialization::singleton<ResourceManager>
         void loadTextures();
 };
 
+inline ResourceManager &resourceManager() { return ResourceManager::get_mutable_instance(); }
 
 #endif /* _RESOURCE_MANAGER_HPP_ */

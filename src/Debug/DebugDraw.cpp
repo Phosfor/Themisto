@@ -8,7 +8,7 @@
 
 DebugDraw::DebugDraw()
 {
-    mGC = appManager.getGraphic();
+    mGC = appManager().getGraphic();
 }
 
 void DebugDraw::DrawPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color)
@@ -57,7 +57,7 @@ void DebugDraw::DrawCircle(const b2Vec2& center, float32 radius, const b2Color& 
     for (unsigned int i=0; i < k_segments; i++)
     {
         b2Vec2 v = center + radius * b2Vec2(cosf(theta), sinf(theta));
-        CL_Draw::point(appManager.getGraphic(), Meters2Pixels(v.x), Meters2Pixels(v.y), cl_color);
+        CL_Draw::point(appManager().getGraphic(), Meters2Pixels(v.x), Meters2Pixels(v.y), cl_color);
         theta += k_increment;
     }
 }
@@ -72,13 +72,13 @@ void DebugDraw::DrawSolidCircle(const b2Vec2& center, float32 radius, const b2Ve
     float32 theta = 0.0f;
 
     // Draw solid shape
-    CL_Draw::circle(appManager.getGraphic(), Meters2Pixels(center.x), Meters2Pixels(center.y), Meters2Pixels(radius), color2);
+    CL_Draw::circle(appManager().getGraphic(), Meters2Pixels(center.x), Meters2Pixels(center.y), Meters2Pixels(radius), color2);
 
     // Draw the border
     for (unsigned int i=0; i < k_segments; i++)
     {
         b2Vec2 v = center + radius * b2Vec2(cosf(theta), sinf(theta));
-        CL_Draw::point(appManager.getGraphic(), Meters2Pixels(v.x), Meters2Pixels(v.y), cl_color);
+        CL_Draw::point(appManager().getGraphic(), Meters2Pixels(v.x), Meters2Pixels(v.y), cl_color);
         theta += k_increment;
     }
 

@@ -8,8 +8,8 @@
 
 Moon::Moon()
 {
-    string media = utils.getMediaFolder();
-    CL_GraphicContext gc = appManager.getGraphic();
+    string media = utils().getMediaFolder();
+    CL_GraphicContext gc = appManager().getGraphic();
     mMoon = CL_Sprite(gc, "media/SkyX_Moon.png");
 
     mMoonColor = mMoon.get_color();
@@ -24,9 +24,9 @@ Moon::Moon()
 
     // Center (x;y) of the Moon orbit
     mCenterX = 0;
-    mCenterY = appManager.getWindow().get_geometry().get_height();
+    mCenterY = appManager().getWindow().get_geometry().get_height();
 
-    mGC = appManager.getGraphic();
+    mGC = appManager().getGraphic();
 }
 
 void Moon::setScale(float _scaleX, float _scaleY)

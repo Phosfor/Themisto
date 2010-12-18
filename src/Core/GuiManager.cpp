@@ -13,12 +13,12 @@ GuiManager::~GuiManager()
     delete mWrapper;
 }
 
-void GuiManager::setThemeName(const string &name)
+void GuiManager::setThemeName(const std::string &name)
 {
     mThemeName = name;
 }
 
-string GuiManager::getThemeName()
+std::string GuiManager::getThemeName()
 {
     return mThemeName;
 }
@@ -46,7 +46,7 @@ void GuiManager::initGuiWrapper(float width, float height)
     mWrapper = new CL_GUIComponent(mGuiManager, desc);
 }
 
-void GuiManager::initGui(CL_DisplayWindow &window, const string &theme)
+void GuiManager::initGui(CL_DisplayWindow &window, const std::string &theme)
 {
     mWm = new CL_GUIWindowManagerTexture(window);
     mGuiManager = new CL_GUIManager(*mWm, theme);

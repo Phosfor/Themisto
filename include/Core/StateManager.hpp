@@ -15,14 +15,9 @@
 #include "Core/Utils.hpp"
 
 #include <deque>
-
-using namespace std;
-using namespace boost;
+#include <ClanLib/core.h>
 
 #define READY_TO_ADVANCE() StateManager::get_mutable_instance().setAdvanceState(true);
-
-#define stateManager (StateManager::get_mutable_instance())
-#define stateManagerConst (StateManager::get_const_instance())
 
 class State
 {
@@ -31,11 +26,12 @@ class State
         virtual void init() = 0;
         virtual void update() = 0;
         virtual void shutdown() = 0;
-        virtual string type() = 0;
+        virtual std::string type() = 0;
 };
 
-typedef shared_ptr<State> StatePtr;
-typedef deque<StatePtr> StateDeque;
+// TODO: Replace with shared_array from boost
+typedef boost::shared_ptr<State> StatePtr;
+typedef std::deque<StatePtr> StateDeque;
 
 class StateManager : public boost::serialization::singleton<StateManager>
 {
@@ -56,5 +52,7 @@ class StateManager : public boost::serialization::singleton<StateManager>
         State *getActiveState();
         State *pop();
 };
+
+inline StateManager &stateManager() { return StateManager::get_mutable_instance(); }
 
 #endif /* _STATE_MANAGER_HPP_ */

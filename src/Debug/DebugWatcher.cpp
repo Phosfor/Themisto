@@ -13,7 +13,6 @@ void DebugWatcher::init()
 
     mTimeout = DEFAULT_TIMEOUT;
     mLeftFromLastUpdate = 0;
-    _appManager = &appManager;
 }
 
 DebugWatcher::~DebugWatcher()
@@ -181,7 +180,7 @@ void DebugWatcher::parseCommand(string _command, string* _answer)
     }
     else if(firstWord == "close")
     {
-        appManager.setRunning(false);
+        appManager().setRunning(false);
         answer += "Programm terminated.\n";
     }
     else if(firstWord == "help")
@@ -318,14 +317,14 @@ EnvironObject* getEnvironObject(string _name)
     string name(_name);
     boost::to_lower(name);
     EnvironObject* result = NULL;
-    if(name == "sky")result = environManager.getTypeHandle(Environ_Sky);
-    else if(name == "stars")result = environManager.getTypeHandle(Environ_Stars);  
-    else if(name == "moon")result = environManager.getTypeHandle(Environ_Moon);  
-    else if(name == "lightnings")result = environManager.getTypeHandle(Environ_Lightnings);   
-    else if(name == "rain")result = environManager.getTypeHandle(Environ_Rain);  
-    else if(name == "clouds")result = environManager.getTypeHandle(Environ_Clouds);  
-    else if(name == "leaves")result = environManager.getTypeHandle(Environ_Leaves); 
-    else if(name == "birds")result = environManager.getTypeHandle(Environ_Birds); 
+    if(name == "sky")result = environManager().getTypeHandle(Environ_Sky);
+    else if(name == "stars")result = environManager().getTypeHandle(Environ_Stars);  
+    else if(name == "moon")result = environManager().getTypeHandle(Environ_Moon);  
+    else if(name == "lightnings")result = environManager().getTypeHandle(Environ_Lightnings);   
+    else if(name == "rain")result = environManager().getTypeHandle(Environ_Rain);  
+    else if(name == "clouds")result = environManager().getTypeHandle(Environ_Clouds);  
+    else if(name == "leaves")result = environManager().getTypeHandle(Environ_Leaves); 
+    else if(name == "birds")result = environManager().getTypeHandle(Environ_Birds); 
 
     return result;
 }
@@ -507,7 +506,7 @@ string DebugWatcher::addWatchCommon(Watch* watch, vector<string> &commandSet)
         {
             watch->Name = "Elapsed";
             watch->Active = true;
-            watch->Object = &appManager;
+            watch->Object = &appManager();
             watch->Expression = evalute_elapsed;
             watch->MemberName = "Elapsed";
             addWatchToConsole(watch);
@@ -686,7 +685,7 @@ map<Target, TargetInfo> DebugWatcher::getTargets(StrIterator command, StrIterato
     map<Target, TargetInfo> result;
     if(type & tApplicationManager)
     {
-        result.insert(pair<Target, TargetInfo>(&appManager, TargetInfo("ApplicationManager", NULL)));
+        result.insert(pair<Target, TargetInfo>(&appManager(), TargetInfo("ApplicationManager", NULL)));
     }
     if(type & tEnvironObject)
     {
@@ -728,7 +727,7 @@ map<Target, TargetInfo> DebugWatcher::getTargets(StrIterator command, StrIterato
                 std::vector<std::string> objNameAndFixtures;
                 boost::split(objNameAndFixtures, targetSpecifier, boost::is_any_of("(,)"));
                 string objName = objNameAndFixtures[0];
-                list<Body*> bodies = physicManager.getBodies();
+                list<Body*> bodies = physicManager().getBodies();
                 list<Body*>::iterator it;
                 for(it = bodies.begin(); it != bodies.end(); ++it)
                 {
@@ -1334,7 +1333,7 @@ string DebugWatcher::getFileName(ofstream* file)
 
 void DebugWatcher::step()
 {
-    int elapsed = _appManager->getElapsed();
+    int elapsed = appManager().getElapsed();
     BOOST_FOREACH(Watch* watch, mWatches)
     {
         if(watch->UpdateInterval == AEON)
@@ -1382,7 +1381,7 @@ void DebugWatcher::update(Watch* watch)
                 if(watch->OutFile->is_open())
                 {
                     string record = "";
-                    string time = boost::posix_time::to_simple_string(microsec_clock::local_time());
+                    string time = boost::posix_time::to_simple_string(boost::posix_time::microsec_clock::local_time());
                     record = time + " : [" + watch->ID + "] " + watch->Name + " = " + watch->Expression(watch)+ "\n";
                     watch->OutFile->write(record.c_str(), record.size());                        
                 }

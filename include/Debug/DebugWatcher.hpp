@@ -41,12 +41,8 @@ using namespace evalute;
 #define debugWatcher (DebugWatcher::get_mutable_instance())
 #define debugWatcherConst (DebugWatcher::get_const_instance())
 
-
-
-
 typedef vector<string>::iterator StrIterator;
 typedef pair<string, Body*> TargetInfo; // ID and parent body
-
 
 class DebugWatcher: public
 boost::serialization::singleton<DebugWatcher>
@@ -55,11 +51,10 @@ boost::serialization::singleton<DebugWatcher>
         list<Watch*> mWatches;
         int mTimeout; // Mileseconds, if less then zero, then every step
         int mLeftFromLastUpdate;
-        ApplicationManager* _appManager;
         CL_Slot mCommandSlot;
         std::map<string, ofstream*> mFiles;
         std::map<ofstream*, int> mFilesUsing;
-        
+
         string assignWatchToFile(Watch* watch, string file, bool rewrite);
         string assignWatchToFile(Watch* watch, ofstream* file, bool rewrite);
         string unassignWatchFromFile(Watch* watch, bool dispose);
@@ -91,7 +86,5 @@ boost::serialization::singleton<DebugWatcher>
         void step();
         ~DebugWatcher();
 };
-
-
 
 #endif

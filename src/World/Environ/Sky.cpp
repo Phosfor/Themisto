@@ -24,7 +24,7 @@ Sky::Sky()
     t1 = t2 = t3 = 0.0f;
     mNight = false;
 
-    mGC = appManager.getGraphic();
+    mGC = appManager().getGraphic();
 
     quad1 = CL_Rectf(0, 0, mWindowWidth, mWindowHeight/2.0);
     quad2 = CL_Rectf(0, mWindowHeight/2.0, mWindowWidth, mWindowHeight + mWindowHeight * 0.3);

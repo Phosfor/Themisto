@@ -8,7 +8,7 @@
 
 void InputManager::initInput()
 {
-    mInput = appManager.getWindow().get_ic();
+    mInput = appManager().getWindow().get_ic();
 
     mKeyboard = &mInput.get_keyboard();
     mMouse = &mInput.get_mouse();

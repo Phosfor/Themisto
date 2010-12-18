@@ -17,37 +17,36 @@
 #include <fstream>
 #include <iostream>
 
-using namespace boost::serialization;
-using namespace boost::posix_time;
-using namespace std;
-
-// date : message
-#define LOG(message) LogManager::get_mutable_instance().write(message, "", "")
-// date : function \n message
-#define LOG_META(message) LogManager::get_mutable_instance().write(message, "", __PRETTY_FUNCTION__)
-// date : message (into given file)
-#define LOG_FILE(message, fileName) LogManager::get_mutable_instance().write(message, fileName)
-// message
-#define LOG_NOFORMAT(message) LogManager::get_mutable_instance().write(message, "", "", false);
-
-#define logManager (LogManager::get_mutable_instance())
-#define logManagerConst (LogManager::get_const_instance())
-
 class LogManager : public boost::serialization::singleton<LogManager>
 {
     protected:
-        ofstream mLogHandle;
-        string mDefaultPath;
-        vector<string> mUsedFiles;
+        std::ofstream mLogHandle;
+        std::string mDefaultPath;
+        std::vector<std::string> mUsedFiles;
 
-        void _forceLog(const string &logPath);
-        string _cleanSignature(const string &signature);
+        void _forceLog(const std::string &logPath);
+        std::string _cleanSignature(const std::string &signature);
 
     public:
         LogManager();
-        
-        void setDefaultLog(const string &logPath);
-        void write(const string &message, const string logFile = "", const string metaSignature = "", bool formatString = true);
+
+        void setDefaultLog(const std::string &logPath);
+        void write(const std::string &message, const std::string &logFile = "",
+                const std::string &metaSignature = "", bool formatString = true);
 };
+
+inline LogManager &logManager() { return LogManager::get_mutable_instance(); }
+
+// date : message
+inline void LOG(const std::string &message) { logManager().write(message, "", ""); }
+
+// data : message (into passed file)
+inline void LOG_FILE(const std::string &message, const std::string &filename) { logManager().write(message, filename); }
+
+// message
+inline void LOG_NOFORMAT(const std::string &message) { logManager().write(message, "", "", false); }
+
+// date : function \n message
+#define LOG_META(message) logManager().write(message, "", __PRETTY_FUNCTION__)
 
 #endif

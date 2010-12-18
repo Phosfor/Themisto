@@ -4,8 +4,12 @@
  * Project is contributed with GPL license. For more information, visit project page.
  */
 
-
 #include "World/Objects/PhysicObject.hpp"
+
+void PhysicObject::setVisual(BodyVisual *visualiser) { mBodyVisual = visualiser; }
+BodyVisual &PhysicObject::getVisual() { return *mBodyVisual; }
+void PhysicObject::setBody(Body *body) { mBody = body; }
+Body &PhysicObject::getBody() { return *mBody; }
 
 PhysicObject::PhysicObject(Body* body, BodyVisual* visual)
 {
@@ -24,7 +28,7 @@ PhysicObject::~PhysicObject()
 
 
 void PhysicObject::updateVisual() 
-{  
+{
     if(mBodyVisual != NULL)
     {
         mBodyVisual->redrawBody(); 
@@ -54,20 +58,17 @@ CL_Pointf PhysicObject::getPosition()
 }
 
 void PhysicObject::update(float elapsed) 
-{ 
-    step(elapsed); 
-    updateVisual(); 
+{
+    step(elapsed);
+    updateVisual();
 }
-
-
 
 // ----------------------------------------------------------------
 //---------------------------- PARSING-----------------------------
 //----------------------------------------------------------------
 
 Object* PhysicObject::ParsePhysicObject(CL_DomElement* tag, string& desc)
-{  
-    
+{
     BodyVisual* visualHandle = new BodyVisual();
     float x = 0, y = 0;
     // Parsing visuals
@@ -91,19 +92,19 @@ Object* PhysicObject::ParsePhysicObject(CL_DomElement* tag, string& desc)
             }
         }
     }
-    
+
    CL_DomNodeList BodyTags = tag->get_elements_by_tag_name("Body");
    if(BodyTags.get_length() > 1 || BodyTags.get_length() == 0)
    {
        desc += "Error: one and only one tag Body can appear in Object.";
        return NULL;
-   }      
+   }
    CL_DomElement body = BodyTags.item(0).to_element();
 
     // Physic body variables
     b2Body *b2body = NULL;
     b2BodyDef bdef;
-    Body *bodyHandle = NULL;    
+    Body *bodyHandle = NULL;
 
     // b2Body tag
     CL_DomNodeList b2BodyTags = body.get_elements_by_tag_name("b2Body");
@@ -220,9 +221,8 @@ Object* PhysicObject::ParsePhysicObject(CL_DomElement* tag, string& desc)
         }
     }
 
-    b2body = physicManager.getWorld().CreateBody(&bdef);
+    b2body = physicManager().getWorld().CreateBody(&bdef);
     bodyHandle = new Body(b2body);
-    
 
     // Go through all physic parts
     CL_DomNodeList parts = body.get_elements_by_tag_name("Part");
@@ -231,14 +231,14 @@ Object* PhysicObject::ParsePhysicObject(CL_DomElement* tag, string& desc)
         b2FixtureDef fixdef;
         b2CircleShape cshape;
         b2PolygonShape pshape;
-        
+
         //b2Vec2* normals = NULL;
         b2Fixture *fixture = NULL;
         BodyMaterial *materialHandle = NULL;
         BodyState *stateHandle = NULL;
         BodyPart *partHandle = NULL;
         b2Filter filter;
-        
+
         // Parse b2Fixture
         CL_DomElement physicPart = parts.item(i).to_element();
         CL_DomNodeList b2FixtureTags = physicPart.get_elements_by_tag_name("b2Fixture");
@@ -355,7 +355,6 @@ Object* PhysicObject::ParsePhysicObject(CL_DomElement* tag, string& desc)
                                         x = lexical_cast<float>(centerCoord.get_text().c_str());
                                     if(centerCoord.get_node_name() == "y")
                                         y = lexical_cast<float>(centerCoord.get_text().c_str());
-                                    
                                 }
                             }
                         }
@@ -420,7 +419,7 @@ Object* PhysicObject::ParsePhysicObject(CL_DomElement* tag, string& desc)
                     }
                 }
             }
-            
+
             fixture = b2body->CreateFixture(&fixdef);
             partHandle = new BodyPart(fixture, worldManager.mDefaultMaterial);
         }
@@ -430,7 +429,7 @@ Object* PhysicObject::ParsePhysicObject(CL_DomElement* tag, string& desc)
         for (int i=0; i < physicPartChildren.get_length(); ++i)
         {
             CL_DomElement partChild = physicPartChildren.item(i).to_element();
-       
+
             if(partChild.get_node_name() == "MaxKindleLevel")
             {
                 float value = lexical_cast<float>(partChild.get_text().c_str());
@@ -451,7 +450,7 @@ Object* PhysicObject::ParsePhysicObject(CL_DomElement* tag, string& desc)
                 bool value = partChild.get_text() == "true";
                 partHandle->setAcceptsCord(value);
             }
-            
+
             else if(partChild.get_node_name() == "State")
             {
                 stateHandle = partHandle->getState();
@@ -497,7 +496,7 @@ Object* PhysicObject::ParsePhysicObject(CL_DomElement* tag, string& desc)
                 /*}*/
             }
         }
-        
+
         // Parse material
         CL_DomNodeList matList = physicPart.get_elements_by_tag_name("Material");
         if(matList.get_length() > 1)
@@ -517,7 +516,7 @@ Object* PhysicObject::ParsePhysicObject(CL_DomElement* tag, string& desc)
             materialHandle = new BodyMaterial();
             partHandle->mShouldFreeBodyMaterial = true;
             CL_DomElement matElement = matList.item(0).to_element(); // item(0) is ok
-            
+
             CL_DomNodeList NameTags = matElement.get_elements_by_tag_name("Name");
             if(NameTags.get_length() > 1)
             {

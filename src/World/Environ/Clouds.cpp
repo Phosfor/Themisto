@@ -52,7 +52,7 @@ Clouds::Clouds(int maxClouds)
     srand(time(NULL));
 
     mMaxObjects = maxClouds;
-    mGC = appManager.getGraphic();
+    mGC = appManager().getGraphic();
 }
 
 void Clouds::update(float windPower, float elapsed, float globalTime)

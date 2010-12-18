@@ -17,11 +17,7 @@
 #include "World/Objects/TypesManager.hpp"
 #include <map>
 
-#define sceneLoader (SceneLoader::get_mutable_instance())
-#define sceneLoaderConst (SceneLoader::get_const_instance())
-
-class SceneLoader : public
-boost::serialization::singleton<SceneLoader>
+class SceneLoader : public boost::serialization::singleton<SceneLoader>
 {
     private:
         // For the threading
@@ -38,4 +34,6 @@ boost::serialization::singleton<SceneLoader>
         void loadScene(const std::string &sceneName);
 };
 
-#endif
+inline SceneLoader &sceneLoader() { return SceneLoader::get_mutable_instance(); }
+
+#endif /* _PHYSIC_SCENE_LOADER_HPP_ */

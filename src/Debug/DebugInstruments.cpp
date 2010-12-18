@@ -9,13 +9,13 @@
 void DebugDragAndDrop::init()
 {
     mMousePos = new b2Vec2;
-    CL_InputDevice device = inputManager.getMouse();
+    CL_InputDevice device = inputManager().getMouse();
     mDownSlot = device.sig_key_down().connect(this, &DebugDragAndDrop::mouseDown);
     mMoveSlot = device.sig_pointer_move().connect(this, &DebugDragAndDrop::mouseMove);
     mUpSlot = device.sig_key_up().connect(this, &DebugDragAndDrop::mouseUp);
     mMouseJoint = NULL;
     b2BodyDef attachDef;
-    mAttachBody = physicManager.getWorld().CreateBody(&attachDef);
+    mAttachBody = physicManager().getWorld().CreateBody(&attachDef);
 
 }
 
@@ -37,7 +37,7 @@ bool DebugDragAndDrop::ReportFixture(b2Fixture *fixture)
         jointDef.bodyB = draggingBody;
         jointDef.frequencyHz = 60.0f;
         jointDef.dampingRatio = 0.0f;
-        std::list<Body*> bodies = physicManager.getBodies();
+        std::list<Body*> bodies = physicManager().getBodies();
 
         /*for(std::list<Body*>::iterator body = bodies.begin(); body != bodies.end(); ++body)
         {
@@ -50,7 +50,7 @@ bool DebugDragAndDrop::ReportFixture(b2Fixture *fixture)
 
         jointDef.target =*mMousePos;
         jointDef.maxForce = 1000.0f * draggingBody->GetMass();
-        mMouseJoint = (b2MouseJoint*)physicManager.getWorld().CreateJoint(&jointDef);
+        mMouseJoint = (b2MouseJoint*)physicManager().getWorld().CreateJoint(&jointDef);
         draggingBody->SetActive(true);
         return false;
     }
@@ -65,7 +65,7 @@ void DebugDragAndDrop::mouseDown(const CL_InputEvent &ev, const CL_InputState &s
         b2AABB region;
         region.lowerBound.Set(mMousePos->x - 0.001f, mMousePos->y - 0.0f);
         region.upperBound.Set(mMousePos->x + 0.001f, mMousePos->y + 0.001f);
-        physicManager.getWorld().QueryAABB(this, region);
+        physicManager().getWorld().QueryAABB(this, region);
     }
 }
 
@@ -82,7 +82,7 @@ void DebugDragAndDrop::mouseUp(const CL_InputEvent &ev, const CL_InputState &sta
 {
     if(mMouseJoint != NULL)
     {
-        physicManager.getWorld().DestroyJoint(mMouseJoint);
+        physicManager().getWorld().DestroyJoint(mMouseJoint);
         mMouseJoint = NULL;
     }
 }

@@ -201,14 +201,14 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
     // Check whether environ should be enabled
     bool mEnvironEnabled = false;
     if (environ.get_attribute("active") == "true") mEnvironEnabled = true;
-    environManager.setEnvironEnabled(mEnvironEnabled);
+    environManager().setEnvironEnabled(mEnvironEnabled);
     LOG_NOFORMAT(cl_format("- Environ enabled state: %1\n", mEnvironEnabled));
 
     // If Environ is enabled, go through all environ-params in the level file
     if (mEnvironEnabled)
     {
         using namespace boost;
-        environManager.initEnviron();
+        environManager().initEnviron();
 
         std::map<std::string, EnvironTypes> deps;
         deps["Rain"] = Environ_Rain;
@@ -227,7 +227,7 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
             if (tag.get_node_name() == "Wind")
             {
                 float pow = lexical_cast<float>(tag.to_element().get_attribute("power").c_str());
-                environManager.setWindPower(pow);
+                environManager().setWindPower(pow);
             }
             EnvironTypes type = deps[tag.get_node_name().c_str()];
 
@@ -237,7 +237,7 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
             CL_String s_lim = tag.to_element().get_attribute("limit");
             if (s_lim != "") lim = lexical_cast<int>(s_lim.c_str());
 
-            environManager.enableType(enabled, type, lim);
+            environManager().enableType(enabled, type, lim);
         }
         LOG_NOFORMAT("- All environ objects are loaded.\n");
     }
@@ -255,21 +255,13 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
             std::string type = tag.get_attribute("type").c_str();
             LOG_NOFORMAT(cl_format("- Parsing object `%1` of type `%2`\n", name, type));
 
-            if (tag.has_attribute("template"))
-            {
-                CL_String templatePath = tag.get_attribute("template");
-                LOG_NOFORMAT(cl_format("\tUses template with name `%1`\n", templatePath));
+            // TODO: Call template parsing here...
 
-                if (!boost::filesystem::exists(cl_format("media/templates/%1", templatePath).c_str()))
-                {
-                    std::cout << "Achtung\n";
-                }
-            }
             string desc = "";
             Object* object = typesManager.parseObject(&tag, type, desc);
             if(object != NULL)
             {
-                objectsManager.addObject(object->getName(), object);
+                objectsManager().addObject(object->getName(), object);
             }
             else
             {

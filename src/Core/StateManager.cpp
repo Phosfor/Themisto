@@ -18,7 +18,7 @@ void StateManager::update()
     if (mAdvanceState)
     {
         mActiveState.get()->shutdown();
-        LOG_META(FORMAT(" Exiting from '%1%' game state.", mActiveState.get()->type()));
+        LOG_META(cl_format(" Exiting from '%1' game state.", mActiveState.get()->type()));
         setAdvanceState(false);
 
         /*TODO: Remove all entities, etc. */
@@ -56,7 +56,7 @@ State *StateManager::pop()
     mActiveState = mStates.front(); // Store pointer for next state to use
     mStates.pop_front();            // And remove it from list
 
-    LOG_META(FORMAT(" Activating '%1%' game state.", mActiveState.get()->type()));
+    LOG_META(cl_format(" Activating '%1' game state.", mActiveState.get()->type()));
     mActiveState.get()->init();
 
     return mActiveState.get();

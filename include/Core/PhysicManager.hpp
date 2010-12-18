@@ -16,13 +16,9 @@
 #include "Core/Utils.hpp"
 #include "Core/ApplicationManager.hpp"
 
-#define physicManager (PhysicManager::get_mutable_instance())
-#define physicManagerConst (PhysicManager::get_const_instance())
-
 class Body;
 
-class PhysicManager : public
-boost::serialization::singleton<PhysicManager>
+class PhysicManager : public boost::serialization::singleton<PhysicManager>
 {
     private:
         b2World* mWorld;
@@ -41,5 +37,6 @@ boost::serialization::singleton<PhysicManager>
         void disposeScene();
 };
 
-#endif
+inline PhysicManager &physicManager() { return PhysicManager::get_mutable_instance(); }
 
+#endif /* _PHYSIC_MANAGER_HPP_ */

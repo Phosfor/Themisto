@@ -32,9 +32,6 @@
 
 #include <map>
 
-#define environManager (EnvironManager::get_mutable_instance())
-#define environManagerConst (EnvironManager::get_const_instance())
-
 class EnvironManager : public boost::serialization::singleton<EnvironManager>
 {
     private:
@@ -70,5 +67,7 @@ class EnvironManager : public boost::serialization::singleton<EnvironManager>
 
         void update();
 };
+
+inline EnvironManager &environManager() { return EnvironManager::get_mutable_instance(); }
 
 #endif /* _ENVIRON_MANAGER_HPP_ */

@@ -28,7 +28,7 @@ Stars::Stars(int maxStars)
 {
     srand(time(NULL));
 
-    mGC = appManager.getGraphic();
+    mGC = appManager().getGraphic();
     mMaxObjects = maxStars;
 
     for (int i=0; i < mMaxObjects; i++)

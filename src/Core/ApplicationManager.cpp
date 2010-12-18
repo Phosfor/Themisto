@@ -61,12 +61,12 @@ CL_DisplayWindow &ApplicationManager::getWindow()
     return *mWindow;
 }
 
-void ApplicationManager::initWindow(const string &title)
+void ApplicationManager::initWindow(const std::string &title)
 {
     // Initializating part
-    short width = configManager.getValue<int>("window.width", 640);
-    short height = configManager.getValue<int>("window.height", 480);
-    bool fullscreen = configManager.getValue<bool>("window.fullscreen", false);
+    short width = configManager().getValue<int>("window.width", 640);
+    short height = configManager().getValue<int>("window.height", 480);
+    bool fullscreen = configManager().getValue<bool>("window.fullscreen", false);
 
     CL_DisplayWindowDescription desc(title);
     desc.set_fullscreen(fullscreen);

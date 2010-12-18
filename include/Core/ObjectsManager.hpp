@@ -22,20 +22,19 @@
 #include <map>
 #include <utility>
 
-#define objectsManager (ObjectsManager::get_mutable_instance())
-#define objectsManagerConst (ObjectsManager::get_const_instance())
-typedef map<std::string, Object*> ObjectMapType;
+typedef std::map<std::string, Object*> ObjectMapType;
 class ObjectsManager : public boost::serialization::singleton<ObjectsManager>
 {
     private:
         ObjectMapType mObjects;
         unsigned int mNumObjects;
-        ApplicationManager* mAppManager;
 
     public:
         ObjectsManager();
         void addObject(const std::string &name, Object *obj);
         void update();
 };
+
+inline ObjectsManager &objectsManager() { return ObjectsManager::get_mutable_instance(); }
 
 #endif /* _CORE_OBJECTS_MANAGER_HPP_ */

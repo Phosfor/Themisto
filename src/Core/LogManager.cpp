@@ -11,7 +11,7 @@ LogManager::LogManager()
     mDefaultPath = "Engine.log";
 }
 
-void LogManager::_forceLog(const string& logPath)
+void LogManager::_forceLog(const std::string& logPath)
 {
     if (std::find(mUsedFiles.begin(), mUsedFiles.end(), logPath) == mUsedFiles.end())
     {
@@ -21,17 +21,17 @@ void LogManager::_forceLog(const string& logPath)
     }
 }
 
-void LogManager::setDefaultLog(const string& logPath)
+void LogManager::setDefaultLog(const std::string& logPath)
 {
     mDefaultPath = logPath;
 }
 
-string LogManager::_cleanSignature(const string &signature)
+std::string LogManager::_cleanSignature(const std::string &signature)
 {
-    // Remove template stuff from signature. The string like: "type Class::function(arguments) [with ...]"
-    // The goal is to make that string: Class::Function()
+    // Remove template stuff from signature. The std::string like: "type Class::function(arguments) [with ...]"
+    // The goal is to make that std::string: Class::Function()
     // We really don't need arguments list and template insertion
-    string result = signature;
+    std::string result = signature;
 
     // Remove function return type
     int typePosition = result.find(" ");
@@ -45,21 +45,22 @@ string LogManager::_cleanSignature(const string &signature)
     return result;
 }
 
-void LogManager::write(const string& message, const string logFile, const string metaSignature, bool formatString)
+void LogManager::write(const std::string &message, const std::string &logFile,
+        const std::string &metaSignature, bool formatString)
 {
-    string workPath = mDefaultPath;
+    std::string workPath = mDefaultPath;
     if (logFile != "") workPath = logFile;
 
     this->_forceLog(workPath);
 
-    string comand = "";
-    string time = boost::posix_time::to_simple_string(microsec_clock::local_time());
+    std::string comand = "";
+    std::string time = boost::posix_time::to_simple_string(boost::posix_time::microsec_clock::local_time());
 
     if (formatString)
     {
         if (metaSignature != "")
         {
-            string signature = _cleanSignature(metaSignature);
+            std::string signature = _cleanSignature(metaSignature);
             comand += time + " : ";
             comand += "[" + signature;
             comand += "] Message: ";
@@ -75,8 +76,8 @@ void LogManager::write(const string& message, const string logFile, const string
         comand = message;
     }
 
-    mLogHandle.open(workPath.c_str(), fstream::app | fstream::ate);
+    mLogHandle.open(workPath.c_str(), std::fstream::app | std::fstream::ate);
     mLogHandle << comand;
-    cout << comand;
+    std::cout << comand;
     mLogHandle.close();
 }

@@ -14,30 +14,24 @@
 
 #include <vector>
 
-using boost::property_tree::ptree;
-using namespace std;
-
-#define configManager (ConfigManager::get_mutable_instance())
-#define configManagerConst (ConfigManager::get_const_instance())
-
-#define CONFIG(key, type, def) configManager.getValue<type>(key, def)
-
 class ConfigManager : public boost::serialization::singleton<ConfigManager>
 {
     protected:
-        string mConfigPath;
-        ptree mTreeHandle;
+        std::string mConfigPath;
+        boost::property_tree::ptree mTreeHandle;
 
     public:
         ConfigManager();
-        void setPath(const string &path);
-        vector<string> getListValue(const string &key);
+        void setPath(const std::string &path);
+        std::vector<std::string> getListValue(const std::string &key);
 
         template<typename T>
-        T getValue(const string &key, const T &defaultValue = T())
+        T getValue(const std::string &key, const T &defaultValue = T())
         {
             return mTreeHandle.get<T>(key, defaultValue);
         }
 };
 
-#endif
+inline ConfigManager &configManager() { return ConfigManager::get_mutable_instance(); }
+
+#endif /* _CONFIG_MANAGER_H_ */

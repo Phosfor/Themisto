@@ -29,20 +29,20 @@ class PhysicObject: public Object
     private:
         BodyVisual *mBodyVisual;
         Body* mBody;
-        
+
     public:
         PhysicObject(Body* body, BodyVisual* visual);
         ~PhysicObject();
 
         // Get/set 
-        void setVisual(BodyVisual* visualiser) { mBodyVisual = visualiser; }
-        BodyVisual& getVisual() { return *mBodyVisual; }
-        void setBody(Body* body) { mBody = body; }
-        Body& getBody() { return *mBody; }
+        void setVisual(BodyVisual* visualiser);
+        BodyVisual& getVisual();
+        void setBody(Body* body);
+        Body& getBody();
 
         void updateVisual();
         void step(float32 elapsed); // Physic
-        
+
         // Should body free memory under mBodyVisual object at destroing
         // Default value is true
         bool mShouldFreeBodyVisual;
@@ -50,17 +50,14 @@ class PhysicObject: public Object
         // Should body free memory under mBody object at destroing
         // Default is true
         bool mShouldFreeBody; 
-        
+
         // Parsing object
         static Object* ParsePhysicObject(CL_DomElement* node, std::string &desc);
-        
+
         // --- Object implementation ---
         CL_Pointf getPosition();
         void update(float elapsed);
-        
-        
-
 };
 
 
-#endif
+#endif /* _PHYSIC_OBJECT_HPP_ */

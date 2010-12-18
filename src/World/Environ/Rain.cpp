@@ -52,7 +52,7 @@ Rain::Rain(int maxDrops)
     mDropColor = CL_Colorf::black;
     mDropColor.a = kDropAlpha;
 
-    mGC = appManager.getGraphic();
+    mGC = appManager().getGraphic();
 }
 
 void Rain::update(float windPower, float elapsed, float globalTime)
