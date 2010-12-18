@@ -12,8 +12,8 @@
 #include <map>
 #include <utility>
 
-const static CL_String SERVER_PORT = "1992";
-const static CL_String SERVER_HOST = "localhost";
+const CL_String SERVER_PORT = "1992";
+const CL_String SERVER_HOST = "localhost";
 
 struct watch
 {
@@ -58,4 +58,3 @@ private:
 };
 
 #endif // CLIENT_H
-

@@ -20,7 +20,7 @@ Client::Client()
 
 Client::~Client() { }
 
-void Client::step(const std::string command)
+void Client::step(const std::string &command)
 {
     CL_NetGameEvent commandNotice(CL_String("Command"));
     commandNotice.add_argument(CL_String(command));
@@ -32,7 +32,7 @@ void Client::step(const std::string command)
     }
     catch(CL_Exception& e)
     {
-        cout << "# Error: can't send command to Themisto; Reason: " <<  e.what();
+        std::cout << "# Error: can't send command to Themisto; Reason: " <<  e.what();
     }
 }
 
@@ -68,7 +68,7 @@ void Client::on_event_received(const CL_NetGameEvent &e)
 {
     if(e.get_name() == "Answer")
     {
-        string answer = (string)e.get_argument(0).to_string(); 
+        std::string answer = (std::string)e.get_argument(0).to_string(); 
         if( *(answer.rbegin()) != '\n') answer += "\n";
         boost::replace_all(answer, "\n", "\n# ");
         std::size_t posLastEndl = answer.rfind("\n# ");
@@ -76,7 +76,7 @@ void Client::on_event_received(const CL_NetGameEvent &e)
         {
             answer.erase(posLastEndl, answer.npos);
         }
-        std::cout << "# " << answer << endl;
+        std::cout << "# " << answer << std::endl;
     }
 }
 
@@ -86,7 +86,6 @@ void Client::disconnect()
     network_client.disconnect();
     connected = false;
 }
-
 
 // A static variable for holding the line. 
 static char *line_read = (char *)NULL;
@@ -114,7 +113,7 @@ char* readCommand()
     return (line_read);
 }
 
-std::string exec(const std::string cmd, bool read) {
+std::string exec(const std::string &cmd, bool read) {
     FILE* pipe = popen(cmd.c_str(), "r");
     if (!pipe) return "ERROR";
     char buffer[128];
@@ -123,14 +122,14 @@ std::string exec(const std::string cmd, bool read) {
     {
         while(!feof(pipe)) {
             if(fgets(buffer, 128, pipe) != NULL)
-                    cout<< buffer;
+                    std::cout << buffer;
         }
     }
     pclose(pipe);
     return "";
 }
 
-void Client::parseCommand(std::string command)
+void Client::parseCommand(std::string &command)
 {
     if ((command == "disconnect") && connected)
     {
@@ -165,12 +164,12 @@ void Client::parseCommand(std::string command)
     {
         command.insert(0, "cd .. && ");
         exec(command, true);
-    }     
+    }
     else if(command[0] == '.')
     {
         command[0] = ' ';
         system(command.c_str());
-    }   
+    }
     else if(command == "clear")
     {
         system("clear");
@@ -193,7 +192,7 @@ void Client::parseCommand(std::string command)
         {
             connect_to_server();
         }
-        cout << "# Themisto says:\n";
+        std::cout << "# Themisto says:\n";
         if (connected)
         {
             step(command);
@@ -214,14 +213,14 @@ int main(int argc, char* argv[])
         _command.append(argv[i]);
         _command.append(" ");
     }
-    
+
     std::cout << "\t========= Welcome to Themisto DebugConsole =========\n";
 
     while (!client.quit)
     {
-        vector<string> subcommands;
+        std::vector<std::string> subcommands;
         boost::split(subcommands, _command, boost::is_any_of("&&"));
-        BOOST_FOREACH(string command, subcommands)
+        BOOST_FOREACH(std::string command, subcommands)
         {
             boost::trim(command);
 
@@ -230,12 +229,12 @@ int main(int argc, char* argv[])
                 std::size_t paramPos = command.find(" ");
                 if(paramPos != command.npos)
                 {
-                    string file = command.substr(paramPos+1, command.npos);
+                    std::string file = command.substr(paramPos+1, command.npos);
                     if(boost::filesystem::exists(file))
                     {
-                        ifstream fs;
-                        fs.open(file.c_str(), ifstream::in);
-                        string line;
+                        std::ifstream fs;
+                        fs.open(file.c_str(), std::ifstream::in);
+                        std::string line;
                         char bufer[256];
                         while(fs.good() && !fs.eof())
                         {
@@ -244,7 +243,7 @@ int main(int argc, char* argv[])
                             boost::trim(line);
                             if(line != "")
                             {
-                                cout << ">" << line << endl;
+                                std::cout << ">" << line << std::endl;
                                 add_history(line.c_str());
                                 client.parseCommand(line);
                             }
@@ -253,12 +252,12 @@ int main(int argc, char* argv[])
                     }
                     else
                     {
-                        cout << "# Error: file '"+ file +"' not exists.\n";
+                        std::cout << "# Error: file '" + file + "' not exists.\n";
                     }
                 }
                 else
                 {
-                    cout<< "# Error: script-file not specified.\n";
+                    std::cout<< "# Error: script-file not specified.\n";
                 }
             }
             else if (command == "q" || command == "quit")

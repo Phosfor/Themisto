@@ -9,7 +9,7 @@
 void DebugWatcher::init()
 {
     //subsribe to commands
-    mCommandSlot = debugIO.mCommand.connect(this, &DebugWatcher::parseCommand);
+    mCommandSlot = debugIO().mCommand.connect(this, &DebugWatcher::parseCommand);
 
     mTimeout = DEFAULT_TIMEOUT;
     mLeftFromLastUpdate = 0;
@@ -1403,15 +1403,15 @@ void DebugWatcher::addWatchToConsole(Watch* watch)
     {
         parentID = watch->Parent->ID;
     }
-    debugIO.addWatch(watch->ID, watch->Name, watch->Expression(watch), parentID);
+    debugIO().addWatch(watch->ID, watch->Name, watch->Expression(watch), parentID);
 }
 void DebugWatcher::updateWatchInConsole(Watch* watch)
 {
-    debugIO.updateWatch(watch->ID, watch->Expression(watch));
+    debugIO().updateWatch(watch->ID, watch->Expression(watch));
 }
 void DebugWatcher::removeWatchFromConsole(Watch* watch)
 {
-    debugIO.removeWatch(watch->ID);
+    debugIO().removeWatch(watch->ID);
 }
 
 void DebugWatcher::notifyConsoleChangedParent(Watch* watch)

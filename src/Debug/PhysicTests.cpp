@@ -38,13 +38,13 @@ void PhysicTests::SimpleMoisten(BodyPart* part)
         getBody(part)->getName(), part->getName()), &answer);
          debugWatcher.parseCommand(cl_format("show param of %1(%2) every eon", 
         getBody(part)->getName(), part->getName()), &answer); */
-    debugWatcher.parseCommand(cl_format("show state(Dampness) of %1(%2) every step", 
+    debugWatcher().parseCommand(cl_format("show state(Dampness) of %1(%2) every step", 
         getBody(part)->getName(), part->getName()), &answer);
     LOG(answer);
-    
+
     Impact* moisten = new Impact(Moisten);
     moisten->Intensity = 0.5;
-    part->applyImpact(moisten);    
+    part->applyImpact(moisten);
 }
 
 
@@ -60,4 +60,3 @@ void PhysicTests::SimpleWind(BodyPart* part)
 void PhysicTests::SimpleElectricity(BodyPart* part)
 {
 }
-

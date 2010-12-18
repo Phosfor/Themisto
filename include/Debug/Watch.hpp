@@ -18,12 +18,9 @@
 struct Watch;
 typedef boost::function<string (Watch*)> EvaluteFunction;
 
-#define DEFAULT_TIMEOUT 500
-#define EVERY_STEP -1
-#define AEON 65000
-
-using namespace std;
-
+const int DEFAULT_TIMEOUT = 500;
+const int EVERY_STEP = -1;
+const int AEON = 65000;
 
 enum WatchType
 {
@@ -57,27 +54,25 @@ enum TargetType
     tEnvironObject=128
 };
 
-string nope_evalute(Watch* watch);
-   
+std::string nope_evalute(Watch* watch);
 
 struct Watch
 {
     WatchType Type;
-    string ID;
-    string Name;
+    std::string ID;
+    std::string Name;
     bool Active;
-    ofstream* OutFile;
+    std::ofstream* OutFile;
     Target Object; // Target object
-    string MemberName; // Member name of Object to show
+    std::string MemberName; // Member name of Object to show
     EvaluteFunction Expression; // Function, that evalutes watch value
     Watch* Parent;
-    list<Watch*> Children;  
+    std::list<Watch*> Children;  
     int UpdateInterval; // Milliseconds; if less then zero (EVERY_STEP value) then newer update
     int LeftFromLastUpdate;
-    
+
     Watch();
-    ~Watch();  
+    ~Watch();
 };
 
-#endif
-
+#endif /* _WATCH_HPP_ */

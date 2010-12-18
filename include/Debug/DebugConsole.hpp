@@ -19,10 +19,8 @@
 #include <boost/foreach.hpp>
 #include <cstdlib>
 
-const static CL_String SERVER_PORT = "1992";
-const static CL_String SERVER_HOST = "localhost";
-
-using namespace std;
+const CL_String SERVER_PORT = "1992";
+const CL_String SERVER_HOST = "localhost";
 
 class Client
 {
@@ -30,15 +28,15 @@ public:
     Client();
     ~Client();
 
-    void step(const std::string command);
+    void step(const std::string &command);
 
     bool connected;
     bool quit;
 
     void connect_to_server();
     void disconnect();
-    
-    void parseCommand(std::string command);
+
+    void parseCommand(std::string &command);
 
 private:
     void on_connected();

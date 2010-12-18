@@ -86,7 +86,7 @@ const float G = Meters2Pixels(9.81);
 /////////////////////////////////////////////////////////////////////////
 //////////////////////// TIME MANAGEMENT ////////////////////////////////
 
-// Game time is 220 times faster than in real life
+// Game time is 220 times faster than in real life (we can change this during runtime)
 const float TimeKoef = 220.0f;
 
 //---------- Real time → game time
@@ -116,6 +116,8 @@ inline float Minutes2Seconds(float realMinutes) { return Seconds2Seconds(realMin
 
 // Get number of game seconds to achive passed real hours
 inline float Hours2Seconds(float realHours) { return Minutes2Seconds(realHours * 60.0f); }
+
+/*TODO: Replace this defines with inline functions */
 
 #define IntToStr(p) (utils().intToStr(p))
 #define FloatToStr(p) (utils().floatToStr(p))

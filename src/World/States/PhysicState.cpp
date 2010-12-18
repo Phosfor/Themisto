@@ -25,9 +25,9 @@ void PhysicState::init()
             );
     physicManager().getWorld().SetDebugDraw(&mDebugDrawHandle);
 
-    debugWatcher.init();
-    debugIO.init();
-    physicTests.RunTest();
+    debugWatcher().init();
+    debugIO().init();
+    physicTests().RunTest();
 }
 
 
@@ -48,8 +48,8 @@ void PhysicState::update()
     mStatFont->draw_text(appManager().getGraphic(), 10, 25,
             CL_String(cl_format("elapsed: %1", int(floor(appManager().getElapsed()+0.5)))), CL_Colorf::white);
 
-    debugIO.step();
-    debugWatcher.step();
+    debugIO().step();
+    debugWatcher().step();
 }
 
 string PhysicState::type()

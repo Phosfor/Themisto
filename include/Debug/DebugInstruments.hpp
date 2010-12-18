@@ -33,7 +33,6 @@ class DebugDragAndDrop: public b2QueryCallback
     public:
         void init();
         ~DebugDragAndDrop();
-
 };
 
 #endif

@@ -14,15 +14,11 @@
 #include <queue>
 #include "Core/ApplicationManager.hpp"
 
+const CL_String CONSOLE_PORT = "1992";
+const CL_String VISUAL_PORT = "1993";
+const CL_String SERVER_HOST = "localhost";
 
-#define debugIO (DebugIO::get_mutable_instance())
-#define debugIOConst (DebugIO::get_const_instance())
-
-#define CONSOLE_PORT "1992"
-#define VISUAL_PORT "1993"
-#define SERVER_HOST "localhost"
-
-typedef std::pair<CL_NetGameConnection*,const CL_NetGameEvent&> EventInfo;
+typedef std::pair<CL_NetGameConnection*, const CL_NetGameEvent&> EventInfo;
 
 class DebugIO : public boost::serialization::singleton<DebugIO>
 {
@@ -52,5 +48,6 @@ class DebugIO : public boost::serialization::singleton<DebugIO>
         CL_Signal_v2<std::string, std::string*> mCommand;
 };
 
+inline DebugIO &debugIO() { return DebugIO::get_mutable_instance(); }
 
-#endif
+#endif /* _DEBUG_IO_HPP_ */

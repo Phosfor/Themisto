@@ -38,16 +38,16 @@ namespace evalute
         "InflMoistenToKindleLevel",
         "InflTemperatureToDampness"
     };
-    
+
     const int BodyStateFieldsCount = 5;
     const string BodyStateFields[] = {
         "IsFrozen",
         "KindleLevel",
         "CarbonizeLevel",
         "Temperature",
-        "Dampness"        
+        "Dampness"
     };
-    
+
     const int b2FixtureFieldsCount = 23;
     const string b2FixtureFields[] = {
         "Shape",
@@ -74,7 +74,7 @@ namespace evalute
         "AABB.Left",
         "AABB.Right"
     };
-    
+
     const int b2BodyFieldsCount = 18;
     const string b2BodyFields[] = {
         "Type",
@@ -96,7 +96,7 @@ namespace evalute
         "Active",
         "FixedRotation"
     };
-    
+
     const int BodyPartFieldsCount = 5;
     const string BodyPartFields[] = {
         "IsDefaultMaterial",
@@ -105,13 +105,13 @@ namespace evalute
         "AcceptsCord",
         "Name"
     };
-    
+
     const int BodyFieldsCount = 2;
     const string BodyFields[] = {
         "Buoyancy",
         "Name",
     };
-    
+
     const int EnvironObjectFieldsCount = 2;
     const string EnvironObjectFields[] = {
         "Enabled",
@@ -129,4 +129,4 @@ namespace evalute
 
 }
 
-#endif
+#endif /* _EVALUTE_FUNCTIONS_HPP */
