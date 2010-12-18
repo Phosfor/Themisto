@@ -43,7 +43,7 @@ class Utils : public boost::serialization::singleton<Utils>
 
 /////////////////////////////////////////////////////////////////////////
 //////////////////////// UTILS FUNCTIONS ////////////////////////////////
-const float GAME_VERSION = 0.1f;
+const float GAME_VERSION = configManager().getValue<float>("application.version", 1.0);
 
 // Check the location exists
 inline std::string LOCATION(const std::string &path) { return Utils::get_mutable_instance().checkLocation(path); }
@@ -59,7 +59,7 @@ const int ScreenResolutionX = configManager().getValue<int>("window.width", 768)
 /////////////////////// GAME MAGNITUDES /////////////////////////////////
 
 // Don't ask me where did I take this
-const float MagicKoef = 19.2f;
+const float MagicKoef = configManager().getValue<float>("application.resolution_koef", 19.2f);
 
 // How many pixels in one game meter in current screen height
 const float PixelsPerMeter = (float)ScreenResolutionY / MagicKoef;
@@ -86,8 +86,8 @@ const float G = Meters2Pixels(9.81);
 /////////////////////////////////////////////////////////////////////////
 //////////////////////// TIME MANAGEMENT ////////////////////////////////
 
-// Game time is 220 times faster than in real life (we can change this during runtime)
-const float TimeKoef = 220.0f;
+// Game time is 220(default) times faster than in real life (we can change this during runtime)
+const float TimeKoef = configManager().getValue<float>("application.game_speed", 220.0f);
 
 //---------- Real time → game time
 

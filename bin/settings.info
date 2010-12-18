@@ -7,6 +7,10 @@ window
 
 application
 {
+    version "0.1"
+    game_speed "4000"
+    resolution_koef "19.2"
+
     debug "true"
     media-folder "media"
 }
