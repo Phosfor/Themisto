@@ -10,7 +10,7 @@ Moon::Moon()
 {
     std::string media = utils().getMediaFolder();
     CL_GraphicContext gc = appManager().getGraphic();
-    mMoon = CL_Sprite(gc, "media/SkyX_Moon.png");
+    mMoon = CL_Sprite(gc, resourceManager().texturePath("Moons", "0"));
 
     mMoonColor = mMoon.get_color();
     mG = mB = 1.0f;

@@ -1,63 +1,63 @@
 <resources>
-	<section name="Clouds">
-		<texture name="0" file="clouds/0.png" />
-		<texture name="1" file="clouds/1.png" />
-		<texture name="2" file="clouds/2.png" />
-		<texture name="3" file="clouds/3.png" />
-		<texture name="4" file="clouds/4.png" />
-		<texture name="5" file="clouds/5.png" />
-		<texture name="6" file="clouds/6.png" />
-		<texture name="7" file="clouds/7.png" />
-	</section>
+    <section name="Clouds">
+        <texture name="0" file="clouds/0.png" />
+        <texture name="1" file="clouds/1.png" />
+        <texture name="2" file="clouds/2.png" />
+        <texture name="3" file="clouds/3.png" />
+        <texture name="4" file="clouds/4.png" />
+        <texture name="5" file="clouds/5.png" />
+        <texture name="6" file="clouds/6.png" />
+        <texture name="7" file="clouds/7.png" />
+    </section>
 
-	<section name="Leaves">
-		<texture name="0" file="leaves/0.png" />
-		<texture name="1" file="leaves/1.png" />
-		<texture name="2" file="leaves/2.png" />
-		<texture name="3" file="leaves/3.png" />
-	</section>
+    <section name="Leaves">
+        <texture name="0" file="leaves/0.png" />
+        <texture name="1" file="leaves/1.png" />
+        <texture name="2" file="leaves/2.png" />
+        <texture name="3" file="leaves/3.png" />
+    </section>
 
-	<section name="Moons">
-		<texture name="0" file="moons/0.png" />
-		<texture name="1" file="moons/1.png" />
-		<texture name="2" file="moons/2.png" />
-	</section>
+    <section name="Moons">
+        <texture name="0" file="moons/0.png" />
+        <texture name="1" file="moons/1.png" />
+        <texture name="2" file="moons/2.png" />
+    </section>
 
-	<section name="Lightnings">
-		<texture name="0" file="lightnings/0.png" />
-		<texture name="1" file="lightnings/1.png" />
-		<texture name="2" file="lightnings/2.png" />
-		<texture name="3" file="lightnings/3.png" />
-		<texture name="4" file="lightnings/4.png" />
-		<texture name="5" file="lightnings/5.png" />
-		<texture name="6" file="lightnings/6.png" />
-		<texture name="7" file="lightnings/7.png" />
-		<texture name="8" file="lightnings/8.png" />
-		<texture name="9" file="lightnings/9.png" />
-		<texture name="10" file="lightnings/10.png" />
-	</section>
+    <section name="Lightnings">
+        <texture name="0" file="lightnings/0.png" />
+        <texture name="1" file="lightnings/1.png" />
+        <texture name="2" file="lightnings/2.png" />
+        <texture name="3" file="lightnings/3.png" />
+        <texture name="4" file="lightnings/4.png" />
+        <texture name="5" file="lightnings/5.png" />
+        <texture name="6" file="lightnings/6.png" />
+        <texture name="7" file="lightnings/7.png" />
+        <texture name="8" file="lightnings/8.png" />
+        <texture name="9" file="lightnings/9.png" />
+        <texture name="10" file="lightnings/10.png" />
+    </section>
 
-	<section name="Plants">
-		<texture name="0" file="plants/0.png" />
-		<texture name="1" file="plants/1.png" />
-		<texture name="2" file="plants/2.png" />
-		<texture name="3" file="plants/3.png" />
-		<texture name="4" file="plants/4.png" />
-		<texture name="5" file="plants/5.png" />
-	</section>
+    <section name="Plants">
+        <texture name="0" file="plants/0.png" />
+        <texture name="1" file="plants/1.png" />
+        <texture name="2" file="plants/2.png" />
+        <texture name="3" file="plants/3.png" />
+        <texture name="4" file="plants/4.png" />
+        <texture name="5" file="plants/5.png" />
+    </section>
 
     <section name="Birds">
         <section name="Bird1">
-		   <texture name="0" file="birds/bird1/0.png" />
-	       <texture name="1" file="birds/bird1/1.png" />
-		   <texture name="2" file="birds/bird1/2.png" />
-		   <texture name="3" file="birds/bird1/3.png" />
-		   <texture name="4" file="birds/bird1/4.png" />
-		   <texture name="5" file="birds/bird1/5.png" />
-		   <texture name="6" file="birds/bird1/6.png" />
-		   <texture name="7" file="birds/bird1/7.png" />
-		   <texture name="8" file="birds/bird1/8.png" />
-		   <texture name="9" file="birds/bird1/9.png" />
+           <texture name="0" file="birds/bird1/0.png" />
+           <texture name="1" file="birds/bird1/1.png" />
+           <texture name="2" file="birds/bird1/2.png" />
+           <texture name="3" file="birds/bird1/3.png" />
+           <texture name="4" file="birds/bird1/4.png" />
+           <texture name="5" file="birds/bird1/5.png" />
+           <texture name="6" file="birds/bird1/6.png" />
+           <texture name="7" file="birds/bird1/7.png" />
+           <texture name="8" file="birds/bird1/8.png" />
+           <texture name="9" file="birds/bird1/9.png" />
         </section>
     </section>
 </resources>

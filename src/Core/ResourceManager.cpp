@@ -29,7 +29,7 @@ void ResourceManager::loadTextures()
         unsigned int lastIndex = sectionStd.find_last_of('/');
         string formattedSection = sectionStd.substr(0, lastIndex);
 
-        texturesStorage.insert(make_pair(formattedSection, make_pair(textureName, texturePath)));
+        texturesStorage[formattedSection][textureName] = texturePath;
 
         string fullPath = mediaPath + "/" + texturePath;
         if (!boost::filesystem::exists(fullPath))
@@ -39,6 +39,24 @@ void ResourceManager::loadTextures()
         counter++;
     }
     LOG(cl_format("%1 texture(s) are(is) loaded!", counter));
+}
+
+std::string ResourceManager::texturePath(const std::string &section, const std::string &name)
+{
+    std::string path = mediaPath;
+    path += "/";
+    if (texturesStorage.find(section) == texturesStorage.end())
+    {
+        throw new CL_Exception(cl_format("Failed to load(texture) from section `%1`.", section));
+    }
+    else
+    {
+        if (texturesStorage[section].find(name) == texturesStorage[section].end())
+            throw new CL_Exception(cl_format("Failed to load texture `%1`", name));
+        else
+            path += texturesStorage[section][name];
+    }
+    return path;
 }
 
 void ResourceManager::loadFonts()

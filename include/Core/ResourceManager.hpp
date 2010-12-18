@@ -29,13 +29,15 @@ class ResourceManager : public boost::serialization::singleton<ResourceManager>
         std::string mediaPath;
 
         // Section => (name => location)
-        std::map< std::string, std::pair<std::string, std::string> > texturesStorage;
+        std::map< std::string, std::map<std::string, std::string> > texturesStorage;
 
     public:
         ResourceManager();
 
         void loadFonts();
         void loadTextures();
+
+        std::string texturePath(const std::string &section, const std::string &name);
 };
 
 inline ResourceManager &resourceManager() { return ResourceManager::get_mutable_instance(); }
