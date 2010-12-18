@@ -11,13 +11,15 @@ Lightnings::Lightnings()
     : EnvironObject(), mProbability(200), alpha(0)
 {
     mGC = appManager().getGraphic();
+    int size = resourceManager().sectionHandle("Lightnings").get_child_nodes().get_length();
 
-    for (int i=0; i < 11; ++i)
+    for (int i=0; i < size; ++i)
     {
-        mLightningImage[i] = CL_Image(mGC, cl_format("media/lightnings/%1.png", i));
+        mLightningImages.push_back(CL_Image(mGC,
+                resourceManager().texturePath("Lightnings", boost::lexical_cast<std::string>(i))));
     }
 
-    if (!environManager().getTypeEnabled(Environ_Clouds)) 
+    if (!environManager().getTypeEnabled(Environ_Clouds))
         mEnabled = false;
     else
         mCloudsHandle = dynamic_cast<Clouds*>(environManager().getTypeHandle(Environ_Clouds));
@@ -31,14 +33,14 @@ void Lightnings::update(float windPower, float elapsed, float globalTime)
         if (mPosition.x != -1 && mPosition.y != -1)
         {
             mAnimation = true;
-            mHandle = rand() % 11;
+            mHandle = rand() % mLightningImages.size();
         }
     }
 
     if (mAnimation && mTimer <= 700.0f)
     {
         mTimer += elapsed * 1000.0f;
-        mLightningImage[mHandle].draw(mGC, mPosition.x, mPosition.y);
+        mLightningImages[mHandle].draw(mGC, mPosition.x, mPosition.y);
     }
     else
     {

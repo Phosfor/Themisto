@@ -11,6 +11,7 @@
 #include <ClanLib/display.h>
 #include "Core/Utils.hpp"
 #include "Core/ApplicationManager.hpp"
+#include "Core/ResourceManager.hpp"
 #include "World/Environ/Object.hpp"
 
 struct BirdData

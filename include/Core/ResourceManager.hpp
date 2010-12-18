@@ -28,6 +28,10 @@ class ResourceManager : public boost::serialization::singleton<ResourceManager>
         CL_ResourceManager fontsManager, texturesManager;
         std::string mediaPath;
 
+        CL_File textureXmlFile;
+        CL_DomDocument textureXmlDocument;
+        CL_DomElement textureXmlRoot;
+
         // Section => (name => location)
         std::map< std::string, std::map<std::string, std::string> > texturesStorage;
 
@@ -38,6 +42,7 @@ class ResourceManager : public boost::serialization::singleton<ResourceManager>
         void loadTextures();
 
         std::string texturePath(const std::string &section, const std::string &name);
+        CL_DomNode sectionHandle(const std::string &section);
 };
 
 inline ResourceManager &resourceManager() { return ResourceManager::get_mutable_instance(); }

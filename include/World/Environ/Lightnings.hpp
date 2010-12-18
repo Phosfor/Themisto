@@ -13,6 +13,7 @@
 #include "Core/Utils.hpp"
 
 #include "Core/ApplicationManager.hpp"
+#include "Core/ResourceManager.hpp"
 #include "World/Environ/Object.hpp"
 #include "World/Environ/Types.hpp"
 #include "World/Environ/Clouds.hpp"
@@ -23,7 +24,7 @@ class Lightnings : public EnvironObject
         Clouds *mCloudsHandle;
 
         CL_Pointf mPosition;
-        CL_Image mLightningImage[11];
+        std::vector<CL_Image> mLightningImages;
 
         const int mProbability;
         bool mAnimation;

@@ -11,6 +11,10 @@ ResourceManager::ResourceManager()
     mediaPath = configManager().getValue<std::string>("application.media-folder", "media");
     fontsManager = CL_ResourceManager(mediaPath + "/fonts.xml");
     texturesManager = CL_ResourceManager(mediaPath + "/textures.xml");
+
+    textureXmlFile = CL_File(mediaPath + "/textures.xml");
+    textureXmlDocument = CL_DomDocument(textureXmlFile);
+    textureXmlRoot = textureXmlDocument.get_document_element();
 }
 
 void ResourceManager::loadTextures()
@@ -19,24 +23,26 @@ void ResourceManager::loadTextures()
 
     LOG_NOFORMAT("\t---------- Loading textures ---------\n");
     unsigned int counter = 0;
-    BOOST_FOREACH(CL_String section, texturesManager.get_resource_names())
+    BOOST_FOREACH(CL_String section, texturesManager.get_section_names())
     {
-        CL_Resource textureSection = texturesManager.get_resource(section);
-        string textureName = textureSection.get_element().get_attribute("name").c_str();
-        string texturePath = textureSection.get_element().get_attribute("file").c_str();
+        LOG(cl_format("Parsing section `%1`", section.c_str()));
 
-        string sectionStd = string(section.c_str());
-        unsigned int lastIndex = sectionStd.find_last_of('/');
-        string formattedSection = sectionStd.substr(0, lastIndex);
-
-        texturesStorage[formattedSection][textureName] = texturePath;
-
-        string fullPath = mediaPath + "/" + texturePath;
-        if (!boost::filesystem::exists(fullPath))
+        BOOST_FOREACH(CL_String resource, texturesManager.get_resource_names(section))
         {
-            LOG(cl_format("The texture path `%1` is invalid, check your resources!", fullPath));
+            CL_Resource textureSection = texturesManager.get_resource(section + resource);
+            string textureName = textureSection.get_element().get_attribute("name").c_str();
+            string texturePath = textureSection.get_element().get_attribute("file").c_str();
+
+            /*TODO: Load pictures into CL_Image */
+            texturesStorage[section][textureName] = texturePath;
+
+            string fullPath = mediaPath + "/" + texturePath;
+            if (!boost::filesystem::exists(fullPath))
+            {
+                LOG(cl_format("The texture path `%1` is invalid, check your resources!", fullPath));
+            }
+            counter++;
         }
-        counter++;
     }
     LOG(cl_format("%1 texture(s) are(is) loaded!", counter));
 }
@@ -45,18 +51,34 @@ std::string ResourceManager::texturePath(const std::string &section, const std::
 {
     std::string path = mediaPath;
     path += "/";
-    if (texturesStorage.find(section) == texturesStorage.end())
+    if (texturesStorage.find(section + "/") == texturesStorage.end())
     {
-        throw new CL_Exception(cl_format("Failed to load(texture) from section `%1`.", section));
+        std::cout << cl_format("Failed to load(texture) from section `%1`.", section).c_str();
+        throw new CL_Exception(cl_format("Failed to load(texture) from section `%1/`.", section));
     }
     else
     {
-        if (texturesStorage[section].find(name) == texturesStorage[section].end())
+        if (texturesStorage[section + "/"].find(name) == texturesStorage[section].end())
             throw new CL_Exception(cl_format("Failed to load texture `%1`", name));
         else
-            path += texturesStorage[section][name];
+            path += texturesStorage[section + "/"][name];
     }
     return path;
+}
+
+CL_DomNode ResourceManager::sectionHandle(const std::string &section)
+{
+    try {
+        BOOST_FOREACH(CL_DomNode node, textureXmlRoot.select_nodes("section"))
+        {
+            if (node.to_element().get_attribute("name").c_str() == section)
+                return node;
+        }
+    } catch(CL_Exception &e) {
+        std::cout << "Something bad happened in `sectionHandle`: " << e.what();
+    }
+
+    return CL_DomNode();
 }
 
 void ResourceManager::loadFonts()

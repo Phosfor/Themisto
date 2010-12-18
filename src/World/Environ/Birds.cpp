@@ -18,11 +18,23 @@ void Birds::setLimit(int limit)
 
 void Birds::processBirds(CL_GraphicContext &gc, int width, int height, int i)
 {
+    CL_DomElement birds = resourceManager().sectionHandle("Birds").to_element();
+    int numBirds = birds.get_child_nodes().get_length();
+
+    CL_DomElement birdHandle;
+    if (numBirds > 1)
+        birdHandle = birds.get_child_nodes().item(rand() % numBirds + 1).to_element();
+    else
+        birdHandle = birds.get_first_child_element();
+
     // TODO: Chose the bird type here
-    for (int j=1; j <= 10; j++)
+    for (int j=0; j < birdHandle.get_child_nodes().get_length(); j++)
     {
+
         // Load all animation frames
-        mBirds[i].mImageDesc.add_frame(CL_ImageProviderFactory::load(cl_format("media/bird/%1.png", j)));
+        mBirds[i].mImageDesc.add_frame(CL_ImageProviderFactory::load(resourceManager().texturePath(
+                        cl_format("Birds/%1", birdHandle.get_attribute("name")).c_str(),
+                        boost::lexical_cast<std::string>(j))));
     }
 
     mBirds[i].mBirdImage = CL_Sprite(gc, mBirds[i].mImageDesc);
