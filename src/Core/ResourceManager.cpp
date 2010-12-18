@@ -8,25 +8,48 @@
 
 ResourceManager::ResourceManager()
 {
-    std::string mediaPath = configManager().getValue<std::string>("application.media-folder", "media");
+    mediaPath = configManager().getValue<std::string>("application.media-folder", "media");
     fontsManager = CL_ResourceManager(mediaPath + "/fonts.xml");
     texturesManager = CL_ResourceManager(mediaPath + "/textures.xml");
 }
 
 void ResourceManager::loadTextures()
 {
+    using namespace std;
 
+    LOG_NOFORMAT("\t---------- Loading textures ---------\n");
+    unsigned int counter = 0;
+    BOOST_FOREACH(CL_String section, texturesManager.get_resource_names())
+    {
+        CL_Resource textureSection = texturesManager.get_resource(section);
+        string textureName = textureSection.get_element().get_attribute("name").c_str();
+        string texturePath = textureSection.get_element().get_attribute("file").c_str();
+
+        string sectionStd = string(section.c_str());
+        unsigned int lastIndex = sectionStd.find_last_of('/');
+        string formattedSection = sectionStd.substr(0, lastIndex);
+
+        texturesStorage.insert(make_pair(formattedSection, make_pair(textureName, texturePath)));
+
+        string fullPath = mediaPath + "/" + texturePath;
+        if (!boost::filesystem::exists(fullPath))
+        {
+            LOG(cl_format("The texture path `%1` is invalid, check your resources!", fullPath));
+        }
+        counter++;
+    }
+    LOG(cl_format("%1 texture(s) are(is) loaded!", counter));
 }
 
 void ResourceManager::loadFonts()
 {
+    LOG_NOFORMAT("\t---------- Loading fonts ---------\n");
     BOOST_FOREACH(CL_String section, fontsManager.get_resource_names())
     {
         CL_Resource tempFontRes = fontsManager.get_resource(section);
-        CL_String filename = tempFontRes.get_element().get_attribute("file");
+        std::string filename = tempFontRes.get_element().get_attribute("file").c_str();
 
-        std::string mediaPath = configManager().getValue<std::string>("application.media-folder", "media");
-        std::string fontPath = mediaPath + "/" + filename.c_str();
+        std::string fontPath = mediaPath + "/" + filename;
         if (!boost::filesystem::exists(fontPath))
         {
             LOG(cl_format("The font path `%1` is invalid, check your resources!", fontPath));

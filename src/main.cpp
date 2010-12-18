@@ -8,6 +8,7 @@
 
 int Application::main(const std::vector<CL_String> &args)
 {
+    LOG_NOFORMAT("\t---------- Loading systems ---------\n");
     // Main environment handlers
     CL_SetupCore coreHandle;
     LOG("Core handle is initialized");
@@ -38,6 +39,7 @@ int Application::main(const std::vector<CL_String> &args)
         CL_GraphicContext gc = appManager().getGraphic();
 
         resourceManager().loadFonts();
+        resourceManager().loadTextures();
 
         CL_Slot slotQuit = appManager().getWindow().sig_window_close().connect(Application::onWindowClose);
         CL_Slot slotInput = inputManager().getKeyboard().sig_key_up().connect(Application::onInput);
@@ -54,6 +56,7 @@ int Application::main(const std::vector<CL_String> &args)
         else
            stateManager().push(new MenuState);
 
+        LOG_NOFORMAT("\t---------- Starting game ---------\n");
         while (appManager().getRunning())
         {
             appManager().frameStarted();

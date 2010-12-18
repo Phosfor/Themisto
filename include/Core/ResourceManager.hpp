@@ -19,11 +19,17 @@
 #include <boost/serialization/singleton.hpp>
 
 #include <vector>
+#include <map>
+#include <utility>
 
 class ResourceManager : public boost::serialization::singleton<ResourceManager>
 {
     private:
         CL_ResourceManager fontsManager, texturesManager;
+        std::string mediaPath;
+
+        // Section => (name => location)
+        std::map< std::string, std::pair<std::string, std::string> > texturesStorage;
 
     public:
         ResourceManager();
