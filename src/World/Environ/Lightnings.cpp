@@ -37,9 +37,10 @@ void Lightnings::update(float windPower, float elapsed, float globalTime)
         }
     }
 
-    if (mAnimation && mTimer <= 700.0f)
+    if (mAnimation && mTimer <= 900.0f)
     {
         mTimer += elapsed * 1000.0f;
+        mLightningImages[mHandle].set_alpha(0.8);
         mLightningImages[mHandle].draw(mGC, mPosition.x, mPosition.y);
     }
     else

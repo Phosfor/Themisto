@@ -33,8 +33,6 @@
         <texture name="6" file="lightnings/6.png" />
         <texture name="7" file="lightnings/7.png" />
         <texture name="8" file="lightnings/8.png" />
-        <texture name="9" file="lightnings/9.png" />
-        <texture name="10" file="lightnings/10.png" />
     </section>
 
     <section name="Plants">

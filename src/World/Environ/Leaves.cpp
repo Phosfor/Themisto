@@ -25,10 +25,20 @@ void Leaves::processLeaves(CL_GraphicContext &gc, float windPower, int i)
     mLeaves[i].animation = false;
 
     // Where to create new leaf (refers to the wind blowing direction)
-    if (windPower < 0)
-        mLeaves[i].x = mWindowWidth;
+    if (mFirstTime)
+    {
+        mLeaves[i].x = rand() % mWindowWidth;
+        mLeaves[i].timeout = 0;
+    }
     else
-        mLeaves[i].x = 0;
+    {
+        if (windPower < 0)
+            mLeaves[i].x = mWindowWidth;
+        else
+            mLeaves[i].x = 0;
+
+        mLeaves[i].timeout = rand() % 250;
+    }
 
     // The height where new leaf will be located
     mLeaves[i].y = mWindowHeight - mWindowHeight*((rand()%6+2)/10.0);
@@ -38,16 +48,16 @@ void Leaves::processLeaves(CL_GraphicContext &gc, float windPower, int i)
     mLeaves[i].k2 = (rand() % 7 + 3) / 10.0;
 
     // Load some random leaf surface
-    mLeaves[i].leafType = rand()%4;
-    mLeaves[i].imageHandle = CL_Sprite(gc, cl_format("media/leaves/%1.png", mLeaves[i].leafType));
-
-    mLeaves[i].timeout = rand() % 300;
+    int size = resourceManager().sectionHandle("Leaves").get_child_nodes().get_length();
+    mLeaves[i].leafType = rand() % size;
+    mLeaves[i].imageHandle = CL_Sprite(gc,
+            resourceManager().texturePath("Leaves", boost::lexical_cast<std::string>(mLeaves[i].leafType)));
 
     // Rotate leaf surface at some random angle
     int angle = rand() % 360 + 1;
     mLeaves[i].imageHandle.set_angle(CL_Angle::from_degrees(angle));
 
-    mLeaves[i].speed_koef = rand()%45 + 50;
+    mLeaves[i].speed_koef = rand()%70 + 50;
 }
 
 Leaves::Leaves(int maxLeaves)

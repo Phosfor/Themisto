@@ -5,14 +5,14 @@
 
         <Environ active="true">
             <Rain enabled="true" limit="50" />
-            <Clouds enabled="true" />
+            <Clouds enabled="true" limit="10" />
             <Lightnings enabled="true" />
             <Sky enabled="true" />
             <Moon enabled="true" />
             <Leaves enabled="true" limit="5" />
             <Stars enabled="true" />
             <Birds enabled="true" />
-            <Wind power="-2" />
+            <Wind power="-1" />
         </Environ>
 
         <Objects>
