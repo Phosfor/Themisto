@@ -21,12 +21,12 @@ class PhysicWind
         void regionUpdated(CellRegion region);
         CL_Slot mRegionUpdatedSlot;
         int getWeakness(Impact* impact);
+
     public:
         void setPower(float value);
         void setDirrection(b2Vec2 value);
         void init(float power, b2Vec2 dirrection);
         ~PhysicWind();
-
 };
 
-#endif
+#endif /* _PHYSIC_WIND_HPP_ */

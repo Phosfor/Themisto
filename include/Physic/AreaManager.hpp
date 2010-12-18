@@ -14,13 +14,9 @@
 #include "Physic/Body.hpp"
 #include "Core/Utils.hpp"
 
-#define areaManager (AreaManager::get_mutable_instance())
-#define areaManagerConst (AreaManager::get_const_instance())
-
 class AreaManagerQueryCallback: public b2QueryCallback
 {
     public:
-
         bool ReportFixture (b2Fixture *fixture);
 };
 
@@ -38,8 +34,7 @@ struct CellRegion
     int upperY;
 };
 
-class AreaManager : public
-boost::serialization::singleton<AreaManager>
+class AreaManager : public boost::serialization::singleton<AreaManager>
 {
     private:
         b2World *mWorld;
@@ -77,7 +72,8 @@ boost::serialization::singleton<AreaManager>
 
         void init(b2World *world, float sellSize=10);
         ~AreaManager();
-
 };
 
-#endif
+inline AreaManager &areaManager() { return AreaManager::get_mutable_instance(); }
+
+#endif /* _AREA_MANAGER_HPP_ */

@@ -9,8 +9,7 @@
 Body::Body(b2Body* body)
 {
     mBody = body;
-    
-    
+
     body->SetUserData(this);
     mShouldFreeB2Body = true;
     mParentWorld= mBody->GetWorld();
@@ -42,12 +41,12 @@ void Body::step(float32 elapsed)
     }
 
     b2AABB currentLocation = calculateLocation();
-    
+
     b2Vec2 ll = mLastLocation.lowerBound;
     b2Vec2 cl = currentLocation.lowerBound;
     float deltaX = cl.x - ll.x;
     float deltaY = cl.y - ll.y;
-    float cellSize = areaManager.getCellSize();
+    float cellSize = areaManager().getCellSize();
     // If body moved father then cell size
     if( abs(deltaX) > cellSize ||  abs(deltaY) > cellSize)
     {
@@ -58,7 +57,7 @@ void Body::step(float32 elapsed)
             b2Vec2 delta(deltaX, deltaY);
             lastLocation.lowerBound = lastLocation.lowerBound - delta;
             lastLocation.upperBound = lastLocation.upperBound - delta;
-            areaManager.reportNewFixtureLocation(&lastLocation, 
+            areaManager().reportNewFixtureLocation(&lastLocation, 
                     &fixture->GetAABB(), fixture);
         }
         mLastLocation = currentLocation;
@@ -88,20 +87,3 @@ b2AABB Body::calculateLocation()
     }
     return region;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

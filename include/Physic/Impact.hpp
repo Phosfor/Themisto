@@ -13,11 +13,11 @@
 enum ImpactTypes
 {
     Nothing = 0,
-    Moisten=1,
-    Heat=2,
-    Cool=3,
-    Wind=5,
-    Electricity=6
+    Moisten = 1,
+    Heat = 2,
+    Cool = 3,
+    Wind = 5,
+    Electricity = 6
 };
 
 struct Impact
@@ -36,5 +36,4 @@ struct Impact
     Impact(ImpactTypes type, float intensity, b2Vec2 impactPoint, b2Vec2 dirrection);
 };
 
-
-#endif
+#endif /* _IMPACT_HPP_ */

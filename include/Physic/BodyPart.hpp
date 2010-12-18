@@ -23,7 +23,6 @@
 #include <list>
 #include <map>
 
-
 class BodyPart
 {
     protected:
@@ -37,8 +36,8 @@ class BodyPart
         std::list<BodyPart*> *mStaticCollisions;
         std::map<b2Fixture*, Impact*>* mContactImpacts;
         BodyMaterial *mMaterial;
-        string mName;
-        
+        std::string mName;
+
         float mMaxKindleLevel;
         float mMaxDampness;
         bool mAcceptsCord;
@@ -62,6 +61,7 @@ class BodyPart
         void findStaticCollisions();
         void calculateThermalTransmissions();
         void calculateThermalTransmission(BodyPart* p);
+
     public:
         BodyPart(b2Fixture* fixture, BodyMaterial* material);
         ~BodyPart();
@@ -79,11 +79,9 @@ class BodyPart
         // Wind impact of natural wind
         virtual void applyWindImpact(Impact *impact);
 
-        
         // Applied material to body or not
         // Notice, that defaut material is one object for all
         bool IsDefaultMaterial(){ return mIsDefaultMaterial;}
-        
 
         // Sould boyd free memory under mMaterial object at sestroing
         // By default is false
@@ -103,8 +101,6 @@ class BodyPart
 
         string getName() { return mName; }
         void setName(const std::string &value){ mName.assign(value); }
-
 };
-
 
 #endif /* _BODY_PART_HPP_ */

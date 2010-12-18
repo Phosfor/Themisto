@@ -28,6 +28,7 @@ BodyPart::BodyPart(b2Fixture* fixture, BodyMaterial* material)
     mMaxDampness = 0;
     mAcceptsCord = 0;
 }
+
 BodyPart::~BodyPart()
 {
     delete mAppliedImpacts;
@@ -147,7 +148,6 @@ void BodyPart::calculateThermalTransmissions()
    }
 }
 
-   
 void BodyPart::calculateThermalTransmission(BodyPart* p)
 {
       Impact* impact;

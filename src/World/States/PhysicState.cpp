@@ -14,7 +14,7 @@ void PhysicState::init()
     mGC = appManager().getGraphic();
     mStatFont = new CL_Font(appManager().getGraphic(), "Ubuntu", 30);
 
-    areaManager.init(&physicManager().getWorld(), 20);
+    areaManager().init(&physicManager().getWorld(), 20);
     sceneLoader().loadScene("testingPhysic.xml");
 
     mDebugDrawHandle.SetFlags(

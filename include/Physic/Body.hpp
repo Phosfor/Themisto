@@ -30,15 +30,13 @@
 #include "World/Environ/Types.hpp"
 #include <boost/lexical_cast.hpp>
 
-using namespace boost;
-
 class Body
 {
     private:
         b2AABB mLastLocation;
         b2AABB calculateLocation();
         string mName;
-        
+
         // 0 - body will sink, more - stronger force would pop body from water
         float mBuoyancy;
 
@@ -54,23 +52,18 @@ class Body
         ~Body();
 
         // Get/set 
-       
+
         b2Body* getb2Body();
         float getBuoyancy() { return mBuoyancy; }
         void setBuoyancy(float value) { mBuoyancy = value; }
         string getName() { return mName; }
         void setName(string name) { mName = name; }
 
-        void step(float32 elapsed);     
+        void step(float32 elapsed);
 
         // Should body free memory under mBody object at destroing
         // Default is true
         bool mShouldFreeB2Body; 
-        
-       
-
 };
 
-
-
-#endif
+#endif /* _PHYSIC_BODY_HPP_ */

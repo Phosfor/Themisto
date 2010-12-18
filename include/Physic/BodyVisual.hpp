@@ -5,7 +5,7 @@
  */
 
 #ifndef _BODY_VISUAL_HPP_
-#define  _BODY_VISUAL_HPP_
+#define _BODY_VISUAL_HPP_
 
 #include <Box2D/Collision/Shapes/b2PolygonShape.h>
 #include "Physic/BodyState.hpp"
@@ -19,9 +19,6 @@ class BodyVisual
         void setBodyState(BodyState *state);
 
         void redrawBody();
-
-        
 };
 
-
-#endif
+#endif /* _BODY_VISUAL_HPP_ */

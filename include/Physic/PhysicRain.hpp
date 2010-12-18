@@ -25,4 +25,4 @@ class PhysicRain
         ~PhysicRain();
 };
 
-#endif
+#endif /* _PHYSIC_RAIN_HPP_ */

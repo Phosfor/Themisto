@@ -30,9 +30,7 @@ struct BodyState
         // 0 - dry, maxDampness - full of water
         float Dampness;
 
-
         BodyState();
 };
 
-
-#endif
+#endif /* _BODY_STATE_HPP_ */

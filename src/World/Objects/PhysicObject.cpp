@@ -69,6 +69,7 @@ void PhysicObject::update(float elapsed)
 
 Object* PhysicObject::ParsePhysicObject(CL_DomElement* tag, string& desc)
 {
+    using namespace boost;
     BodyVisual* visualHandle = new BodyVisual();
     float x = 0, y = 0;
     // Parsing visuals

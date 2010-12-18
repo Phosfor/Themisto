@@ -18,8 +18,8 @@ void PhysicWind::init(float power, b2Vec2 dirrection)
         mWeakerImpacts[i] = new Impact(Wind);
     }
     calculateWeakerImpacts();
-    mRegionUpdatedSlot = areaManager.mRegionUpdated.connect(this, &PhysicWind::regionUpdated);
-    regionUpdated(areaManager.getCellRegion());
+    mRegionUpdatedSlot = areaManager().mRegionUpdated.connect(this, &PhysicWind::regionUpdated);
+    regionUpdated(areaManager().getCellRegion());
 }
 
  PhysicWind::~PhysicWind()
@@ -43,10 +43,9 @@ void PhysicWind::calculateWeakerImpacts()
     }
 }
 
-
 void PhysicWind::regionUpdated(CellRegion region)
 {
-    CellRegion allRegion = areaManager.getCellRegion();
+    CellRegion allRegion = areaManager().getCellRegion();
 
     // Scan by horizontal lines
 
@@ -72,15 +71,15 @@ void PhysicWind::regionUpdated(CellRegion region)
     bool afterBody = false; // Are we at area of weaked wind after body
     for(int y=region.lowerY; y<=region.upperY; ++y)
     {
-        weak = getWeakness(areaManager.getWindImpact(region.lowerX, y));
+        weak = getWeakness(areaManager().getWindImpact(region.lowerX, y));
         for(int x=from; x!=to; x+=delta)
         {
             Impact* impact;
             if(weak < 0) impact = mImpact;
             else impact = mWeakerImpacts[weak];
-            areaManager.setWindImpact(impact, x, y);
+            areaManager().setWindImpact(impact, x, y);
 
-            b2Fixture* cellb2Fixture = areaManager.getCellFixture(x,y);
+            b2Fixture* cellb2Fixture = areaManager().getCellFixture(x,y);
             if(cellb2Fixture != NULL)
             {
                 BodyPart* body = (BodyPart*)cellb2Fixture->GetUserData();

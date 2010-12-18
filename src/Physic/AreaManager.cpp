@@ -330,6 +330,6 @@ void AreaManager::scanArea(b2AABB* region)
 
 bool AreaManagerQueryCallback::ReportFixture (b2Fixture *fixture)
 {
-    areaManager.reportNewFixtureLocation(NULL, &fixture->GetAABB(), fixture);
+    areaManager().reportNewFixtureLocation(NULL, &fixture->GetAABB(), fixture);
     return true;
 }
