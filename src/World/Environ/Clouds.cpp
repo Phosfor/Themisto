@@ -5,26 +5,29 @@
  */
 
 #include "World/Environ/Clouds.hpp"
+#include "Core/EnvironManager.hpp"
 
 void Clouds::setLimit(int limit)
 {
    mClouds.resize(limit);
    if (limit > mMaxObjects && !mFirstTime)
       for (int i=0; i < limit-mMaxObjects; i++)
-         processClouds(mGC, mWindowWidth, mWindowHeight, i);
+         processClouds(mGC, environManager().getWindPower(), i);
 
    mMaxObjects = limit;
 }
 
-void Clouds::processClouds(CL_GraphicContext &gc, float windPower, int i, bool firstTime)
+void Clouds::processClouds(CL_GraphicContext &gc, float windPower, int i)
 {
     mClouds[i].y_offset = rand() % (int)(mWindowHeight * 0.05);
 
     mClouds[i].x_speed = 0;
-    mClouds[i].cloudType = rand() % 8;
-    mClouds[i].imageHandle = CL_Sprite(gc, cl_format("media/clouds/%1.png", mClouds[i].cloudType));
+    int size = resourceManager().sectionHandle("Clouds").get_child_nodes().get_length();
+    mClouds[i].cloudType = rand() % size;
+    mClouds[i].imageHandle = CL_Sprite(gc,
+            resourceManager().texturePath("Clouds", boost::lexical_cast<std::string>(mClouds[i].cloudType)));
 
-    if (!firstTime)
+    if (!mFirstTime)
     {
         if (windPower < 0)
             mClouds[i].x = mWindowWidth;
@@ -53,6 +56,7 @@ Clouds::Clouds(int maxClouds)
 
     mMaxObjects = maxClouds;
     mGC = appManager().getGraphic();
+    mFirstTime = true;
 }
 
 void Clouds::update(float windPower, float elapsed, float globalTime)
@@ -62,7 +66,7 @@ void Clouds::update(float windPower, float elapsed, float globalTime)
         for (int i=0; i < mMaxObjects; i++)
         {
             mClouds.push_back(CloudData());
-            processClouds(mGC, windPower, i, true);
+            processClouds(mGC, windPower, i);
         }
 
         mFirstTime = false;

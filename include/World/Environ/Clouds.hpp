@@ -14,6 +14,7 @@
 
 #include "Core/Utils.hpp"
 #include "Core/ApplicationManager.hpp"
+#include "Core/ResourceManager.hpp"
 #include "World/Environ/Object.hpp"
 
 struct CloudData
@@ -31,7 +32,7 @@ class Clouds : public EnvironObject
         CL_GraphicContext mGC;
         bool mFirstTime;
 
-        void processClouds(CL_GraphicContext &gc, float windPower, int i, bool firstTime = false);
+        void processClouds(CL_GraphicContext &gc, float windPower, int i);
 
     public:
         Clouds(int maxClouds = 4);
