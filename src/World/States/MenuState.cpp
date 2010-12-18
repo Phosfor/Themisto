@@ -16,7 +16,7 @@ void MenuState::init()
 }
 
 void MenuState::shutdown() 
-{ 
+{
     delete mStatFont;
 }
 
@@ -34,7 +34,7 @@ void MenuState::update()
             CL_String(cl_format("wind: %1", int(environManager().getWindPower()))), CL_Colorf::white);
 }
 
-string MenuState::type()
+std::string MenuState::type()
 {
     return "MenuState";
 }

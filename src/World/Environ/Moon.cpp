@@ -8,7 +8,7 @@
 
 Moon::Moon()
 {
-    string media = utils().getMediaFolder();
+    std::string media = utils().getMediaFolder();
     CL_GraphicContext gc = appManager().getGraphic();
     mMoon = CL_Sprite(gc, "media/SkyX_Moon.png");
 

@@ -15,7 +15,7 @@ PhysicObject::PhysicObject(Body* body, BodyVisual* visual)
 {
     mBody = body;
     mBodyVisual = visual;
-    mName = worldManager.generateUniqueID();
+    mName = worldManager().generateUniqueID();
     mType = PhysicBodyObject;
     mShouldFreeBodyVisual = mShouldFreeBody = true;
 }
@@ -39,7 +39,7 @@ void PhysicObject::updateVisual()
     }
 }
 void PhysicObject::step(float32 elapsed) 
-{ 
+{
     if(mBody != NULL)
     {
         mBody->step(elapsed); 
@@ -67,7 +67,7 @@ void PhysicObject::update(float elapsed)
 //---------------------------- PARSING-----------------------------
 //----------------------------------------------------------------
 
-Object* PhysicObject::ParsePhysicObject(CL_DomElement* tag, string& desc)
+Object* PhysicObject::ParsePhysicObject(CL_DomElement* tag, std::string& desc)
 {
     using namespace boost;
     BodyVisual* visualHandle = new BodyVisual();
@@ -422,7 +422,7 @@ Object* PhysicObject::ParsePhysicObject(CL_DomElement* tag, string& desc)
             }
 
             fixture = b2body->CreateFixture(&fixdef);
-            partHandle = new BodyPart(fixture, worldManager.mDefaultMaterial);
+            partHandle = new BodyPart(fixture, worldManager().mDefaultMaterial);
         }
 
         // Go through Part children
@@ -438,7 +438,7 @@ Object* PhysicObject::ParsePhysicObject(CL_DomElement* tag, string& desc)
             }
             else if(partChild.get_node_name() == "Name")
             {
-                string value = partChild.get_text().c_str();
+                std::string value = partChild.get_text().c_str();
                 partHandle->setName(value);
             }
             else if(partChild.get_node_name() == "MaxDampness")
@@ -509,7 +509,7 @@ Object* PhysicObject::ParsePhysicObject(CL_DomElement* tag, string& desc)
         // The material tag doesn't exist
         if (matList.get_length() <= 0)
         {
-            materialHandle = worldManager.mDefaultMaterial;
+            materialHandle = worldManager().mDefaultMaterial;
             partHandle->mShouldFreeBodyMaterial = false;
         }
         else
@@ -530,7 +530,7 @@ Object* PhysicObject::ParsePhysicObject(CL_DomElement* tag, string& desc)
             }
             else
             {
-                materialHandle->Name = worldManager.generateUniqueID();
+                materialHandle->Name = worldManager().generateUniqueID();
             }
 
             CL_DomNodeList matChildList = matElement.get_child_nodes();
@@ -636,7 +636,7 @@ Object* PhysicObject::ParsePhysicObject(CL_DomElement* tag, string& desc)
             } // for (int i=0; i < matChildList.get_length(); ++i)
         } // if (matList.get_length() <= 0)
 
-        partHandle->setMaterial(materialHandle, materialHandle == worldManager.mDefaultMaterial );
+        partHandle->setMaterial(materialHandle, materialHandle == worldManager().mDefaultMaterial );
     } // for (int i=0; i < parts.get_length(); ++i)
 
     return new PhysicObject(bodyHandle, visualHandle);

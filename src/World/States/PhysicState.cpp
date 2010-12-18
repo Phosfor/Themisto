@@ -30,7 +30,6 @@ void PhysicState::init()
     physicTests().RunTest();
 }
 
-
 void PhysicState::shutdown()
 {
     delete mStatFont;
@@ -52,7 +51,7 @@ void PhysicState::update()
     debugWatcher().step();
 }
 
-string PhysicState::type()
+std::string PhysicState::type()
 {
     return "PhysicState";
 }

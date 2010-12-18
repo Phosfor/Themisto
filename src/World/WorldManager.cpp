@@ -23,7 +23,7 @@ WorldManager::~WorldManager()
     delete mDefaultMaterial;
 }
 
-string WorldManager::generateUniqueID()
+std::string WorldManager::generateUniqueID()
 {
     ++mUniqueIDCounter;
     std::ostringstream out;

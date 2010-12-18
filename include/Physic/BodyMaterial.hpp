@@ -14,12 +14,9 @@
 
 #include <vector>
 
-using boost::property_tree::ptree;
-using namespace std;
-
 struct BodyMaterial
 {
-    string Name;
+    std::string Name;
 
     // If temperature become more then kindle temperature, body would flare up
     float KindleTemperature;

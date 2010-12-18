@@ -23,7 +23,6 @@ class Object
         ObjectTypes mType;
 
     public:
-    
         virtual std::string getName() { return mName; }
         virtual void setName(const std::string &name) { mName = name; }
 

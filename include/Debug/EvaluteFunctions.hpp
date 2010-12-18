@@ -16,7 +16,7 @@
 namespace evalute
 {
     const int BodyMaterialFieldsCount = 20;
-    const string BodyMaterialFields[] = {
+    const std::string BodyMaterialFields[] = {
         "Name",
         "KindleTemperature",
         "KindleReceptivity",
@@ -40,7 +40,7 @@ namespace evalute
     };
 
     const int BodyStateFieldsCount = 5;
-    const string BodyStateFields[] = {
+    const std::string BodyStateFields[] = {
         "IsFrozen",
         "KindleLevel",
         "CarbonizeLevel",
@@ -49,7 +49,7 @@ namespace evalute
     };
 
     const int b2FixtureFieldsCount = 23;
-    const string b2FixtureFields[] = {
+    const std::string b2FixtureFields[] = {
         "Shape",
         "Shape.Type",
         "Shape.VertexCount",
@@ -76,7 +76,7 @@ namespace evalute
     };
 
     const int b2BodyFieldsCount = 18;
-    const string b2BodyFields[] = {
+    const std::string b2BodyFields[] = {
         "Type",
         "Position",
         "Angle",
@@ -98,7 +98,7 @@ namespace evalute
     };
 
     const int BodyPartFieldsCount = 5;
-    const string BodyPartFields[] = {
+    const std::string BodyPartFields[] = {
         "IsDefaultMaterial",
         "MaxKindleLevel",
         "MaxDampness",
@@ -107,26 +107,25 @@ namespace evalute
     };
 
     const int BodyFieldsCount = 2;
-    const string BodyFields[] = {
+    const std::string BodyFields[] = {
         "Buoyancy",
         "Name",
     };
 
     const int EnvironObjectFieldsCount = 2;
-    const string EnvironObjectFields[] = {
+    const std::string EnvironObjectFields[] = {
         "Enabled",
         "Limit"
     };
 
-    string evalute_material(Watch* watch);
-    string evalute_state(Watch* watch);
-    string evalute_b2Fixture(Watch* watch);
-    string evalute_b2Body(Watch* watch);
-    string evalute_BodyPart(Watch* watch);
-    string evalute_Body(Watch* watch);
-    string evalute_EnvironObject(Watch* watch);
-    string evalute_elapsed(Watch* watch);
-
+    std::string evalute_material(Watch* watch);
+    std::string evalute_state(Watch* watch);
+    std::string evalute_b2Fixture(Watch* watch);
+    std::string evalute_b2Body(Watch* watch);
+    std::string evalute_BodyPart(Watch* watch);
+    std::string evalute_Body(Watch* watch);
+    std::string evalute_EnvironObject(Watch* watch);
+    std::string evalute_elapsed(Watch* watch);
 }
 
 #endif /* _EVALUTE_FUNCTIONS_HPP */

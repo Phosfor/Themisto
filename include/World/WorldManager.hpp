@@ -12,9 +12,6 @@
 #include <boost/serialization/singleton.hpp>
 #include <sstream>
 
-#define worldManager (WorldManager::get_mutable_instance())
-#define worldManagerConst (WorldManager::get_const_instance())
-
 class WorldManager : public boost::serialization::singleton<WorldManager>
 {
     private:
@@ -27,7 +24,9 @@ class WorldManager : public boost::serialization::singleton<WorldManager>
         void initWorld();
         WorldManager();
         ~WorldManager();
-        string generateUniqueID();
+        std::string generateUniqueID();
 };
+
+inline WorldManager &worldManager() { return WorldManager::get_mutable_instance(); }
 
 #endif /* _WORLD_MANAGER_HPP_ */

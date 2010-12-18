@@ -47,28 +47,28 @@ class DebugWatcher: public boost::serialization::singleton<DebugWatcher>
         int mTimeout; // Mileseconds, if less then zero, then every step
         int mLeftFromLastUpdate;
         CL_Slot mCommandSlot;
-        std::map<string, std::ofstream*> mFiles;
-        std::map<ofstream*, int> mFilesUsing;
+        std::map<std::string, std::ofstream*> mFiles;
+        std::map<std::ofstream*, int> mFilesUsing;
 
         std::string assignWatchToFile(Watch* watch, std::string file, bool rewrite);
         std::string assignWatchToFile(Watch* watch, std::ofstream* file, bool rewrite);
         std::string unassignWatchFromFile(Watch* watch, bool dispose);
         std::string getFileName(std::ofstream* file);
 
-        vector<Watch*> getWatches(StrIterator specIt, StrIterator endIt, std::string& answer, bool child);
+        std::vector<Watch*> getWatches(StrIterator specIt, StrIterator endIt, std::string& answer, bool child);
         int processEvery(StrIterator everyIt, StrIterator end, std::string& answer);
         std::string process_hide(StrIterator commandIt, StrIterator endIt);
         std::string process_remove(StrIterator commandIt, StrIterator endIt);
         std::string process_stop_resume(StrIterator commandIt, StrIterator endIt, bool stop);
         std::string process_parent(StrIterator cmdIt, StrIterator endIt, Watch* watch);
-        map<Target, TargetInfo> getTargets(StrIterator command, StrIterator end, TargetType type, std::string& answer);
-        std::string process_material(Watch* watch, vector<string> &commandSet);
-        vector<b2Fixture*> getFixtures(Body* body, std::string* partID);
-        std::string addWatchCommon(Watch* watch, vector<string> &commandSet);
-        std::string add_member_watch(Watch* watch, std::string command, 
-            const std::string members[], const int memberCount, map<Target, TargetInfo>& targets, EvaluteFunction evalute);
+        std::map<Target, TargetInfo> getTargets(StrIterator command, StrIterator end, TargetType type, std::string& answer);
+        std::string process_material(Watch* watch, std::vector<std::string> &commandSet);
+        std::vector<b2Fixture*> getFixtures(Body* body, std::string* partID);
+        std::string addWatchCommon(Watch* watch, std::vector<std::string> &commandSet);
+        std::string add_member_watch(Watch* watch, std::string command,
+            const std::string members[], const int memberCount, std::map<Target, TargetInfo>& targets, EvaluteFunction evalute);
 
-        Watch* getWatchByID(string id);
+        Watch* getWatchByID(std::string id);
         void update(Watch* watch);
         void addWatchToConsole(Watch* watch);
         void updateWatchInConsole(Watch* watch);
@@ -76,7 +76,7 @@ class DebugWatcher: public boost::serialization::singleton<DebugWatcher>
         void notifyConsoleChangedParent(Watch* watch);
 
     public:
-        void parseCommand(string command, std::string* answer);
+        void parseCommand(std::string command, std::string* answer);
         void init();
         void step();
         ~DebugWatcher();

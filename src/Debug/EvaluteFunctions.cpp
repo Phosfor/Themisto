@@ -6,10 +6,10 @@
 
 #include "Debug/EvaluteFunctions.hpp"
 
-string evalute::evalute_material(Watch* watch)
+std::string evalute::evalute_material(Watch* watch)
 {
-    string name = watch->MemberName;
-    string result = "Error, member not found";
+    std::string name = watch->MemberName;
+    std::string result = "Error, member not found";
     BodyMaterial* m = boost::get<BodyMaterial*>(watch->Object);
     if(name == "Name") result = m->Name;
     else if(name == "KindleTemperature") result = FloatToStr(m->KindleTemperature);
@@ -35,10 +35,10 @@ string evalute::evalute_material(Watch* watch)
     return result;
 }
 
-string evalute::evalute_state(Watch* watch)
+std::string evalute::evalute_state(Watch* watch)
 {
-    string name = watch->MemberName;
-    string result = "Error, member not found";
+    std::string name = watch->MemberName;
+    std::string result = "Error, member not found";
     BodyState* m = boost::get<BodyState*>(watch->Object); 
     if(name == "IsFrozen") result = FloatToStr(m->IsFrozen);
     else if(name == "KindleLevel") result = FloatToStr(m->KindleLevel);
@@ -48,14 +48,13 @@ string evalute::evalute_state(Watch* watch)
     return result;
 }
 
-string evalute::evalute_b2Fixture(Watch* watch)
+std::string evalute::evalute_b2Fixture(Watch* watch)
 {
-    string name = watch->MemberName;
-    string result = "";
+    std::string name = watch->MemberName;
+    std::string result = "";
     b2Fixture* m = boost::get<b2Fixture*>(watch->Object); 
-                        
-             
-    string shapeTypePrefix = "", shapeVetexCountPrefix = "",
+
+    std::string shapeTypePrefix = "", shapeVetexCountPrefix = "",
         shapeVerticesPrefix = "", shapeRadiusPrefix = "", shapeCenterPrefix = "";
     bool shape = false;
     b2Shape* xshape = m->GetShape();
@@ -71,7 +70,7 @@ string evalute::evalute_b2Fixture(Watch* watch)
     }
     if(name == "Shape.Type" || shape)
     {
-        string type = "";
+        std::string type = "";
         if(xshape->GetType() == b2Shape::e_unknown) type = "e_unknown";
         else if(xshape->GetType() == b2Shape::e_circle) type = "e_circle";
         else if(xshape->GetType() == b2Shape::e_polygon) type = "e_polygon";
@@ -130,7 +129,7 @@ string evalute::evalute_b2Fixture(Watch* watch)
     if(shape) result += " }";
     else if(name == "IsSensor") result = FloatToStr(m->IsSensor());
     bool filter = false;
-    string filterCategoryPrefix = "", filterMaskPrefix = "", filterGroupPrefix = "";
+    std::string filterCategoryPrefix = "", filterMaskPrefix = "", filterGroupPrefix = "";
     if(name == "Filter")
     {
         filter = true;
@@ -158,7 +157,7 @@ string evalute::evalute_b2Fixture(Watch* watch)
             result = "Has no atached Body object";
     }
     bool mass = false;
-    string massValuePrefix = "", massCenterPrefix = "", massRotationInertiaPrefix = "";
+    std::string massValuePrefix = "", massCenterPrefix = "", massRotationInertiaPrefix = "";
     b2MassData massData;
     m->GetMassData(&massData);
     if( name == "Mass")
@@ -180,7 +179,7 @@ string evalute::evalute_b2Fixture(Watch* watch)
     else if(name == "Friction") result = FloatToStr(m->GetFriction());
 
     bool aabb = false;
-    string aabbTopPrefix = "", aabbBottomPrefix = "", aabbLeftPrefix = "", aabbRightPrefix = "";
+    std::string aabbTopPrefix = "", aabbBottomPrefix = "", aabbLeftPrefix = "", aabbRightPrefix = "";
     if( name == "AABB" )
     {
         aabb = true;
@@ -199,10 +198,10 @@ string evalute::evalute_b2Fixture(Watch* watch)
     if( result == "") result = "Erorr, can't evalute";
     return result;
 }
-string evalute::evalute_b2Body(Watch* watch)
+std::string evalute::evalute_b2Body(Watch* watch)
 {
-    string name = watch->MemberName;
-    string result = "";
+    std::string name = watch->MemberName;
+    std::string result = "";
     b2Body* body = boost::get<b2Body*>(watch->Object); 
 
     if( name == "Type")
@@ -231,7 +230,7 @@ string evalute::evalute_b2Body(Watch* watch)
     else if(name == "Active") result = BoolToStr(body->IsActive());
     else if(name == "FixedRotation") result = BoolToStr(body->IsFixedRotation());
     bool mass = false;
-    string massValuePrefix = "", massCenterPrefix = "", massRotationInertiaPrefix = "";
+    std::string massValuePrefix = "", massCenterPrefix = "", massRotationInertiaPrefix = "";
     b2MassData massData;
     body->GetMassData(&massData);
     if( name == "Mass")
@@ -253,10 +252,10 @@ string evalute::evalute_b2Body(Watch* watch)
     return result;
 }
 
-string evalute::evalute_BodyPart(Watch* watch)
+std::string evalute::evalute_BodyPart(Watch* watch)
 {
-    string name = watch->MemberName;
-    string result = "";
+    std::string name = watch->MemberName;
+    std::string result = "";
     BodyPart* part = boost::get<BodyPart*>(watch->Object); 
 
     if( name == "IsDefaultMaterial") result = BoolToStr(part->IsDefaultMaterial());
@@ -269,10 +268,10 @@ string evalute::evalute_BodyPart(Watch* watch)
     return result;
 }
 
-string evalute::evalute_Body(Watch* watch)
+std::string evalute::evalute_Body(Watch* watch)
 {
-    string name = watch->MemberName;
-    string result = "";
+    std::string name = watch->MemberName;
+    std::string result = "";
     Body* body = boost::get<Body*>(watch->Object); 
     if( name == "Buoyancy") result = FloatToStr(body->getBuoyancy());
     else if( name == "Name") result = body->getName();
@@ -281,10 +280,10 @@ string evalute::evalute_Body(Watch* watch)
     return result;
 }
 
-string evalute::evalute_EnvironObject(Watch* watch)
+std::string evalute::evalute_EnvironObject(Watch* watch)
 {
-    string name = watch->MemberName;
-    string result = "";
+    std::string name = watch->MemberName;
+    std::string result = "";
     EnvironObject* obj = boost::get<EnvironObject*>(watch->Object); 
     if(name == "Enabled") result = BoolToStr(obj->getEnabled());
     else if(name == "Limit") result = IntToStr(obj->getLimit());
@@ -295,11 +294,8 @@ string evalute::evalute_EnvironObject(Watch* watch)
 }
 
 
-string evalute::evalute_elapsed(Watch* watch)
+std::string evalute::evalute_elapsed(Watch* watch)
 {
     ApplicationManager* app = boost::get<ApplicationManager*>(watch->Object); 
     return IntToStr(app->getElapsed());
 }
-
-
-

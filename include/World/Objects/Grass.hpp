@@ -33,15 +33,15 @@ class Grass : public Object
 
     public:
         Grass(CL_Pointf position);
-    
+
         float getAmp() { return mAmplitudeFactor; }
         float getStretcH() { return mYStretch; }
         void setAmp(float amp) { mAmplitudeFactor = amp; }
         void setStretch(float amp) { mYStretch = amp; }
-        
+
         CL_Pointf getPosition() { return mPosition; }
         void setPosition(CL_Pointf point) { mPosition = point; }
-        
+
         Grass();
         void update(float elapsed);
 };

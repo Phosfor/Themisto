@@ -59,5 +59,4 @@ class PhysicObject: public Object
         void update(float elapsed);
 };
 
-
 #endif /* _PHYSIC_OBJECT_HPP_ */

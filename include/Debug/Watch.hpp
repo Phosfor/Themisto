@@ -16,7 +16,7 @@
 #include <fstream>
 
 struct Watch;
-typedef boost::function<string (Watch*)> EvaluteFunction;
+typedef boost::function<std::string (Watch*)> EvaluteFunction;
 
 const int DEFAULT_TIMEOUT = 500;
 const int EVERY_STEP = -1;

@@ -14,8 +14,8 @@
 #include "Core/ApplicationManager.hpp"
 #include "World/Environ/Object.hpp"
 
-#define kTail 0.025
-#define kDropAlpha 0.5
+const float kTail = 0.025f;
+const float kDropAlpha = 0.5f;
 
 struct Data
 {

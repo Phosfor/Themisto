@@ -15,8 +15,6 @@
 #include "Core/ApplicationManager.hpp"
 #include "World/Environ/Object.hpp"
 
-using namespace std;
-
 class Moon : public EnvironObject
 {
     private:

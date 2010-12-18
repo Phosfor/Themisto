@@ -21,10 +21,7 @@
 #include <ClanLib/display.h>
 #include <ClanLib/application.h>
 
-using namespace std;
-
 class DebugDragAndDrop;
-
 class PhysicState : public State
 {
     private:
@@ -39,7 +36,7 @@ class PhysicState : public State
     void shutdown();
     void update();
 
-    string type();
+    std::string type();
 };
 
 #endif /* _PHYSIC_STATE_HPP_ */

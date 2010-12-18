@@ -99,7 +99,7 @@ class BodyPart
         bool getAcceptsCord() { return mAcceptsCord; }
         void setAcceptsCord(bool value) { mAcceptsCord = value; }
 
-        string getName() { return mName; }
+        std::string getName() { return mName; }
         void setName(const std::string &value){ mName.assign(value); }
 };
 

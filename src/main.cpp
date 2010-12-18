@@ -22,7 +22,7 @@ int Application::main(const std::vector<CL_String> &args)
 
     try
     {
-        string mediaPath = configManager().getValue<string>("application.media-folder", "media");
+        std::string mediaPath = configManager().getValue<std::string>("application.media-folder", "media");
         utils().setMediaFolder(mediaPath);
 
         appManager().initWindow("Themisto");

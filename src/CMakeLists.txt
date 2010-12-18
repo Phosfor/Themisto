@@ -15,7 +15,6 @@ set(Themisto_srcs
     Core/EnvironManager.cpp
     Core/InputManager.cpp
     Core/ObjectsManager.cpp
-    
 
     # Environ
     World/WorldManager.cpp
@@ -38,7 +37,7 @@ set(Themisto_srcs
     World/States/MenuState.cpp
     World/States/PhysicState.cpp
 
-    # Physic   
+    # Physic
     Physic/BodyVisual.cpp
     Physic/BodyMaterial.cpp
     Physic/Impact.cpp
@@ -48,16 +47,16 @@ set(Themisto_srcs
     Physic/PhysicWind.cpp
     Physic/BodyPart.cpp
     Physic/Body.cpp
-    
+
     # Debug
     Debug/DebugIO.cpp
     Debug/DebugDraw.cpp
     Debug/DebugInstruments.cpp
     Debug/EvaluteFunctions.cpp
     Debug/DebugWatcher.cpp
-    Debug/Watch.cpp   
+    Debug/Watch.cpp
     Debug/PhysicTests.cpp
-    
+
     main.cpp
 )
 
@@ -86,12 +85,11 @@ target_link_libraries(Themisto
 # Executable for the DebugConsole
 # ----------------------------------------------------
 set(DebugConsole_srcs
-	Debug/DebugConsole.cpp
-	
+    Debug/DebugConsole.cpp
 )
 
 add_executable(DebugConsole
-	${DebugConsole_srcs}
+    ${DebugConsole_srcs}
 )
 
 target_link_libraries(DebugConsole
@@ -117,13 +115,12 @@ target_link_libraries(DebugConsole
 # Executable for the DebugVisualisator
 # ----------------------------------------------------
 set(DebugVisualisator_srcs
-	Debug/Visualisator/main.cpp
-	Debug/Visualisator/Client.cpp
-	
+    Debug/Visualisator/main.cpp
+    Debug/Visualisator/Client.cpp
 )
 
 add_executable(DebugVisualisator
-	${DebugVisualisator_srcs}
+    ${DebugVisualisator_srcs}
 )
 
 target_link_libraries(DebugVisualisator
@@ -140,4 +137,3 @@ target_link_libraries(DebugVisualisator
     fontconfig
     pthread
 )
-

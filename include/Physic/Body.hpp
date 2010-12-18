@@ -35,7 +35,7 @@ class Body
     private:
         b2AABB mLastLocation;
         b2AABB calculateLocation();
-        string mName;
+        std::string mName;
 
         // 0 - body will sink, more - stronger force would pop body from water
         float mBuoyancy;
@@ -53,11 +53,12 @@ class Body
 
         // Get/set 
 
+        // TODO: Move implementation into cpp!
         b2Body* getb2Body();
         float getBuoyancy() { return mBuoyancy; }
         void setBuoyancy(float value) { mBuoyancy = value; }
-        string getName() { return mName; }
-        void setName(string name) { mName = name; }
+        std::string getName() { return mName; }
+        void setName(const std::string &name) { mName = name; }
 
         void step(float32 elapsed);
 

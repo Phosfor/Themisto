@@ -15,8 +15,6 @@
 #include <ClanLib/display.h>
 #include <ClanLib/application.h>
 
-using namespace std;
-
 class MenuState : public State
 {
     private:
@@ -29,7 +27,7 @@ class MenuState : public State
     void shutdown();
     void update();
 
-    string type();
+    std::string type();
 };
 
 #endif /* _MENU_STATE_HPP_ */

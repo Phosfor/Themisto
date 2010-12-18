@@ -17,10 +17,7 @@
 #include <string>
 #include <boost/serialization/singleton.hpp>
 
-typedef boost::function<Object* (CL_DomElement*, string& desc)> Parser;
-
-#define typesManager (TypesManager::get_mutable_instance())
-#define typesManagerConst (TypesManager::get_const_instance())
+typedef boost::function<Object* (CL_DomElement*, std::string& desc)> Parser;
 
 class TypesManager : public boost::serialization::singleton<TypesManager>
 {
@@ -34,4 +31,7 @@ class TypesManager : public boost::serialization::singleton<TypesManager>
         Object* parseObject(CL_DomElement* objectTag, const std::string &type, std::string &desc);
         void registerParser(std::string type, Parser p);
 };
-#endif
+
+inline TypesManager &typesManager() { return TypesManager::get_mutable_instance(); }
+
+#endif /* _OBJECT_TYPES_HPP_ */

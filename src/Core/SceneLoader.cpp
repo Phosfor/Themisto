@@ -177,7 +177,7 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
     CL_DomDocument document(fileHandle);
 
     CL_DomElement root = document.get_document_element();
-    cout << " -------- " << sceneName << " --------------- \n";
+    std::cout << " -------- " << sceneName << " --------------- \n";
     CL_DomElement world = root.get_elements_by_tag_name("World").item(0).to_element();
     CL_DomElement environ = world.get_elements_by_tag_name("Environ").item(0).to_element();
     CL_DomElement objects = world.get_elements_by_tag_name("Objects").item(0).to_element();
@@ -257,8 +257,8 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
 
             // TODO: Call template parsing here...
 
-            string desc = "";
-            Object* object = typesManager.parseObject(&tag, type, desc);
+            std::string desc = "";
+            Object* object = typesManager().parseObject(&tag, type, desc);
             if(object != NULL)
             {
                 objectsManager().addObject(object->getName(), object);

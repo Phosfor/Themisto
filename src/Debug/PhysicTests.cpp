@@ -33,7 +33,7 @@ void PhysicTests::RunTest()
 
 void PhysicTests::SimpleMoisten(BodyPart* part)
 {
-    string answer;
+    std::string answer;
     /*debugWatcher.parseCommand(cl_format("show material of %1(%2) every eon", 
         getBody(part)->getName(), part->getName()), &answer);
          debugWatcher.parseCommand(cl_format("show param of %1(%2) every eon", 

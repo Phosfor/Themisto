@@ -11,14 +11,14 @@ BodyPart::BodyPart(b2Fixture* fixture, BodyMaterial* material)
     mFixture = fixture;
 
     fixture->SetUserData(this);
-    mAppliedImpacts = new list<Impact*>;
+    mAppliedImpacts = new std::list<Impact*>;
     mIsDefaultMaterial = true;
     mShouldFreeBodyMaterial =false;
     mMaterial = material;
-    mParentWorld= mFixture->GetBody()->GetWorld();
+    mParentWorld = mFixture->GetBody()->GetWorld();
     mState = new BodyState;
-    world= &worldManager;
-    mStaticCollisions = new list<BodyPart*>;
+    world= &worldManager();
+    mStaticCollisions = new std::list<BodyPart*>;
     mContactImpacts = new std::map<b2Fixture*, Impact*>;
     mRainImpact = NULL;
     mWindImpact = NULL;
@@ -161,7 +161,7 @@ void BodyPart::calculateThermalTransmission(BodyPart* p)
       {
           ImpactTypes type = (p->mState->Temperature > mState->Temperature)? Heat : Cool;
           impact = new Impact(type);
-          mContactImpacts->insert(pair<b2Fixture*, Impact*>(p->mFixture,impact));
+          mContactImpacts->insert(std::pair<b2Fixture*, Impact*>(p->mFixture,impact));
           p->applyImpact(impact);
       }
       impact->Intensity = abs(p->mState->Temperature - mState->Temperature);
