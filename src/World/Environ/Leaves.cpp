@@ -66,6 +66,8 @@ Leaves::Leaves(int maxLeaves)
     srand(time(NULL));
     mGC = appManager().getGraphic();
     mMaxObjects = maxLeaves;
+
+    functionValue = +1;
 }
 
 void Leaves::update(float windPower, float elapsed, float globalTime)
@@ -94,7 +96,13 @@ void Leaves::update(float windPower, float elapsed, float globalTime)
 
             float y = mLeaves[i].k1 * sinf(mLeaves[i].k2 * Deg2Rad(mLeaves[i].x)) + mLeaves[i].y;
 
-            if (floor(abs(y - mLeaves[i].y)+0.5) >= mLeaves[i].k1) mLeaves[i].animation = true;
+            float tempValue = -cosf(y);
+
+            if (tempValue * functionValue < 0)
+            {
+                mLeaves[i].animation = true;
+            }
+            functionValue = tempValue;
 
             if (mLeaves[i].animation)
             {

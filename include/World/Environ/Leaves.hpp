@@ -31,6 +31,7 @@ class Leaves : public EnvironObject
     private:
         std::vector<LeafData> mLeaves;
         bool mFirstTime;
+        float functionValue;
 
         CL_GraphicContext mGC;
 

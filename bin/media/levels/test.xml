@@ -9,10 +9,10 @@
             <!--<Lightnings enabled="true" />-->
             <Sky enabled="true" />
             <Moon enabled="true" />
-            <Leaves enabled="true" limit="5" />
+            <Leaves enabled="true" limit="2" />
             <Stars enabled="true" />
             <!--<Birds enabled="true" />-->
-            <Wind power="-1" />
+            <Wind power="-2" />
         </Environ>
 
         <Objects>
