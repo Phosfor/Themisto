@@ -81,7 +81,7 @@ inline float Rad2Deg(float rad) { return rad * 57.2957795130823; }
 inline float Deg2Rad(float deg) { return deg * 0.0174532925199433; }
 
 // The speed of free falling
-const float G = Meters2Pixels(9.81);
+const float Gravity = 9.81 * PixelsPerMeter;
 
 /////////////////////////////////////////////////////////////////////////
 //////////////////////// TIME MANAGEMENT ////////////////////////////////

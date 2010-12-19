@@ -14,7 +14,7 @@ void Rain::setLimit(int limit)
 
 Data::Data()
     : x(rand()%ScreenResolutionX), y(0)
-    , x_speed(), y_speed(0), timeout(rand()%130)
+    , x_speed(0), y_speed(0), timeout(rand()%130)
 { }
 
 void Rain::processDrops(float windPower, int i)
@@ -22,7 +22,7 @@ void Rain::processDrops(float windPower, int i)
     int left, right;
     left = right = 0;
 
-    int x1 = (mWindowHeight / G) * windPower;
+    int x1 = (mWindowHeight / Gravity) * windPower;
 
     if (windPower < 0) {
         left = 0; 
@@ -35,12 +35,20 @@ void Rain::processDrops(float windPower, int i)
     int posX = rand() % (right - left) + left;
 
     mData[i].x = posX;
-    mData[i].y = 0;
 
     mData[i].x_speed = windPower*0.1;
-    mData[i].y_speed = G*0.1;
+    mData[i].y_speed = Gravity*0.1;
 
-    mData[i].timeout = rand() % 130;
+    if (mFirstTime)
+    {
+        mData[i].timeout = 0;
+        mData[i].y = rand() % mWindowHeight;
+    }
+    else
+    {
+        mData[i].timeout = rand() % 130;
+        mData[i].y = 0;
+    }
 }
 
 Rain::Rain(int maxDrops)
@@ -53,10 +61,21 @@ Rain::Rain(int maxDrops)
     mDropColor.a = kDropAlpha;
 
     mGC = appManager().getGraphic();
+    mFirstTime = true;
 }
 
 void Rain::update(float windPower, float elapsed, float globalTime)
 {
+    if (mFirstTime)
+    {
+        for (int i=0; i < mMaxObjects; ++i)
+        {
+            mData.push_back(Data());
+            processDrops(windPower, i);
+        }
+        mFirstTime = false;
+    }
+
     for (int i=0; i < mMaxObjects; i++)
     {
         if (mData[i].timeout > 0)
@@ -69,11 +88,11 @@ void Rain::update(float windPower, float elapsed, float globalTime)
             mData[i].y += mData[i].y_speed * elapsed;
 
             mData[i].x_speed += windPower * elapsed;
-            mData[i].y_speed += G * elapsed;
+            mData[i].y_speed += Gravity * elapsed;
 
             CL_Draw::line(mGC,
-                    mData[i].x, mData[i].y, 
-                    mData[i].x - mData[i].x_speed * kTail, mData[i].y - mData[i].y_speed * kTail, 
+                    mData[i].x, mData[i].y,
+                    mData[i].x - mData[i].x_speed * kTail, mData[i].y - mData[i].y_speed * kTail,
                     mDropColor);
 
             if (mData[i].y > mWindowHeight) processDrops(windPower, i);

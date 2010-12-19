@@ -12,6 +12,7 @@
 
 #include "Core/Utils.hpp"
 #include "Core/ApplicationManager.hpp"
+#include "Core/EnvironManager.hpp"
 #include "World/Environ/Object.hpp"
 
 const float kTail = 0.025f;
@@ -30,6 +31,7 @@ class Rain : public EnvironObject
         std::vector<Data> mData;
         CL_Colorf mDropColor;
         CL_GraphicContext mGC;
+        bool mFirstTime;
 
         void processDrops(float windPower, int i);
 

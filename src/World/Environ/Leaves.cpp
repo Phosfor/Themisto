@@ -73,7 +73,7 @@ void Leaves::update(float windPower, float elapsed, float globalTime)
     // Init pack part of leaves
     if (mFirstTime)
     {
-        for (int i=0; i < mMaxObjects; i++)
+        for (int i=0; i < mMaxObjects; ++i)
         {
             mLeaves.push_back(LeafData());
             processLeaves(mGC, windPower, i);
@@ -125,7 +125,7 @@ void Leaves::update(float windPower, float elapsed, float globalTime)
             }
 
             mLeaves[i].x_speed = mLeaves[i].speed_koef * windPower * elapsed;
-            mLeaves[i].y_speed = G * elapsed;
+            mLeaves[i].y_speed = Gravity * elapsed;
 
             mLeaves[i].imageHandle.draw(mGC, mLeaves[i].x, y);
         }
