@@ -36,6 +36,7 @@ void Moon::setScale(float _scaleX, float _scaleY)
 
 void Moon::update(float windPower, float elapsed, float globalTime)
 {
+    // TODO: Count the time (21.4)
     // Set moon back
     if (!mRenderMoon && globalTime >= 21.4f)
     {

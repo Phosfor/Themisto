@@ -17,6 +17,18 @@
         <texture name="3" file="leaves/3.png" />
     </section>
 
+    <section name="Stars">
+        <texture name="0" file="stars/0.png" />
+        <texture name="1" file="stars/1.png" />
+        <texture name="2" file="stars/2.png" />
+        <texture name="3" file="stars/3.png" />
+    </section>
+
+    <section name="Nebulas">
+        <texture name="big_galaxy" file="nebulas/big_galaxy.png" />
+        <texture name="0" file="nebulas/0.png" />
+    </section>
+
     <section name="Moons">
         <texture name="0" file="moons/0.png" />
         <texture name="1" file="moons/1.png" />

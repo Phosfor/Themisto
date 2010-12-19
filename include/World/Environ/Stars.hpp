@@ -12,6 +12,7 @@
 
 #include "Core/Utils.hpp"
 #include "Core/ApplicationManager.hpp"
+#include "Core/ResourceManager.hpp"
 #include "World/Environ/Object.hpp"
 
 struct StarsData
@@ -22,16 +23,29 @@ struct StarsData
     StarsData(int width, int height);
 };
 
+struct ImageStarsData
+{
+    float x, y, brightness;
+    CL_Image imageHandle;
+
+    ImageStarsData(CL_GraphicContext gc, int width, int height);
+};
+
 class Stars : public EnvironObject
 {
     private:
         std::vector<StarsData> mStars;
+        std::vector<ImageStarsData> mImageStars;
 
         float mBloomSize;
         float t1, t2;
         bool mNight, mDrawStars;
 
         CL_GraphicContext mGC;
+
+        // For galaxies
+        CL_Image mBigGalaxy;
+        float mBigGalaxyAlpha, mBigGalaxyBloom;
 
     public:
         Stars(int maxStars = 200);
