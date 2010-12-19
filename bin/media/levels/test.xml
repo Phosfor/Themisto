@@ -9,7 +9,7 @@
             <!--<Lightnings enabled="true" />-->
             <Sky enabled="true" />
             <Moon enabled="true" />
-            <Leaves enabled="true" limit="2" />
+            <Leaves enabled="true" limit="5" />
             <Stars enabled="true" />
             <!--<Birds enabled="true" />-->
             <Wind power="-2" />

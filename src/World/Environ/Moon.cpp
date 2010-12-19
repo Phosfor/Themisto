@@ -5,12 +5,16 @@
  */
 
 #include "World/Environ/Moon.hpp"
+#include <math.h>
 
 Moon::Moon()
 {
     std::string media = utils().getMediaFolder();
     CL_GraphicContext gc = appManager().getGraphic();
     mMoon = CL_Sprite(gc, resourceManager().texturePath("Moons", "0"));
+
+    float koef = Meters2Pixels(9.0) / mMoon.get_width();
+    mMoon.set_scale(koef, koef);
 
     mMoonColor = mMoon.get_color();
     mG = mB = 1.0f;
