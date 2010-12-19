@@ -8,7 +8,7 @@
 #include "Core/EnvironManager.hpp"
 
 Lightnings::Lightnings()
-    : EnvironObject(), mProbability(200), alpha(0)
+    : EnvironObject(), mProbability(1000), mAnimation(false), alpha(0)
 {
     mGC = appManager().getGraphic();
     int size = resourceManager().sectionHandle("Lightnings").get_child_nodes().get_length();
@@ -37,7 +37,7 @@ void Lightnings::update(float windPower, float elapsed, float globalTime)
         }
     }
 
-    if (mAnimation && mTimer <= 900.0f)
+    if (mEnabled && mAnimation && mTimer <= 900.0f)
     {
         mTimer += elapsed * 1000.0f;
         mLightningImages[mHandle].set_alpha(0.8);
