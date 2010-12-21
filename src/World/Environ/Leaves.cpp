@@ -96,7 +96,7 @@ void Leaves::update(float windPower, float elapsed, float globalTime)
 
             float y = mLeaves[i].k1 * sinf(mLeaves[i].k2 * Deg2Rad(mLeaves[i].x)) + mLeaves[i].y;
 
-            float tempValue = -cosf(y);
+            float tempValue = mLeaves[i].k1 * mLeaves[i].k2 * cosf(mLeaves[i].k2 * Deg2Rad(mLeaves[i].x));
 
             if (tempValue * functionValue < 0)
             {
