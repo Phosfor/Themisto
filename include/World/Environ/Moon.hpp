@@ -16,6 +16,8 @@
 #include "Core/ResourceManager.hpp"
 #include "World/Environ/Object.hpp"
 
+#include <math.h>
+
 class Moon : public EnvironObject
 {
     private:
