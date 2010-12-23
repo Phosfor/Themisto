@@ -14,7 +14,9 @@ int Application::main(const std::vector<CL_String> &args)
     LOG("Core handle is initialized");
     CL_SetupDisplay displayHandle;
     LOG("Display handle is initialized");
-    CL_SetupGL glHandle;
+    CL_SetupGL gl2Handle;
+    CL_SetupGL1 gl1Handle;
+    CL_SetupSWRender swHandle;
     LOG("GL handle is initialized");
     CL_SetupSound soundHandle;
     LOG("Sound handle is initialized");
@@ -23,6 +25,15 @@ int Application::main(const std::vector<CL_String> &args)
 
     try
     {
+        // Set software render as default
+        swHandle.set_current();
+        std::string render = configManager().getValue<std::string>("window.render", "software");
+        LOG("Chosen render is " + render);
+        if (render == "opengl1")
+            gl1Handle.set_current();
+        else if (render == "opengl2")
+            gl2Handle.set_current();
+
         std::string mediaPath = configManager().getValue<std::string>("application.media-folder", "media");
         utils().setMediaFolder(mediaPath);
 
@@ -56,7 +67,6 @@ int Application::main(const std::vector<CL_String> &args)
         else
            stateManager().push(new MenuState);
 
-        LOG_NOFORMAT("\t---------- Starting game ---------\n");
         while (appManager().getRunning())
         {
             appManager().frameStarted();

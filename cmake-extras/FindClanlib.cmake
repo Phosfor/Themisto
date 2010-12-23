@@ -20,13 +20,12 @@ IF(NOT ClanLib_FIND_COMPONENTS)
     App
     Display
     GL
+    GL1
+    SWRender
     GUI
     CSSLayout
-    GUIStyleSilver
     MikMod
     Network
-    SDL
-    Signals
     Sound
     Vorbis)
 ENDIF(NOT ClanLib_FIND_COMPONENTS)
@@ -98,12 +97,11 @@ MARK_AS_ADVANCED(
   ClanLib_Core_LIBRARY
   ClanLib_Display_LIBRARY
   ClanLib_GL_LIBRARY
+  ClanLib_GL1_LIBRARY
+  ClanLib_SWRender_LIBRARY
   ClanLib_GUI_LIBRARY
-  ClanLib_GUIStyleSilver_LIBRARY
   ClanLib_MikMod_LIBRARY
   ClanLib_Network_LIBRARY
-  ClanLib_SDL_LIBRARY
-  ClanLib_Signals_LIBRARY
   ClanLib_Sound_LIBRARY
   ClanLib_Vorbis_LIBRARY
 )

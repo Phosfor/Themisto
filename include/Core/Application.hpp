@@ -10,6 +10,8 @@
 #include <ClanLib/display.h>
 #include <ClanLib/core.h>
 #include <ClanLib/gl.h>
+#include <ClanLib/gl1.h>
+#include <ClanLib/swrender.h>
 #include <ClanLib/application.h>
 #include <ClanLib/gui.h>
 #include <ClanLib/sound.h>
