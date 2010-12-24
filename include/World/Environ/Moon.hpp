@@ -22,7 +22,7 @@ class Moon : public EnvironObject
 {
     private:
         // Moon graphic representing
-        CL_Sprite mMoon;
+        CL_Image mMoon;
         CL_Colorf mMoonColor;
         float mG, mB;
 

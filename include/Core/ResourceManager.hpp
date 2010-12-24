@@ -10,6 +10,7 @@
 #include <ClanLib/core.h>
 #include <ClanLib/display.h>
 
+#include "Core/ApplicationManager.hpp"
 #include "Core/ConfigManager.hpp"
 #include "Core/LogManager.hpp"
 #include "Core/Utils.hpp"
@@ -33,7 +34,8 @@ class ResourceManager : public boost::serialization::singleton<ResourceManager>
         CL_DomElement textureXmlRoot;
 
         // Section => (name => location)
-        std::map< std::string, std::map<std::string, std::string> > texturesStorage;
+        std::map< CL_String, std::map<CL_String, CL_String> > texturesStorage;
+        std::map< CL_String, CL_Texture > mTexturesData; // Stores copy of the texture in memory
 
     public:
         ResourceManager();
@@ -42,6 +44,9 @@ class ResourceManager : public boost::serialization::singleton<ResourceManager>
         void loadTextures();
 
         std::string texturePath(const std::string &section, const std::string &name);
+        CL_Image getImage(const std::string &section, const std::string &name);
+        CL_Sprite getSprite(const std::string &section, const std::vector<std::string> &names);
+        CL_Sprite getSprite(const std::string &section, const std::string &name);
         CL_DomNode sectionHandle(const std::string &section);
 };
 

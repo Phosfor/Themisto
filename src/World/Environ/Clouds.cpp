@@ -24,8 +24,7 @@ void Clouds::processClouds(CL_GraphicContext &gc, float windPower, int i)
     mClouds[i].x_speed = 0;
     int size = resourceManager().sectionHandle("Clouds").get_child_nodes().get_length();
     mClouds[i].cloudType = rand() % size;
-    mClouds[i].imageHandle = CL_Sprite(gc,
-            resourceManager().texturePath("Clouds", boost::lexical_cast<std::string>(mClouds[i].cloudType)));
+    mClouds[i].imageHandle = resourceManager().getSprite("Clouds", boost::lexical_cast<std::string>(mClouds[i].cloudType));
 
     if (!mFirstTime)
     {

@@ -31,7 +31,7 @@ ImageStarsData::ImageStarsData(CL_GraphicContext gc, int width, int height)
 
     int size = resourceManager().sectionHandle("Stars").get_child_nodes().get_length();
     int randStar = rand() % size;
-    imageHandle = CL_Image(gc, resourceManager().texturePath("Stars", boost::lexical_cast<std::string>(randStar)));
+    imageHandle = resourceManager().getImage("Stars", boost::lexical_cast<std::string>(randStar));
 
     float scale = float(rand()%2 + 2)/10.0f;
     imageHandle.set_scale(scale, scale);
@@ -50,7 +50,7 @@ Stars::Stars(int maxStars)
     for (int i=0; i < mMaxObjects; i++)
         mStars.push_back(StarsData(mWindowWidth, mWindowHeight));
 
-    mBigGalaxy = CL_Image(mGC, resourceManager().texturePath("Nebulas", "big_galaxy"));
+    mBigGalaxy = resourceManager().getImage("Nebulas", "big_galaxy");
     mBigGalaxyAlpha = 0.8f; // Max alpha value
     mBigGalaxy.set_alpha(0.0);
 

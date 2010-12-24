@@ -14,10 +14,7 @@ Lightnings::Lightnings()
     int size = resourceManager().sectionHandle("Lightnings").get_child_nodes().get_length();
 
     for (int i=0; i < size; ++i)
-    {
-        mLightningImages.push_back(CL_Image(mGC,
-                resourceManager().texturePath("Lightnings", boost::lexical_cast<std::string>(i))));
-    }
+        mLightningImages.push_back(resourceManager().getImage("Lightnings", boost::lexical_cast<std::string>(i)));
 
     if (!environManager().getTypeEnabled(Environ_Clouds))
         mEnabled = false;

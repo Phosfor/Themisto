@@ -50,8 +50,8 @@ void Leaves::processLeaves(CL_GraphicContext &gc, float windPower, int i)
     // Load some random leaf surface
     int size = resourceManager().sectionHandle("Leaves").get_child_nodes().get_length();
     mLeaves[i].leafType = rand() % size;
-    mLeaves[i].imageHandle = CL_Sprite(gc,
-            resourceManager().texturePath("Leaves", boost::lexical_cast<std::string>(mLeaves[i].leafType)));
+
+    mLeaves[i].imageHandle = resourceManager().getSprite("Leaves", boost::lexical_cast<std::string>(mLeaves[i].leafType));
 
     // Rotate leaf surface at some random angle
     int angle = rand() % 360 + 1;

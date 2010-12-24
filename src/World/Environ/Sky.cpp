@@ -32,7 +32,7 @@ Sky::Sky()
 
 void Sky::update(float windPower, float elapsed, float globalTime)
 {
-    // Make atmosphere scattering? [9; 12] globalTime
+    // Make atmosphere scattering? [9; 11] globalTime
     if (globalTime <= 9.0f) {
         t1 = 0.0f;
     } else if (globalTime >= 11.0f) {

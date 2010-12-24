@@ -10,7 +10,7 @@ Moon::Moon()
 {
     std::string media = utils().getMediaFolder();
     CL_GraphicContext gc = appManager().getGraphic();
-    mMoon = CL_Sprite(gc, resourceManager().texturePath("Moons", "0"));
+    mMoon = resourceManager().getImage("Moons", "0");
 
     float koef = Meters2Pixels(9.0) / mMoon.get_width();
     mMoon.set_scale(koef, koef);

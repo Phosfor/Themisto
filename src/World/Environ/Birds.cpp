@@ -27,17 +27,13 @@ void Birds::processBirds(CL_GraphicContext &gc, int width, int height, int i)
     else
         birdHandle = birds.get_first_child_element();
 
+    std::vector<std::string> textures;
     // TODO: Chose the bird type here
     for (int j=0; j < birdHandle.get_child_nodes().get_length(); j++)
-    {
+        textures.push_back(cl_format(boost::lexical_cast<std::string>(j)));
 
-        // Load all animation frames
-        mBirds[i].mImageDesc.add_frame(CL_ImageProviderFactory::load(resourceManager().texturePath(
-                        cl_format("Birds/%1", birdHandle.get_attribute("name")).c_str(),
-                        boost::lexical_cast<std::string>(j))));
-    }
-
-    mBirds[i].mBirdImage = CL_Sprite(gc, mBirds[i].mImageDesc);
+    mBirds[i].mBirdImage = 
+        resourceManager().getSprite(cl_format("Birds/%1", birdHandle.get_attribute("name")).c_str(), textures);
     mBirds[i].mBirdImage.set_scale(0.5, 0.5);
     mBirds[i].mBirdImage.set_linear_filter(true);
 

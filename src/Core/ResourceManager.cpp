@@ -17,6 +17,43 @@ ResourceManager::ResourceManager()
     textureXmlRoot = textureXmlDocument.get_document_element();
 }
 
+CL_Image ResourceManager::getImage(const std::string &section, const std::string &name)
+{
+    if (mTexturesData.find(section + '/' + name) == mTexturesData.end())
+        throw new CL_Exception(cl_format("Failed to getImage from `%1/%2`.", section, name));
+
+    CL_Texture temp = mTexturesData[section + '/' + name];
+    return CL_Image(appManager().getGraphic(), temp, CL_Rectf(0, 0, temp.get_width(), temp.get_height()));
+}
+
+CL_Sprite ResourceManager::getSprite(const std::string &section, const std::vector<std::string> &names)
+{
+    CL_SpriteDescription desc;
+
+    BOOST_FOREACH(std::string name, names)
+    {
+        if (mTexturesData.find(section + '/' + name) == mTexturesData.end())
+            throw new CL_Exception(cl_format("Failed to getSprite from `%1/%2`.", section, name));
+
+        CL_Texture temp = mTexturesData[section + '/' + name];
+        desc.add_frame(temp);
+    }
+
+    return CL_Sprite(appManager().getGraphic(), desc);
+}
+
+CL_Sprite ResourceManager::getSprite(const std::string &section, const std::string &name)
+{
+    if (mTexturesData.find(section + '/' + name) == mTexturesData.end())
+        throw new CL_Exception(cl_format("Failed to getSprite from `%1/%2`.", section, name));
+
+    CL_Texture temp = mTexturesData[section + '/' + name];
+    CL_SpriteDescription desc;
+    desc.add_frame(temp);
+
+    return CL_Sprite(appManager().getGraphic(), desc);
+}
+
 void ResourceManager::loadTextures()
 {
     using namespace std;
@@ -30,14 +67,15 @@ void ResourceManager::loadTextures()
         BOOST_FOREACH(CL_String resource, texturesManager.get_resource_names(section))
         {
             CL_Resource textureSection = texturesManager.get_resource(section + resource);
-            string textureName = textureSection.get_element().get_attribute("name").c_str();
-            string texturePath = textureSection.get_element().get_attribute("file").c_str();
+            CL_String textureName = textureSection.get_element().get_attribute("name");
+            CL_String texturePath = textureSection.get_element().get_attribute("file");
 
-            /*TODO: Load pictures into CL_Image */
             texturesStorage[section][textureName] = texturePath;
+            std::string res = std::string(cl_format("%1%2", section, textureName).c_str());
+            mTexturesData[res] = CL_Texture(appManager().getGraphic(), cl_format("%1/%2", mediaPath, texturePath));
 
-            string fullPath = mediaPath + "/" + texturePath;
-            if (!boost::filesystem::exists(fullPath))
+            CL_String fullPath = cl_format("%1/%2", mediaPath, texturePath);
+            if (!boost::filesystem::exists(fullPath.c_str()))
             {
                 LOG(cl_format("The texture path `%1` is invalid, check your resources!", fullPath));
             }
