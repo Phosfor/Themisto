@@ -17,10 +17,10 @@ To build it follow such comands:
 To build it succesfull, you have to install these packages:
 @ClanLib >= 2.2.4@
 @boost-all-dev >= 1.42@
-@box2d latest@
+@box2d 2.1.2@
 
 To build everything (clanlib, box2d) you need such packages:
-@cmake libx11-dev libmikmod=dev db4.8-util libpng-dev libfreeimagedev build-essential gcc git automake libtool libjpeg62-dev libfreetype6-dev libfontconfig1-dev libvorbis-dev libx11-gl-dev libgl1-mesa-dev mesa-common-dev xlibmesa-gl-dev xorg-dev@
+@cmake libx11-dev libmikmod-dev db4.8-util libpng-dev libfreeimagedev build-essential gcc git automake libtool libjpeg62-dev libfreetype6-dev libfontconfig1-dev libvorbis-dev libx11-gl-dev libgl1-mesa-dev mesa-common-dev xlibmesa-gl-dev xorg-dev@
 
 <b>Debug tools</b>:
 ReadLine utility, for installing process this lines:
