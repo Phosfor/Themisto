@@ -85,25 +85,6 @@ void ResourceManager::loadTextures()
     LOG(cl_format("%1 texture(s) are(is) loaded!", counter));
 }
 
-std::string ResourceManager::texturePath(const std::string &section, const std::string &name)
-{
-    std::string path = mediaPath;
-    path += "/";
-    if (texturesStorage.find(section + "/") == texturesStorage.end())
-    {
-        std::cout << cl_format("Failed to load(texture) from section `%1`.", section).c_str();
-        throw new CL_Exception(cl_format("Failed to load(texture) from section `%1/`.", section));
-    }
-    else
-    {
-        if (texturesStorage[section + "/"].find(name) == texturesStorage[section].end())
-            throw new CL_Exception(cl_format("Failed to load texture `%1`", name));
-        else
-            path += texturesStorage[section + "/"][name];
-    }
-    return path;
-}
-
 CL_DomNode ResourceManager::sectionHandle(const std::string &section)
 {
     try {

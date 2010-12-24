@@ -43,7 +43,6 @@ class ResourceManager : public boost::serialization::singleton<ResourceManager>
         void loadFonts();
         void loadTextures();
 
-        std::string texturePath(const std::string &section, const std::string &name);
         CL_Image getImage(const std::string &section, const std::string &name);
         CL_Sprite getSprite(const std::string &section, const std::vector<std::string> &names);
         CL_Sprite getSprite(const std::string &section, const std::string &name);
