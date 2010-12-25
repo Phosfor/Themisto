@@ -50,6 +50,7 @@ int Application::main(const std::vector<CL_String> &args)
         CL_GUIWindowManagerTexture wm = guiManager().getWM();
         CL_GraphicContext gc = appManager().getGraphic();
 
+
         resourceManager().loadFonts();
         resourceManager().loadTextures();
 

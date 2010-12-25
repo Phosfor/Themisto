@@ -6,83 +6,95 @@
 
 #include <ClanLib/core.h>
 #include <ClanLib/display.h>
-#include <ClanLib/gl.h>
 #include <ClanLib/application.h>
+#include <ClanLib/gui.h>
+
+#include <ClanLib/gl.h>
+#include <ClanLib/gl1.h>
+#include <ClanLib/swrender.h>
+
 #include "Debug/Visualisator/Client.hpp"
+#include "Core/ConfigManager.hpp"
+#include "Core/GuiManager.hpp"
+
 #include <algorithm>
 #include <boost/algorithm/string.hpp>
 
 class DebugVisualisator
 {
-private:
-    static void onKeyDown(const CL_InputEvent &event, const CL_InputState &state)
-    {
-        if (event.id == CL_MOUSE_WHEEL_DOWN)
-        {
-            if (topOffsetScroll - 5 >= -((numElements-3) * 25))
-                topOffsetScroll -= 5;
-        } else if (event.id == CL_MOUSE_WHEEL_UP)
-        {
-            if (topOffsetScroll + 5 <= windowHeight/25)
-                topOffsetScroll += 5;
-        }
-    }
 public:
-    static int topOffsetScroll;
-    static int windowHeight;
-    static int numElements;
-
     static int main(const std::vector<CL_String> &args)
     {
         CL_SetupCore setup_core;
         CL_SetupDisplay setup_display;
-        CL_SetupGL setup_gl;
+        CL_SetupGL gl2Handle;
+        CL_SetupGL1 gl1Handle;
+        CL_SetupSWRender swHandle;
 
         try
         {
+            // Set software render as default
+            swHandle.set_current();
+            std::string render = configManager().getValue<std::string>("window.render", "software");
+            if (render == "opengl1")
+                gl1Handle.set_current();
+            else if (render == "opengl2")
+                gl2Handle.set_current();
+
             CL_Font_System::register_font("media/fonts/ubuntu.ttf", "Ubuntu");
             Client mClient;
             mClient.connect_to_server();
 
             CL_DisplayWindow window("Debug Visualisator", 500, 700);
+
+            guiManager().initGui(window, "media/gui_basic");
+            CL_GUIManager gui = guiManager().getHandle();
+            CL_GUIWindowManagerTexture wm = guiManager().getWM();
+
             CL_GraphicContext gc = window.get_gc();
             CL_InputDevice keyboard = window.get_ic().get_keyboard();
-            CL_Slot slot = window.get_ic().get_mouse().sig_key_down().connect(&DebugVisualisator::onKeyDown);
             CL_Font font(gc, "Ubuntu", 25);
 
-            windowHeight = window.get_geometry().get_height();
+            CL_ListView *listView = new CL_ListView(&guiManager().getWrapper());
+            listView->set_geometry(CL_Rectf(0, 0, 500, 700));
+            //listView->set_display_mode(listview_mode_details);
+
+            CL_ListViewHeader *lv_header = listView->get_header();
+            lv_header->append(lv_header->create_column("col1_id", "Command")).set_width(400);
+            lv_header->append(lv_header->create_column("col2_id", "Value")).set_width(100);
+
+            CL_ListViewItem doc_item = listView->get_document_item();
+
             CL_Colorf label(127/255.0f, 229/225.0f, 127/225.0f);
 
             while (!keyboard.get_keycode(CL_KEY_ESCAPE))
             {
                 mClient.checkEvents();
-                numElements = mClient.mWatchesHandles.size();
-                gc.clear(CL_Colorf::black);
-                int offset = 20 + topOffsetScroll;
+                gc.clear(CL_Colorf::grey);
 
+                listView->clear();
                 std::vector<unsigned int> shownElements;
                 for (unsigned int i=0; i < mClient.mWatchesHandles.size(); ++i)
                 {
                     if (std::find(shownElements.begin(), shownElements.end(), i) != shownElements.end()) 
                         continue;
 
-                    int offsetLeft = 10;
-
-                    // If this is parent, add Id string for it
+                    //If this is parent, add Id string for it
                     if (mClient.mWatchesHandles[i].parent == "")
                     {
-                        std::string data = "[" + mClient.mWatchesHandles[i].id + "] ";
-                        data += mClient.mWatchesHandles[i].name + " : ";
-                        font.draw_text(gc, offsetLeft, offset, data, label);
-
-                        int width = font.get_text_size(gc, data).width;
-                        std::string value = mClient.mWatchesHandles[i].value;
-                        font.draw_text(gc, offsetLeft + width, offset, value, CL_Colorf::white);
+                        CL_ListViewItem parent = listView->create_item();
+                        {
+                            std::string data = "[" + mClient.mWatchesHandles[i].id + "] ";
+                            data += mClient.mWatchesHandles[i].name;
+                            parent.set_column_text("col1_id", data);
+                            parent.set_column_text("col2_id", mClient.mWatchesHandles[i].value);
+                            parent.set_open(true);
+                            doc_item.append_child(parent);
+                        }
 
                         shownElements.push_back(i);
-                        offset += 25;
 
-                        // If this is parent, it could contain some children, find them
+                        //If this is parent, it could contain some children, find them
                         for (unsigned int j = i; j < mClient.mWatchesHandles.size(); ++j)
                         {
                             if (std::find(shownElements.begin(), shownElements.end(), j) != shownElements.end()) continue;
@@ -90,21 +102,22 @@ public:
 
                             if (mClient.mWatchesHandles[j].parent == mClient.mWatchesHandles[i].id)
                             {
-                                std::string childData = mClient.mWatchesHandles[j].name + " : ";
-                                font.draw_text(gc, offsetLeft + 20, offset, childData, label);
-
-                                int childWidth = font.get_text_size(gc, childData).width;
-                                std::string childValue = mClient.mWatchesHandles[j].value;
-                                font.draw_text(gc, offsetLeft + childWidth + 20, offset, childValue, CL_Colorf::white);
+                                CL_ListViewItem child = listView->create_item();
+                                child.set_column_text("col1_id", mClient.mWatchesHandles[j].name);
+                                child.set_column_text("col2_id", mClient.mWatchesHandles[j].value);
+                                child.set_open(true);
+                                parent.append_child(child);
 
                                 shownElements.push_back(j);
-                                offset += 25;
                             }
                         }
                     }
                 }
 
                 shownElements.clear();
+
+                wm.process();
+                wm.draw_windows(gc);
 
                 window.flip();
                 CL_KeepAlive::process();
@@ -123,7 +136,4 @@ public:
     }
 };
 
-int DebugVisualisator::topOffsetScroll = 0;
-int DebugVisualisator::windowHeight = 0;
-int DebugVisualisator::numElements = 0;
 CL_ClanApplication app(&DebugVisualisator::main);

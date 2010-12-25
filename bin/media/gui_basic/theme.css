@@ -354,7 +354,7 @@ lineedit selection:unfocused
 listview 
 {
 	bg-image:; 
-
+	font-size: 18;
 	bg-image-sizing-left:3;
 	bg-image-sizing-right:3;
 	bg-image-sizing-top:3;
@@ -372,7 +372,7 @@ listview row:details
 	bg-image 
 	indent-width:20;
 	bg-color:#eeeeee;
-
+	font-size: 18;
 	border-top:0;
 	border-bottom:0;
 }
@@ -382,7 +382,7 @@ listview row:alternate
 	bg-image 
 	indent-width:20;
 	bg-color:#e2e2e2;
-
+	font-size: 18;
 	border-top:0;
 	border-bottom:0;
 }
@@ -396,17 +396,19 @@ listview column
 listview row_opener:open
 {
 	bg-image:;
-	preferred-height:9;
+	preferred-height:18;
 	preferred-width:9;
 	offset-y:-2;
+	font-size: 18;
 }
 
 listview row_opener:closed
 {
 	bg-image:;
-	preferred-height:9;
+	preferred-height:18;
 	preferred-width:9;
 	offset-y:-2;
+	font-size: 18;
 }
 
 listview selection
@@ -418,28 +420,32 @@ listview selection
 
 	bg-color:#316ac5;
 	text-color:#f2e3f2;
+	font-size: 18;
 }
 
 listview selection:unfocused
 {
 	bg-color:#ece9d8;
 	text-color:black;
+	font-size: 18;
 }
 
 listview selection:normal
 {
     text-decoration:none;
+	font-size: 18;
 }
 
 listview selection:hot
 {
     text-decoration:underline;
+	font-size: 18;
 }
 
 listview icon_selection:normal
 {
 	bg-image:;
-
+	font-size: 18;
 	bg-image-sizing-left:3;
 	bg-image-sizing-right:4;
 	bg-image-sizing-top:3;
@@ -455,6 +461,7 @@ listview icon_selection:normal
 
 listview columns_bg
 {
+	font-size: 18;
 	bg-image
 	bg-color:white;
 	border-top:0;
@@ -467,12 +474,14 @@ listview row:icons
 {
 	bg-image
 	bg-color:#eeeeee;
+	font-size: 18;
 }
 
 listview cell:details:hot
 {
 	text-color:blue;
 	text-decoration:underline;
+	font-size: 18;
 }
 
 listview cell:details:normal
@@ -480,10 +489,11 @@ listview cell:details:normal
 	bg-image 
 	bg-color:;
 
+	font-size: 18;
 	text-color:black;
     
 	preferred-width:100;
-	preferred-height:17;
+	preferred-height:20;
 
 	icon-width: 16;
 	icon-height: 16;
@@ -505,6 +515,7 @@ listview cell:details:normal
 
 listview cell:icons:normal
 {
+	font-size: 18;
    	bg-image 
 	bg-color:;
 
@@ -527,6 +538,7 @@ listview cell:icons:normal
 
 listview cell:thumbnails:normal
 {
+	font-size: 18;
 	preferred-width:125;
 	preferred-height:119;
 
@@ -548,6 +560,7 @@ listview cell:thumbnails:normal
 
 listview_header
 {
+	font-size: 18;
 	bg-image:;
 	bg-image-sizing-left:2;
 	bg-image-sizing-right:2;
@@ -560,6 +573,7 @@ listview_header
 
 listview_header columnheader:normal
 {
+	font-size: 18;
 	bg-image:ListViewColumnHeaderNormal;
 	bg-image-sizing-left:2;
 	bg-image-sizing-right:3;
@@ -575,6 +589,7 @@ listview_header columnheader:normal
 
 listview_header columnheader:hot
 {
+	font-size: 18;
 	bg-image:ListViewColumnHeaderHot;
 	bg-image-sizing-left:2;
 	bg-image-sizing-right:3;
@@ -590,6 +605,7 @@ listview_header columnheader:hot
 
 listview_header columnheader:pressed
 {
+	font-size: 18;
 	bg-image:ListViewColumnHeaderPressed;
 	bg-image-sizing-left:2;
 	bg-image-sizing-right:3;

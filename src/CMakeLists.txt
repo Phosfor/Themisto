@@ -117,6 +117,9 @@ target_link_libraries(DebugConsole
 set(DebugVisualisator_srcs
     Debug/Visualisator/main.cpp
     Debug/Visualisator/Client.cpp
+
+    Core/GuiManager.cpp
+    Core/ConfigManager.cpp
 )
 
 add_executable(DebugVisualisator
