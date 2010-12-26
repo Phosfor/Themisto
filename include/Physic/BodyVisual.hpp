@@ -8,17 +8,34 @@
 #define _BODY_VISUAL_HPP_
 
 #include <Box2D/Collision/Shapes/b2PolygonShape.h>
-#include "Physic/BodyState.hpp"
 
+#include "Physic/BodyState.hpp"
+#include "Physic/Body.hpp"
+#include "Core/Utils.hpp"
+
+#include "Core/ResourceManager.hpp"
+#include "Core/ApplicationManager.hpp"
+
+class Body;
 class BodyVisual
 {
     private:
         BodyState *mBodyState;
+        CL_Sprite mImageHandle;
+        bool mHasVisual;
+
     public:
         BodyVisual();
         void setBodyState(BodyState *state);
+        bool getVisualState();
+        void setVisualState(bool state);
 
-        void redrawBody();
+        float mXPos, mYPos;
+        float mSizeWidth, mSizeHeight;
+        std::string mTextureName, mSectionName;
+
+        void redrawBody(Body &body);
+        void configureVisual();
 };
 
 #endif /* _BODY_VISUAL_HPP_ */

@@ -17,8 +17,6 @@
 #include <deque>
 #include <ClanLib/core.h>
 
-#define READY_TO_ADVANCE() StateManager::get_mutable_instance().setAdvanceState(true);
-
 class State
 {
     public:
@@ -54,5 +52,6 @@ class StateManager : public boost::serialization::singleton<StateManager>
 };
 
 inline StateManager &stateManager() { return StateManager::get_mutable_instance(); }
+inline void READY_TO_ADVANCE() { StateManager::get_mutable_instance().setAdvanceState(true); }
 
 #endif /* _STATE_MANAGER_HPP_ */

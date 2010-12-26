@@ -4,11 +4,9 @@
  * Project is contributed with GPL license. For more information, visit project page.
  */
 
-
 #ifndef _PHYSIC_OBJECT_HPP_
 #define _PHYSIC_OBJECT_HPP_
 
-#include "Physic/Body.hpp"
 #include <Box2D/Box2D.h>
 #include <ClanLib/core.h>
 #include <Box2D/Collision/Shapes/b2PolygonShape.h>
@@ -16,6 +14,7 @@
 
 #include "Physic/BodyMaterial.hpp"
 
+#include "Physic/Body.hpp"
 #include "Physic/Impact.hpp"
 #include "Physic/BodyState.hpp"
 #include "Physic/BodyVisual.hpp"

@@ -31,7 +31,7 @@ void PhysicObject::updateVisual()
 {
     if(mBodyVisual != NULL)
     {
-        mBodyVisual->redrawBody(); 
+        if (mBodyVisual->getVisualState()) mBodyVisual->redrawBody(*mBody); 
     }
     else
     {
@@ -50,7 +50,6 @@ void PhysicObject::step(float32 elapsed)
     }
 }
 
-
 CL_Pointf PhysicObject::getPosition()
 {
     b2Vec2 position = mBody->getb2Body()->GetPosition();
@@ -63,34 +62,56 @@ void PhysicObject::update(float elapsed)
     updateVisual();
 }
 
-// ----------------------------------------------------------------
-//---------------------------- PARSING-----------------------------
-//----------------------------------------------------------------
+// -----------------------------------------------------------------
+// ---------------------------- PARSING ----------------------------
+// -----------------------------------------------------------------
 
 Object* PhysicObject::ParsePhysicObject(CL_DomElement* tag, std::string& desc)
 {
     using namespace boost;
+
+    // Possible memory leack! Returning object without freeing it.
+    // TODO: Replace with shared pointer
     BodyVisual* visualHandle = new BodyVisual();
-    float x = 0, y = 0;
+
     // Parsing visuals
     {
         CL_DomNodeList VisualTags = tag->get_elements_by_tag_name("Visual");
-        if(VisualTags.get_length() > 1 || VisualTags.get_length() == 0)
+        if(VisualTags.get_length() > 1 /*|| VisualTags.get_length() == 0*/)
         {
             desc += "Error: One, and only one tag Visual must be in Object.";
             return NULL;
         }
-        CL_DomElement visual = VisualTags.item(0).to_element();
-        CL_DomNodeList childList = visual.get_child_nodes();
 
-        for (int i=0; i < childList.get_length(); ++i)
+        if (VisualTags.get_length() != 0)
         {
-            CL_DomElement tag2 = childList.item(i).to_element();
-            if (tag2.get_node_name() == "Position")
+            CL_DomNodeList childList = VisualTags.item(0).get_child_nodes();
+            for (int i=0; i < childList.get_length(); ++i)
             {
-                x = lexical_cast<float>(tag2.get_attribute("x").c_str());
-                y = lexical_cast<float>(tag2.get_attribute("y").c_str());
+                CL_DomElement tag2 = childList.item(i).to_element();
+                if (tag2.get_node_name() == "Position")
+                {
+                    visualHandle->mXPos = lexical_cast<float>(tag2.get_attribute("x").c_str());
+                    visualHandle->mYPos = lexical_cast<float>(tag2.get_attribute("y").c_str());
+                }
+                if (tag2.get_node_name() == "Size")
+                {
+                    visualHandle->mSizeWidth = lexical_cast<float>(tag2.get_attribute("width").c_str());
+                    visualHandle->mSizeHeight = lexical_cast<float>(tag2.get_attribute("height").c_str());
+                }
+                if (tag2.get_node_name() == "Texture")
+                {
+                    visualHandle->mSectionName = tag2.get_attribute("section").c_str();
+                    visualHandle->mTextureName = tag2.get_attribute("name").c_str();
+                }
             }
+
+            visualHandle->setVisualState(true);
+            visualHandle->configureVisual();
+        }
+        else
+        {
+            visualHandle->setVisualState(false);
         }
     }
 
@@ -102,6 +123,7 @@ Object* PhysicObject::ParsePhysicObject(CL_DomElement* tag, std::string& desc)
    }
    CL_DomElement body = BodyTags.item(0).to_element();
 
+    // TODO: Make shared pointer here!!!
     // Physic body variables
     b2Body *b2body = NULL;
     b2BodyDef bdef;

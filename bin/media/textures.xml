@@ -1,4 +1,8 @@
 <resources>
+    <section name="Stuff">
+        <texture name="stone" file="stone.png" />
+    </section>
+
     <section name="Clouds">
         <texture name="0" file="clouds/0.png" />
         <texture name="1" file="clouds/1.png" />

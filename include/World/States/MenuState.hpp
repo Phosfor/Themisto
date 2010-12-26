@@ -10,18 +10,27 @@
 #include "Core/StateManager.hpp"
 #include "Core/ApplicationManager.hpp"
 #include "Core/SceneLoader.hpp"
+#include "Core/PhysicManager.hpp"
 
 #include <ClanLib/core.h>
 #include <ClanLib/display.h>
 #include <ClanLib/application.h>
 
+#include "Debug/DebugDraw.hpp"
+#include "Debug/DebugInstruments.hpp"
+
+class DebugDragAndDrop;
 class MenuState : public State
 {
     private:
     CL_Font *mStatFont;
     bool mEnvironEnabled;
-
+    DebugDraw mDebugDrawHandle;
+    DebugDragAndDrop *mDebugDragAndDropHandle;
     CL_GraphicContext mGC;
+
+    // Remove this later
+    CL_Image ground;
 
     void init();
     void shutdown();
