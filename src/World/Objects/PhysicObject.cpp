@@ -15,6 +15,7 @@ PhysicObject::PhysicObject(Body* body, BodyVisual* visual)
 {
     mBody = body;
     mBodyVisual = visual;
+    if (mBodyVisual->getVisualState()) mBodyVisual->configureVisual(body);
     mName = worldManager().generateUniqueID();
     mType = PhysicBodyObject;
     mShouldFreeBodyVisual = mShouldFreeBody = true;
@@ -31,7 +32,7 @@ void PhysicObject::updateVisual()
 {
     if(mBodyVisual != NULL)
     {
-        if (mBodyVisual->getVisualState()) mBodyVisual->redrawBody(*mBody); 
+        if (mBodyVisual->getVisualState()) mBodyVisual->redrawBody(); 
     }
     else
     {
@@ -107,7 +108,6 @@ Object* PhysicObject::ParsePhysicObject(CL_DomElement* tag, std::string& desc)
             }
 
             visualHandle->setVisualState(true);
-            visualHandle->configureVisual();
         }
         else
         {

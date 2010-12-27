@@ -23,6 +23,7 @@ class BodyVisual
         BodyState *mBodyState;
         CL_Sprite mImageHandle;
         bool mHasVisual;
+        Body *mParentBody;
 
     public:
         BodyVisual();
@@ -34,8 +35,8 @@ class BodyVisual
         float mSizeWidth, mSizeHeight;
         std::string mTextureName, mSectionName;
 
-        void redrawBody(Body &body);
-        void configureVisual();
+        void redrawBody();
+        void configureVisual(Body *parent);
 };
 
 #endif /* _BODY_VISUAL_HPP_ */

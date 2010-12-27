@@ -10,11 +10,11 @@ BodyVisual::BodyVisual()
 {
 }
 
-void BodyVisual::redrawBody(Body &body)
+void BodyVisual::redrawBody()
 {
-    b2Vec2 position = body.getb2Body()->GetPosition();
+    b2Vec2 position = mParentBody->getb2Body()->GetPosition();
 
-    mImageHandle.rotate(CL_Angle::from_degrees(body.getb2Body()->GetAngle()));
+    mImageHandle.rotate(CL_Angle::from_degrees(mParentBody->getb2Body()->GetAngle()));
     mImageHandle.draw(appManager().getGraphic(), Meters2Pixels(position.x), Meters2Pixels(position.y));
 }
 
@@ -23,8 +23,10 @@ void BodyVisual::setBodyState(BodyState *state)
     mBodyState = state;
 }
 
-void BodyVisual::configureVisual()
+void BodyVisual::configureVisual(Body *parent)
 {
+    mParentBody = parent;
+
     mImageHandle = resourceManager().getSprite(mSectionName, mTextureName);
     mImageHandle.set_alignment(origin_center);
 
@@ -32,6 +34,7 @@ void BodyVisual::configureVisual()
     float koefY = mSizeHeight / mImageHandle.get_height();
 
     mImageHandle.set_scale(koefX, koefY);
+    mImageHandle.set_linear_filter(true);
 }
 
 bool BodyVisual::getVisualState()
