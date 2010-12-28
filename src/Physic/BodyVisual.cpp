@@ -1,8 +1,19 @@
 /*
- * Copyright (c) 2010 Tyslenko Max (Ockonal), Bogatirev Pavel (PFight)
- * This file is part of Themisto (Themisto project at https://github.com/Ockonal/Themisto).
- * Project is contributed with GPL license. For more information, visit project page.
- */
+   Copyright 2010 Tyslenko Max, Bogatirev Pavel.
+
+   This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 3, or (at your option)
+   any later version.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
 
 #include "Physic/BodyVisual.hpp"
 
@@ -12,9 +23,9 @@ BodyVisual::BodyVisual()
 
 void BodyVisual::redrawBody()
 {
-    b2Vec2 position = mParentBody->getb2Body()->GetPosition();
-
-    mImageHandle.rotate(CL_Angle::from_degrees(mParentBody->getb2Body()->GetAngle()));
+    b2Body *body = mParentBody->getb2Body();
+    mImageHandle.set_angle(CL_Angle::from_radians(body->GetAngle()));
+    b2Vec2 position = body->GetPosition();
     mImageHandle.draw(appManager().getGraphic(), Meters2Pixels(position.x), Meters2Pixels(position.y));
 }
 
