@@ -34,27 +34,27 @@ PhysicObject::PhysicObject(Body* body, BodyVisual* visual)
 
 PhysicObject::~PhysicObject()
 {
-    if(mShouldFreeBodyVisual && mBodyVisual != NULL) delete mBodyVisual; 
-    if(mShouldFreeBody && mBody != NULL) delete mBody; 
+    if(mShouldFreeBodyVisual && mBodyVisual != NULL) delete mBodyVisual;
+    if(mShouldFreeBody && mBody != NULL) delete mBody;
 }
 
 
-void PhysicObject::updateVisual() 
+void PhysicObject::updateVisual()
 {
     if(mBodyVisual != NULL)
     {
-        if (mBodyVisual->getVisualState()) mBodyVisual->redrawBody(); 
+        if (mBodyVisual->getVisualState()) mBodyVisual->redrawBody();
     }
     else
     {
         throw new CL_Exception("BodyVisual not set.");
     }
 }
-void PhysicObject::step(float32 elapsed) 
+void PhysicObject::step(float32 elapsed)
 {
     if(mBody != NULL)
     {
-        mBody->step(elapsed); 
+        mBody->step(elapsed);
     }
     else
     {
@@ -68,7 +68,7 @@ CL_Pointf PhysicObject::getPosition()
     return CL_Pointf(position.x, position.y);
 }
 
-void PhysicObject::update(float elapsed) 
+void PhysicObject::update(float elapsed)
 {
     step(elapsed);
     updateVisual();
@@ -163,9 +163,9 @@ Object* PhysicObject::ParsePhysicObject(CL_DomElement* tag, std::string& desc)
             {
                 CL_DomElement handle = position.item(i).to_element();
                 if (handle.get_node_name() == "x")
-                    x = lexical_cast<float>(handle.get_text().c_str());
+                    x = Pixels2Meters(lexical_cast<float>(handle.get_text().c_str()));
                 else if (handle.get_node_name() == "y")
-                    y = lexical_cast<float>(handle.get_text().c_str());
+                    y = Pixels2Meters(lexical_cast<float>(handle.get_text().c_str()));
             }
             bdef.position.Set(x, y);
         }
@@ -377,7 +377,7 @@ Object* PhysicObject::ParsePhysicObject(CL_DomElement* tag, std::string& desc)
                             CL_DomElement shapeParam = shapeList.item(i).to_element();
                             if (shapeParam.get_node_name() == "Radius")
                             {
-                                radius = lexical_cast<float>(shapeParam.get_text().c_str());
+                                radius = Pixels2Meters(lexical_cast<float>(shapeParam.get_text().c_str()));
                             }
                             else if(shapeParam.get_node_name() == "Center")
                             {
@@ -386,9 +386,9 @@ Object* PhysicObject::ParsePhysicObject(CL_DomElement* tag, std::string& desc)
                                 {
                                     CL_DomElement centerCoord = centerList.item(i).to_element();
                                     if (centerCoord.get_node_name() == "x")
-                                        x = lexical_cast<float>(centerCoord.get_text().c_str());
+                                        x = Pixels2Meters(lexical_cast<float>(centerCoord.get_text().c_str()));
                                     if(centerCoord.get_node_name() == "y")
-                                        y = lexical_cast<float>(centerCoord.get_text().c_str());
+                                        y = Pixels2Meters(lexical_cast<float>(centerCoord.get_text().c_str()));
                                 }
                             }
                         }
@@ -413,9 +413,9 @@ Object* PhysicObject::ParsePhysicObject(CL_DomElement* tag, std::string& desc)
                                     float x = 0, y = 0;
                                     CL_DomElement centerCoord = centerList.item(i).to_element();
                                     if (centerCoord.get_node_name() == "x")
-                                        x = lexical_cast<float>(centerCoord.get_text().c_str());
+                                        x = Pixels2Meters(lexical_cast<float>(centerCoord.get_text().c_str()));
                                     if(centerCoord.get_node_name() == "y")
-                                        y = lexical_cast<float>(centerCoord.get_text().c_str());
+                                        y = Pixels2Meters(lexical_cast<float>(centerCoord.get_text().c_str()));
                                     pshape.m_centroid.Set(x,y);
                                 }
                             }
@@ -436,11 +436,11 @@ Object* PhysicObject::ParsePhysicObject(CL_DomElement* tag, std::string& desc)
                                             CL_DomElement component = vertexComponents.item(j).to_element();
                                             if (component.get_node_name() == "x")
                                             {
-                                                x = lexical_cast<float>(component.get_text().c_str());
+                                                x = Pixels2Meters(lexical_cast<float>(component.get_text().c_str()));
                                             }
                                             else if(component.get_node_name() == "y")
                                             {
-                                                y = lexical_cast<float>(component.get_text().c_str());
+                                                y = Pixels2Meters(lexical_cast<float>(component.get_text().c_str()));
                                             }
                                         }
                                         vertices[i].Set(x,y);

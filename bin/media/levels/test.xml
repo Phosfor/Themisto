@@ -22,7 +22,7 @@
                     <b2Body>
                         <Position>
                             <x>0.0</x>
-                            <y>17.9</y>
+                            <y>800</y>
                         </Position>
                         <Type>StaticBody</Type>
                     </b2Body>
@@ -40,16 +40,8 @@
                                         <y>0.0</y>
                                     </Vertex>
                                     <Vertex>
-                                        <x>26.0</x>
+                                        <x>1152.0</x>
                                         <y>0.0</y>
-                                    </Vertex>
-                                     <Vertex>
-                                        <x>26.0</x>
-                                        <y>0.1</y>
-                                    </Vertex>
-                                    <Vertex>
-                                        <x>0.0</x>
-                                        <y>0.1</y>
                                     </Vertex>
                                 </Vertices>
                             </Shape>
@@ -70,8 +62,8 @@
                 <Body>
                     <b2Body>
                         <Position>
-                            <x>10.0</x>
-                            <y>2.0</y>
+                            <x>300.0</x>
+                            <y>20.0</y>
                         </Position>
                         <Type>DynamicBody</Type>
                     </b2Body>
@@ -82,7 +74,7 @@
                             <Density>0.3</Density>
                             <Shape>
                                 <Type>e_circle</Type>
-                                <Radius>1.0</Radius>
+                                <Radius>45.0</Radius>
                             </Shape>
                         </b2Fixture>
                     </Part>
