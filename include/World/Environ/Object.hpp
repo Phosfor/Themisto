@@ -24,7 +24,7 @@
 #include "Core/Utils.hpp"
 #include "Core/ApplicationManager.hpp"
 
-class EnvironObject
+class EnvironObject : public boost::noncopyable
 {
    protected:
       int mMaxObjects;

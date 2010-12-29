@@ -27,7 +27,7 @@ enum ObjectTypes
     GrassObject
 };
 
-class Object
+class Object : public boost::noncopyable
 {
     protected:
         std::string mName;
