@@ -42,7 +42,6 @@ class Svg2Themisto_Shape(inkex.Effect):
     def dumpXML(self):
         self.check_dir_exists(self.options.directory)
         fileLocation = os.path.join(self.options.directory, self.options.filename) + '.shape'
-        inkex.errormsg(_(fileLocation))
         fileHandle = open(fileLocation, 'w')
 
         fixtureCounter = 0
@@ -88,16 +87,19 @@ class Svg2Themisto_Shape(inkex.Effect):
                 raise Exception, fixtureId + ': Should be closed path!'
 
             # Check whether number of vertices is right
-            if not (2 <= (len(pathData)-1) <= 8):
-                raise Exception, fixtureId + ' convex should has <=2 vertex <= 8!'
+            # -2 because latest is 'Z' and latest-1 is the same point, as first one
+            if not (2 <= (len(pathData)-2) <= 8):
+                raise Exception, fixtureId + ' convex should has 2 <= vertex <= 8!'
 
             # We need only list with 2 points in it
+            counter = 0
             for point in pathData:
-                if not point[1]:
+                if not point[1] or counter is len(pathData)-2:
                     continue
                 point[1][0] = round(point[1][0], 1)
                 point[1][1] = round(point[1][1], 1)
                 fixtureData.append(point[1])
+                counter += 1
 
             self.fixturesList.append(fixtureData)
 
