@@ -50,20 +50,28 @@ class Svg2Themisto_Shape(inkex.Effect):
         fileHandle.write('<Template name="'+ self.options.filename +'">\n <Object type="PhysicObject">\n  <Body id="tbody1">\n')
         for fixture in self.fixturesList:
             fileHandle.write('   <Part id="part'+ str(fixtureCounter) +'">\n    <b2Fixture>\n')
-            fileHandle.write('     <Shape>\n      <Vertices>\n')
-            for point in fixture:
-                fileHandle.write('       <Vertex id="vertex'+ str(vertexCounter) +'">\n')
-                fileHandle.write('        <x>')
-                fileHandle.write(str(point[0]))
-                fileHandle.write('</x>\n')
-                fileHandle.write('        <y>')
-                fileHandle.write(str(point[1]))
-                fileHandle.write('</y>\n')
-                fileHandle.write('       </Vertex>\n')
-                vertexCounter += 1
-            fileHandle.write('      </Vertices>\n     </Shape>\n   </b2Fixture>\n')
-            fixtureCounter += 1
-            vertexCounter = 0
+            fileHandle.write('     <Shape>\n      <Type>'+ fixture[0] +'</Type>\n')
+
+            if fixture[0] == "e_polygon":
+                fileHandle.write('      <Vertices>\n')
+                for i in range(1, len(fixture)):
+                    fileHandle.write('       <Vertex id="vertex'+ str(vertexCounter) +'">\n')
+                    fileHandle.write('        <x>')
+                    fileHandle.write(str(fixture[i][0]))
+                    fileHandle.write('</x>\n')
+                    fileHandle.write('        <y>')
+                    fileHandle.write(str(fixture[i][1]))
+                    fileHandle.write('</y>\n')
+                    fileHandle.write('       </Vertex>\n')
+                    vertexCounter += 1
+                fileHandle.write('      </Vertices>\n')
+                fixtureCounter += 1
+                vertexCounter = 0
+
+            elif fixture[0] == "e_circle":
+                fileHandle.write('      <Radius>'+ str(fixture[1]) +'</Radius>\n')
+
+            fileHandle.write('     </Shape>\n    </b2Fixture>\n   </Part>\n')
 
         fileHandle.write('  </Body>\n </Object>\n</Template>\n')
 
@@ -76,33 +84,71 @@ class Svg2Themisto_Shape(inkex.Effect):
         # Iterate through fixtures
         for fixture in fixturesList:
             fixtureData = []
+
+            # Available:
+            #    - e_polygon
+            #    - e_circle
+            fixtureType = "e_polygon"
             fixtureId = fixture.attrib['id']
 
-            # Convert path data into stuctured array
-            pathData = simplepath.parsePath(fixture.attrib['d'])
+            # If the object is circle
+            for att in fixture.attrib:
+                res = re.findall(r'{.*}type', att)
+                if res:
+                    if fixture.attrib[res[0]] == "arc":
+                        fixtureType = "e_circle"
 
-            # Check whether path is closed (if 'Z' element is presented)
-            # Z is always in latest element
-            if pathData[-1].count('Z') is 0:
-                raise Exception, fixtureId + ': Should be closed path!'
+            fixtureData.append(fixtureType)
 
-            # Check whether number of vertices is right
-            # -2 because latest is 'Z' and latest-1 is the same point, as first one
-            if not (2 <= (len(pathData)-2) <= 8):
-                raise Exception, fixtureId + ' convex should has 2 <= vertex <= 8!'
+            if fixtureType == "e_circle":
+                centerX = centerY = radius = 0.0
+                # Circle center coordinates:
+                for att in fixture.attrib:
+                    attData = re.findall(r'{.*}cx', att)
+                    if attData:
+                        centerX = round(float(fixture.attrib[attData[0]]), 1)
 
-            # We need only list with 2 points in it
-            counter = 0
-            for point in pathData:
-                if not point[1] or counter is len(pathData)-2:
-                    continue
-                point[1][0] = round(point[1][0], 1)
-                point[1][1] = round(point[1][1], 1)
-                fixtureData.append(point[1])
-                counter += 1
+                    attData = re.findall(r'{.*}cy', att)
+                    if attData:
+                        centerY = round(float(fixture.attrib[attData[0]]), 1)
 
-            self.fixturesList.append(fixtureData)
+                    attData = re.findall(r'{.*}rx', att)
+                    if attData:
+                        radius = round(float(fixture.attrib[attData[0]]), 1)
 
+                fixtureData.append(radius)
+                fixtureData.append([centerX, centerY])
+
+                self.fixturesList.append(fixtureData)
+
+            # if fixture type is e_polygon
+            else:
+                # Convert path data into stuctured array
+                pathData = simplepath.parsePath(fixture.attrib['d'])
+
+                # Check whether path is closed (if 'Z' element is presented)
+                # Z is always in latest element
+                if pathData[-1].count('Z') is 0:
+                    raise Exception, fixtureId + ': Should be closed path!'
+
+                # Check whether number of vertices is right
+                # -2 because latest is 'Z' and latest-1 is the same point, as first one
+                if not (2 <= (len(pathData)-2) <= 8):
+                    raise Exception, fixtureId + ' convex should has 2 <= vertex <= 8!'
+
+                # We need only list with 2 points in it
+                counter = 0
+                for point in pathData:
+                    if not point[1] or counter is len(pathData)-2:
+                        continue
+                    point[1][0] = round(point[1][0], 1)
+                    point[1][1] = round(point[1][1], 1)
+                    fixtureData.append(point[1])
+                    counter += 1
+
+                self.fixturesList.append(fixtureData)
+
+        inkex.errormsg(_(self.fixturesList))
         self.dumpXML()
 
 if __name__ == "__main__":
