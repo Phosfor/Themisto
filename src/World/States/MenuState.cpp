@@ -55,7 +55,7 @@ void MenuState::update()
     objectsManager().update();
     physicManager().step();
     ground.draw(mGC, 0, 770);
-    physicManager().getWorld().DrawDebugData();
+    //physicManager().getWorld().DrawDebugData();
 
 
     int *time = environManager().getEnvironTime();

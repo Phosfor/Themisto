@@ -1,6 +1,7 @@
 <resources>
     <section name="Stuff">
         <texture name="stone" file="stone.png" />
+        <texture name="house" file="house.png" />
     </section>
 
     <section name="Clouds">

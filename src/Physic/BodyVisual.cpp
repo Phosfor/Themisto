@@ -26,7 +26,7 @@ void BodyVisual::redrawBody()
     b2Body *body = mParentBody->getb2Body();
     mImageHandle.set_angle(CL_Angle::from_radians(body->GetAngle()));
     b2Vec2 position = body->GetPosition();
-    mImageHandle.draw(appManager().getGraphic(), Meters2Pixels(position.x), Meters2Pixels(position.y));
+    mImageHandle.draw(appManager().getGraphic(), Meters2Pixels(position.x)+mXPos, Meters2Pixels(position.y)+mYPos);
 }
 
 void BodyVisual::setBodyState(BodyState *state)
@@ -39,7 +39,7 @@ void BodyVisual::configureVisual(Body *parent)
     mParentBody = parent;
 
     mImageHandle = resourceManager().getSprite(mSectionName, mTextureName);
-    mImageHandle.set_alignment(origin_center);
+    //mImageHandle.set_alignment(origin_);
 
     float koefX = mSizeWidth / mImageHandle.get_width();
     float koefY = mSizeHeight / mImageHandle.get_height();
