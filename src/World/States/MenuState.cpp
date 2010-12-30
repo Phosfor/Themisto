@@ -17,25 +17,28 @@
 
 #include "World/States/MenuState.hpp"
 
+#include "Debug/DebugDraw.hpp"
+#include "Debug/DebugInstruments.hpp"
+
 void MenuState::init()
 {
-    mDebugDragAndDropHandle = new DebugDragAndDrop;
-    mDebugDragAndDropHandle->init();
+    mDnD = new DebugDragAndDrop;
+    mDnD->init();
+
+    mDraw->SetFlags(
+        b2DebugDraw::e_shapeBit //|
+        //b2DebugDraw::e_jointBit |
+        //b2DebugDraw::e_aabbBit  |
+        //b2DebugDraw::e_pairBit
+    );
+
 
     mGC = appManager().getGraphic();
     mStatFont = new CL_Font(appManager().getGraphic(), "Ubuntu", 30);
 
     areaManager().init(&physicManager().getWorld(), 20);
     sceneLoader().loadScene("test.xml");
-
-    mDebugDrawHandle.SetFlags(
-            b2DebugDraw::e_shapeBit //|
-            //b2DebugDraw::e_jointBit |
-            //b2DebugDraw::e_aabbBit  |
-            //b2DebugDraw::e_pairBit
-            );
-
-    physicManager().getWorld().SetDebugDraw(&mDebugDrawHandle);
+    physicManager().getWorld().SetDebugDraw(mDraw);
 
     mEnvironEnabled = environManager().getEnvironEnabled();
 
@@ -45,6 +48,8 @@ void MenuState::init()
 void MenuState::shutdown() 
 {
     delete mStatFont;
+    delete mDnD;
+    delete mDraw;
 }
 
 void MenuState::update()
@@ -55,6 +60,8 @@ void MenuState::update()
     objectsManager().update();
     physicManager().step();
     ground.draw(mGC, 0, 770);
+
+    // TODO: Bind some key to enable debug drawing
     //physicManager().getWorld().DrawDebugData();
 
 

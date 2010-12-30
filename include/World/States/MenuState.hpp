@@ -27,27 +27,26 @@
 #include <ClanLib/display.h>
 #include <ClanLib/application.h>
 
-#include "Debug/DebugDraw.hpp"
-#include "Debug/DebugInstruments.hpp"
-
 class DebugDragAndDrop;
+class DebugDraw;
 class MenuState : public State
 {
     private:
-    CL_Font *mStatFont;
-    bool mEnvironEnabled;
-    DebugDraw mDebugDrawHandle;
-    DebugDragAndDrop *mDebugDragAndDropHandle;
-    CL_GraphicContext mGC;
+        DebugDraw *mDraw;
+        DebugDragAndDrop *mDnD;
 
-    // Remove this later
-    CL_Image ground;
+        CL_Font *mStatFont;
+        bool mEnvironEnabled;
+        CL_GraphicContext mGC;
 
-    void init();
-    void shutdown();
-    void update();
+        // Remove this later
+        CL_Image ground;
 
-    std::string type();
+        void init();
+        void shutdown();
+        void update();
+
+        std::string type();
 };
 
 #endif /* _MENU_STATE_HPP_ */
