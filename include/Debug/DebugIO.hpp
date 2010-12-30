@@ -18,11 +18,13 @@
 #ifndef _DEBUG_IO_HPP_
 #define _DEBUG_IO_HPP_
 
-#include <ClanLib/core.h>
-#include "Core/ApplicationManager.hpp"
-#include <ClanLib/network.h>
-#include "Core/Utils.hpp"
 #include <queue>
+
+#include <ClanLib/core.h>
+#include <ClanLib/network.h>
+
+#include "Core/ApplicationManager.hpp"
+#include "Core/Utils.hpp"
 #include "Core/ApplicationManager.hpp"
 
 const CL_String CONSOLE_PORT = "1992";

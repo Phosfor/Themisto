@@ -16,6 +16,10 @@
 */
 
 #include "Debug/Watch.hpp"
+#include "Physic/Body.hpp"
+#include "Physic/BodyState.hpp"
+#include "Physic/BodyPart.hpp"
+#include "Physic/BodyMaterial.hpp"
 
 std::string nope_evalute(Watch* watch)
 {

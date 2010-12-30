@@ -23,6 +23,7 @@
 #include "Core/LogManager.hpp"
 
 class BodyPart;
+class Impact;
 class PhysicTests: public boost::serialization::singleton<PhysicTests>
 {
     public:

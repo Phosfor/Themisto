@@ -16,6 +16,8 @@
 */
 
 #include "Debug/EvaluteFunctions.hpp"
+#include "Debug/Watch.hpp"
+
 #include "World/Environ/Object.hpp"
 #include "Physic/BodyMaterial.hpp"
 #include "Physic/BodyState.hpp"

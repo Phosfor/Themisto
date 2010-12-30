@@ -16,6 +16,7 @@
 */
 
 #include "Debug/DebugInstruments.hpp"
+#include "Physic/Body.hpp"
 
 void DebugDragAndDrop::init()
 {

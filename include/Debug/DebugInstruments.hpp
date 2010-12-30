@@ -18,13 +18,15 @@
 #ifndef _DEGUG_INSTRUMENTS_HPP
 #define _DEGUG_INSTRUMENTS_HPP
 
+#include <iostream>
+
 #include <Box2D/Dynamics/b2World.h>
-#include "Physic/Body.hpp"
+
 #include "Core/ApplicationManager.hpp"
 #include "Core/PhysicManager.hpp"
 #include "Core/InputManager.hpp"
-#include <iostream>
 
+class Body;
 class DebugDragAndDrop: public b2QueryCallback
 {
     private:

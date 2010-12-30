@@ -22,6 +22,7 @@
 #include "Core/ApplicationManager.hpp"
 #include "Core/SceneLoader.hpp"
 #include "Core/PhysicManager.hpp"
+#include "Physic/AreaManager.hpp"
 
 #include <ClanLib/core.h>
 #include <ClanLib/display.h>

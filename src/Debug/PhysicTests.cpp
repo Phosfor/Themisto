@@ -17,6 +17,7 @@
 
 #include "Debug/PhysicTests.hpp"
 #include "Physic/BodyPart.hpp"
+#include "Physic/Impact.hpp"
 
 void PhysicTests::step()
 {

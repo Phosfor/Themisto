@@ -15,16 +15,22 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _WATCH_HPP_
-#define _WATCH_HPP_
+#ifndef _DEBUG_WATCH_HPP_
+#define _DEBUG_WATCH_HPP_
+
+#include <vector>
+#include <fstream>
+
+#include <boost/variant.hpp>
 
 #include "Core/ApplicationManager.hpp"
 #include "Core/EnvironManager.hpp"
 #include "Core/Utils.hpp"
-#include "Physic/Body.hpp"
-#include <vector>
-#include <boost/variant.hpp>
-#include <fstream>
+
+class Body;
+class BodyPart;
+class BodyState;
+class BodyMaterial;
 
 struct Watch;
 typedef boost::function<std::string (Watch*)> EvaluteFunction;
@@ -86,4 +92,4 @@ struct Watch
     ~Watch();
 };
 
-#endif /* _WATCH_HPP_ */
+#endif /* _DEBUG_WATCH_HPP_ */

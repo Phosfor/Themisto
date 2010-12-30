@@ -18,8 +18,6 @@
 #ifndef _EVALUTE_FUNCTIONS_HPP_
 #define _EVALUTE_FUNCTIONS_HPP_
 
-#include "Debug/Watch.hpp"
-#include "Physic/Body.hpp"
 #include "Core/ApplicationManager.hpp"
 #include "Core/Utils.hpp"
 
@@ -27,6 +25,7 @@ class EnvironObject;
 class BodyMaterial;
 class BodyState;
 class BodyPart;
+class Watch;
 namespace evalute
 {
     const int BodyMaterialFieldsCount = 20;

@@ -18,35 +18,38 @@
 #ifndef _DEBUG_WATCHER_HPP_
 #define _DEBUG_WATCHER_HPP_
 
-#include <boost/serialization/singleton.hpp>
 #include <vector>
 #include <list>
 #include <string>
+#include <sstream>
+#include <fstream>
+
+#include <boost/serialization/singleton.hpp>
 #include <boost/algorithm/string.hpp>
 #include <boost/function.hpp>
 #include <boost/any.hpp>
 #include <boost/variant.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/algorithm/string/trim.hpp>
-#include <ClanLib/core.h>
-#include <sstream>
 #include <boost/foreach.hpp>
 #include <boost/lambda/lambda.hpp>
-#include <Box2D/Collision/Shapes/b2Shape.h>
-#include <fstream>
 
-#include "Physic/Body.hpp"
+#include <ClanLib/core.h>
+
+#include <Box2D/Collision/Shapes/b2Shape.h>
 
 #include "Core/ApplicationManager.hpp"
 #include "Core/EnvironManager.hpp"
 #include "Core/Utils.hpp"
+
 #include "Debug/DebugIO.hpp"
 #include "Debug/EvaluteFunctions.hpp"
-#include "Debug/Watch.hpp"
-
 #include "Core/PhysicManager.hpp"
 
+#include "Debug/Watch.hpp"
+
 class BodyPart;
+class Body;
 using namespace evalute;
 
 typedef std::vector<std::string>::iterator StrIterator;

@@ -17,6 +17,10 @@
 
 #include "Debug/DebugIO.hpp"
 
+#include "Physic/Body.hpp"
+#include "Physic/BodyPart.hpp"
+#include "Debug/Watch.hpp"
+
 void DebugIO::init()
 {
     mVisualisatorConnection = NULL;

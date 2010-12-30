@@ -19,6 +19,7 @@
 #define _PHYSIC_DEBUG_DRAW_HPP_
 
 #include <Box2D/Box2D.h>
+
 #include "Core/ApplicationManager.hpp"
 #include "Core/Utils.hpp"
 

@@ -18,49 +18,52 @@
 #ifndef _DEBUG_CONSOLE_HPP_
 #define _DEBUG_CONSOLE_HPP_
 
-#include <ClanLib/core.h>
-#include <ClanLib/network.h>
 #include <iostream>
 #include <string>
+#include <fstream>
+#include <cstdlib>
+
+#include <ClanLib/core.h>
+#include <ClanLib/network.h>
+
 #include <boost/algorithm/string.hpp>
+#include <boost/filesystem.hpp>
+#include <boost/foreach.hpp>
+
 #include <readline/readline.h>
 #include <readline/history.h>
-#include <boost/filesystem.hpp>
-#include <fstream>
-#include <boost/foreach.hpp>
-#include <cstdlib>
 
 const CL_String SERVER_PORT = "1992";
 const CL_String SERVER_HOST = "localhost";
 
 class Client
 {
-public:
-    Client();
-    ~Client();
+    public:
+        Client();
+        ~Client();
 
-    void step(const std::string &command);
+        void step(const std::string &command);
 
-    bool connected;
-    bool quit;
+        bool connected;
+        bool quit;
 
-    void connect_to_server();
-    void disconnect();
+        void connect_to_server();
+        void disconnect();
 
-    void parseCommand(std::string &command);
+        void parseCommand(std::string &command);
 
-private:
-    void on_connected();
-    void on_disconnected();
+    private:
+        void on_connected();
+        void on_disconnected();
 
-    void on_event_received(const CL_NetGameEvent &e);
+        void on_event_received(const CL_NetGameEvent &e);
 
-private:
-    CL_NetGameClient network_client;
-    CL_SlotContainer slots;
+    private:
+        CL_NetGameClient network_client;
+        CL_SlotContainer slots;
 
-    CL_NetGameEventDispatcher_v0 login_events;
-    CL_NetGameEventDispatcher_v0 game_events;
+        CL_NetGameEventDispatcher_v0 login_events;
+        CL_NetGameEventDispatcher_v0 game_events;
 };
 
 #endif /* _DEBUG_CONSOLE_HPP_ */
