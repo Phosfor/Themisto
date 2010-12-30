@@ -109,7 +109,7 @@ void Clouds::update(float windPower, float elapsed, float globalTime)
 
 CL_Pointf Clouds::getCloudPos()
 {
-    int counter;
+    int counter = 0;
     CL_Pointf result(-1, -1);
     while (result.x == -1)
     {
