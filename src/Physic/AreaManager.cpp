@@ -16,6 +16,7 @@
 */
 
 #include "Physic/AreaManager.hpp"
+#include "Physic/Impact.hpp"
 
 void AreaManager::init(b2World *world, float cellSize)
 {

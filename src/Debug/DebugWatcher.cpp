@@ -16,6 +16,7 @@
 */
 
 #include "Debug/DebugWatcher.hpp"
+#include "Physic/BodyPart.hpp"
 
 void DebugWatcher::init()
 {

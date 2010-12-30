@@ -17,6 +17,11 @@
 
 #include "Physic/BodyPart.hpp"
 
+#include "Physic/BodyMaterial.hpp"
+#include "Physic/BodyState.hpp"
+#include "Physic/BodyVisual.hpp"
+#include "Physic/Impact.hpp"
+
 BodyPart::BodyPart(b2Fixture* fixture, BodyMaterial* material)
 {
     mFixture = fixture;

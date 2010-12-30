@@ -17,6 +17,9 @@
 
 #include "Debug/EvaluteFunctions.hpp"
 #include "World/Environ/Object.hpp"
+#include "Physic/BodyMaterial.hpp"
+#include "Physic/BodyState.hpp"
+#include "Physic/BodyPart.hpp"
 
 std::string evalute::evalute_material(Watch* watch)
 {

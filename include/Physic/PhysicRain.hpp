@@ -20,9 +20,11 @@
 
 #include <Box2D/Box2D.h>
 #include <ClanLib/core.h>
-#include "Physic/AreaManager.hpp"
-#include "Physic/Impact.hpp"
 
+#include "Physic/AreaManager.hpp"
+
+class Impact;
+class BodyPart;
 class PhysicRain
 {
     private:

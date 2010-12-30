@@ -18,28 +18,29 @@
 #ifndef _PHYSIC_BODY_HPP_
 #define _PHYSIC_BODY_HPP_
 
-#include <Box2D/Box2D.h>
-#include <ClanLib/core.h>
-#include <Box2D/Collision/Shapes/b2PolygonShape.h>
-#include <Box2D/Common/b2Math.h>
-
-#include "Physic/BodyMaterial.hpp"
-
-#include "Physic/Impact.hpp"
-#include "Physic/BodyState.hpp"
-#include "Physic/BodyVisual.hpp"
-#include "World/WorldManager.hpp"
-#include "Physic/AreaManager.hpp"
-#include "World/Objects/Object.hpp"
-#include "Physic/BodyPart.hpp"
 #include <iostream>
 #include <list>
 
+#include <boost/lexical_cast.hpp>
+#include <Box2D/Collision/Shapes/b2PolygonShape.h>
+#include <Box2D/Common/b2Math.h>
+#include <Box2D/Box2D.h>
+#include <ClanLib/core.h>
+
+#include "World/WorldManager.hpp"
+#include "Physic/AreaManager.hpp"
 #include "Core/PhysicManager.hpp"
 #include "Core/EnvironManager.hpp"
 #include "Core/ObjectsManager.hpp"
+
 #include "World/Environ/Types.hpp"
-#include <boost/lexical_cast.hpp>
+
+class Impact;
+class BodyState;
+class BodyVisual;
+class Object;
+class BodyPart;
+class BodyMaterial;
 
 class Body
 {
@@ -57,12 +58,11 @@ class Body
         b2World *mParentWorld;
         WorldManager* world;
 
-
     public:
         Body(b2Body* body);
         ~Body();
 
-        // Get/set 
+        // Get/set
 
         // TODO: Move implementation into cpp!
         b2Body* getb2Body();

@@ -25,6 +25,8 @@
 #include "Physic/Body.hpp"
 #include "Core/Utils.hpp"
 
+class Impact;
+
 class AreaManagerQueryCallback: public b2QueryCallback
 {
     public:

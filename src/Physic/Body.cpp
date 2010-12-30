@@ -17,6 +17,13 @@
 
 #include "Physic/Body.hpp"
 
+#include "Physic/Impact.hpp"
+#include "Physic/BodyState.hpp"
+#include "Physic/BodyVisual.hpp"
+#include "World/Objects/Object.hpp"
+#include "Physic/BodyPart.hpp"
+#include "Physic/BodyMaterial.hpp"
+
 Body::Body(b2Body* body)
 {
     mBody = body;

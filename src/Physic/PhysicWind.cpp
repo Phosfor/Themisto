@@ -16,6 +16,8 @@
 */
 
 #include "Physic/PhysicWind.hpp"
+#include "Physic/Impact.hpp"
+#include "Physic/BodyPart.hpp"
 
 void PhysicWind::init(float power, b2Vec2 dirrection)
 {

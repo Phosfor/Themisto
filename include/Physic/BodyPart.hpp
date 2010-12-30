@@ -18,21 +18,23 @@
 #ifndef _BODY_PART_HPP_
 #define _BODY_PART_HPP_
 
+#include <iostream>
+#include <list>
+#include <map>
+
 #include <Box2D/Box2D.h>
 #include <ClanLib/core.h>
 #include <Box2D/Collision/Shapes/b2PolygonShape.h>
 #include <Box2D/Common/b2Math.h>
 #include <Box2D/Collision/b2Collision.h>
 
-#include "Physic/BodyMaterial.hpp"
-#include "Physic/Impact.hpp"
-#include "Physic/BodyState.hpp"
-#include "Physic/BodyVisual.hpp"
 #include "World/WorldManager.hpp"
 #include "Physic/AreaManager.hpp"
-#include <iostream>
-#include <list>
-#include <map>
+
+class BodyMaterial;
+class Impact;
+class BodyState;
+class BodyVisual;
 
 class BodyPart
 {

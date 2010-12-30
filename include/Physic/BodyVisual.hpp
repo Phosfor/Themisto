@@ -20,14 +20,12 @@
 
 #include <Box2D/Collision/Shapes/b2PolygonShape.h>
 
-#include "Physic/BodyState.hpp"
-#include "Physic/Body.hpp"
 #include "Core/Utils.hpp"
-
 #include "Core/ResourceManager.hpp"
 #include "Core/ApplicationManager.hpp"
 
 class Body;
+class BodyState;
 class BodyVisual
 {
     private:

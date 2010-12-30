@@ -22,6 +22,8 @@
 #include <Box2D/Box2D.h>
 #include <ClanLib/core.h>
 
+class Impact;
+class BodyPart;
 class PhysicWind
 {
     private:

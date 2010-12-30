@@ -24,6 +24,9 @@
 #include "Core/Utils.hpp"
 
 class EnvironObject;
+class BodyMaterial;
+class BodyState;
+class BodyPart;
 namespace evalute
 {
     const int BodyMaterialFieldsCount = 20;

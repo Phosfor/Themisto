@@ -17,6 +17,9 @@
 
 #include "Physic/BodyVisual.hpp"
 
+#include "Physic/BodyState.hpp"
+#include "Physic/Body.hpp"
+
 BodyVisual::BodyVisual()
 {
 }

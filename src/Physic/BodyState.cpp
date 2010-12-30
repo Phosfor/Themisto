@@ -16,6 +16,7 @@
 */
 
 #include "Physic/BodyState.hpp"
+#include "Physic/BodyMaterial.hpp"
 
 BodyState::BodyState()
 {

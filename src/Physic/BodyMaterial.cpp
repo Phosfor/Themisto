@@ -17,6 +17,10 @@
 
 #include "Physic/BodyMaterial.hpp"
 
+#include "Physic/Impact.hpp"
+#include "Physic/BodyState.hpp"
+#include "Physic/BodyVisual.hpp"
+
 BodyMaterial::BodyMaterial()
 {
     Name = "Default";

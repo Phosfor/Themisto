@@ -46,6 +46,7 @@
 
 #include "Core/PhysicManager.hpp"
 
+class BodyPart;
 using namespace evalute;
 
 typedef std::vector<std::string>::iterator StrIterator;

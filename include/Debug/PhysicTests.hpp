@@ -22,6 +22,7 @@
 #include "Debug/DebugWatcher.hpp"
 #include "Core/LogManager.hpp"
 
+class BodyPart;
 class PhysicTests: public boost::serialization::singleton<PhysicTests>
 {
     public:

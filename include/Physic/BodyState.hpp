@@ -22,6 +22,7 @@
 #include "Physic/BodyMaterial.hpp"
 #include "World/WorldManager.hpp"
 
+class BodyMaterial;
 struct BodyState
 {
         // Is body temperature under the ForzingTemperature
