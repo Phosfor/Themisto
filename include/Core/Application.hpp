@@ -41,7 +41,6 @@
 #include "World/Objects/TypesManager.hpp"
 
 #include "World/States/MenuState.hpp"
-#include "World/States/PhysicState.hpp"
 
 // This is wrapper to make the Main function crossplatform
 class Application

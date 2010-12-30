@@ -35,7 +35,6 @@ set(Themisto_srcs
 
     # States
     World/States/MenuState.cpp
-    World/States/PhysicState.cpp
 
     # Physic
     Physic/BodyVisual.cpp
