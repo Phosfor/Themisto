@@ -27,12 +27,12 @@
 #include <boost/serialization/singleton.hpp>
 #include "Core/ConfigManager.hpp"
 #include "Core/LogManager.hpp"
-#include "World/Objects/Object.hpp"
 #include "Core/ApplicationManager.hpp"
 
 #include <map>
 #include <utility>
 
+class Object;
 typedef std::map<std::string, Object*> ObjectMapType;
 class ObjectsManager : public boost::serialization::singleton<ObjectsManager>
 {

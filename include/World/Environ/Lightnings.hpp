@@ -27,8 +27,8 @@
 #include "Core/ResourceManager.hpp"
 #include "World/Environ/Object.hpp"
 #include "World/Environ/Types.hpp"
-#include "World/Environ/Clouds.hpp"
 
+class Clouds;
 class Lightnings : public EnvironObject
 {
     private:

@@ -24,15 +24,6 @@
 #include "Core/Utils.hpp"
 #include "World/Environ/Types.hpp"
 
-#include "World/Environ/Rain.hpp"
-#include "World/Environ/Moon.hpp"
-#include "World/Environ/Stars.hpp"
-#include "World/Environ/Sky.hpp"
-#include "World/Environ/Leaves.hpp"
-#include "World/Environ/Clouds.hpp"
-#include "World/Environ/Birds.hpp"
-#include "World/Environ/Lightnings.hpp"
-
 #include <boost/serialization/singleton.hpp>
 
 #include <vector>
@@ -43,6 +34,15 @@
 
 #include <map>
 
+class Rain;
+class Moon;
+class Stars;
+class Sky;
+class Leaves;
+class Clouds;
+class Birds;
+class Lightnings;
+class EnvironObject;
 class EnvironManager : public boost::serialization::singleton<EnvironManager>
 {
     private:

@@ -34,7 +34,6 @@ void MenuState::init()
 
 
     mGC = appManager().getGraphic();
-    mStatFont = new CL_Font(appManager().getGraphic(), "Ubuntu", 30);
 
     areaManager().init(&physicManager().getWorld(), 20);
     sceneLoader().loadScene("test.xml");
@@ -47,7 +46,6 @@ void MenuState::init()
 
 void MenuState::shutdown() 
 {
-    delete mStatFont;
     delete mDnD;
     delete mDraw;
 }
@@ -63,15 +61,6 @@ void MenuState::update()
 
     // TODO: Bind some key to enable debug drawing
     //physicManager().getWorld().DrawDebugData();
-
-
-    int *time = environManager().getEnvironTime();
-    mStatFont->draw_text(appManager().getGraphic(), 10, 25,
-            CL_String(cl_format("world time: %1:%2:%3", time[0], time[1], time[2])), CL_Colorf::white);
-    mStatFont->draw_text(appManager().getGraphic(), 10, 50,
-            CL_String(cl_format("elapsed: %1", int(floor(appManager().getElapsed()+0.5)))), CL_Colorf::white);
-    mStatFont->draw_text(appManager().getGraphic(), 10, 75,
-            CL_String(cl_format("wind: %1", int(environManager().getWindPower()))), CL_Colorf::white);
 }
 
 std::string MenuState::type()

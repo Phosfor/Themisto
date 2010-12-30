@@ -16,6 +16,7 @@
 */
 
 #include "World/Environ/Leaves.hpp"
+#include "World/Environ/Clouds.hpp"
 
 void Leaves::setLimit(int limit)
 {

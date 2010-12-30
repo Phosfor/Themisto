@@ -21,9 +21,9 @@
 #include "Debug/Watch.hpp"
 #include "Physic/Body.hpp"
 #include "Core/ApplicationManager.hpp"
-#include "Core/EnvironManager.hpp"
 #include "Core/Utils.hpp"
 
+class EnvironObject;
 namespace evalute
 {
     const int BodyMaterialFieldsCount = 20;

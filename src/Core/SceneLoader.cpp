@@ -16,6 +16,7 @@
 */
 
 #include "Core/SceneLoader.hpp"
+#include "World/Objects/Object.hpp"
 
 void SceneLoader::loadScene(const std::string &sceneName)
 {

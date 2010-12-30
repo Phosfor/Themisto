@@ -17,6 +17,9 @@
 
 #include "World/Objects/TypesManager.hpp"
 
+#include "World/Objects/Object.hpp"
+#include "World/Objects/PhysicObject.hpp"
+
 Object* TypesManager::empty_parser(CL_DomElement* p, std::string& desc)
 {
     desc += "Error: object type not registered.";

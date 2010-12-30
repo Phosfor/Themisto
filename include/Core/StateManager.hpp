@@ -18,15 +18,15 @@
 #ifndef _STATE_MANAGER_HPP_
 #define _STATE_MANAGER_HPP_
 
+#include <deque>
+
 #include <boost/serialization/singleton.hpp>
 #include <boost/foreach.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
+#include <ClanLib/core.h>
 
 #include "Core/LogManager.hpp"
 #include "Core/Utils.hpp"
-
-#include <deque>
-#include <ClanLib/core.h>
 
 class State
 {
@@ -38,7 +38,6 @@ class State
         virtual std::string type() = 0;
 };
 
-// TODO: Replace with shared_array from boost
 typedef boost::shared_ptr<State> StatePtr;
 typedef std::deque<StatePtr> StateDeque;
 

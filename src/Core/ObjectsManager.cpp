@@ -16,6 +16,7 @@
 */
 
 #include "Core/ObjectsManager.hpp"
+#include "World/Objects/Object.hpp"
 
 ObjectsManager::ObjectsManager()
 {

@@ -18,17 +18,15 @@
 #ifndef _PHYSIC_MANAGER_HPP_
 #define _PHYSIC_MANAGER_HPP_
 
+#include <list>
+
 #include <boost/serialization/singleton.hpp>
 #include <Box2D/Box2D.h>
 
-#include <list>
-
-#include "Physic/Body.hpp"
 #include "Core/Utils.hpp"
 #include "Core/ApplicationManager.hpp"
 
 class Body;
-
 class PhysicManager : public boost::serialization::singleton<PhysicManager>
 {
     private:

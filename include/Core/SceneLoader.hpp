@@ -28,6 +28,7 @@
 #include "World/Objects/TypesManager.hpp"
 #include <map>
 
+class Object;
 class SceneLoader : public boost::serialization::singleton<SceneLoader>
 {
     private:

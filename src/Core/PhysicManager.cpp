@@ -16,6 +16,7 @@
 */
 
 #include "Core/PhysicManager.hpp"
+#include "Physic/Body.hpp"
 
 PhysicManager::PhysicManager()
 {

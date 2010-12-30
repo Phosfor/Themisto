@@ -17,6 +17,16 @@
 
 #include "Core/EnvironManager.hpp"
 
+#include "World/Environ/Rain.hpp"
+#include "World/Environ/Moon.hpp"
+#include "World/Environ/Stars.hpp"
+#include "World/Environ/Sky.hpp"
+#include "World/Environ/Leaves.hpp"
+#include "World/Environ/Clouds.hpp"
+#include "World/Environ/Birds.hpp"
+#include "World/Environ/Lightnings.hpp"
+#include "World/Environ/Object.hpp"
+
 void EnvironManager::initEnviron()
 {
     mWindPower = 0.0f;

@@ -16,6 +16,7 @@
 */
 
 #include "Debug/EvaluteFunctions.hpp"
+#include "World/Environ/Object.hpp"
 
 std::string evalute::evalute_material(Watch* watch)
 {
@@ -41,7 +42,7 @@ std::string evalute::evalute_material(Watch* watch)
     else if(name == "InflCarbonizeLevelToMaxDampness") result = FloatToStr(m->InflCarbonizeLevelToMaxDampness);
     else if(name == "InflCarbonizeLevelToElecticalConductivity") result = FloatToStr(m->InflCarbonizeLevelToElecticalConductivity);
     else if(name == "InflMoistenToKindleLevel") result = FloatToStr(m->InflMoistenToKindleLevel);
-    else if(name == "InflTemperatureToDampness") result = FloatToStr(m->InflTemperatureToDampness);  
+    else if(name == "InflTemperatureToDampness") result = FloatToStr(m->InflTemperatureToDampness);
 
     return result;
 }

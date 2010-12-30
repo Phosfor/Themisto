@@ -35,7 +35,6 @@ class MenuState : public State
         DebugDraw *mDraw;
         DebugDragAndDrop *mDnD;
 
-        CL_Font *mStatFont;
         bool mEnvironEnabled;
         CL_GraphicContext mGC;
 
