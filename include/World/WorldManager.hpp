@@ -18,11 +18,10 @@
 #ifndef _WORLD_MANAGER_HPP_
 #define _WORLD_MANAGER_HPP_
 
-#include "Physic/BodyMaterial.hpp"
-
 #include <boost/serialization/singleton.hpp>
 #include <sstream>
 
+class BodyMaterial;
 class WorldManager : public boost::serialization::singleton<WorldManager>
 {
     private:

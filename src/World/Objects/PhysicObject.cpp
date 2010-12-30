@@ -17,6 +17,13 @@
 
 #include "World/Objects/PhysicObject.hpp"
 
+#include "Physic/BodyVisual.hpp"
+#include "Physic/Body.hpp"
+#include "Physic/BodyPart.hpp"
+#include "Physic/BodyState.hpp"
+#include "Physic/Impact.hpp"
+#include "Physic/BodyMaterial.hpp"
+
 void PhysicObject::setVisual(BodyVisual *visualiser) { mBodyVisual = visualiser; }
 BodyVisual &PhysicObject::getVisual() { return *mBodyVisual; }
 void PhysicObject::setBody(Body *body) { mBody = body; }

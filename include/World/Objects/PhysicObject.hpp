@@ -19,21 +19,21 @@
 #define _PHYSIC_OBJECT_HPP_
 
 #include <Box2D/Box2D.h>
-#include <ClanLib/core.h>
 #include <Box2D/Collision/Shapes/b2PolygonShape.h>
 #include <Box2D/Common/b2Math.h>
 
-#include "Physic/BodyMaterial.hpp"
+#include <ClanLib/core.h>
 
-#include "Physic/Body.hpp"
-#include "Physic/Impact.hpp"
-#include "Physic/BodyState.hpp"
-#include "Physic/BodyVisual.hpp"
 #include "World/WorldManager.hpp"
 #include "Physic/AreaManager.hpp"
 #include "World/Objects/Object.hpp"
-#include "Physic/BodyPart.hpp"
 
+class BodyVisual;
+class Body;
+class BodyPart;
+class BodyState;
+class Impact;
+class BodyMaterial;
 class PhysicObject: public Object
 {
     private:

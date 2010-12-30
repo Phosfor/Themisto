@@ -16,6 +16,7 @@
 */
 
 #include "World/WorldManager.hpp"
+#include "Physic/BodyMaterial.hpp"
 
 void WorldManager::initWorld()
 {
