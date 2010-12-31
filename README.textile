@@ -41,3 +41,9 @@ ReadLine utility, for installing process this lines:
 @make@
 @make install@
 @sudo apt-get install libncurses5-dev@
+
+<h2>For developers</h2>
+Before commiting code you have to check it with Google's <a href="http://google-styleguide.googlecode.com/svn/trunk/cpplint/cpplint.py">cpplint</a> tool
+
+Command we are using for checking:
+@python cpplint.py --filter=-whitespace,-build/include_order,-build/include_what_you_use,-runtime/threadsafe_fn DIRS/FILES@
