@@ -33,7 +33,7 @@ std::vector<std::string> ConfigManager::getListValue(const std::string &key)
     using boost::property_tree::ptree;
 
     std::vector<std::string> listValues;
-    BOOST_FOREACH(ptree::value_type &value, mTreeHandle.get_child(key))
+    BOOST_FOREACH(const ptree::value_type &value, mTreeHandle.get_child(key))
     {
         listValues.push_back(value.second.data());
     }

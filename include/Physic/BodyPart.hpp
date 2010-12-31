@@ -77,7 +77,7 @@ class BodyPart
 
     public:
         BodyPart(b2Fixture* fixture, BodyMaterial* material);
-        ~BodyPart();
+        virtual ~BodyPart();
         void setMaterial(BodyMaterial *material, bool isDefault);
         BodyState *getState();
         BodyMaterial* getMaterial();

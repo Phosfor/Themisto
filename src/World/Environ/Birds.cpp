@@ -61,7 +61,7 @@ void Birds::processBirds(CL_GraphicContext &gc, int width, int height, int i)
         mBirds[i].mBirdImage.set_angle_yaw(CL_Angle::from_degrees(0));
     }
 
-    mBirds[i].y = height * (float)(rand()%3 + 2) / 10.0;
+    mBirds[i].y = height * static_cast<float>((rand()%3 + 2)) / 10.0;
 }
 
 Birds::Birds(int maxBirds)

@@ -59,7 +59,7 @@ class Stars : public EnvironObject
         float mBigGalaxyAlpha, mBigGalaxyBloom;
 
     public:
-        Stars(int maxStars = 200);
+        explicit Stars(int maxStars = 200);
         void setLimit(int limit);
         void update(float windPower, float elapsed, float globalTime);
 };

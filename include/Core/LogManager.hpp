@@ -18,15 +18,15 @@
 #ifndef _LOG_MANAGER_H_
 #define _LOG_MANAGER_H_
 
+#include <vector>
+#include <fstream>
+#include <string>
+
 #include <boost/serialization/singleton.hpp>
 #include <boost/filesystem.hpp>
 
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/date_time/posix_time/posix_time_types.hpp>
-
-#include <vector>
-#include <fstream>
-#include <iostream>
 
 class LogManager : public boost::serialization::singleton<LogManager>
 {

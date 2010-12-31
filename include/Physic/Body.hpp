@@ -59,7 +59,7 @@ class Body
         WorldManager* world;
 
     public:
-        Body(b2Body* body);
+        explicit Body(b2Body* body);
         ~Body();
 
         // Get/set

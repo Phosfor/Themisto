@@ -18,6 +18,10 @@
 #ifndef _CORE_OBJECTS_MANAGER_HPP_
 #define _CORE_OBJECTS_MANAGER_HPP_
 
+#include <map>
+#include <utility>
+#include <string>
+
 #include <ClanLib/display.h>
 #include <ClanLib/core.h>
 #include <ClanLib/gl.h>
@@ -28,9 +32,6 @@
 #include "Core/ConfigManager.hpp"
 #include "Core/LogManager.hpp"
 #include "Core/ApplicationManager.hpp"
-
-#include <map>
-#include <utility>
 
 class Object;
 typedef std::map<std::string, Object*> ObjectMapType;

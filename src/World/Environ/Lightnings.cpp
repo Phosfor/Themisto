@@ -31,7 +31,7 @@ Lightnings::Lightnings()
     if (!environManager().getTypeEnabled(Environ_Clouds))
         mEnabled = false;
     else
-        mCloudsHandle = dynamic_cast<Clouds*>(environManager().getTypeHandle(Environ_Clouds));
+        mCloudsHandle = reinterpret_cast<Clouds*>(environManager().getTypeHandle(Environ_Clouds));
 }
 
 void Lightnings::update(float windPower, float elapsed, float globalTime)

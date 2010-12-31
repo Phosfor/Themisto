@@ -18,12 +18,13 @@
 #ifndef _CONFIG_MANAGER_H_
 #define _CONFIG_MANAGER_H_
 
+#include <vector>
+#include <string>
+
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/info_parser.hpp>
 #include <boost/foreach.hpp>
 #include <boost/serialization/singleton.hpp>
-
-#include <vector>
 
 class ConfigManager : public boost::serialization::singleton<ConfigManager>
 {

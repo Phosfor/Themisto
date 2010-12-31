@@ -84,7 +84,7 @@ struct Watch
     std::string MemberName; // Member name of Object to show
     EvaluteFunction Expression; // Function, that evalutes watch value
     Watch* Parent;
-    std::list<Watch*> Children;  
+    std::list<Watch*> Children;
     int UpdateInterval; // Milliseconds; if less then zero (EVERY_STEP value) then newer update
     int LeftFromLastUpdate;
 

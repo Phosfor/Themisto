@@ -34,9 +34,7 @@ void DebugDragAndDrop::init()
  DebugDragAndDrop::~DebugDragAndDrop()
  {
      if(mMousePos != NULL)
-     {
          delete mMousePos;
-     }
  }
 
 bool DebugDragAndDrop::ReportFixture(b2Fixture *fixture)
@@ -62,7 +60,7 @@ bool DebugDragAndDrop::ReportFixture(b2Fixture *fixture)
 
         jointDef.target =*mMousePos;
         jointDef.maxForce = 1000.0f * draggingBody->GetMass();
-        mMouseJoint = (b2MouseJoint*)physicManager().getWorld().CreateJoint(&jointDef);
+        mMouseJoint = reinterpret_cast<b2MouseJoint*>(physicManager().getWorld().CreateJoint(&jointDef));
         draggingBody->SetActive(true);
         return false;
     }
@@ -73,7 +71,7 @@ void DebugDragAndDrop::mouseDown(const CL_InputEvent &ev, const CL_InputState &s
 {
     if(mMouseJoint == NULL)
     {
-        mMousePos->Set((float) Pixels2Meters(ev.mouse_pos.x), (float) Pixels2Meters(ev.mouse_pos.y));
+        mMousePos->Set(static_cast<float>(Pixels2Meters(ev.mouse_pos.x)), static_cast<float>(Pixels2Meters(ev.mouse_pos.y)));
         b2AABB region;
         region.lowerBound.Set(mMousePos->x - 0.001f, mMousePos->y - 0.0f);
         region.upperBound.Set(mMousePos->x + 0.001f, mMousePos->y + 0.001f);
@@ -85,7 +83,7 @@ void DebugDragAndDrop::mouseMove(const CL_InputEvent &ev, const CL_InputState &s
 {
    if(mMouseJoint != NULL)
    {
-       mMousePos->Set((float) Pixels2Meters(ev.mouse_pos.x), (float) Pixels2Meters(ev.mouse_pos.y));
+       mMousePos->Set(static_cast<float>(Pixels2Meters(ev.mouse_pos.x)), static_cast<float>(Pixels2Meters(ev.mouse_pos.y)));
        mMouseJoint->SetTarget(*mMousePos);
    }
 }

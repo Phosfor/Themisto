@@ -30,7 +30,7 @@ void Clouds::setLimit(int limit)
 
 void Clouds::processClouds(CL_GraphicContext &gc, float windPower, int i)
 {
-    mClouds[i].y_offset = rand() % (int)(mWindowHeight * 0.05);
+    mClouds[i].y_offset = rand() % static_cast<int>((mWindowHeight * 0.05));
 
     mClouds[i].x_speed = 0;
     int size = resourceManager().sectionHandle("Clouds").get_child_nodes().get_length();
@@ -52,8 +52,8 @@ void Clouds::processClouds(CL_GraphicContext &gc, float windPower, int i)
         mClouds[i].timeout = 0;
     }
 
-    float alpha = (float)(rand()%4 + 7) / 10.0f;
-    float color = (float)(rand()%1 + 3) / 10.0f;
+    float alpha = static_cast<float>((rand()%4 + 7)) / 10.0f;
+    float color = static_cast<float>((rand()%1 + 3)) / 10.0f;
     mClouds[i].mColor = CL_Colorf(color, color, color, alpha);
 
     mClouds[i].speed_koef = rand() % 35 + 45;

@@ -16,6 +16,7 @@
 */
 
 #include "Core/ApplicationManager.hpp"
+#include <boost/cstdint.hpp>
 
 ApplicationManager::~ApplicationManager()
 {
@@ -75,8 +76,8 @@ CL_DisplayWindow &ApplicationManager::getWindow()
 void ApplicationManager::initWindow(const std::string &title)
 {
     // Initializating part
-    short width = configManager().getValue<int>("window.width", 640);
-    short height = configManager().getValue<int>("window.height", 480);
+    int16_t width = configManager().getValue<int>("window.width", 640);
+    int16_t height = configManager().getValue<int>("window.height", 480);
     bool fullscreen = configManager().getValue<bool>("window.fullscreen", false);
 
     CL_DisplayWindowDescription desc(title);

@@ -18,13 +18,15 @@
 #ifndef _APPLICATION_MANAGER_H_
 #define _APPLICATION_MANAGER_H_
 
+#include <string>
+
+#include <boost/serialization/singleton.hpp>
 #include <ClanLib/display.h>
 #include <ClanLib/core.h>
 #include <ClanLib/gl.h>
 #include <ClanLib/application.h>
 #include <ClanLib/gui.h>
 
-#include <boost/serialization/singleton.hpp>
 #include "Core/ConfigManager.hpp"
 
 class ApplicationManager : public boost::serialization::singleton<ApplicationManager>

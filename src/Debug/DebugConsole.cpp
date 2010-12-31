@@ -41,7 +41,7 @@ void Client::step(const std::string &command)
         CL_Event::wait(network_client.get_event_arrived());
         network_client.process_events();
     }
-    catch(CL_Exception& e)
+    catch(const CL_Exception& e)
     {
         std::cout << "# Error: can't send command to Themisto; Reason: " <<  e.what();
     }
@@ -99,7 +99,7 @@ void Client::disconnect()
 }
 
 // A static variable for holding the line. 
-static char *line_read = (char *)NULL;
+static char *line_read = reinterpret_cast<char*>(NULL);
 
 // Read a string, and return a pointer to it.
 // Returns NULL on EOF. 
@@ -110,7 +110,7 @@ char* readCommand()
     if (line_read)
     {
       free (line_read);
-      line_read = (char *)NULL;
+      line_read = reinterpret_cast<char*>(NULL);
     }
 
     // Get a line from the user. */

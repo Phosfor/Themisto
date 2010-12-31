@@ -46,7 +46,7 @@ void PhysicRain::regionUpdated(CellRegion region)
             b2Fixture* cellb2Fixture = areaManager().getCellFixture(x,y);
             if(cellb2Fixture != NULL)
             {
-                BodyPart* body = (BodyPart*)cellb2Fixture->GetUserData();
+                BodyPart* body = reinterpret_cast<BodyPart*>(cellb2Fixture->GetUserData());
                 if(applied) body->applyRainImpact(NULL);
                 else
                 {

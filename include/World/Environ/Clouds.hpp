@@ -46,7 +46,7 @@ class Clouds : public EnvironObject
         void processClouds(CL_GraphicContext &gc, float windPower, int i);
 
     public:
-        Clouds(int maxClouds = 4);
+        explicit Clouds(int maxClouds = 4);
         void setLimit(int limit);
         void update(float windPower, float elapsed, float globalTime);
 

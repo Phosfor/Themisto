@@ -28,7 +28,7 @@ StarsData::StarsData(int width, int height)
     x = rand() % width;
     y = rand() % height;
 
-    brightness = (float)(rand() % 10 + 1)/10.0f;
+    brightness = static_cast<float>((rand() % 10 + 1))/10.0f;
 
     color = CL_Colorf(1.0f, 1.0f, 1.0f, brightness);
 }
@@ -38,13 +38,13 @@ ImageStarsData::ImageStarsData(CL_GraphicContext gc, int width, int height)
     x = rand() % width;
     y = rand() % height;
 
-    brightness = (float)(rand() % 10 + 1)/10.0f;
+    brightness = static_cast<float>((rand() % 10 + 1))/10.0f;
 
     int size = resourceManager().sectionHandle("Stars").get_child_nodes().get_length();
     int randStar = rand() % size;
     imageHandle = resourceManager().getImage("Stars", boost::lexical_cast<std::string>(randStar));
 
-    float scale = float(rand()%2 + 2)/10.0f;
+    float scale = static_cast<float>(rand()%2 + 2)/10.0f;
     imageHandle.set_scale(scale, scale);
     imageHandle.set_alpha(brightness);
 }

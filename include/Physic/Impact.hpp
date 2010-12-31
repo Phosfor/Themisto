@@ -43,7 +43,7 @@ struct Impact
     b2Vec2 ImpactPoint;
     b2Vec2 Dirrection;
 
-    Impact(ImpactTypes type);
+    explicit Impact(ImpactTypes type);
     Impact(ImpactTypes type, float intensity, b2Vec2 impactPoint, b2Vec2 dirrection);
 };
 

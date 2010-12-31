@@ -49,7 +49,7 @@ class Leaves : public EnvironObject
         void processLeaves(CL_GraphicContext &gc, float windPower, int i);
 
     public:
-        Leaves(int maxLeaves = 5);
+        explicit Leaves(int maxLeaves = 5);
         void setLimit(int limit);
         void update(float windPower, float elapsed, float globalTime);
 };

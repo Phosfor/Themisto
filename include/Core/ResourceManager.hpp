@@ -18,21 +18,22 @@
 #ifndef _RESOURCE_MANAGER_HPP_
 #define _RESOURCE_MANAGER_HPP_
 
+#include <vector>
+#include <string>
+#include <map>
+#include <utility>
+
 #include <ClanLib/core.h>
 #include <ClanLib/display.h>
-
-#include "Core/ApplicationManager.hpp"
-#include "Core/ConfigManager.hpp"
-#include "Core/LogManager.hpp"
-#include "Core/Utils.hpp"
 
 #include <boost/foreach.hpp>
 #include <boost/algorithm/string.hpp>
 #include <boost/serialization/singleton.hpp>
 
-#include <vector>
-#include <map>
-#include <utility>
+#include "Core/ApplicationManager.hpp"
+#include "Core/ConfigManager.hpp"
+#include "Core/LogManager.hpp"
+#include "Core/Utils.hpp"
 
 class ResourceManager : public boost::serialization::singleton<ResourceManager>
 {

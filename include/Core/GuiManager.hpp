@@ -18,9 +18,11 @@
 #ifndef _GUI_MANAGER_HPP_
 #define _GUI_MANAGER_HPP_
 
+#include <vector>
+#include <string>
+
 #include <ClanLib/gui.h>
 #include <ClanLib/core.h>
-#include <vector>
 #include <boost/serialization/singleton.hpp>
 
 class GuiManager : public boost::serialization::singleton<GuiManager>

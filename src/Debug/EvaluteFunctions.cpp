@@ -98,12 +98,12 @@ std::string evalute::evalute_b2Fixture(Watch* watch)
     {
         if(xshape->GetType() == b2Shape::e_circle) 
         {
-            b2CircleShape* cshape= (b2CircleShape*)xshape;
+            b2CircleShape* cshape= reinterpret_cast<b2CircleShape*>(xshape);
             result += shapeCenterPrefix + VectorToStr(cshape->m_p);
         }
         else if(xshape->GetType() == b2Shape::e_polygon)
         {
-            b2PolygonShape* pshape= (b2PolygonShape*)xshape;
+            b2PolygonShape* pshape= reinterpret_cast<b2PolygonShape*>(xshape);
             result += shapeCenterPrefix + VectorToStr(pshape->m_centroid);
         }
     }
@@ -112,7 +112,7 @@ std::string evalute::evalute_b2Fixture(Watch* watch)
     {
         if(xshape->GetType() == b2Shape::e_polygon)
         {
-            b2PolygonShape* pshape= (b2PolygonShape*)xshape;
+            b2PolygonShape* pshape= reinterpret_cast<b2PolygonShape*>(xshape);
             result += shapeVetexCountPrefix + IntToStr(pshape->m_vertexCount);
         }
         else 
@@ -127,7 +127,7 @@ std::string evalute::evalute_b2Fixture(Watch* watch)
     {
         if(xshape->GetType() == b2Shape::e_polygon)
         {
-            b2PolygonShape* pshape= (b2PolygonShape*)xshape;
+            b2PolygonShape* pshape= reinterpret_cast<b2PolygonShape*>(xshape);
             result += shapeVerticesPrefix;
             for(int i =0; i<pshape->m_vertexCount; ++i)
             {
@@ -167,7 +167,7 @@ std::string evalute::evalute_b2Fixture(Watch* watch)
     }
     else if(name == "ParentBody")
     {
-        Body* body = (Body*)m->GetBody()->GetUserData();
+        Body* body = reinterpret_cast<Body*>(m->GetBody()->GetUserData());
         if(body != NULL)
             result = body->getName();
         else
@@ -189,7 +189,7 @@ std::string evalute::evalute_b2Fixture(Watch* watch)
     if( name == "Mass.Center" || mass) result += massCenterPrefix + VectorToStr(massData.center);
     if( name == "Mass.RotationInertia" || mass) 
         result += massRotationInertiaPrefix + FloatToStr(massData.I);
-    if(mass) result += " }";   
+    if(mass) result += " }";
 
     else if(name == "Density") result = FloatToStr(m->GetDensity());
     else if(name == "Restitution") result = FloatToStr(m->GetRestitution());

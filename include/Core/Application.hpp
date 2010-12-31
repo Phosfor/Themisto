@@ -18,6 +18,8 @@
 #ifndef _APPLICATION_HPP_
 #define _APPLICATION_HPP_
 
+#include <vector>
+
 #include <ClanLib/display.h>
 #include <ClanLib/core.h>
 #include <ClanLib/application.h>

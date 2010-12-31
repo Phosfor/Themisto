@@ -67,8 +67,6 @@ CL_Sprite ResourceManager::getSprite(const std::string &section, const std::stri
 
 void ResourceManager::loadTextures()
 {
-    using namespace std;
-
     LOG_NOFORMAT("\t---------- Loading textures ---------\n");
     unsigned int counter = 0;
     BOOST_FOREACH(CL_String section, texturesManager.get_section_names())
@@ -104,7 +102,7 @@ CL_DomNode ResourceManager::sectionHandle(const std::string &section)
             if (node.to_element().get_attribute("name").c_str() == section)
                 return node;
         }
-    } catch(CL_Exception &e) {
+    } catch(const CL_Exception &e) {
         std::cout << "Something bad happened in `sectionHandle`: " << e.what();
     }
 

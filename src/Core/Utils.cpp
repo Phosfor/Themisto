@@ -56,7 +56,7 @@ std::string Utils::floatToStr(float p)
 {
     std::ostringstream out;
     out << p;
-    return out.str(); 
+    return out.str();
 }
 
 std::string Utils::getMediaFolder()
@@ -66,14 +66,12 @@ std::string Utils::getMediaFolder()
 
 boost::posix_time::ptime Utils::getCurrentTime() const
 {
-    using namespace boost;
-    return posix_time::microsec_clock::local_time();
+    return boost::posix_time::microsec_clock::local_time();
 }
 
 std::string Utils::checkLocation(const std::string &path)
 {
-    using namespace boost;
-    if (!filesystem::exists(path))
+    if (!boost::filesystem::exists(path))
     {
         LOG(cl_format("The path `%1` could be invalid!", path));
     }
@@ -83,14 +81,11 @@ std::string Utils::checkLocation(const std::string &path)
 
 std::string Utils::getTimeDifference()
 {
-    using namespace boost;
-    using namespace boost::posix_time;
-
     // If we don't call writeTimestamp before this function
     if (mTimeStamp.is_not_a_date_time()) LOG("You are trying to get time difference but you have to call writeTimestamp first!");
 
-    time_duration result = getCurrentTime() - mTimeStamp;
-    mTimeStamp = ptime(not_a_date_time);
+    boost::posix_time::time_duration result = getCurrentTime() - mTimeStamp;
+    mTimeStamp = boost::posix_time::ptime(boost::posix_time::not_a_date_time);
 
-    return to_simple_string(result);
+    return boost::posix_time::to_simple_string(result);
 }

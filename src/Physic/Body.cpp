@@ -51,7 +51,7 @@ void Body::step(float32 elapsed)
     for(b2Fixture* fixture = mBody->GetFixtureList();
             fixture != NULL; fixture = fixture->GetNext())
     {
-        BodyPart* part = (BodyPart*)fixture->GetUserData();
+        BodyPart* part = reinterpret_cast<BodyPart*>(fixture->GetUserData());
         if( part != NULL)
         {
             part->step(elapsed);

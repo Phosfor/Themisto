@@ -50,7 +50,7 @@ std::list<Body*> PhysicManager::getBodies()
     {
         if(body->GetUserData() != NULL)
         {
-            result.push_back((Body*)body->GetUserData());
+            result.push_back(reinterpret_cast<Body*>(body->GetUserData()));
         }
     }
     return result;

@@ -67,7 +67,7 @@ void BodyPart::findStaticCollisions()
     {
         if(b2TestOverlap(mFixture->GetShape(), fixture->GetShape(), t, t))
         {
-            mStaticCollisions->push_front((BodyPart*)fixture->GetUserData());
+            mStaticCollisions->push_front(reinterpret_cast<BodyPart*>(fixture->GetUserData()));
         }
     }
 }
@@ -144,11 +144,11 @@ void BodyPart::calculateThermalTransmissions()
    {
        if(contact->contact->GetFixtureA() == mFixture )
        {
-           calculateThermalTransmission((BodyPart*)contact->contact->GetFixtureB()->GetUserData());
+           calculateThermalTransmission(reinterpret_cast<BodyPart*>(contact->contact->GetFixtureB()->GetUserData()));
        }
        else if(contact->contact->GetFixtureB() == mFixture)
        {
-           calculateThermalTransmission((BodyPart*)contact->contact->GetFixtureA()->GetUserData());
+           calculateThermalTransmission(reinterpret_cast<BodyPart*>(contact->contact->GetFixtureA()->GetUserData()));
        }
    }
    // Reset impacts for contacts, that no more exists
@@ -157,7 +157,7 @@ void BodyPart::calculateThermalTransmissions()
    {
        if(it->second->Intensity == 0)
        {
-           ((BodyPart*)it->first->GetUserData())->cancelImpact(it->second);
+           (reinterpret_cast<BodyPart*>(it->first->GetUserData()))->cancelImpact(it->second);
            delete it->second;
            mContactImpacts->erase(it);
        }

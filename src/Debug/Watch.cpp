@@ -29,7 +29,7 @@ std::string nope_evalute(Watch* watch)
 Watch::Watch()
 {
     Active = true;
-    Object = (void*)NULL;
+    Object = reinterpret_cast<void*>(NULL);
     MemberName = "";
     OutFile = NULL;
     Parent = NULL;

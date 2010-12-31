@@ -73,7 +73,7 @@ const int ScreenResolutionX = configManager().getValue<int>("window.width", 768)
 const float MagicKoef = configManager().getValue<float>("application.resolution_koef", 19.2f);
 
 // How many pixels in one game meter in current screen height
-const float PixelsPerMeter = (float)ScreenResolutionY / MagicKoef;
+const float PixelsPerMeter = static_cast<float>(ScreenResolutionY) / MagicKoef;
 
 // Some conversions
 inline float Meters2Pixels(float meters) { return meters * PixelsPerMeter; }

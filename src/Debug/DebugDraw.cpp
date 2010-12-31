@@ -16,6 +16,7 @@
 */
 
 #include "Debug/DebugDraw.hpp"
+#include <boost/cstdint.hpp>
 
 DebugDraw::DebugDraw()
 {
@@ -25,7 +26,7 @@ DebugDraw::DebugDraw()
 void DebugDraw::DrawPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color)
 {
     CL_Colorf cl_color(color.r, color.g, color.b);
-    for (unsigned short int i=0; i < vertexCount - 1; ++i)
+    for (uint16_t i=0; i < vertexCount - 1; ++i)
         CL_Draw::line(mGC,
                 Meters2Pixels(vertices[i].x), Meters2Pixels(vertices[i].y),
                 Meters2Pixels(vertices[i+1].x), Meters2Pixels(vertices[i+1].y),
@@ -36,14 +37,14 @@ void DebugDraw::DrawSolidPolygon(const b2Vec2* vertices, int32 vertexCount, cons
 {
     CL_Colorf cl_color(color.r, color.g, color.b);
 
-    for (unsigned short int i=0; i < vertexCount - 1; ++i)
+    for (uint16_t i=0; i < vertexCount - 1; ++i)
         CL_Draw::line(mGC,
                 Meters2Pixels(vertices[i].x), Meters2Pixels(vertices[i].y),
                 Meters2Pixels(vertices[i+1].x), Meters2Pixels(vertices[i+1].y),
                 cl_color);
 
     std::vector<CL_Vec2f> triangles;
-    for (unsigned short int i = 0; i < vertexCount; ++i)
+    for (uint16_t i = 0; i < vertexCount; ++i)
       triangles.push_back(CL_Vec2f(Meters2Pixels(vertices[i].x), Meters2Pixels(vertices[i].y)));
 
     if (!triangles.empty())
@@ -61,11 +62,11 @@ void DebugDraw::DrawCircle(const b2Vec2& center, float32 radius, const b2Color& 
 {
     CL_Colorf cl_color(color.r, color.g, color.b);
 
-    unsigned int k_segments = 70.0f;
+    uint16_t k_segments = 70.0f;
     float32 k_increment = 2.0f * b2_pi / k_segments;
     float32 theta = 0.0f;
 
-    for (unsigned int i=0; i < k_segments; i++)
+    for (uint16_t i=0; i < k_segments; i++)
     {
         b2Vec2 v = center + radius * b2Vec2(cosf(theta), sinf(theta));
         CL_Draw::point(appManager().getGraphic(), Meters2Pixels(v.x), Meters2Pixels(v.y), cl_color);
@@ -78,7 +79,7 @@ void DebugDraw::DrawSolidCircle(const b2Vec2& center, float32 radius, const b2Ve
     CL_Colorf cl_color(color.r, color.g, color.b);
     CL_Colorf color2 = CL_Colorf(cl_color.r * 0.5f, cl_color.g * 0.5f, cl_color.b * 0.5f, 0.5);
 
-    unsigned int k_segments = 70.0f;
+    uint16_t k_segments = 70.0f;
     float32 k_increment = 2.0f * b2_pi / k_segments;
     float32 theta = 0.0f;
 
@@ -86,7 +87,7 @@ void DebugDraw::DrawSolidCircle(const b2Vec2& center, float32 radius, const b2Ve
     CL_Draw::circle(appManager().getGraphic(), Meters2Pixels(center.x), Meters2Pixels(center.y), Meters2Pixels(radius), color2);
 
     // Draw the border
-    for (unsigned int i=0; i < k_segments; i++)
+    for (uint16_t i=0; i < k_segments; i++)
     {
         b2Vec2 v = center + radius * b2Vec2(cosf(theta), sinf(theta));
         CL_Draw::point(appManager().getGraphic(), Meters2Pixels(v.x), Meters2Pixels(v.y), cl_color);

@@ -768,7 +768,7 @@ std::map<Target, TargetInfo> DebugWatcher::getTargets(StrIterator command, StrIt
                                         {
                                             result.insert(std::pair<Target, TargetInfo>(fixture, TargetInfo(partID, obj)));
                                         }
-                                        BodyPart* part = (BodyPart*)fixture->GetUserData();
+                                        BodyPart* part = reinterpret_cast<BodyPart*>(fixture->GetUserData());
                                         if(part != NULL)
                                         {
                                             if(type & tBodyPart)
@@ -782,7 +782,7 @@ std::map<Target, TargetInfo> DebugWatcher::getTargets(StrIterator command, StrIt
                                             if(type & tBodyState)
                                             {
                                                 result.insert(std::pair<Target, TargetInfo>(part->getState(), TargetInfo(partID, obj)));
-                                            }                                    
+                                            }
                                         }
                                     }
                                     if(fixtures.size() == 0)
@@ -803,7 +803,7 @@ std::map<Target, TargetInfo> DebugWatcher::getTargets(StrIterator command, StrIt
                             {
                                 std::string id = IntToStr(i);
 
-                                BodyPart* part = (BodyPart*)fixture->GetUserData();
+                                BodyPart* part = reinterpret_cast<BodyPart*>(fixture->GetUserData());
                                 if(part != NULL)
                                 {
                                     id = part->getName();
@@ -869,7 +869,7 @@ std::vector<b2Fixture*> DebugWatcher::getFixtures(Body* obj, std::string* partID
             partNumber = boost::lexical_cast<int>(*partID);
             numberID = true;
         }
-        catch(boost::bad_lexical_cast &e)
+        catch(const boost::bad_lexical_cast &e)
         {
             numberID = false;
         }
@@ -882,7 +882,7 @@ std::vector<b2Fixture*> DebugWatcher::getFixtures(Body* obj, std::string* partID
                 if(currentPartNumber == partNumber)
                 {
                     result.push_back(fixture);
-                    BodyPart* part = (BodyPart*)fixture->GetUserData();
+                    BodyPart* part = reinterpret_cast<BodyPart*>(fixture->GetUserData());
                     if(part!= NULL)
                     {
                         partID->assign(part->getName());
@@ -897,7 +897,7 @@ std::vector<b2Fixture*> DebugWatcher::getFixtures(Body* obj, std::string* partID
             for(b2Fixture* fixture = body->GetFixtureList(); 
                      fixture != NULL; fixture = fixture->GetNext())
             {
-                BodyPart* part = (BodyPart*)fixture->GetUserData();
+                BodyPart* part = reinterpret_cast<BodyPart*>(fixture->GetUserData());
                 if(part != NULL)
                 {
                     if(part->getName() == *partID)

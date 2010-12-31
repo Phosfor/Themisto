@@ -25,7 +25,7 @@ void PhysicTests::step()
 
 Body* getBody(BodyPart* part)
 {
-    return (Body*)part->getFixture()->GetBody()->GetUserData();
+    return reinterpret_cast<Body*>(part->getFixture()->GetBody()->GetUserData());
 }
 
 void PhysicTests::RunTest()
@@ -41,7 +41,7 @@ void PhysicTests::RunTest()
     }
     if(testBody != NULL)
     {
-        BodyPart* part = (BodyPart*)testBody->getb2Body()->GetFixtureList()->GetUserData();
+        BodyPart* part = reinterpret_cast<BodyPart*>(testBody->getb2Body()->GetFixtureList()->GetUserData());
         SimpleMoisten(part);
     }
     else

@@ -45,7 +45,7 @@ class Birds : public EnvironObject
         void processBirds(CL_GraphicContext &gc, int width, int height, int i);
 
     public:
-        Birds(int maxBirds = 1);
+        explicit Birds(int maxBirds = 1);
         void setLimit(int limit);
         void update(float windPower, float elapsed, float globalTime);
 };

@@ -219,7 +219,6 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
     // If Environ is enabled, go through all environ-params in the level file
     if (mEnvironEnabled)
     {
-        using namespace boost;
         environManager().initEnviron();
 
         std::map<std::string, EnvironTypes> deps;
@@ -238,7 +237,7 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
             CL_DomNode tag = childList.item(i);
             if (tag.get_node_name() == "Wind")
             {
-                float pow = lexical_cast<float>(tag.to_element().get_attribute("power").c_str());
+                float pow = boost::lexical_cast<float>(tag.to_element().get_attribute("power").c_str());
                 environManager().setWindPower(pow);
             }
             EnvironTypes type = deps[tag.get_node_name().c_str()];
@@ -247,7 +246,7 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
 
             int lim = -1;
             CL_String s_lim = tag.to_element().get_attribute("limit");
-            if (s_lim != "") lim = lexical_cast<int>(s_lim.c_str());
+            if (s_lim != "") lim = boost::lexical_cast<int>(s_lim.c_str());
 
             environManager().enableType(enabled, type, lim);
         }
@@ -256,7 +255,6 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
 
     // START OF OBJECTS PARSING -------------------------------------------
     {
-        using namespace boost;
 
         CL_DomNodeList childList = objects.get_child_nodes();
         for (int i=0; i < childList.get_length(); ++i)
