@@ -10,7 +10,7 @@
             <Sky enabled="true" />
             <Moon enabled="true" />
             <Leaves enabled="true" limit="5" />
-            <Stars enabled="true" />
+            <Stars enabled="true" limit="200" />
             <Birds enabled="true" />
             <Wind power="-2" />
         </Environ>

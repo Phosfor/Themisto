@@ -27,17 +27,10 @@
 #include "Core/ResourceManager.hpp"
 #include "World/Environ/Object.hpp"
 
-struct StarsData
-{
-    float x, y, size, brightness;
-    CL_Colorf color;
-
-    StarsData(uint16_t width, uint16_t height);
-};
-
 struct ImageStarsData
 {
-    float x, y, brightness;
+    uint16_t x, y;
+    float brightness;
     CL_Image imageHandle;
 
     ImageStarsData(CL_GraphicContext gc, uint16_t width, uint16_t height);
@@ -46,7 +39,6 @@ struct ImageStarsData
 class Stars : public EnvironObject
 {
     private:
-        std::vector<StarsData> mStars;
         std::vector<ImageStarsData> mImageStars;
 
         float mBloomSize;

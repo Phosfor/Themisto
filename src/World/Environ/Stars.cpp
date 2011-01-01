@@ -19,18 +19,9 @@
 
 void Stars::setLimit(uint16_t limit)
 {
-   mStars.resize(limit, StarsData(mWindowWidth, mWindowHeight));
+   std::cout << "Stars limit has been changed to: " << limit << "\n";
+   mImageStars.resize(limit, ImageStarsData(appManager().getGraphic(), mWindowWidth, mWindowHeight));
    mMaxObjects = limit;
-}
-
-StarsData::StarsData(uint16_t width, uint16_t height)
-{
-    x = rand() % width;
-    y = rand() % height;
-
-    brightness = static_cast<float>((rand() % 10 + 1))/10.0f;
-
-    color = CL_Colorf(1.0f, 1.0f, 1.0f, brightness);
 }
 
 ImageStarsData::ImageStarsData(CL_GraphicContext gc, uint16_t width, uint16_t height)
@@ -38,13 +29,13 @@ ImageStarsData::ImageStarsData(CL_GraphicContext gc, uint16_t width, uint16_t he
     x = rand() % width;
     y = rand() % height;
 
-    brightness = static_cast<float>((rand() % 10 + 1))/10.0f;
+    brightness = static_cast<float>((rand() % 10 + 2))/10.0f;
 
-    uint16_t size = resourceManager().sectionHandle("Stars").get_child_nodes().get_length();
-    uint16_t randStar = rand() % size;
+    uint16_t mNumStars = resourceManager().sectionHandle("Stars").get_child_nodes().get_length();
+    uint16_t randStar = rand() % mNumStars;
     imageHandle = resourceManager().getImage("Stars", boost::lexical_cast<std::string>(randStar));
 
-    float scale = static_cast<float>(rand()%2 + 2)/10.0f;
+    float scale = static_cast<float>(rand()%10 + 10)/100.0f;
     imageHandle.set_scale(scale, scale);
     imageHandle.set_alpha(brightness);
 }
@@ -57,9 +48,6 @@ Stars::Stars(uint16_t maxStars)
 
     mGC = appManager().getGraphic();
     mMaxObjects = maxStars;
-
-    for (uint16_t i=0; i < mMaxObjects; i++)
-        mStars.push_back(StarsData(mWindowWidth, mWindowHeight));
 
     mBigGalaxy = resourceManager().getImage("Nebulas", "big_galaxy");
     mBigGalaxyAlpha = 0.8f; // Max alpha value
@@ -80,7 +68,7 @@ void Stars::update(float windPower, float elapsed, float globalTime)
         mDrawStars = true;
         t1 = ((globalTime - 10.0f) / (14.0f - 10.0f));
         mBloomSize = t1;
-        mBigGalaxyBloom = t1 / 1.5f;
+        mBigGalaxyBloom = t1 * 0.5f;
     }
 
     if (mNight)
@@ -110,24 +98,21 @@ void Stars::update(float windPower, float elapsed, float globalTime)
 
     mBigGalaxy.draw(mGC, 0, 0);
 
+    if (mNight)
+        mBloomSize += 0.001f;
+    else
+        mBloomSize -= 0.001f;
+
     for (uint16_t i=0; i < mMaxObjects; i++)
     {
         // Stars "blinking"
         if (rand() % 80 == 0) continue;
 
-        if (mBloomSize <= mStars[i].brightness)
-            mStars[i].color.set_alpha(mBloomSize);
+        ImageStarsData &data2 = mImageStars[i];
 
-        if (mBloomSize <= mImageStars[i].brightness)
-            mImageStars[i].imageHandle.set_alpha(mBloomSize);
+        if (mBloomSize <= data2.brightness)
+            data2.imageHandle.set_alpha(mBloomSize);
 
-
-        if (mNight)
-            mBloomSize += 0.001f;
-        else
-            mBloomSize -= 0.001f;
-
-        CL_Draw::point(mGC, mStars[i].x, mStars[i].y, mStars[i].color);
-        mImageStars[i].imageHandle.draw(mGC, mImageStars[i].x, mImageStars[i].y);
+        data2.imageHandle.draw(mGC, data2.x, data2.y);
     }
 }

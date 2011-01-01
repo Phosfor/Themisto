@@ -94,6 +94,9 @@ void Rain::update(float windPower, float elapsed, float globalTime)
         }
         else
         {
+            if (current.y > mWindowHeight || current.x > mWindowWidth || current.x < 0)
+                processDrops(windPower, current, i);
+
             current.x += current.x_speed * elapsed;
             current.y += current.y_speed * elapsed;
 
@@ -103,9 +106,6 @@ void Rain::update(float windPower, float elapsed, float globalTime)
             CL_Draw::line(mGC, current.x, current.y,
                     current.x - current.x_speed * kTail, current.y - current.y_speed * kTail,
                     mDropColor);
-
-            if (current.y > mWindowHeight || current.x > mWindowWidth || current.x < 0)
-                processDrops(windPower, current, i);
         }
     }
 }

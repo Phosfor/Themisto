@@ -27,6 +27,7 @@
         <texture name="1" file="stars/1.png" />
         <texture name="2" file="stars/2.png" />
         <texture name="3" file="stars/3.png" />
+        <texture name="4" file="stars/4.png" />
     </section>
 
     <section name="Nebulas">
