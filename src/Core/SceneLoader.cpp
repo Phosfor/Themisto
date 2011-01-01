@@ -29,7 +29,7 @@ void SceneLoader::copyAttributes(CL_DomNode parent, CL_DomNode templatePointer)
 {
     // Go through all attributes from template and copy them
     CL_DomNamedNodeMap nodemap = templatePointer.get_attributes();
-    for (int i=0; i < nodemap.get_length(); ++i) 
+    for (int i=0; i < nodemap.get_length(); ++i)
     {
         CL_DomAttr attribute = nodemap.item(i).to_attr();
         parent.to_element().set_attribute(attribute.get_name(), attribute.get_value());
@@ -123,7 +123,7 @@ void SceneLoader::processTemplates(CL_DomDocument document)
 
         // template="Filename.tpl/Tplname"
         unsigned int dotPos = tplLocation.find(".");
-        if (dotPos == std::string::npos) 
+        if (dotPos == std::string::npos)
             std::cout << cl_format("Wrong template location `%1`\n", tplLocation).c_str();
 
         std::string tplFile = tplLocation.substr(0, dotPos+4);
@@ -165,7 +165,7 @@ void SceneLoader::processTemplates(CL_DomDocument document)
         // Check whether template child's name is equal for parent which called template
         CL_DomElement tplChildElem = templatePointer.get_first_child_element();
         if (parentNodeName != tplChildElem.get_node_name().c_str())
-            std::cout << cl_format("You can't apply tpl-child tag `%1` for tag `%2`. Reason: different names!\n", 
+            std::cout << cl_format("You can't apply tpl-child tag `%1` for tag `%2`. Reason: different names!\n",
                     tplChildElem.get_node_name(), parentNodeName).c_str();
 
         // Pointer for parent element is in `parent`
@@ -187,6 +187,8 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
 
     CL_File fileHandle = CL_File("media/levels/" + sceneName);
     CL_DomDocument document(fileHandle);
+    TemplatesProcessor proc;
+    proc.processTemplates(&document);
 
     CL_DomElement root = document.get_document_element();
     std::cout << "\t ---------- Parsing scene ----------\n";
