@@ -44,6 +44,7 @@ class Rain : public EnvironObject
         std::vector<Data> mData;
         CL_Colorf mDropColor;
         CL_GraphicContext mGC;
+        float mKoef1;
 
         void processDrops(float windPower, Data &current, bool firstTime=false);
 

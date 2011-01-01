@@ -32,7 +32,7 @@ void Rain::processDrops(float windPower, Data &current, bool firstTime)
     uint16_t left, right;
     left = right = 0;
 
-    uint16_t x1 = (mWindowHeight / Gravity) * windPower;
+    uint16_t x1 = mKoef1 * windPower;
 
     if (windPower < 0) {
         left = 0; 
@@ -71,6 +71,7 @@ Rain::Rain(uint16_t maxDrops)
 
     mGC = appManager().getGraphic();
 
+    mKoef1 = mWindowHeight / Gravity;
     float windPower = environManager().getWindPower();
     for (uint16_t i=0; i < mMaxObjects; ++i)
     {
@@ -81,6 +82,8 @@ Rain::Rain(uint16_t maxDrops)
 
 void Rain::update(float windPower, float elapsed, float globalTime)
 {
+    float newXSpeed = windPower * elapsed;
+    float newYSpeed = Gravity * elapsed;
     for (uint16_t i=0; i < mMaxObjects; i++)
     {
         // Cache it, yeah
@@ -94,15 +97,15 @@ void Rain::update(float windPower, float elapsed, float globalTime)
             current.x += current.x_speed * elapsed;
             current.y += current.y_speed * elapsed;
 
-            current.x_speed += windPower * elapsed;
-            current.y_speed += Gravity * elapsed;
+            current.x_speed += newXSpeed;
+            current.y_speed += newYSpeed;
 
             CL_Draw::line(mGC, current.x, current.y,
                     current.x - current.x_speed * kTail, current.y - current.y_speed * kTail,
                     mDropColor);
 
-            if (current.y > mWindowHeight) processDrops(windPower, current, i);
-            if (current.x > mWindowWidth || current.x < 0) processDrops(windPower, current, i);
+            if (current.y > mWindowHeight || current.x > mWindowWidth || current.x < 0)
+                processDrops(windPower, current, i);
         }
     }
 }
