@@ -20,6 +20,7 @@
 
 #include <ClanLib/core.h>
 #include <ClanLib/display.h>
+#include <boost/cstdlib.hpp>
 
 #include "Core/Utils.hpp"
 #include "Core/ApplicationManager.hpp"
@@ -27,15 +28,15 @@
 class EnvironObject : public boost::noncopyable
 {
    protected:
-      int mMaxObjects;
-      int mWindowWidth, mWindowHeight;
+      uint16_t mMaxObjects;
+      uint16_t mWindowWidth, mWindowHeight;
       bool mEnabled;
 
    public:
       EnvironObject();
 
-      virtual void setLimit(int limit);
-      virtual int getLimit();
+      virtual void setLimit(uint16_t limit);
+      virtual uint16_t getLimit();
 
       bool getEnabled();
       void setEnabled(bool state);

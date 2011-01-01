@@ -18,18 +18,18 @@
 #include "World/Environ/Leaves.hpp"
 #include "World/Environ/Clouds.hpp"
 
-void Leaves::setLimit(int limit)
+void Leaves::setLimit(uint16_t limit)
 {
    mLeaves.resize(limit);
    if (limit > mMaxObjects && !mFirstTime)
-      for (int i=0; i < limit-mMaxObjects; i++)
+      for (uint16_t i=0; i < limit-mMaxObjects; i++)
          processLeaves(mGC, 0, i);
 
    mMaxObjects = limit;
 }
 
 
-void Leaves::processLeaves(CL_GraphicContext &gc, float windPower, int i)
+void Leaves::processLeaves(CL_GraphicContext &gc, float windPower, uint16_t i)
 {
     mLeaves[i].timer = mLeaves[i].addedAngle = 0;
     mLeaves[i].x_speed = mLeaves[i].y_speed = 0;
@@ -60,19 +60,19 @@ void Leaves::processLeaves(CL_GraphicContext &gc, float windPower, int i)
     mLeaves[i].k2 = (rand() % 7 + 3) / 10.0;
 
     // Load some random leaf surface
-    int size = resourceManager().sectionHandle("Leaves").get_child_nodes().get_length();
+    uint16_t size = resourceManager().sectionHandle("Leaves").get_child_nodes().get_length();
     mLeaves[i].leafType = rand() % size;
 
     mLeaves[i].imageHandle = resourceManager().getSprite("Leaves", boost::lexical_cast<std::string>(mLeaves[i].leafType));
 
     // Rotate leaf surface at some random angle
-    int angle = rand() % 360 + 1;
+    uint16_t angle = rand() % 360 + 1;
     mLeaves[i].imageHandle.set_angle(CL_Angle::from_degrees(angle));
 
     mLeaves[i].speed_koef = rand()%70 + 50;
 }
 
-Leaves::Leaves(int maxLeaves)
+Leaves::Leaves(uint16_t maxLeaves)
     : EnvironObject(), mFirstTime(true)
 {
     srand(time(NULL));
@@ -87,7 +87,7 @@ void Leaves::update(float windPower, float elapsed, float globalTime)
     // Init pack part of leaves
     if (mFirstTime)
     {
-        for (int i=0; i < mMaxObjects; ++i)
+        for (uint16_t i=0; i < mMaxObjects; ++i)
         {
             mLeaves.push_back(LeafData());
             processLeaves(mGC, windPower, i);
@@ -95,7 +95,7 @@ void Leaves::update(float windPower, float elapsed, float globalTime)
         mFirstTime = false;
     }
 
-    for (int i=0; i < mMaxObjects; i++)
+    for (uint16_t i=0; i < mMaxObjects; i++)
     {
         if (mLeaves[i].timeout > 0)
         {
@@ -121,7 +121,7 @@ void Leaves::update(float windPower, float elapsed, float globalTime)
                 mLeaves[i].timer += elapsed * 1000.0;
                 if (mLeaves[i].timer >= 100)
                 {
-                    int angle = rand() % 15 + 5;
+                    uint16_t angle = rand() % 15 + 5;
                     mLeaves[i].addedAngle += angle;
 
                     mLeaves[i].imageHandle.rotate_pitch(CL_Angle::from_degrees(angle));

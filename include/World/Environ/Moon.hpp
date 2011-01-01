@@ -20,6 +20,7 @@
 
 #include <ClanLib/core.h>
 #include <ClanLib/display.h>
+#include <boost/cstdlib.hpp>
 
 #include "Core/Utils.hpp"
 
@@ -38,7 +39,7 @@ class Moon : public EnvironObject
         float mG, mB;
 
         // Moon ellipse orbit
-        int mRadius;
+        uint16_t mRadius;
         float mCenterX, mCenterY;
         float mAngle; // The angle where Moon is currently located
         float t;  // For the moon color&size transation

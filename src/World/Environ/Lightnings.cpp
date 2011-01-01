@@ -23,9 +23,9 @@ Lightnings::Lightnings()
     : EnvironObject(), mProbability(1000), mAnimation(false), alpha(0)
 {
     mGC = appManager().getGraphic();
-    int size = resourceManager().sectionHandle("Lightnings").get_child_nodes().get_length();
+    uint16_t size = resourceManager().sectionHandle("Lightnings").get_child_nodes().get_length();
 
-    for (int i=0; i < size; ++i)
+    for (uint16_t i=0; i < size; ++i)
         mLightningImages.push_back(resourceManager().getImage("Lightnings", boost::lexical_cast<std::string>(i)));
 
     if (!environManager().getTypeEnabled(Environ_Clouds))

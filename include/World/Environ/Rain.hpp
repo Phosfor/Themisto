@@ -20,6 +20,7 @@
 
 #include <ClanLib/core.h>
 #include <ClanLib/display.h>
+#include <boost/cstdlib.hpp>
 
 #include "Core/Utils.hpp"
 #include "Core/ApplicationManager.hpp"
@@ -32,7 +33,7 @@ const float kDropAlpha = 0.5f;
 struct Data
 {
     float x, y, x_speed, y_speed;
-    int timeout;
+    uint16_t timeout;
     Data();
 };
 
@@ -44,11 +45,11 @@ class Rain : public EnvironObject
         CL_GraphicContext mGC;
         bool mFirstTime;
 
-        void processDrops(float windPower, int i);
+        void processDrops(float windPower, uint16_t i);
 
     public:
-        explicit Rain(int maxDrops = 150);
-        void setLimit(int limit);
+        explicit Rain(uint16_t maxDrops = 150);
+        void setLimit(uint16_t limit);
         void update(float windPower, float elapsed, float globalTime);
 };
 

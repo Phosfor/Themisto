@@ -20,6 +20,7 @@
 
 #include <ClanLib/core.h>
 #include <ClanLib/display.h>
+#include <boost/cstdlib.hpp>
 
 #include "Core/Utils.hpp"
 #include "Core/ApplicationManager.hpp"
@@ -29,7 +30,7 @@
 struct LeafData
 {
     float x, y, x_speed, y_speed, k1, k2, speed_koef;
-    int leafType, timeout;
+    uint16_t leafType, timeout;
 
     CL_Sprite imageHandle;
 
@@ -46,11 +47,11 @@ class Leaves : public EnvironObject
 
         CL_GraphicContext mGC;
 
-        void processLeaves(CL_GraphicContext &gc, float windPower, int i);
+        void processLeaves(CL_GraphicContext &gc, float windPower, uint16_t i);
 
     public:
-        explicit Leaves(int maxLeaves = 5);
-        void setLimit(int limit);
+        explicit Leaves(uint16_t maxLeaves = 5);
+        void setLimit(uint16_t limit);
         void update(float windPower, float elapsed, float globalTime);
 };
 

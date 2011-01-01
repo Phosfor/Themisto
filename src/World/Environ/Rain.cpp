@@ -17,7 +17,7 @@
 
 #include "World/Environ/Rain.hpp"
 
-void Rain::setLimit(int limit)
+void Rain::setLimit(uint16_t limit)
 {
    mData.resize(limit, Data());
    mMaxObjects = limit;
@@ -28,12 +28,12 @@ Data::Data()
     , x_speed(0), y_speed(0), timeout(rand()%130)
 { }
 
-void Rain::processDrops(float windPower, int i)
+void Rain::processDrops(float windPower, uint16_t i)
 {
-    int left, right;
+    uint16_t left, right;
     left = right = 0;
 
-    int x1 = (mWindowHeight / Gravity) * windPower;
+    uint16_t x1 = (mWindowHeight / Gravity) * windPower;
 
     if (windPower < 0) {
         left = 0; 
@@ -43,7 +43,7 @@ void Rain::processDrops(float windPower, int i)
         right = mWindowWidth;
     }
 
-    int posX = rand() % (right - left) + left;
+    uint16_t posX = rand() % (right - left) + left;
 
     mData[i].x = posX;
 
@@ -62,7 +62,7 @@ void Rain::processDrops(float windPower, int i)
     }
 }
 
-Rain::Rain(int maxDrops)
+Rain::Rain(uint16_t maxDrops)
     : EnvironObject(), mData(maxDrops)
 {
     srand(time(NULL));
@@ -79,7 +79,7 @@ void Rain::update(float windPower, float elapsed, float globalTime)
 {
     if (mFirstTime)
     {
-        for (int i=0; i < mMaxObjects; ++i)
+        for (uint16_t i=0; i < mMaxObjects; ++i)
         {
             mData.push_back(Data());
             processDrops(windPower, i);
@@ -87,7 +87,7 @@ void Rain::update(float windPower, float elapsed, float globalTime)
         mFirstTime = false;
     }
 
-    for (int i=0; i < mMaxObjects; i++)
+    for (uint16_t i=0; i < mMaxObjects; i++)
     {
         if (mData[i].timeout > 0)
         {

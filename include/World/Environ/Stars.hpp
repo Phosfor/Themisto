@@ -20,6 +20,7 @@
 
 #include <ClanLib/core.h>
 #include <ClanLib/display.h>
+#include <boost/cstdlib.hpp>
 
 #include "Core/Utils.hpp"
 #include "Core/ApplicationManager.hpp"
@@ -31,7 +32,7 @@ struct StarsData
     float x, y, size, brightness;
     CL_Colorf color;
 
-    StarsData(int width, int height);
+    StarsData(uint16_t width, uint16_t height);
 };
 
 struct ImageStarsData
@@ -39,7 +40,7 @@ struct ImageStarsData
     float x, y, brightness;
     CL_Image imageHandle;
 
-    ImageStarsData(CL_GraphicContext gc, int width, int height);
+    ImageStarsData(CL_GraphicContext gc, uint16_t width, uint16_t height);
 };
 
 class Stars : public EnvironObject
@@ -59,8 +60,8 @@ class Stars : public EnvironObject
         float mBigGalaxyAlpha, mBigGalaxyBloom;
 
     public:
-        explicit Stars(int maxStars = 200);
-        void setLimit(int limit);
+        explicit Stars(uint16_t maxStars = 200);
+        void setLimit(uint16_t limit);
         void update(float windPower, float elapsed, float globalTime);
 };
 

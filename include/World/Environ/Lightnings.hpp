@@ -20,6 +20,7 @@
 
 #include <ClanLib/core.h>
 #include <ClanLib/display.h>
+#include <boost/cstdlib.hpp>
 
 #include "Core/Utils.hpp"
 
@@ -37,10 +38,10 @@ class Lightnings : public EnvironObject
         CL_Pointf mPosition;
         std::vector<CL_Image> mLightningImages;
 
-        const int mProbability;
+        const uint16_t mProbability;
         bool mAnimation;
         float mTimer, alpha;
-        int mHandle;
+        uint16_t mHandle;
 
         CL_GraphicContext mGC;
 

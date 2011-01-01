@@ -17,12 +17,12 @@
 
 #include "World/Environ/Object.hpp"
 
-void EnvironObject::setLimit(int limit)
+void EnvironObject::setLimit(uint16_t limit)
 {
    mMaxObjects = limit;
 }
 
-int EnvironObject::getLimit()
+uint16_t EnvironObject::getLimit()
 {
    return mMaxObjects;
 }
