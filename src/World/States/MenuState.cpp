@@ -37,7 +37,7 @@ void MenuState::init()
     mGC = appManager().getGraphic();
 
     areaManager().init(&physicManager().getWorld(), 20);
-    sceneLoader().loadScene("test.xml");
+    sceneLoader().loadScene("testTemplates.xml");
     physicManager().getWorld().SetDebugDraw(mDraw);
 
     mEnvironEnabled = environManager().getEnvironEnabled();

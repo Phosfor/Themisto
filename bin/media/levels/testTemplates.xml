@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<ThemistoLevel version="0.1" authors="Wincode team">
+    <World size_width="1024" size_height="600">
+
+        <Environ active="true">
+            <Rain enabled="true" limit="50"  />
+            <Clouds enabled="true" />
+            <Lightnings enabled="true" />
+            <Sky enabled="true" />
+            <Moon enabled="true" />
+            <Leaves enabled="true" limit="5" />
+            <Stars enabled="true" />
+            <Birds enabled="true" />
+            <Wind power="-2" />
+        </Environ>
+   </World>
+   <SomeTag template="tp1, tp2, t3" >
+    <SomeChild template="local/localtpl" >
+        <SomeNestedChild2 template="simpletpl" />
+        <SomeNestedChild3 template = "dir/dir2/file.tpl/tplf" />
+    </SomeChild>
+</SomeTag>
+</ThemistoLevel>
+
+

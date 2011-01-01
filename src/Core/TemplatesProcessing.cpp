@@ -35,7 +35,7 @@ std::string TemplatesProcessor::processTemplates(CL_DomDocument* scene) // No wa
 
 void TemplatesProcessor::processTag(CL_DomElement* tag)
 {
-
+    std::cout << "Process tag " << tag->get_node_name().c_str() << std::endl;
     if(tag->has_attribute("template")) //Runtime fail!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     {
          std::string tplLocation = tag->to_element().get_attribute("template").c_str();
@@ -46,7 +46,7 @@ void TemplatesProcessor::processTag(CL_DomElement* tag)
          }
     }
 
-    CL_DomNodeList childList = mSceneDocument->get_child_nodes();
+    CL_DomNodeList childList = tag->get_child_nodes();
 
     for (int i=0; i < childList.get_length(); ++i)
     {
@@ -118,7 +118,24 @@ CL_DomElement* TemplatesProcessor::getSingleTemplate(const std::string& _spec)
     }
     else
     {
-        // Check in file
+        unsigned int lastSlashInd1 = spec.find_last_of('/');
+        unsigned int lastSlashInd2 = spec.find_last_of('\\');
+        unsigned int lastSlashInd = 0;
+        if(lastSlashInd1 == spec.npos)
+        {
+            lastSlashInd = lastSlashInd2;
+        }
+        else if(lastSlashInd2 == spec.npos)
+        {
+            lastSlashInd = lastSlashInd1;
+        }
+        else
+        {
+            lastSlashInd = (lastSlashInd1 > lastSlashInd2)? lastSlashInd1 : lastSlashInd2;
+        }
+        std::string path = spec.substr(0, lastSlashInd);
+        std::string name = spec.substr(lastSlashInd +1, spec.size() - lastSlashInd +1);
+        tpl = getTemplateFromFile(path, name);
     }
     return tpl;
 }
