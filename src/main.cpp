@@ -54,11 +54,11 @@ int Application::main(const std::vector<CL_String> &args)
         inputManager().initInput();
         LOG("Input system is configured");
 
-        guiManager().initGui(appManager().getWindow(), "media/gui_basic/");
-        LOG("The gui has been initialized!");
+        /*guiManager().initGui(appManager().getWindow(), "media/gui_basic/");
+        LOG("The gui has been initialized!");*/
 
-        CL_GUIManager gui = guiManager().getHandle();
-        CL_GUIWindowManagerTexture wm = guiManager().getWM();
+        /*CL_GUIManager gui = guiManager().getHandle();
+        CL_GUIWindowManagerTexture wm = guiManager().getWM();*/
         CL_GraphicContext gc = appManager().getGraphic();
 
 
@@ -75,15 +75,15 @@ int Application::main(const std::vector<CL_String> &args)
             appManager().frameStarted();
             stateManager().update();
 
-            wm.process();
-            wm.draw_windows(gc);
+            /*wm.process();
+            wm.draw_windows(gc);*/
 
             appManager().getWindow().flip(1);
             CL_KeepAlive::process(0);
             appManager().frameEnded();
         }
     }
-    catch(CL_Exception &error)
+    catch (CL_Exception &error)
     {
         CL_ConsoleWindow console("Themisto console", 80, 160);
         CL_Console::write_line("Exception happened: " + error.get_message_and_stack_trace());

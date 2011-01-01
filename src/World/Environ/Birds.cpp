@@ -17,20 +17,20 @@
 
 #include "World/Environ/Birds.hpp"
 
-void Birds::setLimit(int limit)
+void Birds::setLimit(uint16_t limit)
 {
    mBirds.resize(limit);
    if (limit > mMaxObjects && !mFirstTime)
-      for (int i=0; i < limit-mMaxObjects; i++)
+      for (uint16_t i=0; i < limit-mMaxObjects; i++)
          processBirds(mGC, mWindowWidth, mWindowHeight, i);
 
    mMaxObjects = limit;
 }
 
-void Birds::processBirds(CL_GraphicContext &gc, int width, int height, int i)
+void Birds::processBirds(CL_GraphicContext &gc, uint16_t width, uint16_t height, uint16_t i)
 {
     CL_DomElement birds = resourceManager().sectionHandle("Birds").to_element();
-    int numBirds = birds.get_child_nodes().get_length();
+    uint16_t numBirds = birds.get_child_nodes().get_length();
 
     CL_DomElement birdHandle;
     if (numBirds > 1)
@@ -40,7 +40,7 @@ void Birds::processBirds(CL_GraphicContext &gc, int width, int height, int i)
 
     std::vector<std::string> textures;
     // TODO: Chose the bird type here
-    for (int j=0; j < birdHandle.get_child_nodes().get_length(); j++)
+    for (uint16_t j=0; j < birdHandle.get_child_nodes().get_length(); j++)
         textures.push_back(cl_format(boost::lexical_cast<std::string>(j)));
 
     mBirds[i].mBirdImage = 
@@ -64,13 +64,13 @@ void Birds::processBirds(CL_GraphicContext &gc, int width, int height, int i)
     mBirds[i].y = height * static_cast<float>((rand()%3 + 2)) / 10.0;
 }
 
-Birds::Birds(int maxBirds)
+Birds::Birds(uint16_t maxBirds)
     : EnvironObject(), mProbability(1000), mFirstTime(true)
 {
     mGC = appManager().getGraphic();
     mMaxObjects = maxBirds;
 
-    for (int i=0; i < maxBirds; i++)
+    for (uint16_t i=0; i < maxBirds; i++)
         mBirds.push_back(BirdData());
 }
 
@@ -78,11 +78,11 @@ void Birds::update(float windPower, float elapsed, float globalTime)
 {
     if (mFirstTime)
     {
-        for (int i=0; i < mMaxObjects; i++)
+        for (uint16_t i=0; i < mMaxObjects; i++)
             processBirds(mGC, mWindowWidth, mWindowHeight, i);
         mFirstTime = false;
     }
-    for (int i=0; i < mMaxObjects; i++)
+    for (uint16_t i=0; i < mMaxObjects; i++)
     {
         if (mBirds[i].timeout > 0)
         {

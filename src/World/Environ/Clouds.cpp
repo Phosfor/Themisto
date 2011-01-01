@@ -18,22 +18,22 @@
 #include "World/Environ/Clouds.hpp"
 #include "Core/EnvironManager.hpp"
 
-void Clouds::setLimit(int limit)
+void Clouds::setLimit(uint16_t limit)
 {
    mClouds.resize(limit);
    if (limit > mMaxObjects && !mFirstTime)
-      for (int i=0; i < limit-mMaxObjects; i++)
+      for (uint16_t i=0; i < limit-mMaxObjects; i++)
          processClouds(mGC, environManager().getWindPower(), i);
 
    mMaxObjects = limit;
 }
 
-void Clouds::processClouds(CL_GraphicContext &gc, float windPower, int i)
+void Clouds::processClouds(CL_GraphicContext &gc, float windPower, uint16_t i)
 {
-    mClouds[i].y_offset = rand() % static_cast<int>((mWindowHeight * 0.05));
+    mClouds[i].y_offset = rand() % static_cast<uint16_t>((mWindowHeight * 0.05));
 
     mClouds[i].x_speed = 0;
-    int size = resourceManager().sectionHandle("Clouds").get_child_nodes().get_length();
+    uint16_t size = resourceManager().sectionHandle("Clouds").get_child_nodes().get_length();
     mClouds[i].cloudType = rand() % size;
     mClouds[i].imageHandle = resourceManager().getSprite("Clouds", boost::lexical_cast<std::string>(mClouds[i].cloudType));
 
@@ -59,7 +59,7 @@ void Clouds::processClouds(CL_GraphicContext &gc, float windPower, int i)
     mClouds[i].speed_koef = rand() % 35 + 45;
 }
 
-Clouds::Clouds(int maxClouds)
+Clouds::Clouds(uint16_t maxClouds)
     : EnvironObject(), mFirstTime(true)
 {
     srand(time(NULL));
@@ -73,7 +73,7 @@ void Clouds::update(float windPower, float elapsed, float globalTime)
 {
     if (mFirstTime)
     {
-        for (int i=0; i < mMaxObjects; i++)
+        for (uint16_t i=0; i < mMaxObjects; i++)
         {
             mClouds.push_back(CloudData());
             processClouds(mGC, windPower, i);
@@ -82,7 +82,7 @@ void Clouds::update(float windPower, float elapsed, float globalTime)
         mFirstTime = false;
     }
 
-    for (int i=0; i < mMaxObjects; i++)
+    for (uint16_t i=0; i < mMaxObjects; i++)
     {
         if (mClouds[i].timeout > 0)
         {
@@ -109,14 +109,14 @@ void Clouds::update(float windPower, float elapsed, float globalTime)
 
 CL_Pointf Clouds::getCloudPos()
 {
-    int counter = 0;
+    uint16_t counter = 0;
     CL_Pointf result(-1, -1);
     while (result.x == -1)
     {
         ++counter;
         if (counter == 4) break;
 
-        int index = rand() % mMaxObjects + 1;
+        uint16_t index = rand() % mMaxObjects + 1;
         if (mClouds[index].x > mWindowWidth*0.1 &&
             mClouds[index].x < mWindowWidth - mWindowWidth*0.1)
         {

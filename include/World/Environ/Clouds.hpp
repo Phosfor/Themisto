@@ -22,6 +22,7 @@
 #include <ClanLib/display.h>
 
 #include <boost/foreach.hpp>
+#include <boost/cstdint.hpp>
 
 #include "Core/Utils.hpp"
 #include "Core/ApplicationManager.hpp"
@@ -31,7 +32,7 @@
 struct CloudData
 {
         float x, y_offset, x_speed, speed_koef;
-        int cloudType, timeout;
+        uint16_t cloudType, timeout;
         CL_Sprite imageHandle;
         CL_Colorf mColor;
 };
@@ -43,11 +44,11 @@ class Clouds : public EnvironObject
         CL_GraphicContext mGC;
         bool mFirstTime;
 
-        void processClouds(CL_GraphicContext &gc, float windPower, int i);
+        void processClouds(CL_GraphicContext &gc, float windPower, uint16_t i);
 
     public:
-        explicit Clouds(int maxClouds = 4);
-        void setLimit(int limit);
+        explicit Clouds(uint16_t maxClouds = 4);
+        void setLimit(uint16_t limit);
         void update(float windPower, float elapsed, float globalTime);
 
         // For the lightning

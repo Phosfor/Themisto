@@ -25,13 +25,14 @@ void MenuState::init()
     mDnD = new DebugDragAndDrop;
     mDnD->init();
 
+    mDraw = new DebugDraw;
+
     mDraw->SetFlags(
         b2DebugDraw::e_shapeBit //|
         //b2DebugDraw::e_jointBit |
         //b2DebugDraw::e_aabbBit  |
         //b2DebugDraw::e_pairBit
     );
-
 
     mGC = appManager().getGraphic();
 

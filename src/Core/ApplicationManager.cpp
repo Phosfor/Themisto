@@ -19,9 +19,7 @@
 #include <boost/cstdint.hpp>
 
 ApplicationManager::~ApplicationManager()
-{
-    delete mWindow;
-}
+{ }
 
 ApplicationManager::ApplicationManager():
     mRunning(true), mLastTime(CL_System::get_time()), mCurrentTime(0), mTimeDifference(0), mDeltaTimeMs(0) {}
@@ -65,12 +63,12 @@ void ApplicationManager::setRunning(bool state)
 
 CL_GraphicContext &ApplicationManager::getGraphic()
 {
-    return mWindow->get_gc();
+    return mWindow.get_gc();
 }
 
 CL_DisplayWindow &ApplicationManager::getWindow()
 {
-    return *mWindow;
+    return mWindow;
 }
 
 void ApplicationManager::initWindow(const std::string &title)
@@ -83,5 +81,5 @@ void ApplicationManager::initWindow(const std::string &title)
     CL_DisplayWindowDescription desc(title);
     desc.set_fullscreen(fullscreen);
     desc.set_size(CL_Size(width, height), false);
-    mWindow = new CL_DisplayWindow(desc);
+    mWindow = CL_DisplayWindow(desc);
 }

@@ -55,8 +55,9 @@ class EnvironManager : public boost::serialization::singleton<EnvironManager>
         float mTotalSec;
 
     public:
-        void initEnviron();
         ~EnvironManager();
+
+        void initEnviron();
         bool isNight();
 
         void setEnvironEnabled(bool state);

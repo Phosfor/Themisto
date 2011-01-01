@@ -20,6 +20,7 @@
 
 #include <ClanLib/core.h>
 #include <ClanLib/display.h>
+#include <boost/cstdint.hpp>
 
 #include "Core/Utils.hpp"
 #include "Core/ApplicationManager.hpp"
@@ -37,16 +38,16 @@ class Birds : public EnvironObject
 {
     private:
         std::vector<BirdData> mBirds;
-        int mProbability; // The probability that bird will begin to fly current frame
+        uint16_t mProbability; // The probability that bird will begin to fly current frame
         bool mFirstTime;
 
         CL_GraphicContext mGC;
 
-        void processBirds(CL_GraphicContext &gc, int width, int height, int i);
+        void processBirds(CL_GraphicContext &gc, uint16_t width, uint16_t height, uint16_t i);
 
     public:
-        explicit Birds(int maxBirds = 1);
-        void setLimit(int limit);
+        explicit Birds(uint16_t maxBirds = 1);
+        void setLimit(uint16_t limit);
         void update(float windPower, float elapsed, float globalTime);
 };
 

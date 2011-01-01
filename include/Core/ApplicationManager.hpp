@@ -35,7 +35,7 @@ class ApplicationManager : public boost::serialization::singleton<ApplicationMan
         int mFps, mStartTime, mFrames;
         float mElapsed;
         bool mRunning;
-        CL_DisplayWindow *mWindow;
+        CL_DisplayWindow mWindow;
 
         unsigned int mLastTime, mCurrentTime;
         int mTimeDifference;
@@ -44,6 +44,7 @@ class ApplicationManager : public boost::serialization::singleton<ApplicationMan
     public:
         ~ApplicationManager();
         ApplicationManager();
+
         void initWindow(const std::string &title);
 
         void frameStarted();
