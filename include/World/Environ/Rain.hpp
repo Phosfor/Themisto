@@ -18,6 +18,8 @@
 #ifndef _WEATHER_RAIN_HPP_
 #define _WEATHER_RAIN_HPP_
 
+#include <math.h>
+
 #include <ClanLib/core.h>
 #include <ClanLib/display.h>
 #include <boost/cstdlib.hpp>
@@ -32,8 +34,7 @@ const float kDropAlpha = 0.5f;
 
 struct Data
 {
-    float x, y, x_speed, y_speed;
-    uint16_t timeout;
+    float x, y, x_speed, y_speed, timeout;
     Data();
 };
 
@@ -43,9 +44,8 @@ class Rain : public EnvironObject
         std::vector<Data> mData;
         CL_Colorf mDropColor;
         CL_GraphicContext mGC;
-        bool mFirstTime;
 
-        void processDrops(float windPower, uint16_t i);
+        void processDrops(float windPower, Data &current, bool firstTime=false);
 
     public:
         explicit Rain(uint16_t maxDrops = 150);

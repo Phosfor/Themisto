@@ -24,11 +24,10 @@ void Rain::setLimit(uint16_t limit)
 }
 
 Data::Data()
-    : x(rand()%ScreenResolutionX), y(0)
-    , x_speed(0), y_speed(0), timeout(rand()%130)
+    : x(rand()%ScreenResolutionX), y(0), timeout(rand()%130)
 { }
 
-void Rain::processDrops(float windPower, uint16_t i)
+void Rain::processDrops(float windPower, Data &current, bool firstTime)
 {
     uint16_t left, right;
     left = right = 0;
@@ -44,21 +43,20 @@ void Rain::processDrops(float windPower, uint16_t i)
     }
 
     uint16_t posX = rand() % (right - left) + left;
+    current.x = posX;
 
-    mData[i].x = posX;
+    current.x_speed = windPower;
+    current.y_speed = Gravity;
 
-    mData[i].x_speed = windPower*0.1;
-    mData[i].y_speed = Gravity*0.1;
-
-    if (mFirstTime)
+    if (firstTime)
     {
-        mData[i].timeout = 0;
-        mData[i].y = rand() % mWindowHeight;
+        current.timeout = 0;
+        current.y = rand() % mWindowHeight;
     }
     else
     {
-        mData[i].timeout = rand() % 130;
-        mData[i].y = 0;
+        current.timeout = rand() % 130;
+        current.y = 0;
     }
 }
 
@@ -72,41 +70,39 @@ Rain::Rain(uint16_t maxDrops)
     mDropColor.a = kDropAlpha;
 
     mGC = appManager().getGraphic();
-    mFirstTime = true;
+
+    float windPower = environManager().getWindPower();
+    for (uint16_t i=0; i < mMaxObjects; ++i)
+    {
+        mData.push_back(Data());
+        processDrops(windPower, mData[i], true);
+    }
 }
 
 void Rain::update(float windPower, float elapsed, float globalTime)
 {
-    if (mFirstTime)
-    {
-        for (uint16_t i=0; i < mMaxObjects; ++i)
-        {
-            mData.push_back(Data());
-            processDrops(windPower, i);
-        }
-        mFirstTime = false;
-    }
-
     for (uint16_t i=0; i < mMaxObjects; i++)
     {
-        if (mData[i].timeout > 0)
+        // Cache it, yeah
+        Data &current = mData[i];
+        if (current.timeout > 0)
         {
-            mData[i].timeout--;
+            current.timeout--;
         }
         else
         {
-            mData[i].x += mData[i].x_speed * elapsed;
-            mData[i].y += mData[i].y_speed * elapsed;
+            current.x += current.x_speed * elapsed;
+            current.y += current.y_speed * elapsed;
 
-            mData[i].x_speed += windPower * elapsed;
-            mData[i].y_speed += Gravity * elapsed;
+            current.x_speed += windPower * elapsed;
+            current.y_speed += Gravity * elapsed;
 
-            CL_Draw::line(mGC,
-                    mData[i].x, mData[i].y,
-                    mData[i].x - mData[i].x_speed * kTail, mData[i].y - mData[i].y_speed * kTail,
+            CL_Draw::line(mGC, current.x, current.y,
+                    current.x - current.x_speed * kTail, current.y - current.y_speed * kTail,
                     mDropColor);
 
-            if (mData[i].y > mWindowHeight) processDrops(windPower, i);
+            if (current.y > mWindowHeight) processDrops(windPower, current, i);
+            if (current.x > mWindowWidth || current.x < 0) processDrops(windPower, current, i);
         }
     }
 }
