@@ -20,6 +20,9 @@
         <texture name="1" file="leaves/1.png" />
         <texture name="2" file="leaves/2.png" />
         <texture name="3" file="leaves/3.png" />
+        <texture name="4" file="leaves/4.png" />
+        <texture name="5" file="leaves/5.png" />
+        <texture name="6" file="leaves/6.png" />
     </section>
 
     <section name="Stars">
