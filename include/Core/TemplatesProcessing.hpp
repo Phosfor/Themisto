@@ -25,33 +25,45 @@
 #include <vector>
 #include <iostream>
 #include <string>
-//#include <boost/shared_ptr.hpp>
+#include <boost/shared_ptr.hpp>
 #include <boost/algorithm/string.hpp>
+#include <boost/filesystem.hpp>
 
-//typedef boost::shared_ptr<CL_DomDocument> DocumentPtr;
+typedef boost::shared_ptr<CL_DomDocument> DocumentPtr;
+
+class TemplateFileNotFound: CL_Exception
+{
+    public:
+     TemplateFileNotFound(std::string msg):CL_Exception(msg)
+     {
+     }
+};
 
 class TemplatesProcessor
 {
     private:
-        //std::map<std::string, DocumentPtr> mFileToDocument;
+        std::map<std::string, DocumentPtr> mFileToDocument;
+        std::vector<std::string> mIncludeChain;
 
-        // These two fileds are using in most private functions;
+        // These three fileds are using in most private functions;
         // For syntax clear, I keep them in fields, not passing as params to everywhere
-        CL_DomDocument* mSceneDocument;
-        std::string mErrorMessage;
+        DocumentPtr mSceneDocument;
+        std::string mSceneFile;
 
         void processTag(CL_DomElement* tag);
         void applyTemplate(CL_DomElement* tag, const CL_DomElement& templateTag);
-        CL_DomElement* getTemplate(const std::string& spec);
-        CL_DomElement* getSingleTemplate(const std::string& _spec); // Without multiply specifiers
-        CL_DomElement* getLocalTemplate(const std::string& name);
-        CL_DomElement* getTemplateFromFile(const std::string& file,const std::string& name);
+        CL_DomElement getTemplate(const std::string& spec);
+        CL_DomElement getSingleTemplate(const std::string& _spec); // Without multiply specifiers
+        CL_DomElement getLocalTemplate(const std::string& name);
+        CL_DomElement getTemplateFromFile(const std::string& file,const std::string& name);
+        std::string getTemplateFilePath(const std::string& file);
+        std::vector<std::string> getIncludedFiles(CL_DomElement templatesTag);
 
 
 
     public:
         TemplatesProcessor();
-        std::string processTemplates(CL_DomDocument* scene); // Returns error message ( empty string if ok)
+        DocumentPtr processTemplates(const std::string& sceneFile);
 };
 
 

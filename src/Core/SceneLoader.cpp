@@ -185,12 +185,21 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
 {
     //mMutex.lock();
 
-    CL_File fileHandle = CL_File("media/levels/" + sceneName);
-    CL_DomDocument document(fileHandle);
     TemplatesProcessor proc;
-    proc.processTemplates(&document);
+    std::string error= "";
+    DocumentPtr document;
+    try
+    {
+        document = proc.processTemplates("media/levels/" + sceneName);
+    }
+    catch(CL_Exception& e)
+    {
+        LOG(e.what());
+        LOG("Level parsing stopped.");
+        return;
+    }
 
-    CL_DomElement root = document.get_document_element();
+    CL_DomElement root = document->get_document_element();
     std::cout << "\t ---------- Parsing scene ----------\n";
     CL_DomElement world = root.get_elements_by_tag_name("World").item(0).to_element();
     CL_DomElement environ = world.get_elements_by_tag_name("Environ").item(0).to_element();

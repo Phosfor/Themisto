@@ -19,31 +19,29 @@
 
 TemplatesProcessor::TemplatesProcessor()
 {
-    mSceneDocument = NULL;
-    mErrorMessage = "";
 }
 
-std::string TemplatesProcessor::processTemplates(CL_DomDocument* scene) // No way to return reference, it's bad
+DocumentPtr TemplatesProcessor::processTemplates(const std::string& sceneFile)
 {
-    mErrorMessage = "";
-    mSceneDocument = scene;
+    CL_File fileHandle = CL_File(sceneFile);
+    DocumentPtr document = DocumentPtr(new CL_DomDocument(fileHandle));
+    mSceneDocument = document;
+    mSceneFile = sceneFile;
     CL_DomElement document_element = mSceneDocument->get_document_element();
     processTag(&document_element);
-    mSceneDocument = NULL;
-    return mErrorMessage;
+    mSceneDocument.reset();
+    mSceneFile = "";
+    return document;
 }
 
 void TemplatesProcessor::processTag(CL_DomElement* tag)
 {
     std::cout << "Process tag " << tag->get_node_name().c_str() << std::endl;
-    if(tag->has_attribute("template")) //Runtime fail!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    if(tag->has_attribute("template"))
     {
          std::string tplLocation = tag->to_element().get_attribute("template").c_str();
-         CL_DomElement* tagTemplate = getTemplate(tplLocation);
-         if( tagTemplate != NULL)
-         {
-            applyTemplate(tag, *tagTemplate);
-         }
+         CL_DomElement tagTemplate = getTemplate(tplLocation);
+         applyTemplate(tag, tagTemplate);
     }
 
     CL_DomNodeList childList = tag->get_child_nodes();
@@ -59,7 +57,7 @@ void TemplatesProcessor::processTag(CL_DomElement* tag)
     }
 }
 
-CL_DomElement* TemplatesProcessor::getTemplate(const std::string& spec)
+CL_DomElement TemplatesProcessor::getTemplate(const std::string& spec)
 {
     std::cout << "Get template " <<spec <<std::endl;
     std::vector<std::string> parts;
@@ -70,35 +68,36 @@ CL_DomElement* TemplatesProcessor::getTemplate(const std::string& spec)
     {
         std::string templateSpec = *partsIt;
         boost::trim(templateSpec);
-        CL_DomElement* tpl = getSingleTemplate(templateSpec);
+        CL_DomElement tpl = getSingleTemplate(templateSpec);
         if(prevTemplate != NULL)
         {
-            applyTemplate(tpl, *prevTemplate);
+            applyTemplate(&tpl, *prevTemplate);
         }
-        prevTemplate = tpl;
+        prevTemplate = &tpl;
     }
-    return prevTemplate;
+    return *prevTemplate;
 }
 
 // Without multiply specifiers
-CL_DomElement* TemplatesProcessor::getSingleTemplate(const std::string& _spec)
+CL_DomElement TemplatesProcessor::getSingleTemplate(const std::string& _spec)
 {
     std::cout << "Get single template " << _spec << std::endl;
     std::string spec(_spec);
     boost::trim(spec);
 
-    CL_DomElement* tpl = NULL;
-
     // No file, no local
     if(spec.find("/") == spec.npos && spec.find("\\") == spec.npos)
     {
         // Check local
-        tpl = getLocalTemplate(spec);
-        if(tpl == NULL)
+        try
         {
+            return getLocalTemplate(spec);
+        }
+        catch(CL_Exception&)
+        {
+
             // Check in Include files
 
-            // Check recursively in Include files with test on cicle include
         }
     }
     else if(spec.find("local") == 0)
@@ -108,19 +107,18 @@ CL_DomElement* TemplatesProcessor::getSingleTemplate(const std::string& _spec)
         if(parts.size() == 2)
         {
             std::string templateName = parts.back();
-            tpl = getLocalTemplate(templateName);
+            return getLocalTemplate(templateName);
         }
         else
         {
-            mErrorMessage += "Invalid use of keyword 'local'";
-            tpl = NULL;
+            throw CL_Exception("Invalid use of keyword 'local': " + spec);
         }
     }
     else
     {
         unsigned int lastSlashInd1 = spec.find_last_of('/');
         unsigned int lastSlashInd2 = spec.find_last_of('\\');
-        unsigned int lastSlashInd = 0;
+        int lastSlashInd = 0;
         if(lastSlashInd1 == spec.npos)
         {
             lastSlashInd = lastSlashInd2;
@@ -133,25 +131,108 @@ CL_DomElement* TemplatesProcessor::getSingleTemplate(const std::string& _spec)
         {
             lastSlashInd = (lastSlashInd1 > lastSlashInd2)? lastSlashInd1 : lastSlashInd2;
         }
-        std::string path = spec.substr(0, lastSlashInd);
+        std::string path = spec.substr(0, lastSlashInd-1);
         std::string name = spec.substr(lastSlashInd +1, spec.size() - lastSlashInd +1);
-        tpl = getTemplateFromFile(path, name);
+        return getTemplateFromFile(path, name);
     }
-    return tpl;
 }
 
-CL_DomElement* TemplatesProcessor::getLocalTemplate(const std::string& name)
+std::vector<std::string> TemplatesProcessor::getIncludedFiles(CL_DomElement templatesTag)
+{
+    std::vector<std::string> files;
+    CL_DomNodeList includeTags = templatesTag.get_elements_by_tag_name("Include");
+    for(int i=0; i<includeTags.get_length(); ++i)
+    {
+        CL_DomElement includeTag = includeTags.item(i).to_element();
+        std::string file = includeTag.get_node_value();
+        std::string filePath = getTemplateFilePath(file);
+        files.push_back(filePath);
+    }
+    return files;
+}
+
+CL_DomElement TemplatesProcessor::getLocalTemplate(const std::string& name)
 {
     std::cout << std::endl << "Get local template " << name << std::endl;
-    return NULL;
+
+    return CL_DomElement();
 }
 
+std::string TemplatesProcessor::getTemplateFilePath(const std::string& file)
+{
+    std::string resultPath = "";
 
+    // Find in scene dir
+    boost::filesystem::path scenePath(mSceneFile);
+    std::string sceneDir = scenePath.native_directory_string();
+    boost::filesystem::path templatePath(sceneDir);
+    templatePath /= file;
+    if( boost::filesystem::exists(templatePath) )
+    {
+        resultPath = std::string(templatePath.string());
+        std::cout << "Found in scene dir" << std::endl;
+    }
+    // Find in media/templates dir
+    else
+    {
+        std::string templatesDirRelativePath = "media/templates/" + file;
+        if( boost::filesystem::exists(templatesDirRelativePath) )
+        {
+            resultPath = templatesDirRelativePath;
+            std::cout << "Found in templates dirrectory" << std::endl;
+        }
+        else
+        {
+            throw CL_Exception( "Template file '" + file + "' not found.");
+        }
+    }
+    return resultPath;
+}
 
-CL_DomElement* TemplatesProcessor::getTemplateFromFile(const std::string& file, const std::string& name)
+CL_DomElement TemplatesProcessor::getTemplateFromFile(const std::string& file, const std::string& name)
 {
     std::cout << std::endl << "Get template from file " << file << " template name: " << name << std::endl;
-    return NULL;
+    // Check recursively in Include files with test on cicle include
+    std::string resultPath = getTemplateFilePath(file);
+    DocumentPtr document;
+    std::map<std::string, DocumentPtr>::iterator documentIt= mFileToDocument.find(resultPath);
+    if( documentIt != mFileToDocument.end())
+    {
+        document = documentIt->second;
+    }
+    else
+    {
+        CL_File fileHandle = CL_File(resultPath);
+        document = DocumentPtr(new CL_DomDocument(fileHandle));
+        mFileToDocument.insert(std::pair<std::string, DocumentPtr>(resultPath, document));
+    }
+    std::vector<CL_DomNode> templatesElements = document->select_nodes("Templates/Template[@name='" + name +"']");
+    if(templatesElements.size() == 1)
+    {
+        return templatesElements.front().to_element();
+    }
+    else if( templatesElements.size() == 0)
+    {
+
+        std::vector<std::string> includedFiles = getIncludedFiles(document->get_document_element());
+        std::vector<std::string>::iterator filesIt;
+        for(filesIt = includedFiles.begin(); filesIt != includedFiles.end(); ++filesIt)
+        {
+            try
+            {
+                return getTemplateFromFile(*filesIt, name);
+            }
+            catch(TemplateFileNotFound&)
+            {
+            }
+        }
+        throw TemplateFileNotFound( "Template " + name +" not found in " + file + ".");
+    }
+    else if(templatesElements.size() > 1)
+    {
+        throw CL_Exception( "Corrupted template file: there are several templates with equal names. File: "
+            + file +"; Template name: " + name + ".");
+    }
 }
 
 
