@@ -35,17 +35,17 @@ void MenuState::init()
     );
 
     mGC = appManager().getGraphic();
+    mDrawDebug = false;
 
     areaManager().init(&physicManager().getWorld(), 20);
     sceneLoader().loadScene("test.xml");
     physicManager().getWorld().SetDebugDraw(mDraw);
+    mInputSlot = inputManager().getKeyboard().sig_key_down().connect(this, &MenuState::onKeyDown);
 
     mEnvironEnabled = environManager().getEnvironEnabled();
-
-    ground = CL_Image(mGC, "media/ground.png");
 }
 
-void MenuState::shutdown() 
+void MenuState::shutdown()
 {
     delete mDnD;
     delete mDraw;
@@ -60,13 +60,22 @@ void MenuState::update()
     levelManager().update();
     objectsManager().update();
     physicManager().step();
-    //ground.draw(mGC, 0, 770);
 
-    // TODO: Bind some key to enable debug drawing
-    //physicManager().getWorld().DrawDebugData();
+    if (mDrawDebug) physicManager().getWorld().DrawDebugData();
 }
 
 std::string MenuState::type()
 {
     return "MenuState";
+}
+
+void MenuState::onKeyDown(const CL_InputEvent &key, const CL_InputState &state)
+{
+    if (key.id == CL_KEY_D)
+    {
+        if (inputManager().keyPressed(CL_KEY_CONTROL))
+        {
+            mDrawDebug = !mDrawDebug;
+        }
+    }
 }

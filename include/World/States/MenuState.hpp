@@ -41,7 +41,9 @@ class MenuState : public State
         CL_GraphicContext mGC;
 
         // Remove this later
-        CL_Image ground;
+        void onKeyDown(const CL_InputEvent &key, const CL_InputState &state);
+        CL_Slot mInputSlot;
+        bool mDrawDebug;
 
         void init();
         void shutdown();
