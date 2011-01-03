@@ -217,7 +217,7 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
     {
         CL_DomNode foregroundNode = environ.select_node("Foreground");
 
-        uint16_t actualSize = 100;
+        uint16_t actualSize = 0;
         if (foregroundNode.to_element().has_attribute("actual_size"))
         {
             actualSize = boost::lexical_cast<uint16_t>(foregroundNode.to_element().get_attribute("actual_size").c_str());

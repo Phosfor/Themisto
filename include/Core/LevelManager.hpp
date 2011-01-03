@@ -45,12 +45,17 @@ class LevelManager : public boost::serialization::singleton<LevelManager>
         // Average real foreground image size refer to full window size (in percents)
         uint16_t mForegroundActualSize;
 
+        int mXOffset;
+
     public:
         void setForegroundTexture(const std::string &resourceName);
         std::string getForegroundTexture();
         bool getForegroundEnabled();
         uint16_t getForegroundSize();
         void setForegroundSize(uint16_t size);
+
+        void setOffsetX(int x);
+        int getOffsetX();
 
         void init(const std::string &textureName);
         void update();

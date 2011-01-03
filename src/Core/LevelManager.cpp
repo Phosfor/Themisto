@@ -5,6 +5,8 @@ void LevelManager::init(const std::string &textureName)
     std::string path = utils().getMediaFolder() + "/" + textureName;
     if (!boost::filesystem::exists(path)) LOG_NOFORMAT(cl_format("Error: Level texture `%1` doesn't exist!", path));
     mLevelTexture = CL_Image(appManager().getGraphic(), path);
+
+    mXOffset = 0;
 }
 
 void LevelManager::setForegroundTexture(const std::string &resourceName)
@@ -35,5 +37,15 @@ void LevelManager::setForegroundSize(uint16_t size)
 
 void LevelManager::update()
 {
-    mLevelTexture.draw(appManager().getGraphic(), 0, 0);
+    mLevelTexture.draw(appManager().getGraphic(), mXOffset, 0);
+}
+
+void LevelManager::setOffsetX(int x)
+{
+    mXOffset = x;
+}
+
+int LevelManager::getOffsetX()
+{
+    return mXOffset;
 }

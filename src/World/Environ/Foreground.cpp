@@ -9,5 +9,5 @@ Foreground::Foreground()
 
 void Foreground::update(float windPower, float elapsed, float globalTime)
 {
-    mForeground.draw(mGC, 0, 0);
+    mForeground.draw(mGC, levelManager().getOffsetX(), 0);
 }

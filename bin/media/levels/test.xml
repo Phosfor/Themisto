@@ -9,7 +9,7 @@
             <!--<Lightnings enabled="true" />-->
             <Sky enabled="true" />
             <Moon enabled="true" />
-            <Leaves enabled="true" limit="5" />
+            <Leaves enabled="true" limit="8" />
             <Stars enabled="true" limit="300" />
             <Birds enabled="true" />
             <!-- actual_size is average real foreground image size refer to full window size -->
