@@ -21,6 +21,8 @@
 #include <map>
 #include <utility>
 #include <string>
+#include <stdio.h>
+#include <stdlib.h>
 
 #include <ClanLib/display.h>
 #include <ClanLib/core.h>
@@ -32,13 +34,32 @@
 #include "Core/ConfigManager.hpp"
 #include "Core/LogManager.hpp"
 #include "Core/ApplicationManager.hpp"
+#include "Utils.hpp"
+
+struct Compare
+{
+    bool operator()(const std::string &a, const std::string &b) const
+    {
+        unsigned int index1 = a.find_first_of('_');
+        std::string num1 = a.substr(0, index1);
+        int num_1 = atoi(num1.c_str());
+
+        unsigned int index2 = b.find_first_of('_');
+        std::string num2 = b.substr(0, index2);
+        int num_2 = atoi(num2.c_str());
+
+        return num_1 <= num_2;
+    }
+};
 
 class Object;
-typedef std::map<std::string, Object*> ObjectMapType;
+typedef std::map<std::string, Object*> ObjectMapTypeAccess;
+typedef std::map<std::string, Object*, Compare> ObjectMapTypeSorted;
 class ObjectsManager : public boost::serialization::singleton<ObjectsManager>
 {
     private:
-        ObjectMapType mObjects;
+        ObjectMapTypeAccess mObjects;
+        ObjectMapTypeSorted mObjectsSorted;
         unsigned int mNumObjects;
 
     public:

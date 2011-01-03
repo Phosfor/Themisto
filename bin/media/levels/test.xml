@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <ThemistoLevel version="0.1" authors="Wincode team">
-    <World size_width="1152" size_height="864">
+    <World size_width="1152" size_height="864" image="levels/test.png">
 
         <Environ active="true">
             <Rain enabled="true" limit="50" />
@@ -17,7 +17,7 @@
 
         <Objects>
 
-            <Object name="Ground" type="PhysicBodyObject">
+            <Object name="Ground" type="PhysicBodyObject" z-index="2">
                 <Body>
                     <b2Body>
                         <Position>
@@ -153,7 +153,7 @@
                   </Body>
              </Object>
 
-            <Object name="House" type="PhysicBodyObject">
+            <Object name="House" type="PhysicBodyObject" z-index="-1">
                 <Visual>
                     <Size width="562" height="273" />
                     <Position x="0" y="0" />

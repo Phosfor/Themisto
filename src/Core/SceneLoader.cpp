@@ -210,6 +210,9 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
     int worldHeight = boost::lexical_cast<int>(world.get_attribute("size_height").c_str());
     LOG_NOFORMAT(cl_format("- World size width: %1\n- World size height: %2\n", worldWidth, worldHeight));
 
+    if (!world.has_attribute("image")) LOG_NOFORMAT("Error: World tag should have `image` attribute!");
+    levelManager().init(world.get_attribute("image"));
+
     // Check whether environ should be enabled
     bool mEnvironEnabled = false;
     if (environ.get_attribute("active") == "true") mEnvironEnabled = true;
@@ -263,15 +266,21 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
 
             std::string name = tag.get_attribute("name").c_str();
             std::string type = tag.get_attribute("type").c_str();
+
+            int z_index = 0;
+            if (tag.has_attribute("z-index"))
+                z_index = boost::lexical_cast<int>(tag.get_attribute("z-index").c_str());
+
             LOG_NOFORMAT(cl_format("- Parsing object `%1` of type `%2`\n", name, type));
 
             // TODO: Call template parsing here...
 
             std::string desc = "";
             Object* object = typesManager().parseObject(&tag, type, desc);
+            object->setIndex(z_index);
             if(object != NULL)
             {
-                objectsManager().addObject(object->getName(), object);
+                objectsManager().addObject(name, object);
             }
             else
             {

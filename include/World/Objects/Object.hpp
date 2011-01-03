@@ -32,10 +32,14 @@ class Object : public boost::noncopyable
     protected:
         std::string mName;
         ObjectTypes mType;
+        int z_index;
 
     public:
         virtual std::string getName() { return mName; }
         virtual void setName(const std::string &name) { mName = name; }
+
+        virtual int getIndex() { return z_index; }
+        virtual void setIndex(int _z_index) { z_index = _z_index; }
 
         virtual ObjectTypes getType() { return mType; }
 

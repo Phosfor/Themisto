@@ -54,11 +54,13 @@ void MenuState::shutdown()
 void MenuState::update()
 {
     mGC.clear();
+
     if (mEnvironEnabled) environManager().update();
 
+    levelManager().update();
     objectsManager().update();
     physicManager().step();
-    ground.draw(mGC, 0, 770);
+    //ground.draw(mGC, 0, 770);
 
     // TODO: Bind some key to enable debug drawing
     //physicManager().getWorld().DrawDebugData();

@@ -25,10 +25,11 @@ ObjectsManager::ObjectsManager()
 
 void ObjectsManager::update()
 {
-    for (ObjectMapType::const_iterator it=mObjects.begin();
-            it != mObjects.end(); ++it)
+    float elapsed = appManager().getElapsed();
+    for (ObjectMapTypeSorted::const_iterator it=mObjectsSorted.begin();
+            it != mObjectsSorted.end(); ++it)
     {
-        it->second->update(appManager().getElapsed());
+        it->second->update(elapsed);
     }
 }
 
@@ -36,7 +37,8 @@ void ObjectsManager::addObject(const std::string &name, Object *obj)
 {
     if (mObjects.find(name) == mObjects.end())
     {
-        mObjects.insert(make_pair(name, obj));
+        mObjects.insert(std::make_pair(name, obj));
+        mObjectsSorted.insert(std::make_pair(IntToStr(obj->getIndex()) + "_" + name, obj));
         mNumObjects++;
     }
     else
