@@ -19,15 +19,16 @@
 
 void Stars::setLimit(uint16_t limit)
 {
-   std::cout << "Stars limit has been changed to: " << limit << "\n";
    mImageStars.resize(limit, ImageStarsData(appManager().getGraphic(), mWindowWidth, mWindowHeight));
    mMaxObjects = limit;
 }
 
 ImageStarsData::ImageStarsData(CL_GraphicContext gc, uint16_t width, uint16_t height)
 {
+    uint16_t actualSize = levelManager().getForegroundSize();
+
     x = rand() % width;
-    y = rand() % height;
+    y = rand() % (height - (height * actualSize / 100));
 
     brightness = static_cast<float>((rand() % 10 + 2))/10.0f;
 
@@ -35,7 +36,7 @@ ImageStarsData::ImageStarsData(CL_GraphicContext gc, uint16_t width, uint16_t he
     uint16_t randStar = rand() % mNumStars;
     imageHandle = resourceManager().getImage("Stars", boost::lexical_cast<std::string>(randStar));
 
-    float scale = static_cast<float>(rand()%10 + 10)/100.0f;
+    float scale = static_cast<float>(rand()%10 + 9)/100.0f;
     imageHandle.set_scale(scale, scale);
     imageHandle.set_alpha(brightness);
 }
@@ -52,6 +53,7 @@ Stars::Stars(uint16_t maxStars)
     mBigGalaxy = resourceManager().getImage("Nebulas", "big_galaxy");
     mBigGalaxyAlpha = 0.8f; // Max alpha value
     mBigGalaxy.set_alpha(0.0);
+    mGalaxyX = (mWindowWidth  - mBigGalaxy.get_width()) / 2;
 
     for (uint16_t i=0; i < mMaxObjects; ++i)
         mImageStars.push_back(ImageStarsData(mGC, mWindowWidth, mWindowHeight));
@@ -96,7 +98,7 @@ void Stars::update(float windPower, float elapsed, float globalTime)
     else if (!mNight && mBigGalaxyBloom < mBigGalaxyAlpha)
         mBigGalaxyBloom -= 0.007f;
 
-    mBigGalaxy.draw(mGC, 0, 0);
+    mBigGalaxy.draw(mGC, mGalaxyX, 0);
 
     if (mNight)
         mBloomSize += 0.001f;

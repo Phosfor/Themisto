@@ -26,6 +26,7 @@
 #include "Core/ApplicationManager.hpp"
 #include "Core/ResourceManager.hpp"
 #include "World/Environ/Object.hpp"
+#include "Core/LevelManager.hpp"
 
 struct ImageStarsData
 {
@@ -49,6 +50,7 @@ class Stars : public EnvironObject
 
         // For galaxies
         CL_Image mBigGalaxy;
+        int mGalaxyX;
         float mBigGalaxyAlpha, mBigGalaxyBloom;
 
     public:

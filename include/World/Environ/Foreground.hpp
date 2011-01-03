@@ -15,21 +15,29 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _ENVIRON_TYPES_HPP_
-#define _ENVIRON_TYPES_HPP_
+#ifndef _ENVIRON_FOREGROUND_HPP_
+#define _ENVIRON_FOREGROUND_HPP_
 
-// Numbers show the priority of render
-enum EnvironTypes
+#include <ClanLib/core.h>
+#include <ClanLib/display.h>
+#include <boost/cstdlib.hpp>
+
+#include "Core/Utils.hpp"
+
+#include "Core/ApplicationManager.hpp"
+#include "Core/ResourceManager.hpp"
+#include "Core/LevelManager.hpp"
+#include "World/Environ/Object.hpp"
+
+class Foreground : public EnvironObject
 {
-    Environ_Sky    = 0,
-    Environ_Stars  = 1,
-    Environ_Moon   = 2,
-    Environ_Foreground = 3,
-    Environ_Lightnings = 4,
-    Environ_Rain   = 5,
-    Environ_Clouds = 6,
-    Environ_Leaves = 7,
-    Environ_Birds  = 8
+    private:
+        CL_Image mForeground;
+        CL_GraphicContext mGC;
+
+    public:
+        Foreground();
+        void update(float windPower, float elapsed, float globalTime);
 };
 
-#endif /* _ENVIRON_TYPES_HPP_ */
+#endif /* _ENVIRON_FOREGROUND_HPP_ */

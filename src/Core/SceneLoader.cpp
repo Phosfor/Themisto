@@ -213,6 +213,19 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
     if (!world.has_attribute("image")) LOG_NOFORMAT("Error: World tag should have `image` attribute!");
     levelManager().init(world.get_attribute("image"));
 
+    try
+    {
+        CL_DomNode foregroundNode = environ.select_node("Foreground");
+
+        uint16_t actualSize = 100;
+        if (foregroundNode.to_element().has_attribute("actual_size"))
+        {
+            actualSize = boost::lexical_cast<uint16_t>(foregroundNode.to_element().get_attribute("actual_size").c_str());
+        }
+        levelManager().setForegroundSize(actualSize);
+    }
+    catch (...) { }
+
     // Check whether environ should be enabled
     bool mEnvironEnabled = false;
     if (environ.get_attribute("active") == "true") mEnvironEnabled = true;
@@ -227,6 +240,7 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
         std::map<std::string, EnvironTypes> deps;
         deps["Rain"] = Environ_Rain;
         deps["Clouds"] = Environ_Clouds;
+        deps["Foreground"] = Environ_Foreground;
         deps["Lightnings"] = Environ_Lightnings;
         deps["Sky"] = Environ_Sky;
         deps["Moon"] = Environ_Moon;
@@ -243,6 +257,11 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
                 float pow = boost::lexical_cast<float>(tag.to_element().get_attribute("power").c_str());
                 environManager().setWindPower(pow);
             }
+            if (tag.get_node_name() == "Foreground")
+            {
+                levelManager().setForegroundTexture(tag.to_element().get_attribute("image").c_str());
+            }
+
             EnvironTypes type = deps[tag.get_node_name().c_str()];
 
             bool enabled = tag.to_element().get_attribute("enabled") == "true";

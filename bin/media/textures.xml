@@ -1,4 +1,5 @@
 <resources>
+
     <section name="Stuff">
         <texture name="stone" file="stone.png" />
         <texture name="house" file="house.png" />
@@ -79,4 +80,9 @@
            <texture name="9" file="birds/bird1/9.png" />
         </section>
     </section>
+
+    <section name="Foreground">
+        <texture name="test" file="levels/test_foreground.png" />
+    </section>
+
 </resources>

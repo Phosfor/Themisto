@@ -58,8 +58,8 @@ void MenuState::update()
     if (mEnvironEnabled) environManager().update();
 
     levelManager().update();
-    objectsManager().update();
     physicManager().step();
+    objectsManager().update();
 
     if (mDrawDebug) physicManager().getWorld().DrawDebugData();
 }

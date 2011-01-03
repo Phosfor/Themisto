@@ -28,6 +28,7 @@ set(Themisto_srcs
     World/Environ/Clouds.cpp
     World/Environ/Birds.cpp
     World/Environ/Lightnings.cpp
+    World/Environ/Foreground.cpp
 
     # Objects
     World/Objects/Grass.cpp
