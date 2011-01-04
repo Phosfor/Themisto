@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<?xml version="1.0" encoding="UTF-8" ?>
-
 <ThemistoLevel version="0.1" authors="Wincode team">
     <World size_width="1024" size_height="600">
 
@@ -17,10 +15,15 @@
             <Wind power="-2" />
         </Environ>
    </World>
-   <SomeTag template="tp1, tp2, t3" >
-    <SomeChild template="local/localtpl" >
-        <SomeNestedChild2 template="simpletpl" />
-        <SomeNestedChild3 template = "dir/dir2/file.tpl/tplf" />
+   <Templates>
+    <Include>templates/BaseTemplates.tpl</Include>
+    <Template name="localtp1" />
+   </Templates>
+   <SomeTag template="localtp1, includeLevel1, includeLevel2" >
+    <SomeChild template="local/localtp1" >
+        <SomeNestedChild2 template="templates/BaseTemplates.tpl/includeLevel1" />
+        <SomeNestedChild3 template = "templates/BaseTemplates.tpl/includeLevel2"  />
+        <SomeNestedChild4 template="Templates3.tpl/defaultLocation" ></SomeNestedChild4>
     </SomeChild>
 </SomeTag>
 </ThemistoLevel>

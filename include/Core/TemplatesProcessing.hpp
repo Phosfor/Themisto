@@ -28,38 +28,49 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/algorithm/string.hpp>
 #include <boost/filesystem.hpp>
+#include "Core/Utils.hpp"
+#include "Core/LogManager.hpp"
 
 typedef boost::shared_ptr<CL_DomDocument> DocumentPtr;
 
-class TemplateFileNotFound: CL_Exception
-{
-    public:
-     TemplateFileNotFound(std::string msg):CL_Exception(msg)
-     {
-     }
-};
+const std::string TEMPLATES_DIRRECTORY =  utils().getMediaFolder() + "/templates";
+
+const std::string COMMON_TEMPLATES_FILE = TEMPLATES_DIRRECTORY + "/common.tpl";
 
 class TemplatesProcessor
 {
     private:
         std::map<std::string, DocumentPtr> mFileToDocument;
-        std::vector<std::string> mIncludeChain;
+        std::list< std::pair<std::string, std::string> > mIncludeChain;
 
-        // These three fileds are using in most private functions;
-        // For syntax clear, I keep them in fields, not passing as params to everywhere
-        DocumentPtr mSceneDocument;
-        std::string mSceneFile;
+        void processTag(CL_DomElement* tag, DocumentPtr baseDocument, const std::string& baseFile);
 
-        void processTag(CL_DomElement* tag);
+        CL_DomElement getTemplate(const std::string& spec,
+                                  DocumentPtr baseDocument,
+                                  const std::string& baseFile);
+
+        boost::shared_ptr<CL_DomElement>
+        getSingleTemplate(const std::string& _spec,
+                           DocumentPtr baseDocument,
+                           const std::string& baseFile);
+
+        boost::shared_ptr<CL_DomElement>
+        getTemplatesTag(DocumentPtr baseDocument, const std::string& baseFile);
+
+        std::vector<std::string>
+        getIncludedFiles(DocumentPtr baseDocument,
+                        const std::string& baseFile);
+
+        boost::shared_ptr<CL_DomElement>
+        getLocalTemplate(const std::string& name,
+                         DocumentPtr baseDocument,
+                         const std::string& baseFile);
+
+        std::string solveFileName(const std::string& file, const std::string& basePath);
+
+        DocumentPtr getFileDocument(const std::string& filePath);
+
         void applyTemplate(CL_DomElement* tag, const CL_DomElement& templateTag);
-        CL_DomElement getTemplate(const std::string& spec);
-        CL_DomElement getSingleTemplate(const std::string& _spec); // Without multiply specifiers
-        CL_DomElement getLocalTemplate(const std::string& name);
-        CL_DomElement getTemplateFromFile(const std::string& file,const std::string& name);
-        std::string getTemplateFilePath(const std::string& file);
-        std::vector<std::string> getIncludedFiles(CL_DomElement templatesTag);
-
-
 
     public:
         TemplatesProcessor();
