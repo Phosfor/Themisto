@@ -81,18 +81,10 @@ void MenuState::onKeyDown(const CL_InputEvent &key, const CL_InputState &state)
 
     if (key.id == CL_KEY_RIGHT)
     {
-        int oldOffset = levelManager().getOffsetX();
-        int newOffset = levelManager().getOffsetX() - 5;
-
-        std::cout << "Old: " << oldOffset << ";\nNew: " << newOffset << "\n";
         levelManager().setOffsetX(levelManager().getOffsetX() - 5);
     }
     if (key.id == CL_KEY_LEFT)
     {
-        int oldOffset = levelManager().getOffsetX();
-        int newOffset = levelManager().getOffsetX() + 5;
-
-        std::cout << "Old: " << oldOffset << ";\nNew: " << newOffset << "\n";
         levelManager().setOffsetX(levelManager().getOffsetX() + 5);
     }
 }

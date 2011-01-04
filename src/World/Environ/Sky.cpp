@@ -38,7 +38,7 @@ Sky::Sky()
     mGC = appManager().getGraphic();
 
     quad1 = CL_Rectf(0, 0, mWindowWidth, mWindowHeight/2.0);
-    quad2 = CL_Rectf(0, mWindowHeight/2.0, mWindowWidth, mWindowHeight + mWindowHeight * 0.3);
+    quad2 = CL_Rectf(0, mWindowHeight/2.0, mWindowWidth, mWindowHeight);
 }
 
 void Sky::update(float windPower, float elapsed, float globalTime)

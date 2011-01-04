@@ -52,9 +52,10 @@ void Clouds::processClouds(CL_GraphicContext &gc, float windPower, uint16_t i)
         mClouds[i].timeout = 0;
     }
 
-    float alpha = static_cast<float>((rand()%4 + 7)) / 10.0f;
+    //float alpha = static_cast<float>((rand()%4 + 7)) / 10.0f;
     float color = static_cast<float>((rand()%1 + 3)) / 10.0f;
-    mClouds[i].mColor = CL_Colorf(color, color, color, alpha);
+    //mClouds[i].mColor = CL_Colorf(color, color, color, alpha);
+    mClouds[i].mColor = CL_Colorf(color, color, color, 1.2f);
 
     mClouds[i].speed_koef = rand() % 35 + 45;
 }

@@ -24,10 +24,10 @@ enum EnvironTypes
     Environ_Sky    = 0,
     Environ_Stars  = 1,
     Environ_Moon   = 2,
-    Environ_Foreground = 3,
-    Environ_Lightnings = 4,
-    Environ_Rain   = 5,
-    Environ_Clouds = 6,
+    Environ_Lightnings = 3,
+    Environ_Clouds = 4,
+    Environ_Foreground = 5,
+    Environ_Rain   = 6,
     Environ_Leaves = 7,
     Environ_Birds  = 8
 };
