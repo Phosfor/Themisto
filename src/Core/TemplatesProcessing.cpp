@@ -88,7 +88,7 @@ TemplatesProcessor::getSingleTemplate(const std::string& _spec,
                                       DocumentPtr baseDocument,
                                       const std::string& baseFile)
 {
-    LOG("Get single template " + _spec + " from file " + baseFile);
+    LOG("Get single template " + _spec + "; Base file: " + baseFile);
     std::string spec(_spec);
     boost::trim(spec);
     // Anti circle include
@@ -123,20 +123,23 @@ TemplatesProcessor::getSingleTemplate(const std::string& _spec,
         // Check common.tpl
         else
         {
-            DocumentPtr commonDocument = getFileDocument(COMMON_TEMPLATES_FILE);
-            boost::shared_ptr<CL_DomElement> comonSearchResult =
-                getSingleTemplate(templateName, commonDocument, COMMON_TEMPLATES_FILE);
-            if(comonSearchResult)
+            if(boost::filesystem::exists(COMMON_TEMPLATES_FILE))
             {
-                LOG("Found common");
-                result = comonSearchResult;
-                if(result)
+                DocumentPtr commonDocument = getFileDocument(COMMON_TEMPLATES_FILE);
+                boost::shared_ptr<CL_DomElement> comonSearchResult =
+                    getSingleTemplate(templateName, commonDocument, COMMON_TEMPLATES_FILE);
+                if(comonSearchResult)
                 {
-                    processTag(result.get(), commonDocument, COMMON_TEMPLATES_FILE);
+                    LOG("Found common");
+                    result = comonSearchResult;
+                    if(result)
+                    {
+                        processTag(result.get(), commonDocument, COMMON_TEMPLATES_FILE);
+                    }
                 }
             }
             // Check in included files
-            else
+            if(!result)
             {
                 std::vector<std::string> includedFiles = getIncludedFiles(baseDocument, baseFile);
                 std::vector<std::string>::iterator filesIt;
@@ -243,12 +246,14 @@ TemplatesProcessor::getIncludedFiles(DocumentPtr baseDocument,
         CL_DomNodeList includeTags = templatesTag->get_elements_by_tag_name("Include");
         for(int i=0; i<includeTags.get_length(); ++i)
         {
-            CL_DomElement includeTag = includeTags.item(i).to_element();
-            std::string file = includeTag.get_node_value();
+            std::string file = includeTags.item(i).get_node_value().c_str();
+            LOG(std::string("Include tag name: ") +  includeTags.item(i).get_node_name().c_str());
+            LOG("Found included file " + file);
             std::string filePath = solveFileName(file, baseFile);
             files.push_back(filePath);
         }
     }
+    LOG("Found " + IntToStr(files.size()) + " included files.");
     return files;
 }
 
@@ -257,7 +262,6 @@ TemplatesProcessor::getLocalTemplate(const std::string& name,
                                      DocumentPtr baseDocument,
                                      const std::string& baseFile)
 {
-    std::cout << std::endl << "Get local template " << name << std::endl;
     boost::shared_ptr<CL_DomElement> result;
 
     boost::shared_ptr<CL_DomElement> templatesTag = getTemplatesTag(baseDocument, baseFile);
@@ -280,16 +284,18 @@ TemplatesProcessor::getLocalTemplate(const std::string& name,
 std::string TemplatesProcessor::solveFileName(const std::string& file, const std::string& basePath)
 {
     std::string resultPath = "";
+    LOG("Solving file: " + file + "; base file: " + basePath);
 
-    // Find in scene dir
+    // Find in base dir
     boost::filesystem::path scenePath(basePath);
     std::string baseDir = scenePath.native_directory_string();
+    LOG("Base dirrectory: " + baseDir);
     boost::filesystem::path templatePath(baseDir);
     templatePath /= file;
     if( boost::filesystem::exists(templatePath) )
     {
         resultPath = std::string(templatePath.string());
-        std::cout << "Found in scene dir" << std::endl;
+        std::cout << "Found in base dir: " << resultPath << std::endl;
     }
     // Find in media/templates dir
     else
@@ -299,7 +305,7 @@ std::string TemplatesProcessor::solveFileName(const std::string& file, const std
         if( boost::filesystem::exists(templatesDirRelativePath) )
         {
             resultPath = std::string(templatesDirRelativePath.string());
-            std::cout << "Found in templates dirrectory" << std::endl;
+            std::cout << "Found in templates dirrectory: " << resultPath << std::endl;
         }
         else
         {
@@ -336,11 +342,117 @@ DocumentPtr TemplatesProcessor::getFileDocument(const std::string& filePath)
     return document;
 }
 
-
-void TemplatesProcessor::applyTemplate(CL_DomElement* tag, const CL_DomElement& templateTag)
+bool TemplatesProcessor::tagsEquivalent(const CL_DomElement&  tag1, const CL_DomElement& tag2)
 {
-    std::cout <<std::endl << "Applying template.." << std::endl;
+    std::string id1 = "";
+    if(tag1.has_attribute("id") )
+    {
+        id1 = tag1.get_attribute("id");
+        boost::trim(id1);
+    }
+    std::string id2 = "";
+    if(tag2.has_attribute("id") )
+    {
+        id2 = tag2.get_attribute("id");
+        boost::trim(id2);
+    }
+    return (tag1.get_node_name() == tag2.get_node_name()) && (id1 == id2);
 }
+
+void TemplatesProcessor::applyTemplate(CL_DomElement* _tag, const CL_DomElement& templateTag)
+{
+    CL_DomElement tag = *_tag;
+    std::cout << "applyTemplate iteration...\n";
+    std::cout << "current node_name: " << tag.get_node_name().c_str() << "\n";
+    std::cout << "template node_name: " << templateTag.get_node_name().c_str() << "\n";
+
+   if(tagsEquivalent(tag, templateTag))
+   {
+        std::cout << "Tags are equivalent!\n";
+
+        std::string action = "merge";
+        if (tag.has_attribute("action"))
+        {
+            action = tag.get_attribute("action");
+        }
+        std::cout << "tag action: " << action << "\n";
+
+        // If ignore - remove element from xml-tree
+        if (action == "ignore")
+        {
+            tag.get_parent_node().remove_child(tag);
+        }
+        else if (action == "override")
+        {
+            // Nothing to do
+            return;
+        }
+        else if (action == "merge")
+        {
+            copyAttributes(tag, templateTag);
+            CL_DomNodeList templateChildren = templateTag.get_child_nodes();
+            // Check on qeuivalent dublicates in template
+            for (int i=0; i < templateChildren.get_length(); ++i)
+            {
+                for (int j=i+1; j < templateChildren.get_length(); ++j)
+                {
+                    if(tagsEquivalent(templateChildren.item(i).to_element(), templateChildren.item(j).to_element()))
+                    {
+                        throw CL_Exception("Several equivalent tags in template.");
+                    }
+                }
+            }
+            // Apply template childs to equivalent tags in current tag
+            // or simple add, if no equivalent tags.
+            CL_DomNodeList tagChildren = tag.get_child_nodes();
+            for (int tpli=0; tpli < templateChildren.get_length(); ++tpli)
+            {
+
+                // Find equivalent tags
+                bool applied = false;
+                CL_DomElement templateChild = templateChildren.item(tpli).to_element();
+                std::cout << "\t - Iteration through template children. Tag name: " << templateChild.get_node_name().c_str() << "\n";
+                for (int ti=0; ti < tagChildren.get_length(); ++ti)
+                {
+                    CL_DomElement tagChild = tagChildren.item(ti).to_element();
+                    if(tagsEquivalent(tagChild, templateChild))
+                    {
+                        applyTemplate(&tagChild, templateChild);
+                        applied = true;
+                    }
+                }
+                if(!applied)
+                {
+                    std::cout << "No equivalent tags, add children\n";
+                    CL_DomNode toAdd = tag.get_owner_document().import_node(templateChild, true);
+                    tag.append_child(toAdd);
+                }
+            }
+        }
+    }
+    // Not equivalent
+    else
+    {
+        std::cout << "Tags are NOT equivalent!\n";
+        CL_DomNode parent = tag.get_parent_node();
+        CL_DomNode toAdd = tag.get_owner_document().import_node(templateTag, true);
+        parent.append_child(toAdd);
+    }
+}
+
+void TemplatesProcessor::copyAttributes(CL_DomElement tag, CL_DomElement templateTag)
+{
+    CL_DomNamedNodeMap templateAttributes = templateTag.get_attributes();
+    for (int i=0; i < templateAttributes.get_length(); ++i)
+    {
+        CL_DomAttr attribute = templateAttributes.item(i).to_attr();
+        if(!tag.has_attribute(attribute.get_name()))
+        {
+            tag.set_attribute(attribute.get_name(), attribute.get_value());
+        }
+    }
+}
+
 
 
 

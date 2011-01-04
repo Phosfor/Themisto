@@ -71,6 +71,8 @@ class TemplatesProcessor
         DocumentPtr getFileDocument(const std::string& filePath);
 
         void applyTemplate(CL_DomElement* tag, const CL_DomElement& templateTag);
+        void copyAttributes(CL_DomElement tag, CL_DomElement templateTag);
+        bool tagsEquivalent(const CL_DomElement&  tag1, const CL_DomElement& tag2);
 
     public:
         TemplatesProcessor();

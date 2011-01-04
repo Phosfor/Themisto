@@ -17,7 +17,9 @@
    </World>
    <Templates>
     <Include>templates/BaseTemplates.tpl</Include>
-    <Template name="localtp1" />
+    <Template name="localtp1" >
+        <LocalTemplateTag />
+    </Template>
    </Templates>
    <SomeTag template="localtp1, includeLevel1, includeLevel2" >
     <SomeChild template="local/localtp1" >
