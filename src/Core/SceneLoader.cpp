@@ -197,9 +197,10 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
     // Get level attributes
     CL_String authors = root.get_attribute("authors");
     CL_String version = root.get_attribute("version");
+    CL_String name = root.get_attribute("name");
 
-    LOG(cl_format("Loading new scene with name `%1` for the game version: `%2`. Created by: `%3`."
-                  , sceneName, version, authors));
+    LOG(cl_format("Loading new scene with name `%1` (in file `%2`) for the game version: `%3`. Created by: `%3`."
+                  , name, sceneName, version, authors));
 
     // Check versions of the game and the level
     if (boost::lexical_cast<float>(version.c_str()) != GAME_VERSION)
@@ -208,6 +209,8 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
     // Get world dimensions
     if (!world.has_attribute("image")) LOG_NOFORMAT("Error: World tag should have `image` attribute!");
     levelManager().init(world.get_attribute("image"));
+
+    levelManager().setLevelName(name);
 
     // Camera viewport settings
     float cameraPosX = 0, cameraPosY = 0;

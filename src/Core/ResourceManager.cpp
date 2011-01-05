@@ -128,6 +128,7 @@ void ResourceManager::loadFonts()
             boost::split(storage, section, boost::is_any_of("/"));
             std::string fontName = storage[storage.size()-1];
             CL_Font_System::register_font(fontPath, fontName);
+
             LOG(cl_format("Font with name `%1` is registered in the system.", fontName));
         }
     }

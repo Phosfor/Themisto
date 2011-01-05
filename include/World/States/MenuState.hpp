@@ -47,8 +47,25 @@ class MenuState : public State
         bool mDrawDebug;
 
         // Gui shit
+        bool mDetailedOutput;
+
         CL_Label *mInfoLabel;
+
+        CL_Label *mWindLabel;
+        CL_Slider *mWindSlider;
+
+        CL_Label *mDropLabel;
+        CL_Slider *mDropSlider;
+
+        CL_Label *mLeavesLabel;
+        CL_Slider *mLeavesSlider;
+
         void initGui();
+
+        void dropNumChanged();
+        void windPowerChanged();
+        void leavesNumChanged();
+        // End gui shit
 
         void init();
         void shutdown();

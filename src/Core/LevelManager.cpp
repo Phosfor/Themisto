@@ -110,3 +110,13 @@ CL_Rectf LevelManager::getAbsoluteCameraPos()
                     abs(mCameraViewport.left) + ScreenResolutionX,
                     abs(mCameraViewport.top) + ScreenResolutionY);
 }
+
+void LevelManager::setLevelName(const std::string &name)
+{
+    mLevelName = name;
+}
+
+std::string LevelManager::getLevelName()
+{
+    return mLevelName;
+}

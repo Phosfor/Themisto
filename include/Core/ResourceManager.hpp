@@ -33,6 +33,7 @@
 #include "Core/ApplicationManager.hpp"
 #include "Core/ConfigManager.hpp"
 #include "Core/LogManager.hpp"
+#include "Core/GuiManager.hpp"
 #include "Core/Utils.hpp"
 
 class ResourceManager : public boost::serialization::singleton<ResourceManager>

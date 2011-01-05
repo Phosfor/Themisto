@@ -21,9 +21,9 @@
 void Leaves::setLimit(uint16_t limit)
 {
    mLeaves.resize(limit);
-   if (limit > mMaxObjects && !mFirstTime)
-      for (uint16_t i=0; i < limit-mMaxObjects; i++)
-         processLeaves(mGC, 0, i);
+   if (limit > mMaxObjects)
+      for (uint16_t i=0; i < limit - mMaxObjects; i++)
+          processLeaves(mGC, 0, mMaxObjects + i);
 
    mMaxObjects = limit;
 }

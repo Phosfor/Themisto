@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<ThemistoLevel version="0.1" authors="Wincode team">
+<ThemistoLevel version="0.1" authors="Wincode team" name="First level">
     <World image="levels/test.png" cameraPosX="0" cameraPosY="0">
 
         <Environ active="true">

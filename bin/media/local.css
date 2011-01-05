@@ -1,0 +1,8 @@
+@import "gui_basic/theme.css";
+
+label.info-label
+{
+    text-color: #FFFFFF;
+    font-size: 22px;
+    font-family: Ubuntu;
+}

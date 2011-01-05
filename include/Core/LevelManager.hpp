@@ -38,6 +38,7 @@ class LevelManager : public boost::serialization::singleton<LevelManager>
 {
     private:
         CL_Image mLevelTexture;
+        std::string mLevelName;
         std::string mForegroundTexture;
 
         // Is foreground image enabled
@@ -66,6 +67,9 @@ class LevelManager : public boost::serialization::singleton<LevelManager>
 
         float getCameraSpeed();
         void setCameraSpeed(float speed);
+
+        std::string getLevelName();
+        void setLevelName(const std::string &name);
 
         CL_Rectf getAbsoluteCameraPos();
 
