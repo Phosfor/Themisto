@@ -16,6 +16,7 @@ set(Themisto_srcs
     Core/InputManager.cpp
     Core/ObjectsManager.cpp
     Core/LevelManager.cpp
+    Core/TemplatesProcessing.cpp
 
     # Environ
     World/WorldManager.cpp

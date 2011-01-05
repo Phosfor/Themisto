@@ -22,11 +22,21 @@ void Utils::setMediaFolder(const std::string &path)
     mMediaFolder = path;
 }
 
+std::string Utils::getTemplateFolder()
+{
+    return getMediaFolder() + "/templates";
+}
+
+std::string Utils::getCommonTemplateFile()
+{
+    return  getTemplateFolder() + "/common.tpl";
+}
+
 std::string Utils::intToStr(int p)
 {
     std::ostringstream out;
     out << p;
-    return out.str(); 
+    return out.str();
 }
 
 std::string Utils::vectorToStr(b2Vec2 p)

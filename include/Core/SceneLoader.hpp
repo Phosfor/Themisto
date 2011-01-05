@@ -25,8 +25,10 @@
 #include "Core/EnvironManager.hpp"
 #include "Core/ObjectsManager.hpp"
 #include "Core/LevelManager.hpp"
+#include "Core/TemplatesProcessing.hpp"
 #include "World/Environ/Types.hpp"
 #include "World/Objects/TypesManager.hpp"
+
 #include <map>
 
 class Object;

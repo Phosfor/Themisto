@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<ThemistoLevel version="0.1" authors="Wincode team">
+    <World size_width="1024" size_height="600">
+
+        <Environ active="true">
+            <Rain enabled="true" limit="50"  />
+            <Clouds enabled="true" />
+            <Lightnings enabled="true" />
+            <Sky enabled="true" />
+            <Moon enabled="true" />
+            <Leaves enabled="true" limit="5" />
+            <Stars enabled="true" />
+            <Birds enabled="true" />
+            <Wind power="-2" />
+        </Environ>
+   </World>
+   <Templates>
+    <Include>templates/BaseTemplates.tpl</Include>
+    <Tadam atr="val">tadam-tam-tam</Tadam>
+    <Template name="localtp1"  >
+        <SomeTag>
+            <LocalTemplateTag >tpl</LocalTemplateTag>
+        </SomeTag>
+    </Template>
+   </Templates>
+    <SomeTag template="localtp1" >
+         <LocalTemplateTag >local</LocalTemplateTag>
+    </SomeTag>
+    <SomeTag template="local/localtp1" />
+    <SomeTag template="includeLevel1" />
+    <SomeTag template = "includeLevel2"  />
+    <SomeTag template="Templates3.tpl/defaultLocation" ></SomeTag>
+    <SomeTag template = "common"  />
+</ThemistoLevel>
+
+

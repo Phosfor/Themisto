@@ -9,3 +9,4 @@ bin/Themisto
 additional/*
 bin/DebugConsole
 bin/DebugVisualisator
+bin/settings.info
