@@ -44,12 +44,12 @@ Sky::Sky()
 void Sky::update(float windPower, float elapsed, float globalTime)
 {
     // Make atmosphere scattering? [9; 11] globalTime
-    if (globalTime <= 9.0f) {
+    if (globalTime <= 7.0f) {
         t1 = 0.0f;
-    } else if (globalTime >= 11.0f) {
+    } else if (globalTime >= 10.0f) {
         t1 = 1.0f;
     } else {
-        t1 = (globalTime - 9.0f) / (11.0f - 9.0f);
+        t1 = (globalTime - 7.0f) / (10.0f - 7.0f);
 
         // Make color transation of the sky bottom (to the scattering color)
         float r = t1 * (mColorBottomTrans.r - mColorBottomConst.r) + mColorBottomConst.r;
