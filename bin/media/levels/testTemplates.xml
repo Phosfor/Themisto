@@ -18,16 +18,14 @@
    <Templates>
     <Include>templates/BaseTemplates.tpl</Include>
     <Tadam atr="val">tadam-tam-tam</Tadam>
-    <Template name="localtp1" parent="common" >
+    <Template name="localtp1"  >
         <SomeTag>
-            <LocalTemplateTag />
-             <SomeChild  action="merge">
-                <SomeNestedChildeeeeee />
-            </SomeChild>
+            <LocalTemplateTag >tpl</LocalTemplateTag>
         </SomeTag>
     </Template>
    </Templates>
     <SomeTag template="localtp1" >
+         <LocalTemplateTag >local</LocalTemplateTag>
     </SomeTag>
     <SomeTag template="local/localtp1" />
     <SomeTag template="includeLevel1" />
