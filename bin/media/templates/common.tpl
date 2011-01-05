@@ -2,9 +2,12 @@
 <Templates>
     <Template name="common" >
         <SomeTag>
+            <SomeTag template="Templates3.tpl/defaultLocation" >
+                <SomeChild id="d" />
+            </SomeTag>
             <SomeChild>
-            <SomeNestedChild />
-        </SomeChild>
+                <SomeNestedChildCommon />
+            </SomeChild>
         </SomeTag>
     </Template>
 </Templates>

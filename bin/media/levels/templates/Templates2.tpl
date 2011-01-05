@@ -3,8 +3,8 @@
     <Template name="includeLevel2" >
         <SomeTag>
             <SomeChild>
-            <SomeNestedChild />
-        </SomeChild>
+                <SomeNestedChildLevel2 />
+            </SomeChild>
         </SomeTag>
     </Template>
 </Templates>

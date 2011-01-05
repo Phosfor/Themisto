@@ -37,7 +37,7 @@ void MenuState::init()
     mGC = appManager().getGraphic();
 
     areaManager().init(&physicManager().getWorld(), 20);
-    sceneLoader().loadScene("testTemplates.xml");
+    sceneLoader().loadScene("test.xml");
     physicManager().getWorld().SetDebugDraw(mDraw);
 
     mEnvironEnabled = environManager().getEnvironEnabled();
@@ -45,7 +45,7 @@ void MenuState::init()
     ground = CL_Image(mGC, "media/ground.png");
 }
 
-void MenuState::shutdown() 
+void MenuState::shutdown()
 {
     delete mDnD;
     delete mDraw;
