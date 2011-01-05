@@ -17,10 +17,15 @@
 
 #include "World/Environ/Stars.hpp"
 
+int Stars::mCounter = 0;
+
 void Stars::setLimit(uint16_t limit)
 {
-   mImageStars.resize(limit, ImageStarsData(appManager().getGraphic(), mWindowWidth, mWindowHeight));
-   mMaxObjects = limit;
+    for (uint16_t i=0; i < limit; ++i)
+    {
+        mImageStars.push_back(ImageStarsData(appManager().getGraphic(), mWindowWidth, mWindowHeight));
+    }
+    mMaxObjects = limit;
 }
 
 ImageStarsData::ImageStarsData(CL_GraphicContext gc, uint16_t width, uint16_t height)
@@ -36,9 +41,11 @@ ImageStarsData::ImageStarsData(CL_GraphicContext gc, uint16_t width, uint16_t he
     uint16_t randStar = rand() % mNumStars;
     imageHandle = resourceManager().getImage("Stars", boost::lexical_cast<std::string>(randStar));
 
-    float scale = static_cast<float>(rand()%10 + 9)/100.0f;
+    float scale = static_cast<float>(rand()%13 + 9)/100.0f;
     imageHandle.set_scale(scale, scale);
     imageHandle.set_alpha(brightness);
+
+    Stars::mCounter++;
 }
 
 Stars::Stars(uint16_t maxStars)

@@ -10,7 +10,7 @@
             <Sky enabled="true" />
             <Moon enabled="true" />
             <Leaves enabled="true" limit="8" />
-            <Stars enabled="true" limit="3000" />
+            <Stars enabled="true" limit="400" />
             <Birds enabled="true" />
             <!-- actual_size is average real foreground image size refer to full window size -->
             <!-- If fixed is true, foreground wouldn't move with camera and level -->

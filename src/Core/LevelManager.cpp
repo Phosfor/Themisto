@@ -81,11 +81,6 @@ void LevelManager::setCameraSpeed(float speed)
 
 void LevelManager::translateCamera(float x, float y)
 {
-    std::cout << "left: " << mCameraViewport.left << "\n";
-    std::cout << "top: " << mCameraViewport.top << "\n";
-    std::cout << "right: " << mCameraViewport.right << "\n";
-    std::cout << "bottom: " << mCameraViewport.bottom << "\n";
-
     // Check X-moving
     if (mCameraViewport.left + x > 0 ||
         abs(mCameraViewport.left) - x + ScreenResolutionX > mLevelTexture.get_width())
@@ -95,6 +90,7 @@ void LevelManager::translateCamera(float x, float y)
     // If the texture is smaller then window height
     if (mForegroundDelta != -1)
     {
+        // If it's smaller, we don't need in any Y axis moving
         y = 0;
     }
     else
