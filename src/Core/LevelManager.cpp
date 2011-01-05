@@ -6,7 +6,7 @@ void LevelManager::init(const std::string &textureName)
     if (!boost::filesystem::exists(path)) LOG_NOFORMAT(cl_format("Error: Level texture `%1` doesn't exist!", path));
     mLevelTexture = CL_Image(appManager().getGraphic(), path);
 
-    mXOffset = 0;
+    mGC = appManager().getGraphic();
 }
 
 void LevelManager::setForegroundTexture(const std::string &resourceName)
@@ -18,6 +18,16 @@ void LevelManager::setForegroundTexture(const std::string &resourceName)
 bool LevelManager::getForegroundEnabled()
 {
     return mForeground;
+}
+
+bool LevelManager::getForegroundFixed()
+{
+    return mFixedForeground;
+}
+
+void LevelManager::setForegroundFixed(bool fixed)
+{
+    mFixedForeground = fixed;
 }
 
 std::string LevelManager::getForegroundTexture()
@@ -37,15 +47,24 @@ void LevelManager::setForegroundSize(uint16_t size)
 
 void LevelManager::update()
 {
-    mLevelTexture.draw(appManager().getGraphic(), mXOffset, 0);
+    mLevelTexture.draw(mGC, mCameraViewport.left, mCameraViewport.top);
 }
 
-void LevelManager::setOffsetX(int x)
+void LevelManager::setCamViewport(const CL_Rectf  &viewport)
 {
-    mXOffset = x;
+    mCameraViewport = viewport;
+
+    int delta = mLevelTexture.get_height() - ScreenResolutionY;
+    if (delta < 0)
+        mCameraViewport.top += abs(delta);
 }
 
-int LevelManager::getOffsetX()
+CL_Rectf LevelManager::getCamViewport()
 {
-    return mXOffset;
+    return mCameraViewport;
+}
+
+void LevelManager::translateCamera(float x, float y)
+{
+    mCameraViewport.translate(x, y);
 }

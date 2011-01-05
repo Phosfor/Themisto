@@ -81,10 +81,18 @@ void MenuState::onKeyDown(const CL_InputEvent &key, const CL_InputState &state)
 
     if (key.id == CL_KEY_RIGHT)
     {
-        levelManager().setOffsetX(levelManager().getOffsetX() - 5);
+        levelManager().translateCamera(-5, 0);
     }
-    if (key.id == CL_KEY_LEFT)
+    else if (key.id == CL_KEY_LEFT)
     {
-        levelManager().setOffsetX(levelManager().getOffsetX() + 5);
+        levelManager().translateCamera(+5, 0);
+    }
+    else if (key.id == CL_KEY_UP)
+    {
+        levelManager().translateCamera(0, -5);
+    }
+    else if (key.id == CL_KEY_DOWN)
+    {
+        levelManager().translateCamera(0, +5);
     }
 }

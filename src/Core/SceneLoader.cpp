@@ -206,12 +206,19 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
         LOG(cl_format("Warning! Level version is different with game one(%1). Possible faults.", version));
 
     // Get world dimensions
-    int worldWidth = boost::lexical_cast<int>(world.get_attribute("size_width").c_str());
-    int worldHeight = boost::lexical_cast<int>(world.get_attribute("size_height").c_str());
-    LOG_NOFORMAT(cl_format("- World size width: %1\n- World size height: %2\n", worldWidth, worldHeight));
-
     if (!world.has_attribute("image")) LOG_NOFORMAT("Error: World tag should have `image` attribute!");
     levelManager().init(world.get_attribute("image"));
+
+    // Camera viewport settings
+    float cameraPosX = 0, cameraPosY = 0;
+    if (world.has_attribute("cameraPosX"))
+        cameraPosX = boost::lexical_cast<float>(world.get_attribute("cameraPosX").c_str());
+
+    if (world.has_attribute("cameraPosY"))
+        cameraPosY = boost::lexical_cast<float>(world.get_attribute("cameraPosY").c_str());
+
+    CL_Rectf camViewport(CL_Pointf(cameraPosX, cameraPosY), CL_Sizef(ScreenResolutionX, ScreenResolutionY));
+    levelManager().setCamViewport(camViewport);
 
     try
     {
@@ -223,14 +230,22 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
             actualSize = boost::lexical_cast<uint16_t>(foregroundNode.to_element().get_attribute("actual_size").c_str());
         }
         levelManager().setForegroundSize(actualSize);
+
+        bool fixedImage = true;
+        if (foregroundNode.to_element().has_attribute("fixed"))
+        {
+            fixedImage = foregroundNode.to_element().get_attribute("fixed") == "true";
+        }
+        levelManager().setForegroundFixed(fixedImage);
     }
+    // Foreground tag isn't available
     catch (...) { }
 
     // Check whether environ should be enabled
     bool mEnvironEnabled = false;
     if (environ.get_attribute("active") == "true") mEnvironEnabled = true;
     environManager().setEnvironEnabled(mEnvironEnabled);
-    LOG_NOFORMAT(cl_format("- Environ enabled state: %1\n", mEnvironEnabled));
+    if (mEnvironEnabled) LOG_NOFORMAT("- Environ is enabled!\n");
 
     // If Environ is enabled, go through all environ-params in the level file
     if (mEnvironEnabled)

@@ -42,20 +42,25 @@ class LevelManager : public boost::serialization::singleton<LevelManager>
 
         // Is foreground image enabled
         bool mForeground;
+        bool mFixedForeground;
         // Average real foreground image size refer to full window size (in percents)
         uint16_t mForegroundActualSize;
 
-        int mXOffset;
+        CL_Rectf mCameraViewport;
+        CL_GraphicContext mGC;
 
     public:
         void setForegroundTexture(const std::string &resourceName);
         std::string getForegroundTexture();
         bool getForegroundEnabled();
+        bool getForegroundFixed();
         uint16_t getForegroundSize();
         void setForegroundSize(uint16_t size);
+        void setForegroundFixed(bool fixed);
 
-        void setOffsetX(int x);
-        int getOffsetX();
+        void setCamViewport(const CL_Rectf &viewport);
+        CL_Rectf getCamViewport();
+        void translateCamera(float x, float y);
 
         void init(const std::string &textureName);
         void update();
