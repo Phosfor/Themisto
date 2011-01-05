@@ -19,9 +19,9 @@
 
 GuiManager::~GuiManager()
 {
-    delete mGuiManager;
     delete mWm;
     delete mWrapper;
+    delete mGuiManager;
 }
 
 void GuiManager::setThemeName(const std::string &name)
@@ -34,7 +34,7 @@ std::string GuiManager::getThemeName()
     return mThemeName;
 }
 
-CL_GUIManager GuiManager::getHandle()
+CL_GUIManager &GuiManager::getHandle()
 {
     return *mGuiManager;
 }

@@ -18,16 +18,17 @@
 #ifndef _MENU_STATE_HPP_
 #define _MENU_STATE_HPP_
 
+#include <ClanLib/core.h>
+#include <ClanLib/display.h>
+#include <ClanLib/application.h>
+
 #include "Core/StateManager.hpp"
+#include "Core/GuiManager.hpp"
 #include "Core/ApplicationManager.hpp"
 #include "Core/SceneLoader.hpp"
 #include "Core/PhysicManager.hpp"
 #include "Core/LevelManager.hpp"
 #include "Physic/AreaManager.hpp"
-
-#include <ClanLib/core.h>
-#include <ClanLib/display.h>
-#include <ClanLib/application.h>
 
 class DebugDragAndDrop;
 class DebugDraw;
@@ -44,6 +45,10 @@ class MenuState : public State
         void onKeyDown(const CL_InputEvent &key, const CL_InputState &state);
         CL_Slot mInputSlot;
         bool mDrawDebug;
+
+        // Gui shit
+        CL_Label *mInfoLabel;
+        void initGui();
 
         void init();
         void shutdown();

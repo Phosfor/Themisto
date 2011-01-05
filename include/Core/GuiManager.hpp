@@ -39,7 +39,7 @@ class GuiManager : public boost::serialization::singleton<GuiManager>
     public:
         ~GuiManager();
 
-        CL_GUIManager getHandle();
+        CL_GUIManager &getHandle();
         CL_GUIWindowManagerTexture &getWM();
         CL_GUIComponent &getWrapper();
 

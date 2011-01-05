@@ -43,10 +43,14 @@ void MenuState::init()
     mInputSlot = inputManager().getKeyboard().sig_key_down().connect(this, &MenuState::onKeyDown);
 
     mEnvironEnabled = environManager().getEnvironEnabled();
+
+    initGui();
 }
 
 void MenuState::shutdown()
 {
+    delete mInfoLabel;
+
     delete mDnD;
     delete mDraw;
 }
@@ -96,4 +100,13 @@ void MenuState::onKeyDown(const CL_InputEvent &key, const CL_InputState &state)
     {
         levelManager().translateCamera(0, -camSpeed);
     }
+}
+
+void MenuState::initGui()
+{
+    CL_Rect clientArea = appManager().getGraphic().get_cliprect();
+
+    mInfoLabel = new CL_Label(&guiManager().getWrapper());
+    mInfoLabel->set_geometry(CL_Rect(clientArea.left + 5, clientArea.top + 5, CL_Size(330, 20)));
+    mInfoLabel->set_text("Press 'P' to view some debug information!");
 }
