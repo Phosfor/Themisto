@@ -43,6 +43,7 @@ class LevelManager : public boost::serialization::singleton<LevelManager>
         // Is foreground image enabled
         bool mForeground;
         bool mFixedForeground;
+        int mForegroundDelta; // If level texture is < then window height
         // Average real foreground image size refer to full window size (in percents)
         uint16_t mForegroundActualSize;
 
