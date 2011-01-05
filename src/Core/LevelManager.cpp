@@ -74,9 +74,8 @@ void LevelManager::translateCamera(float x, float y)
         return;
 
     // Check Y-moving
-    // Uncomment to fix moving up
-    if (/*mCameraViewport.bottom + y > mLevelTexture.get_height() ||*/
-        mCameraViewport.top + y < 0 )
+    if (mCameraViewport.top + y > 0 ||
+        abs(mCameraViewport.top) - y + ScreenResolutionY > mLevelTexture.get_height())
         return;
 
     mCameraViewport.translate(x, y);
