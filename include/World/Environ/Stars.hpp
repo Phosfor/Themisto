@@ -57,9 +57,6 @@ class Stars : public EnvironObject
         explicit Stars(uint16_t maxStars = 200);
         void setLimit(uint16_t limit);
         void update(float windPower, float elapsed, float globalTime);
-
-        // Remove this later
-        static int mCounter;
 };
 
 #endif /* _WEATHER_STARS_HPP_ */

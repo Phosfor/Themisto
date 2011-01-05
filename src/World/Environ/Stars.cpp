@@ -17,8 +17,6 @@
 
 #include "World/Environ/Stars.hpp"
 
-int Stars::mCounter = 0;
-
 void Stars::setLimit(uint16_t limit)
 {
     for (uint16_t i=0; i < limit; ++i)
@@ -44,8 +42,6 @@ ImageStarsData::ImageStarsData(CL_GraphicContext gc, uint16_t width, uint16_t he
     float scale = static_cast<float>(rand()%13 + 9)/100.0f;
     imageHandle.set_scale(scale, scale);
     imageHandle.set_alpha(brightness);
-
-    Stars::mCounter++;
 }
 
 Stars::Stars(uint16_t maxStars)
@@ -115,7 +111,7 @@ void Stars::update(float windPower, float elapsed, float globalTime)
     for (uint16_t i=0; i < mMaxObjects; i++)
     {
         // Stars "blinking"
-        if (rand() % 80 == 0) continue;
+        if (rand() % 70 == 0) continue;
 
         ImageStarsData &data2 = mImageStars[i];
 

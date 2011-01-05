@@ -20,6 +20,10 @@
 void Rain::setLimit(uint16_t limit)
 {
    mData.resize(limit, Data());
+
+  for (uint16_t i=0; i < limit-mMaxObjects; i++)
+     processDrops(environManager().getWindPower(), mData[i], false);
+
    mMaxObjects = limit;
 }
 
