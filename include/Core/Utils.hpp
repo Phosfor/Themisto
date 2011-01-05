@@ -66,6 +66,12 @@ inline float Randf(float lower) { return ( (rand()%10 + lower) / 10.0f ); }
 const int ScreenResolutionY = configManager().getValue<int>("window.height", 1024);
 const int ScreenResolutionX = configManager().getValue<int>("window.width", 768);
 
+// For points interpolation
+inline float LERP(float oldState, float newState, float k)
+{
+    return (newState + k * (oldState - newState));
+}
+
 /////////////////////////////////////////////////////////////////////////
 /////////////////////// GAME MAGNITUDES /////////////////////////////////
 

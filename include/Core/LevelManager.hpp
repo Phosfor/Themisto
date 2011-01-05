@@ -46,6 +46,7 @@ class LevelManager : public boost::serialization::singleton<LevelManager>
         int mForegroundDelta; // If level texture is < then window height
         // Average real foreground image size refer to full window size (in percents)
         uint16_t mForegroundActualSize;
+        float mCameraSpeed;
 
         CL_Rectf mCameraViewport;
         CL_GraphicContext mGC;
@@ -62,6 +63,11 @@ class LevelManager : public boost::serialization::singleton<LevelManager>
         void setCamViewport(const CL_Rectf &viewport);
         CL_Rectf getCamViewport();
         void translateCamera(float x, float y);
+
+        float getCameraSpeed();
+        void setCameraSpeed(float speed);
+
+        CL_Rectf getAbsoluteCameraPos();
 
         void init(const std::string &textureName);
         void update();

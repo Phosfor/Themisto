@@ -7,6 +7,7 @@ void LevelManager::init(const std::string &textureName)
     mLevelTexture = CL_Image(appManager().getGraphic(), path);
 
     mGC = appManager().getGraphic();
+    mCameraSpeed = 10.0f;
 }
 
 void LevelManager::setForegroundTexture(const std::string &resourceName)
@@ -68,8 +69,23 @@ CL_Rectf LevelManager::getCamViewport()
     return mCameraViewport;
 }
 
+float LevelManager::getCameraSpeed()
+{
+    return mCameraSpeed;
+}
+
+void LevelManager::setCameraSpeed(float speed)
+{
+    mCameraSpeed = speed;
+}
+
 void LevelManager::translateCamera(float x, float y)
 {
+    std::cout << "left: " << mCameraViewport.left << "\n";
+    std::cout << "top: " << mCameraViewport.top << "\n";
+    std::cout << "right: " << mCameraViewport.right << "\n";
+    std::cout << "bottom: " << mCameraViewport.bottom << "\n";
+
     // Check X-moving
     if (mCameraViewport.left + x > 0 ||
         abs(mCameraViewport.left) - x + ScreenResolutionX > mLevelTexture.get_width())
@@ -89,4 +105,12 @@ void LevelManager::translateCamera(float x, float y)
     }
 
     mCameraViewport.translate(x, y);
+}
+
+CL_Rectf LevelManager::getAbsoluteCameraPos()
+{
+    return CL_Rectf(abs(mCameraViewport.left),
+                    abs(mCameraViewport.top),
+                    abs(mCameraViewport.left) + ScreenResolutionX,
+                    abs(mCameraViewport.top) + ScreenResolutionY);
 }
