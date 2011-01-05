@@ -54,6 +54,8 @@ void LevelManager::setCamViewport(const CL_Rectf  &viewport)
 {
     mCameraViewport = viewport;
 
+    // If level texture height is smaller then window resolution, draw texture
+    // At the bottom of the screen
     int delta = mLevelTexture.get_height() - ScreenResolutionY;
     if (delta < 0)
         mCameraViewport.top += abs(delta);
@@ -66,5 +68,16 @@ CL_Rectf LevelManager::getCamViewport()
 
 void LevelManager::translateCamera(float x, float y)
 {
+    // Check X-moving
+    if (mCameraViewport.left + x > 0 ||
+        abs(mCameraViewport.left) - x + ScreenResolutionX > mLevelTexture.get_width())
+        return;
+
+    // Check Y-moving
+    // Uncomment to fix moving up
+    if (/*mCameraViewport.bottom + y > mLevelTexture.get_height() ||*/
+        mCameraViewport.top + y < 0 )
+        return;
+
     mCameraViewport.translate(x, y);
 }

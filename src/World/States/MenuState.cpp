@@ -89,10 +89,10 @@ void MenuState::onKeyDown(const CL_InputEvent &key, const CL_InputState &state)
     }
     else if (key.id == CL_KEY_UP)
     {
-        levelManager().translateCamera(0, -5);
+        levelManager().translateCamera(0, +5);
     }
     else if (key.id == CL_KEY_DOWN)
     {
-        levelManager().translateCamera(0, +5);
+        levelManager().translateCamera(0, -5);
     }
 }
