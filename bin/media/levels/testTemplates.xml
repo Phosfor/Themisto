@@ -17,17 +17,19 @@
    </World>
    <Templates>
     <Include>templates/BaseTemplates.tpl</Include>
+    <Tadam atr="val">tadam-tam-tam</Tadam>
     <Template name="localtp1" >
-        <LocalTemplateTag />
+        <SomeTag>
+            <LocalTemplateTag />
+        </SomeTag>
     </Template>
    </Templates>
-   <SomeTag template="localtp1, includeLevel1, includeLevel2" >
-    <SomeChild template="local/localtp1" >
-        <SomeNestedChild2 template="templates/BaseTemplates.tpl/includeLevel1" />
-        <SomeNestedChild3 template = "templates/BaseTemplates.tpl/includeLevel2"  />
-        <SomeNestedChild4 template="Templates3.tpl/defaultLocation" ></SomeNestedChild4>
-    </SomeChild>
-</SomeTag>
+    <SomeTag template="localtp1" >
+    </SomeTag>
+    <SomeTag template="local/localtp1" />
+    <SomeTag template="templates/BaseTemplates.tpl/includeLevel1" />
+    <SomeTag template = "templates/BaseTemplates.tpl/includeLevel2"  />
+    <SomeTag template="Templates3.tpl/defaultLocation" ></SomeTag>
 </ThemistoLevel>
 
 

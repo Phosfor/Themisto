@@ -40,6 +40,8 @@ class Utils : public boost::serialization::singleton<Utils>
 
         void setMediaFolder(const std::string &path);
         std::string getMediaFolder();
+        std::string getTemplateFolder();
+        std::string getCommonTemplateFile();
 
         // For time measuring
         boost::posix_time::ptime getCurrentTime() const;

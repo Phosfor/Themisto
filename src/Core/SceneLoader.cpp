@@ -191,6 +191,8 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
     try
     {
         document = proc.processTemplates("media/levels/" + sceneName);
+        CL_File writeFile("out.xml", CL_File::create_always, CL_File::access_write);
+        document->save(writeFile);
     }
     catch(CL_Exception& e)
     {

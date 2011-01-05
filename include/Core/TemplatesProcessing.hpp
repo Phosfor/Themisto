@@ -33,10 +33,6 @@
 
 typedef boost::shared_ptr<CL_DomDocument> DocumentPtr;
 
-const std::string TEMPLATES_DIRRECTORY =  utils().getMediaFolder() + "/templates";
-
-const std::string COMMON_TEMPLATES_FILE = TEMPLATES_DIRRECTORY + "/common.tpl";
-
 class TemplatesProcessor
 {
     private:
@@ -71,6 +67,8 @@ class TemplatesProcessor
         DocumentPtr getFileDocument(const std::string& filePath);
 
         void applyTemplate(CL_DomElement* tag, const CL_DomElement& templateTag);
+        void applyParent(CL_DomElement* tag, const CL_DomElement& parentTag);
+        void applyTemplateRecursive(CL_DomElement* tag, const CL_DomElement& templateTag);
         void copyAttributes(CL_DomElement tag, CL_DomElement templateTag);
         bool tagsEquivalent(const CL_DomElement&  tag1, const CL_DomElement& tag2);
 
