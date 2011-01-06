@@ -5,7 +5,7 @@
 
         <Environ active="true">
             <Rain enabled="true" limit="50" />
-            <Clouds enabled="true" limit="15" />
+            <Clouds enabled="true" limit="20" />
             <!--<Lightnings enabled="true" />-->
             <Sky enabled="true" />
             <Moon enabled="true" />

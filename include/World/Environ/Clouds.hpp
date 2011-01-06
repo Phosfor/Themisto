@@ -28,6 +28,7 @@
 #include "Core/ApplicationManager.hpp"
 #include "Core/ResourceManager.hpp"
 #include "World/Environ/Object.hpp"
+#include "Core/LevelManager.hpp"
 
 struct CloudData
 {
@@ -44,10 +45,10 @@ class Clouds : public EnvironObject
         CL_GraphicContext mGC;
         bool mFirstTime;
 
-        void processClouds(CL_GraphicContext &gc, float windPower, uint16_t i);
+        void processClouds(CL_GraphicContext &gc, float windPower, CloudData &current, bool firstTime=false);
 
     public:
-        explicit Clouds(uint16_t maxClouds = 4);
+        explicit Clouds(uint16_t maxClouds = 20);
         void setLimit(uint16_t limit);
         void update(float windPower, float elapsed, float globalTime);
 

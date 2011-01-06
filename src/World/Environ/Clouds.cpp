@@ -21,43 +21,47 @@
 void Clouds::setLimit(uint16_t limit)
 {
    mClouds.resize(limit);
-   if (limit > mMaxObjects && !mFirstTime)
-      for (uint16_t i=0; i < limit-mMaxObjects; i++)
-         processClouds(mGC, environManager().getWindPower(), i);
+
+    if (limit > mMaxObjects)
+      for (uint16_t i=0; i < limit - mMaxObjects; i++)
+          processClouds(mGC, environManager().getWindPower(), mClouds[mMaxObjects + i], false);
 
    mMaxObjects = limit;
 }
 
-void Clouds::processClouds(CL_GraphicContext &gc, float windPower, uint16_t i)
+void Clouds::processClouds(CL_GraphicContext &gc, float windPower, CloudData &current, bool firstTime)
 {
-    mClouds[i].y_offset = rand() % static_cast<uint16_t>((mWindowHeight * 0.05));
+    uint16_t actualSize = levelManager().getForegroundSize();
+    current.y_offset = rand() % (mWindowHeight - (mWindowHeight * actualSize / 100));
+    //current.y_offset = rand() % static_cast<uint16_t>((mWindowHeight * 0.5));
 
-    mClouds[i].x_speed = 0;
+    current.x_speed = 0;
     uint16_t size = resourceManager().sectionHandle("Clouds").get_child_nodes().get_length();
-    mClouds[i].cloudType = rand() % size;
-    mClouds[i].imageHandle = resourceManager().getSprite("Clouds", boost::lexical_cast<std::string>(mClouds[i].cloudType));
+    current.cloudType = rand() % size;
+    current.imageHandle = resourceManager().getSprite("Clouds", boost::lexical_cast<std::string>(current.cloudType));
 
-    if (!mFirstTime)
+    if (!firstTime)
     {
         if (windPower < 0)
-            mClouds[i].x = mWindowWidth;
+            current.x = mWindowWidth;
         else
-            mClouds[i].x = 0 - mClouds[i].imageHandle.get_width();
+            current.x = 0 - current.imageHandle.get_width();
 
-        mClouds[i].timeout = rand() % 300;
+        current.timeout = rand() % 300;
     }
     else
     {
-        mClouds[i].x = rand() % mWindowWidth;
-        mClouds[i].timeout = 0;
+        current.x = rand() % mWindowWidth;
+        current.timeout = 0;
     }
 
     //float alpha = static_cast<float>((rand()%4 + 7)) / 10.0f;
-    float color = static_cast<float>((rand()%1 + 3)) / 10.0f;
-    //mClouds[i].mColor = CL_Colorf(color, color, color, alpha);
-    mClouds[i].mColor = CL_Colorf(color, color, color, 1.2f);
+    //float color = static_cast<float>((rand()%1 + 3)) / 10.0f;
+    //current.mColor = CL_Colorf(color, color, color, alpha);
+    //current.mColor = CL_Colorf(color, color, color, 1.2f);
+    current.mColor = CL_Colorf(42/255.0f, 72/255.0f, 85/255.0f, 1.1f);
 
-    mClouds[i].speed_koef = rand() % 35 + 45;
+    current.speed_koef = rand() % 15 + 25;
 }
 
 Clouds::Clouds(uint16_t maxClouds)
@@ -67,43 +71,40 @@ Clouds::Clouds(uint16_t maxClouds)
 
     mMaxObjects = maxClouds;
     mGC = appManager().getGraphic();
-    mFirstTime = true;
+
+    float windPower = environManager().getWindPower();
+    for (uint16_t i=0; i < mMaxObjects; i++)
+    {
+        mClouds.push_back(CloudData());
+        processClouds(mGC, windPower, mClouds[i], true);
+    }
 }
 
 void Clouds::update(float windPower, float elapsed, float globalTime)
 {
-    if (mFirstTime)
-    {
-        for (uint16_t i=0; i < mMaxObjects; i++)
-        {
-            mClouds.push_back(CloudData());
-            processClouds(mGC, windPower, i);
-        }
-
-        mFirstTime = false;
-    }
-
+    float newSpeed = windPower * elapsed;
     for (uint16_t i=0; i < mMaxObjects; i++)
     {
-        if (mClouds[i].timeout > 0)
+        CloudData &current = mClouds[i];
+        if (current.timeout > 0)
         {
-            mClouds[i].timeout--;
+            current.timeout--;
         }
         else
         {
-            mClouds[i].x += mClouds[i].x_speed * elapsed;
-            mClouds[i].x_speed = mClouds[i].speed_koef * windPower * elapsed;
-
             if (windPower > 0) {
-                if (mClouds[i].x > mWindowWidth)
-                    processClouds(mGC, windPower, i);
+                if (current.x > mWindowWidth)
+                    processClouds(mGC, windPower, current);
             } else {
-                if (mClouds[i].x < -mClouds[i].imageHandle.get_width())
-                    processClouds(mGC, windPower, i);
+                if (current.x < -current.imageHandle.get_width())
+                    processClouds(mGC, windPower, current);
             }
 
-            mClouds[i].imageHandle.set_color(mClouds[i].mColor);
-            mClouds[i].imageHandle.draw(mGC, mClouds[i].x, mClouds[i].y_offset);
+            current.x += current.x_speed * elapsed;
+            current.x_speed = current.speed_koef * newSpeed;
+
+            current.imageHandle.set_color(current.mColor);
+            current.imageHandle.draw(mGC, current.x, current.y_offset);
         }
     }
 }
@@ -118,12 +119,13 @@ CL_Pointf Clouds::getCloudPos()
         if (counter == 4) break;
 
         uint16_t index = rand() % mMaxObjects + 1;
-        if (mClouds[index].x > mWindowWidth*0.1 &&
-            mClouds[index].x < mWindowWidth - mWindowWidth*0.1)
+        CloudData &current = mClouds[index];
+        if (current.x > mWindowWidth*0.1 &&
+            current.x < mWindowWidth - mWindowWidth*0.1)
         {
-            result.x = mClouds[index].x;
-            result.y = mClouds[index].y_offset + 
-                mClouds[index].imageHandle.get_height() / 2.0f;
+            result.x = current.x;
+            result.y = current.y_offset + 
+                current.imageHandle.get_height() / 2.0f;
         }
         else
         {
