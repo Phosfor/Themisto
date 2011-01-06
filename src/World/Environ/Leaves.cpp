@@ -72,6 +72,8 @@ void Leaves::processLeaves(CL_GraphicContext &gc, float windPower, LeafData &cur
     float scale = static_cast<float>(rand()% 55 + 50) / 100.0f;
     current.imageHandle.set_scale(scale, scale);
 
+    current.imageHandle.set_color(CL_Colorf(17/255.0f, 30/255.0f, 35/255.0f));
+
     current.speed_koef = rand()%70 + 50;
 }
 
