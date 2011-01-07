@@ -21,6 +21,7 @@
 #include <Box2D/Box2D.h>
 
 #include "Core/ApplicationManager.hpp"
+#include "Core/LevelManager.hpp"
 #include "Core/Utils.hpp"
 
 struct b2AABB;
