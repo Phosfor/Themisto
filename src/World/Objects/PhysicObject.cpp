@@ -64,7 +64,18 @@ void PhysicObject::step(float32 elapsed)
 CL_Pointf PhysicObject::getPosition()
 {
     b2Vec2 position = mBody->getb2Body()->GetPosition();
-    return CL_Pointf(position.x, position.y);
+    return CL_Pointf(Meters2Pixels(position.x), Meters2Pixels(position.y));
+}
+
+CL_Rectf PhysicObject::getRectangle()
+{
+    b2AABB rect;
+    b2Fixture* fixture = mBody->getb2Body()->GetFixtureList();
+    for(fixture; fixture != NULL; fixture = fixture->GetNext())
+    {
+        rect.Combine(rect, fixture->GetAABB());
+    }
+    return CL_Rectf(rect.upperBound.x, rect.upperBound.y, rect.lowerBound.x, rect.lowerBound.y);
 }
 
 void PhysicObject::update(float elapsed)

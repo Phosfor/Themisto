@@ -58,6 +58,7 @@ class PhysicObject: public Object
         // --- Object implementation ---
         CL_Pointf getPosition();
         void update(float elapsed);
+        CL_Rectf getRectangle();
 };
 
 #endif /* _PHYSIC_OBJECT_HPP_ */

@@ -44,6 +44,7 @@ class Object : public boost::noncopyable
         virtual ObjectTypes getType() { return mType; }
 
         virtual CL_Pointf getPosition() = 0;
+        virtual CL_Rectf getRectangle() = 0;
 
         virtual void update(float elapsed) = 0;
 };
