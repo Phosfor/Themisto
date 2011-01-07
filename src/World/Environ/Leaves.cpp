@@ -23,53 +23,58 @@ void Leaves::setLimit(uint16_t limit)
    mLeaves.resize(limit);
    if (limit > mMaxObjects)
       for (uint16_t i=0; i < limit - mMaxObjects; i++)
-          processLeaves(mGC, 0, mMaxObjects + i);
+          processLeaves(mGC, environManager().getWindPower(), mLeaves[mMaxObjects + i], false);
 
    mMaxObjects = limit;
 }
 
 
-void Leaves::processLeaves(CL_GraphicContext &gc, float windPower, uint16_t i)
+void Leaves::processLeaves(CL_GraphicContext &gc, float windPower, LeafData &current, bool firstTime)
 {
-    mLeaves[i].timer = mLeaves[i].addedAngle = 0;
-    mLeaves[i].x_speed = mLeaves[i].y_speed = 0;
+    current.timer = current.addedAngle = 0;
+    current.x_speed = current.y_speed = 0;
 
-    mLeaves[i].animation = false;
+    current.animation = false;
 
     // Where to create new leaf (refers to the wind blowing direction)
-    if (mFirstTime)
+    if (firstTime)
     {
-        mLeaves[i].x = rand() % mWindowWidth;
-        mLeaves[i].timeout = 0;
+        current.x = rand() % mWindowWidth;
+        current.timeout = 0;
     }
     else
     {
         if (windPower < 0)
-            mLeaves[i].x = mWindowWidth;
+            current.x = mWindowWidth;
         else
-            mLeaves[i].x = 0;
+            current.x = 0;
 
-        mLeaves[i].timeout = rand() % 250;
+        current.timeout = rand() % 250;
     }
 
     // The height where new leaf will be located
-    mLeaves[i].y = mWindowHeight - mWindowHeight*((rand()%6+2)/10.0);
+    current.y = mWindowHeight - mWindowHeight*((rand()%6+2)/10.0);
 
     // Some magic numbers for the leaf trajectory
-    mLeaves[i].k1 = rand() % 30 + 20;
-    mLeaves[i].k2 = (rand() % 7 + 3) / 10.0;
+    current.k1 = rand() % 30 + 20;
+    current.k2 = (rand() % 7 + 3) / 10.0;
 
     // Load some random leaf surface
     uint16_t size = resourceManager().sectionHandle("Leaves").get_child_nodes().get_length();
-    mLeaves[i].leafType = rand() % size;
+    current.leafType = rand() % size;
 
-    mLeaves[i].imageHandle = resourceManager().getSprite("Leaves", boost::lexical_cast<std::string>(mLeaves[i].leafType));
+    current.imageHandle = resourceManager().getSprite("Leaves", boost::lexical_cast<std::string>(current.leafType));
 
     // Rotate leaf surface at some random angle
     uint16_t angle = rand() % 360 + 1;
-    mLeaves[i].imageHandle.set_angle(CL_Angle::from_degrees(angle));
+    current.imageHandle.set_angle(CL_Angle::from_degrees(angle));
 
-    mLeaves[i].speed_koef = rand()%70 + 50;
+    float scale = static_cast<float>(rand()% 55 + 50) / 100.0f;
+    current.imageHandle.set_scale(scale, scale);
+
+    current.imageHandle.set_color(CL_Colorf(17/255.0f, 30/255.0f, 35/255.0f));
+
+    current.speed_koef = rand()%70 + 50;
 }
 
 Leaves::Leaves(uint16_t maxLeaves)
@@ -80,74 +85,73 @@ Leaves::Leaves(uint16_t maxLeaves)
     mMaxObjects = maxLeaves;
 
     functionValue = +1;
+
+    float windPower = environManager().getWindPower();
+    for (uint16_t i=0; i < mMaxObjects; ++i)
+    {
+        mLeaves.push_back(LeafData());
+        processLeaves(mGC, windPower, mLeaves[i], true);
+    }
 }
 
 void Leaves::update(float windPower, float elapsed, float globalTime)
 {
-    // Init pack part of leaves
-    if (mFirstTime)
-    {
-        for (uint16_t i=0; i < mMaxObjects; ++i)
-        {
-            mLeaves.push_back(LeafData());
-            processLeaves(mGC, windPower, i);
-        }
-        mFirstTime = false;
-    }
-
+    float newSpeed1 = windPower * elapsed;
+    float newSpeed2 = Gravity * 5 * elapsed;
     for (uint16_t i=0; i < mMaxObjects; i++)
     {
-        if (mLeaves[i].timeout > 0)
+        LeafData &current = mLeaves[i];
+        if (current.timeout > 0)
         {
-            mLeaves[i].timeout--;
+            current.timeout--;
         }
         else
         {
-            mLeaves[i].x += mLeaves[i].x_speed * elapsed;
-            mLeaves[i].y += mLeaves[i].y_speed * elapsed;
+            if (windPower > 0) {
+                if (current.x > mWindowWidth + 10 || current.y > mWindowHeight) 
+                    processLeaves(mGC, windPower, current);
+            } else {
+                if (current.x < -current.imageHandle.get_width() || current.y > mWindowHeight)
+                    processLeaves(mGC, windPower, current);
+            }
 
-            float y = mLeaves[i].k1 * sinf(mLeaves[i].k2 * Deg2Rad(mLeaves[i].x)) + mLeaves[i].y;
+            current.x += current.x_speed * elapsed;
+            current.y += current.y_speed * elapsed;
 
-            float tempValue = mLeaves[i].k1 * mLeaves[i].k2 * cosf(mLeaves[i].k2 * Deg2Rad(mLeaves[i].x));
+            float y = current.k1 * sinf(current.k2 * Deg2Rad(current.x)) + current.y;
+
+            float tempValue = current.k1 * current.k2 * cosf(current.k2 * Deg2Rad(current.x));
 
             if (tempValue * functionValue < 0)
             {
-                mLeaves[i].animation = true;
+                current.animation = true;
             }
             functionValue = tempValue;
 
-            if (mLeaves[i].animation)
+            if (current.animation)
             {
-                mLeaves[i].timer += elapsed * 1000.0;
-                if (mLeaves[i].timer >= 100)
+                current.timer += elapsed * 1000.0;
+                if (current.timer >= 100)
                 {
                     uint16_t angle = rand() % 15 + 5;
-                    mLeaves[i].addedAngle += angle;
+                    current.addedAngle += angle;
 
-                    mLeaves[i].imageHandle.rotate_pitch(CL_Angle::from_degrees(angle));
+                    current.imageHandle.rotate_pitch(CL_Angle::from_degrees(angle));
 
-                    mLeaves[i].timer = 0;
+                    current.timer = 0;
 
-                    if (mLeaves[i].addedAngle >= 180)
+                    if (current.addedAngle >= 180)
                     {
-                        mLeaves[i].animation = false;
-                        mLeaves[i].addedAngle = 0;
+                        current.animation = false;
+                        current.addedAngle = 0;
                     }
                 }
             }
 
-            if (windPower > 0) {
-                if (mLeaves[i].x > mWindowWidth + 10 || mLeaves[i].y > mWindowHeight) 
-                    processLeaves(mGC, windPower, i);
-            } else {
-                if (mLeaves[i].x < -mLeaves[i].imageHandle.get_width() || mLeaves[i].y > mWindowHeight)
-                    processLeaves(mGC, windPower, i);
-            }
+            current.x_speed = current.speed_koef * newSpeed1;
+            current.y_speed = newSpeed2;
 
-            mLeaves[i].x_speed = mLeaves[i].speed_koef * windPower * elapsed;
-            mLeaves[i].y_speed = Gravity * elapsed;
-
-            mLeaves[i].imageHandle.draw(mGC, mLeaves[i].x, y);
+            current.imageHandle.draw(mGC, current.x, y);
         }
     }
 }

@@ -25,6 +25,7 @@
 #include "Core/Utils.hpp"
 #include "Core/ApplicationManager.hpp"
 #include "Core/ResourceManager.hpp"
+#include "Core/EnvironManager.hpp"
 #include "World/Environ/Object.hpp"
 
 struct LeafData
@@ -47,7 +48,7 @@ class Leaves : public EnvironObject
 
         CL_GraphicContext mGC;
 
-        void processLeaves(CL_GraphicContext &gc, float windPower, uint16_t i);
+        void processLeaves(CL_GraphicContext &gc, float windPower, LeafData &current, bool firstTime = false);
 
     public:
         explicit Leaves(uint16_t maxLeaves = 5);
