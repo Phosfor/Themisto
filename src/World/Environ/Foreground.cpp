@@ -11,5 +11,5 @@ void Foreground::update(float windPower, float elapsed, float globalTime)
 {
     float yPos = 0.0f;
     if (!levelManager().getForegroundFixed()) yPos = levelManager().getCamViewport().top;
-    mForeground.draw(mGC, levelManager().getCamViewport().left, yPos);
+    mForeground.draw(mGC, levelManager().getCamViewport().left * 0.5, yPos);
 }
