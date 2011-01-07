@@ -56,7 +56,7 @@ std::string evalute::evalute_state(Watch* watch)
 {
     std::string name = watch->MemberName;
     std::string result = "Error, member not found";
-    BodyState* m = boost::get<BodyState*>(watch->Object); 
+    BodyState* m = boost::get<BodyState*>(watch->Object);
     if(name == "IsFrozen") result = FloatToStr(m->IsFrozen);
     else if(name == "KindleLevel") result = FloatToStr(m->KindleLevel);
     else if(name == "CarbonizeLevel") result = FloatToStr(m->CarbonizeLevel);
@@ -69,7 +69,7 @@ std::string evalute::evalute_b2Fixture(Watch* watch)
 {
     std::string name = watch->MemberName;
     std::string result = "";
-    b2Fixture* m = boost::get<b2Fixture*>(watch->Object); 
+    b2Fixture* m = boost::get<b2Fixture*>(watch->Object);
 
     std::string shapeTypePrefix = "", shapeVetexCountPrefix = "",
         shapeVerticesPrefix = "", shapeRadiusPrefix = "", shapeCenterPrefix = "";
@@ -96,7 +96,7 @@ std::string evalute::evalute_b2Fixture(Watch* watch)
     }
     if(name == "Shape.Center" || shape)
     {
-        if(xshape->GetType() == b2Shape::e_circle) 
+        if(xshape->GetType() == b2Shape::e_circle)
         {
             b2CircleShape* cshape= reinterpret_cast<b2CircleShape*>(xshape);
             result += shapeCenterPrefix + VectorToStr(cshape->m_p);
@@ -115,7 +115,7 @@ std::string evalute::evalute_b2Fixture(Watch* watch)
             b2PolygonShape* pshape= reinterpret_cast<b2PolygonShape*>(xshape);
             result += shapeVetexCountPrefix + IntToStr(pshape->m_vertexCount);
         }
-        else 
+        else
         {
             if(!shape)
             {
@@ -135,7 +135,7 @@ std::string evalute::evalute_b2Fixture(Watch* watch)
                 result += " ";
             }
         }
-        else 
+        else
         {
             if(!shape)
             {
@@ -155,15 +155,15 @@ std::string evalute::evalute_b2Fixture(Watch* watch)
         filterMaskPrefix = ", MaskBits = ";
         filterGroupPrefix = ", GroupIndex = ";
     }
-    if( name == "Filter.CategoryBits" || filter) 
+    if( name == "Filter.CategoryBits" || filter)
         result += filterCategoryPrefix + IntToStr(m->GetFilterData().categoryBits);
-    if( name == "Filter.MaskBits" || filter) 
+    if( name == "Filter.MaskBits" || filter)
         result += filterMaskPrefix + HexToStr(m->GetFilterData().maskBits);
-    if( name == "Filter.GroupIndex") 
+    if( name == "Filter.GroupIndex")
         result += filterGroupPrefix + IntToStr(m->GetFilterData().groupIndex);
     if(filter)
     {
-        result += " }";  
+        result += " }";
     }
     else if(name == "ParentBody")
     {
@@ -187,7 +187,7 @@ std::string evalute::evalute_b2Fixture(Watch* watch)
     }
     if( name == "Mass.Value" || mass) result += massValuePrefix + FloatToStr(massData.mass);
     if( name == "Mass.Center" || mass) result += massCenterPrefix + VectorToStr(massData.center);
-    if( name == "Mass.RotationInertia" || mass) 
+    if( name == "Mass.RotationInertia" || mass)
         result += massRotationInertiaPrefix + FloatToStr(massData.I);
     if(mass) result += " }";
 
@@ -219,7 +219,7 @@ std::string evalute::evalute_b2Body(Watch* watch)
 {
     std::string name = watch->MemberName;
     std::string result = "";
-    b2Body* body = boost::get<b2Body*>(watch->Object); 
+    b2Body* body = boost::get<b2Body*>(watch->Object);
 
     if( name == "Type")
     {
@@ -260,7 +260,7 @@ std::string evalute::evalute_b2Body(Watch* watch)
     }
     if( name == "Mass.Value" || mass) result += massValuePrefix + FloatToStr(massData.mass);
     if( name == "Mass.Center" || mass) result += massCenterPrefix + VectorToStr(massData.center);
-    if( name == "Mass.RotationInertia" || mass) 
+    if( name == "Mass.RotationInertia" || mass)
         result += massRotationInertiaPrefix + FloatToStr(massData.I);
     if(mass) result += " }";
 
@@ -273,10 +273,9 @@ std::string evalute::evalute_BodyPart(Watch* watch)
 {
     std::string name = watch->MemberName;
     std::string result = "";
-    BodyPart* part = boost::get<BodyPart*>(watch->Object); 
+    BodyPart* part = boost::get<BodyPart*>(watch->Object);
 
-    if( name == "IsDefaultMaterial") result = BoolToStr(part->IsDefaultMaterial());
-    else if( name == "MaxKindleLevel") result = FloatToStr(part->getMaxKindleLevel());
+    if( name == "MaxKindleLevel") result = FloatToStr(part->getMaxKindleLevel());
     else if( name == "MaxDampness") result = FloatToStr(part->getMaxDampness());
     else if( name == "AcceptsCord") result = BoolToStr(part->getAcceptsCord());
     else if( name == "Name") result = part->getName();
@@ -289,9 +288,8 @@ std::string evalute::evalute_Body(Watch* watch)
 {
     std::string name = watch->MemberName;
     std::string result = "";
-    Body* body = boost::get<Body*>(watch->Object); 
-    if( name == "Buoyancy") result = FloatToStr(body->getBuoyancy());
-    else if( name == "Name") result = body->getName();
+    Body* body = boost::get<Body*>(watch->Object);
+    if( name == "Name") result = body->getName();
 
     if(result == "") result = "Can't evalute";
     return result;
@@ -301,7 +299,7 @@ std::string evalute::evalute_EnvironObject(Watch* watch)
 {
     std::string name = watch->MemberName;
     std::string result = "";
-    EnvironObject* obj = boost::get<EnvironObject*>(watch->Object); 
+    EnvironObject* obj = boost::get<EnvironObject*>(watch->Object);
     if(name == "Enabled") result = BoolToStr(obj->getEnabled());
     else if(name == "Limit") result = IntToStr(obj->getLimit());
 
@@ -313,6 +311,6 @@ std::string evalute::evalute_EnvironObject(Watch* watch)
 
 std::string evalute::evalute_elapsed(Watch* watch)
 {
-    ApplicationManager* app = boost::get<ApplicationManager*>(watch->Object); 
+    ApplicationManager* app = boost::get<ApplicationManager*>(watch->Object);
     return IntToStr(app->getElapsed());
 }

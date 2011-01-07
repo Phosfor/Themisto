@@ -22,13 +22,13 @@
 #include <list>
 
 #include <boost/lexical_cast.hpp>
+#include <boost/shared_ptr.hpp>
 #include <Box2D/Collision/Shapes/b2PolygonShape.h>
 #include <Box2D/Common/b2Math.h>
 #include <Box2D/Box2D.h>
 #include <ClanLib/core.h>
 
 #include "World/WorldManager.hpp"
-#include "Physic/AreaManager.hpp"
 #include "Core/PhysicManager.hpp"
 #include "Core/EnvironManager.hpp"
 #include "Core/ObjectsManager.hpp"
@@ -48,9 +48,7 @@ class Body
         b2AABB mLastLocation;
         b2AABB calculateLocation();
         std::string mName;
-
-        // 0 - body will sink, more - stronger force would pop body from water
-        float mBuoyancy;
+        std::vector< boost::shared_ptr<BodyPart> > mParts;
 
     protected:
 
@@ -66,16 +64,15 @@ class Body
 
         // TODO: Move implementation into cpp!
         b2Body* getb2Body();
-        float getBuoyancy() { return mBuoyancy; }
-        void setBuoyancy(float value) { mBuoyancy = value; }
-        std::string getName() { return mName; }
-        void setName(const std::string &name) { mName = name; }
+        std::string getName();
+        void setName(const std::string &name);
+        std::vector< boost::shared_ptr<BodyPart> > getParts();
 
         void step(float32 elapsed);
 
         // Should body free memory under mBody object at destroing
         // Default is true
-        bool mShouldFreeB2Body; 
+        bool mShouldFreeB2Body;
 };
 
 #endif /* _PHYSIC_BODY_HPP_ */

@@ -24,19 +24,19 @@
 #include "Core/ResourceManager.hpp"
 #include "Core/ApplicationManager.hpp"
 
-class Body;
+#include "Physic/Body.hpp"
+
 class BodyState;
+
 class BodyVisual
 {
     private:
-        BodyState *mBodyState;
         CL_Sprite mImageHandle;
         bool mHasVisual;
-        Body *mParentBody;
+        boost::shared_ptr<Body> mParentBody;
 
     public:
         BodyVisual();
-        void setBodyState(BodyState *state);
         bool getVisualState();
         void setVisualState(bool state);
 
@@ -45,7 +45,7 @@ class BodyVisual
         std::string mTextureName, mSectionName;
 
         void redrawBody();
-        void configureVisual(Body *parent);
+        void configureVisual(boost::shared_ptr<Body> parent);
 };
 
 #endif /* _BODY_VISUAL_HPP_ */

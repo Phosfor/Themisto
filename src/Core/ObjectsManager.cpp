@@ -33,7 +33,7 @@ void ObjectsManager::update()
     }
 }
 
-void ObjectsManager::addObject(const std::string &name, Object *obj)
+void ObjectsManager::addObject(const std::string &name, boost::shared_ptr<Object> obj)
 {
     if (mObjects.find(name) == mObjects.end())
     {

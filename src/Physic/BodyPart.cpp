@@ -17,46 +17,21 @@
 
 #include "Physic/BodyPart.hpp"
 
-#include "Physic/BodyMaterial.hpp"
-#include "Physic/BodyState.hpp"
-#include "Physic/BodyVisual.hpp"
-#include "Physic/Impact.hpp"
 
-BodyPart::BodyPart(b2Fixture* fixture, BodyMaterial* material)
+
+BodyPart::BodyPart(b2Fixture* fixture, boost::shared_ptr<BodyMaterial> material)
 {
     mFixture = fixture;
-
     fixture->SetUserData(this);
-    mAppliedImpacts = new std::list<Impact*>;
-    mIsDefaultMaterial = true;
-    mShouldFreeBodyMaterial =false;
     mMaterial = material;
     mParentWorld = mFixture->GetBody()->GetWorld();
-    mState = new BodyState;
+    mState = boost::shared_ptr<BodyState>(new BodyState());
     world= &worldManager();
-    mStaticCollisions = new std::list<BodyPart*>;
-    mContactImpacts = new std::map<b2Fixture*, Impact*>;
-    mRainImpact = NULL;
-    mWindImpact = NULL;
-    findStaticCollisions();
+    //findStaticCollisions();
     mName = world->generateUniqueID();
     mMaxKindleLevel = 0;
     mMaxDampness = 0;
-    mAcceptsCord = 0;
-}
-
-BodyPart::~BodyPart()
-{
-    delete mAppliedImpacts;
-    delete mState;
-    delete mStaticCollisions;
-    if(mShouldFreeBodyMaterial) delete mMaterial;
-    for(std::map<b2Fixture*, Impact*>::iterator i = mContactImpacts->begin();
-            i != mContactImpacts->end(); ++i)
-    {
-        delete (*i).second;
-    }
-    delete mContactImpacts;
+    mAcceptsCord = false;
 }
 
 void BodyPart::findStaticCollisions()
@@ -67,21 +42,21 @@ void BodyPart::findStaticCollisions()
     {
         if(b2TestOverlap(mFixture->GetShape(), fixture->GetShape(), t, t))
         {
-            mStaticCollisions->push_front(reinterpret_cast<BodyPart*>(fixture->GetUserData()));
+            mStaticCollisions.push_front(reinterpret_cast<BodyPart*>(fixture->GetUserData()));
         }
     }
 }
 
-void BodyPart::applyRainImpact(Impact *impact)
+void BodyPart::applyRainImpact(boost::shared_ptr<Impact> impact)
 {
     mRainImpact = impact;
 }
-void BodyPart::applyWindImpact(Impact *impact)
+void BodyPart::applyWindImpact(boost::shared_ptr<Impact> impact)
 {
     mWindImpact = impact;
 }
 
-BodyState* BodyPart::getState()
+boost::shared_ptr<BodyState> BodyPart::getState()
 {
     return mState;
 }
@@ -92,25 +67,24 @@ b2Fixture* BodyPart::getFixture()
     return mFixture;
 }
 
-void BodyPart::setMaterial(BodyMaterial *material, bool isDefault)
+void BodyPart::setMaterial(boost::shared_ptr<BodyMaterial> material)
 {
     mMaterial = material;
-    mIsDefaultMaterial = isDefault;
 }
 
-BodyMaterial* BodyPart::getMaterial()
+boost::shared_ptr<BodyMaterial> BodyPart::getMaterial()
 {
     return mMaterial;
 }
 
-void BodyPart::applyImpact(Impact* impact)
+void BodyPart::applyImpact(boost::shared_ptr<Impact> impact)
 {
-    mAppliedImpacts->push_front(impact);
+    mAppliedImpacts.push_front(impact);
 }
 
-void BodyPart::cancelImpact(Impact* impact)
+void BodyPart::cancelImpact(boost::shared_ptr<Impact> impact)
 {
-    mAppliedImpacts->remove(impact);
+    mAppliedImpacts.remove(impact);
 }
 
 
@@ -125,16 +99,16 @@ void BodyPart::step(float32 _elapsed)
 void BodyPart::calculateThermalTransmissions()
 {
     // Between body parts
-   for(std::list<BodyPart*>::iterator it = mStaticCollisions->begin();
-           it != mStaticCollisions->end(); ++it)
+   for(std::list< BodyPart* >::iterator it = mStaticCollisions.begin();
+           it != mStaticCollisions.end(); ++it)
    {
        calculateThermalTransmission(*it);
    }
 
    // Between other fixtures
    // Reset all impacts
-   for(std::map<b2Fixture*, Impact*>::iterator it = mContactImpacts->begin();
-           it != mContactImpacts->end(); ++it)
+   for(std::map<b2Fixture*, boost::shared_ptr<Impact> >::iterator it = mContactImpacts.begin();
+           it != mContactImpacts.end(); ++it)
    {
        it->second->Intensity = 0;
    }
@@ -152,32 +126,31 @@ void BodyPart::calculateThermalTransmissions()
        }
    }
    // Reset impacts for contacts, that no more exists
-   for(std::map<b2Fixture*, Impact*>::iterator it = mContactImpacts->begin(); 
-           it != mContactImpacts->end(); ++it)
+   for(std::map<b2Fixture*, boost::shared_ptr<Impact> >::iterator it = mContactImpacts.begin();
+           it != mContactImpacts.end(); ++it)
    {
        if(it->second->Intensity == 0)
        {
            (reinterpret_cast<BodyPart*>(it->first->GetUserData()))->cancelImpact(it->second);
-           delete it->second;
-           mContactImpacts->erase(it);
+           mContactImpacts.erase(it);
        }
    }
 }
 
 void BodyPart::calculateThermalTransmission(BodyPart* p)
 {
-      Impact* impact;
-      std::map<b2Fixture*, Impact*>::iterator el = mContactImpacts->find(p->mFixture);
+      boost::shared_ptr<Impact> impact;
+      std::map< b2Fixture*, boost::shared_ptr<Impact> >::iterator el = mContactImpacts.find(p->mFixture);
 
-      if(el != mContactImpacts->end())
+      if(el != mContactImpacts.end())
       {
           impact = el->second;
       }
       else
       {
           ImpactTypes type = (p->mState->Temperature > mState->Temperature)? Heat : Cool;
-          impact = new Impact(type);
-          mContactImpacts->insert(std::pair<b2Fixture*, Impact*>(p->mFixture,impact));
+          impact = boost::shared_ptr<Impact>(new Impact(type));
+          mContactImpacts.insert(std::pair< b2Fixture*, boost::shared_ptr<Impact> >(p->mFixture,impact));
           p->applyImpact(impact);
       }
       impact->Intensity = abs(p->mState->Temperature - mState->Temperature);
@@ -185,8 +158,8 @@ void BodyPart::calculateThermalTransmission(BodyPart* p)
 }
 void BodyPart::calculateImpacts(float32 elapsed)
 {
-    for(std::list<Impact*>::iterator impact = mAppliedImpacts->begin();
-      impact != mAppliedImpacts->end(); ++impact)
+    for(std::list< boost::shared_ptr<Impact> >::iterator impact = mAppliedImpacts.begin();
+      impact != mAppliedImpacts.end(); ++impact)
     {
         switch((*impact)->Type)
         {
@@ -236,7 +209,7 @@ void BodyPart::calculateInfluences(float32 elapsed)
     {
         mState->Dampness -= elapsed * mState->Temperature * mMaterial->InflTemperatureToDampness;
 
-            float friction = mFixture->GetFriction() - 
+            float friction = mFixture->GetFriction() -
                 mState->Dampness * mMaterial->InflDampnessToFriction;
             mFixture->SetFriction(friction);
     }
@@ -256,7 +229,7 @@ void BodyPart::calculateInfluences(float32 elapsed)
         mState->CarbonizeLevel * mMaterial->InflCarbonizeLevelToElecticalConductivity;
 }
 
-void BodyPart::calculateMoistenImpact(Impact* impact, float32 elapsed)
+void BodyPart::calculateMoistenImpact(boost::shared_ptr<Impact> impact, float32 elapsed)
 {
     mState->Dampness += impact->Intensity * elapsed * mMaterial->DampReceptivity;
     if(mState->Dampness > mCurrentMaxDampness)
@@ -268,7 +241,7 @@ void BodyPart::calculateMoistenImpact(Impact* impact, float32 elapsed)
         mState->KindleLevel -= impact->Intensity * elapsed * mMaterial->InflMoistenToKindleLevel;
     }
 }
- void BodyPart::calculateHeatImpact(Impact* impact, float32 elapsed)
+ void BodyPart::calculateHeatImpact(boost::shared_ptr<Impact> impact, float32 elapsed)
 {
     if(mState->KindleLevel == 0)
     {
@@ -300,7 +273,7 @@ void BodyPart::calculateMoistenImpact(Impact* impact, float32 elapsed)
         }
     }
 }
- void BodyPart::calculateCoolImpact(Impact* impact, float32 elapsed)
+ void BodyPart::calculateCoolImpact(boost::shared_ptr<Impact> impact, float32 elapsed)
 {
     if(mState->KindleLevel == 0)
     {
@@ -316,11 +289,11 @@ void BodyPart::calculateMoistenImpact(Impact* impact, float32 elapsed)
         }
     }
 }
- void BodyPart::calculateWindImpact(Impact* impact, float32 elapsed)
+ void BodyPart::calculateWindImpact(boost::shared_ptr<Impact> impact, float32 elapsed)
 {
 
 }
- void BodyPart::calculateElectricityImpact(Impact* impact, float32 elapsed)
+ void BodyPart::calculateElectricityImpact(boost::shared_ptr<Impact> impact, float32 elapsed)
 {
 
 }

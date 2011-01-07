@@ -25,20 +25,16 @@ void WorldManager::initWorld()
 
 WorldManager::WorldManager()
 {
-    mDefaultMaterial = new BodyMaterial;
+    mDefaultMaterial = boost::shared_ptr<BodyMaterial>(new BodyMaterial);
     mEnvironTemperature = 20;
     mUniqueIDCounter = 0;
 }
 
-WorldManager::~WorldManager()
-{
-    delete mDefaultMaterial;
-}
 
 std::string WorldManager::generateUniqueID()
 {
     ++mUniqueIDCounter;
     std::ostringstream out;
     out << "#" << mUniqueIDCounter;
-    return out.str(); 
+    return out.str();
 }

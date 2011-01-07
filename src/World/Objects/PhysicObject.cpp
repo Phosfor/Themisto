@@ -24,31 +24,23 @@
 #include "Physic/Impact.hpp"
 #include "Physic/BodyMaterial.hpp"
 
-void PhysicObject::setVisual(BodyVisual *visualiser) { mBodyVisual = visualiser; }
-BodyVisual &PhysicObject::getVisual() { return *mBodyVisual; }
-void PhysicObject::setBody(Body *body) { mBody = body; }
-Body &PhysicObject::getBody() { return *mBody; }
+void PhysicObject::setVisual(boost::shared_ptr<BodyVisual> visualiser) { mBodyVisual = visualiser; }
+boost::shared_ptr<BodyVisual> PhysicObject::getVisual() { return mBodyVisual; }
+void PhysicObject::setBody(boost::shared_ptr<Body> body) { mBody = body; }
+boost::shared_ptr<Body> PhysicObject::getBody() { return mBody; }
 
-PhysicObject::PhysicObject(Body* body, BodyVisual* visual)
+PhysicObject::PhysicObject(boost::shared_ptr<Body> body, boost::shared_ptr<BodyVisual> visual)
 {
     mBody = body;
     mBodyVisual = visual;
     if (mBodyVisual->getVisualState()) mBodyVisual->configureVisual(body);
     mName = worldManager().generateUniqueID();
     mType = PhysicBodyObject;
-    mShouldFreeBodyVisual = mShouldFreeBody = true;
 }
-
-PhysicObject::~PhysicObject()
-{
-    if(mShouldFreeBodyVisual && mBodyVisual != NULL) delete mBodyVisual;
-    if(mShouldFreeBody && mBody != NULL) delete mBody;
-}
-
 
 void PhysicObject::updateVisual()
 {
-    if(mBodyVisual != NULL)
+    if(mBodyVisual)
     {
         if (mBodyVisual->getVisualState()) mBodyVisual->redrawBody();
     }
@@ -59,7 +51,7 @@ void PhysicObject::updateVisual()
 }
 void PhysicObject::step(float32 elapsed)
 {
-    if(mBody != NULL)
+    if(mBody)
     {
         mBody->step(elapsed);
     }
@@ -85,21 +77,19 @@ void PhysicObject::update(float elapsed)
 // ---------------------------- PARSING ----------------------------
 // -----------------------------------------------------------------
 
-Object* PhysicObject::ParsePhysicObject(CL_DomElement* tag, std::string& desc)
+boost::shared_ptr<Object> PhysicObject::ParsePhysicObject(CL_DomElement* tag, std::string& desc)
 {
     using namespace boost;
 
-    // Possible memory leack! Returning object without freeing it.
-    // TODO: Replace with shared pointer
-    BodyVisual* visualHandle = new BodyVisual();
+    boost::shared_ptr<BodyVisual> visualHandle = boost::shared_ptr<BodyVisual>(new BodyVisual());
 
     // Parsing visuals
     {
         CL_DomNodeList VisualTags = tag->get_elements_by_tag_name("Visual");
         if(VisualTags.get_length() > 1 /*|| VisualTags.get_length() == 0*/)
         {
-            desc += "Error: One, and only one tag Visual must be in Object.";
-            return NULL;
+            desc += "Error: only one tag Visual may be in Object.";
+            return boost::shared_ptr<Object>();
         }
 
         if (VisualTags.get_length() != 0)
@@ -137,22 +127,21 @@ Object* PhysicObject::ParsePhysicObject(CL_DomElement* tag, std::string& desc)
    if(BodyTags.get_length() > 1 || BodyTags.get_length() == 0)
    {
        desc += "Error: one and only one tag Body can appear in Object.";
-       return NULL;
+       return boost::shared_ptr<Object>();
    }
    CL_DomElement body = BodyTags.item(0).to_element();
 
-    // TODO: Make shared pointer here!!!
     // Physic body variables
     b2Body *b2body = NULL;
     b2BodyDef bdef;
-    Body *bodyHandle = NULL;
+    boost::shared_ptr<Body> bodyHandle;
 
     // b2Body tag
     CL_DomNodeList b2BodyTags = body.get_elements_by_tag_name("b2Body");
     if(b2BodyTags.get_length() > 1 || b2BodyTags.get_length() == 0)
     {
         desc += "Error: One, and only one tag b2Body must be in Body.";
-        return NULL;
+        return boost::shared_ptr<Object>();
     }
     CL_DomElement b2BodyTag = b2BodyTags.item(0).to_element();
     CL_DomNodeList b2BodyTagList = b2BodyTag.get_child_nodes();
@@ -263,7 +252,7 @@ Object* PhysicObject::ParsePhysicObject(CL_DomElement* tag, std::string& desc)
     }
 
     b2body = physicManager().getWorld().CreateBody(&bdef);
-    bodyHandle = new Body(b2body);
+    bodyHandle = boost::shared_ptr<Body>(new Body(b2body));
 
     // Go through all physic parts
     CL_DomNodeList parts = body.get_elements_by_tag_name("Part");
@@ -275,9 +264,9 @@ Object* PhysicObject::ParsePhysicObject(CL_DomElement* tag, std::string& desc)
 
         //b2Vec2* normals = NULL;
         b2Fixture *fixture = NULL;
-        BodyMaterial *materialHandle = NULL;
-        BodyState *stateHandle = NULL;
-        BodyPart *partHandle = NULL;
+        boost::shared_ptr<BodyMaterial> materialHandle;
+        boost::shared_ptr<BodyState> stateHandle;
+        boost::shared_ptr<BodyPart> partHandle;
         b2Filter filter;
 
         // Parse b2Fixture
@@ -286,7 +275,7 @@ Object* PhysicObject::ParsePhysicObject(CL_DomElement* tag, std::string& desc)
         if(b2FixtureTags.get_length() > 1 || b2FixtureTags.get_length() == 0)
         {
             desc += "Error: one and only one b2Fixture tag can appear in Part.";
-            return NULL;
+            return boost::shared_ptr<Object>();
         }
         else
         {
@@ -366,7 +355,7 @@ Object* PhysicObject::ParsePhysicObject(CL_DomElement* tag, std::string& desc)
                     if(TypeTags.get_length() > 1 || TypeTags.get_length() == 0)
                     {
                         desc += "Error: one and only one tag Type can appear in Shape.";
-                        return NULL;
+                        return boost::shared_ptr<Object>();
                     }
                     CL_DomElement type = TypeTags.item(0).to_element();
                     if (type.get_text() == "e_circle")
@@ -462,7 +451,9 @@ Object* PhysicObject::ParsePhysicObject(CL_DomElement* tag, std::string& desc)
             }
 
             fixture = b2body->CreateFixture(&fixdef);
-            partHandle = new BodyPart(fixture, worldManager().mDefaultMaterial);
+            partHandle = boost::shared_ptr<BodyPart>(
+                new BodyPart(fixture, worldManager().mDefaultMaterial));
+            bodyHandle->getParts().push_back(partHandle);
         }
 
         // Go through Part children
@@ -543,26 +534,24 @@ Object* PhysicObject::ParsePhysicObject(CL_DomElement* tag, std::string& desc)
         if(matList.get_length() > 1)
         {
             desc += "Error: only one Material tag can apear in Part.";
-            return NULL;
+            return boost::shared_ptr<Object>();
         }
 
         // The material tag doesn't exist
         if (matList.get_length() <= 0)
         {
             materialHandle = worldManager().mDefaultMaterial;
-            partHandle->mShouldFreeBodyMaterial = false;
         }
         else
         {
-            materialHandle = new BodyMaterial();
-            partHandle->mShouldFreeBodyMaterial = true;
+            materialHandle = boost::shared_ptr<BodyMaterial>(new BodyMaterial());
             CL_DomElement matElement = matList.item(0).to_element(); // item(0) is ok
 
             CL_DomNodeList NameTags = matElement.get_elements_by_tag_name("Name");
             if(NameTags.get_length() > 1)
             {
                 desc += "Error: only one tag Name can appear in Material.";
-                return NULL;
+                return boost::shared_ptr<Object>();
             }
             else if(NameTags.get_length() > 0)
             {
@@ -676,9 +665,9 @@ Object* PhysicObject::ParsePhysicObject(CL_DomElement* tag, std::string& desc)
             } // for (int i=0; i < matChildList.get_length(); ++i)
         } // if (matList.get_length() <= 0)
 
-        partHandle->setMaterial(materialHandle, materialHandle == worldManager().mDefaultMaterial );
+        partHandle->setMaterial(materialHandle);
     } // for (int i=0; i < parts.get_length(); ++i)
 
-    return new PhysicObject(bodyHandle, visualHandle);
+    return boost::shared_ptr<PhysicObject>(new PhysicObject(bodyHandle, visualHandle));
 }
 

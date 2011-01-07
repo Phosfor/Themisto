@@ -28,7 +28,7 @@
 #include "Core/SceneLoader.hpp"
 #include "Core/PhysicManager.hpp"
 #include "Core/LevelManager.hpp"
-#include "Physic/AreaManager.hpp"
+
 
 class DebugDragAndDrop;
 class DebugDraw;

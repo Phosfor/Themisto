@@ -19,6 +19,7 @@
 #define _WORLD_MANAGER_HPP_
 
 #include <boost/serialization/singleton.hpp>
+#include <boost/shared_ptr.hpp>
 #include <sstream>
 
 class BodyMaterial;
@@ -28,12 +29,11 @@ class WorldManager : public boost::serialization::singleton<WorldManager>
         int mUniqueIDCounter;
 
     public:
-        BodyMaterial *mDefaultMaterial; // Sharing default material for memory economy reason
+        boost::shared_ptr<BodyMaterial> mDefaultMaterial; // Sharing default material for memory economy reason
         float mEnvironTemperature;
 
         void initWorld();
         WorldManager();
-        ~WorldManager();
         std::string generateUniqueID();
 };
 

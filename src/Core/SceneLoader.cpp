@@ -171,7 +171,7 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
             // TODO: Call template parsing here...
 
             std::string desc = "";
-            Object* object = typesManager().parseObject(&tag, type, desc);
+            boost::shared_ptr<Object> object = typesManager().parseObject(&tag, type, desc);
             object->setIndex(z_index);
             if(object != NULL)
             {

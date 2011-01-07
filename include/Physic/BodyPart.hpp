@@ -27,9 +27,13 @@
 #include <Box2D/Collision/Shapes/b2PolygonShape.h>
 #include <Box2D/Common/b2Math.h>
 #include <Box2D/Collision/b2Collision.h>
+#include <boost/shared_ptr.hpp>
 
 #include "World/WorldManager.hpp"
-#include "Physic/AreaManager.hpp"
+#include "Physic/BodyMaterial.hpp"
+#include "Physic/BodyState.hpp"
+#include "Physic/BodyVisual.hpp"
+#include "Physic/Impact.hpp"
 
 class BodyMaterial;
 class Impact;
@@ -40,15 +44,15 @@ class BodyPart
 {
     protected:
         b2Fixture* mFixture;
-        BodyState* mState;
-        std::list<Impact*> *mAppliedImpacts;
+        boost::shared_ptr<BodyState> mState;
+        std::list< boost::shared_ptr<Impact> > mAppliedImpacts;
         b2World *mParentWorld;
-        Impact* mRainImpact;
-        Impact* mWindImpact;
+        boost::shared_ptr<Impact> mRainImpact;
+        boost::shared_ptr<Impact> mWindImpact;
         WorldManager* world;
-        std::list<BodyPart*> *mStaticCollisions;
-        std::map<b2Fixture*, Impact*>* mContactImpacts;
-        BodyMaterial *mMaterial;
+        std::list< BodyPart* > mStaticCollisions;
+        std::map<b2Fixture*, boost::shared_ptr<Impact> > mContactImpacts;
+        boost::shared_ptr<BodyMaterial> mMaterial;
         std::string mName;
 
         float mMaxKindleLevel;
@@ -65,40 +69,32 @@ class BodyPart
 
         virtual void calculateImpacts(float32 timeStep);
         virtual void calculateInfluences(float32 timeStep);
-        virtual void calculateMoistenImpact(Impact* impact, float32 timeStep);
-        virtual void calculateHeatImpact(Impact* impact, float32 timeStep);
-        virtual void calculateCoolImpact(Impact* impact, float32 timeStep);
-        virtual void calculateWindImpact(Impact* impact, float32 timeStep);
-        virtual void calculateElectricityImpact(Impact* impact, float32 timeStep);
+        virtual void calculateMoistenImpact(boost::shared_ptr<Impact> impact, float32 timeStep);
+        virtual void calculateHeatImpact(boost::shared_ptr<Impact> impact, float32 timeStep);
+        virtual void calculateCoolImpact(boost::shared_ptr<Impact> impact, float32 timeStep);
+        virtual void calculateWindImpact(boost::shared_ptr<Impact> impact, float32 timeStep);
+        virtual void calculateElectricityImpact(boost::shared_ptr<Impact> impact, float32 timeStep);
 
         void findStaticCollisions();
         void calculateThermalTransmissions();
         void calculateThermalTransmission(BodyPart* p);
 
     public:
-        BodyPart(b2Fixture* fixture, BodyMaterial* material);
-        virtual ~BodyPart();
-        void setMaterial(BodyMaterial *material, bool isDefault);
-        BodyState *getState();
-        BodyMaterial* getMaterial();
+        BodyPart(b2Fixture* fixture, boost::shared_ptr<BodyMaterial> material);
+        void setMaterial(boost::shared_ptr<BodyMaterial> material);
+        boost::shared_ptr<BodyState> getState();
+        boost::shared_ptr<BodyMaterial> getMaterial();
         b2Fixture* getFixture();
 
         void step(float32 elapsed);
 
-        virtual void applyImpact(Impact* impact);
-        virtual void cancelImpact(Impact* impact);
+        virtual void applyImpact(boost::shared_ptr<Impact> impact);
+        virtual void cancelImpact(boost::shared_ptr<Impact> impact);
         // Moisten impact of natural rain
-        virtual void applyRainImpact(Impact *impact);
+        virtual void applyRainImpact(boost::shared_ptr<Impact> impact);
         // Wind impact of natural wind
-        virtual void applyWindImpact(Impact *impact);
+        virtual void applyWindImpact(boost::shared_ptr<Impact> impact);
 
-        // Applied material to body or not
-        // Notice, that defaut material is one object for all
-        bool IsDefaultMaterial(){ return mIsDefaultMaterial;}
-
-        // Sould boyd free memory under mMaterial object at sestroing
-        // By default is false
-        bool mShouldFreeBodyMaterial;
 
         // How big flame can store this body
         float getMaxKindleLevel() { return mMaxKindleLevel; }

@@ -31,17 +31,17 @@
 class Object;
 class PhysicObject;
 
-typedef boost::function<Object* (CL_DomElement*, std::string& desc)> Parser;
+typedef boost::function<boost::shared_ptr<Object> (CL_DomElement*, std::string& desc)> Parser;
 class TypesManager : public boost::serialization::singleton<TypesManager>
 {
     private:
         std::map<std::string, Parser> ObjectsParser;
-        static Object* empty_parser(CL_DomElement* p, std::string &desc);
+        static boost::shared_ptr<Object> empty_parser(CL_DomElement* p, std::string &desc);
         Parser getParser(std::string type);
 
     public:
         TypesManager();
-        Object* parseObject(CL_DomElement* objectTag, const std::string &type, std::string &desc);
+        boost::shared_ptr<Object> parseObject(CL_DomElement* objectTag, const std::string &type, std::string &desc);
         void registerParser(std::string type, Parser p);
 };
 

@@ -35,6 +35,7 @@
 #include "Core/LogManager.hpp"
 #include "Core/ApplicationManager.hpp"
 #include "Utils.hpp"
+#include <boost/shared_ptr.hpp>
 
 struct Compare
 {
@@ -53,8 +54,9 @@ struct Compare
 };
 
 class Object;
-typedef std::map<std::string, Object*> ObjectMapTypeAccess;
-typedef std::map<std::string, Object*, Compare> ObjectMapTypeSorted;
+typedef std::map<std::string, boost::shared_ptr<Object> > ObjectMapTypeAccess;
+typedef std::map<std::string, boost::shared_ptr<Object>, Compare> ObjectMapTypeSorted;
+
 class ObjectsManager : public boost::serialization::singleton<ObjectsManager>
 {
     private:
@@ -64,7 +66,7 @@ class ObjectsManager : public boost::serialization::singleton<ObjectsManager>
 
     public:
         ObjectsManager();
-        void addObject(const std::string &name, Object *obj);
+        void addObject(const std::string &name, boost::shared_ptr<Object> obj);
         void update();
 };
 

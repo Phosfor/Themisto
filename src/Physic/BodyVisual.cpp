@@ -17,9 +17,6 @@
 
 #include "Physic/BodyVisual.hpp"
 
-#include "Physic/BodyState.hpp"
-#include "Physic/Body.hpp"
-
 BodyVisual::BodyVisual()
 {
 }
@@ -32,12 +29,7 @@ void BodyVisual::redrawBody()
     mImageHandle.draw(appManager().getGraphic(), Meters2Pixels(position.x)+mXPos, Meters2Pixels(position.y)+mYPos);
 }
 
-void BodyVisual::setBodyState(BodyState *state)
-{
-    mBodyState = state;
-}
-
-void BodyVisual::configureVisual(Body *parent)
+void BodyVisual::configureVisual(boost::shared_ptr<Body> parent)
 {
     mParentBody = parent;
 

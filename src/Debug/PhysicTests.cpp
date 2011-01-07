@@ -53,15 +53,15 @@ void PhysicTests::RunTest()
 void PhysicTests::SimpleMoisten(BodyPart* part)
 {
     std::string answer;
-    /*debugWatcher.parseCommand(cl_format("show material of %1(%2) every eon", 
+    /*debugWatcher.parseCommand(cl_format("show material of %1(%2) every eon",
         getBody(part)->getName(), part->getName()), &answer);
-         debugWatcher.parseCommand(cl_format("show param of %1(%2) every eon", 
+         debugWatcher.parseCommand(cl_format("show param of %1(%2) every eon",
         getBody(part)->getName(), part->getName()), &answer); */
-    debugWatcher().parseCommand(cl_format("show state(Dampness) of %1(%2) every step", 
+    debugWatcher().parseCommand(cl_format("show state(Dampness) of %1(%2) every step",
         getBody(part)->getName(), part->getName()), &answer);
     LOG(answer);
 
-    Impact* moisten = new Impact(Moisten);
+    boost::shared_ptr<Impact> moisten = boost::shared_ptr<Impact>(new Impact(Moisten));
     moisten->Intensity = 0.5;
     part->applyImpact(moisten);
 }

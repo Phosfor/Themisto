@@ -38,7 +38,6 @@ void MenuState::init()
     mDrawDebug = false;
     mDetailedOutput = false;
 
-    areaManager().init(&physicManager().getWorld(), 20);
     sceneLoader().loadScene("test.xml");
     physicManager().getWorld().SetDebugDraw(mDraw);
     mInputSlot = inputManager().getKeyboard().sig_key_down().connect(this, &MenuState::onKeyDown);
@@ -84,7 +83,7 @@ void MenuState::update()
 
         information += cl_format("Elapsed: %1\n", boost::lexical_cast<std::string>(appManager().getElapsed())).c_str();
         information += cl_format("World time: %1:%2:%3\n", time[0], time[1], time[2]).c_str();
-        information += cl_format("Camera abs pos: [(%1;%2), (%3;%4)]\n", 
+        information += cl_format("Camera abs pos: [(%1;%2), (%3;%4)]\n",
                 int(camPos.left), int(camPos.top), int(camPos.right), int(camPos.bottom)).c_str();
         information += cl_format("Level name: %1\n", levelManager().getLevelName()).c_str();
         information += cl_format("Wind power: %1\n", int(environManager().getWindPower())).c_str();

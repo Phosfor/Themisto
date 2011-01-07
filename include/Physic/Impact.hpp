@@ -34,12 +34,13 @@ enum ImpactTypes
 struct Impact
 {
     ImpactTypes Type;
+
     // Moisten: ammount of water per time unit
     // Heat, Cool: delta temperature per time unit, for body with ThermalCapacity=1
-    // Beat: impuls
     // Wind: ?
     // Electicity: ?
     float Intensity;
+
     b2Vec2 ImpactPoint;
     b2Vec2 Dirrection;
 

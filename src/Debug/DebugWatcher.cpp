@@ -178,7 +178,7 @@ void DebugWatcher::parseCommand(std::string _command, std::string* _answer)
     else if(firstWord == "write")
     {
         watch = new Watch();
-        watch->Type = WriteWatch;   
+        watch->Type = WriteWatch;
         watch->Name = _command;
         answer += addWatchCommon(watch, commandSet);
     }
@@ -227,7 +227,7 @@ void DebugWatcher::parseCommand(std::string _command, std::string* _answer)
                         answer += c;
                         fshelp.get(c);
                     }
-                    while(c != '$' && !fshelp.eof());  
+                    while(c != '$' && !fshelp.eof());
                 }
                 else
                 {
@@ -306,7 +306,7 @@ int DebugWatcher::processEvery(StrIterator everyIt, StrIterator end, std::string
             try
             {
                 result = boost::lexical_cast<int>(arg);
-                answer += "Update timeout set to " + IntToStr(mTimeout) + ".\n";                   
+                answer += "Update timeout set to " + IntToStr(mTimeout) + ".\n";
             }
             catch(boost::bad_lexical_cast &)
             {
@@ -327,13 +327,13 @@ EnvironObject* getEnvironObject(std::string _name)
     boost::to_lower(name);
     EnvironObject* result = NULL;
     if(name == "sky")result = environManager().getTypeHandle(Environ_Sky);
-    else if(name == "stars")result = environManager().getTypeHandle(Environ_Stars);  
-    else if(name == "moon")result = environManager().getTypeHandle(Environ_Moon);  
-    else if(name == "lightnings")result = environManager().getTypeHandle(Environ_Lightnings);   
-    else if(name == "rain")result = environManager().getTypeHandle(Environ_Rain);  
-    else if(name == "clouds")result = environManager().getTypeHandle(Environ_Clouds);  
-    else if(name == "leaves")result = environManager().getTypeHandle(Environ_Leaves); 
-    else if(name == "birds")result = environManager().getTypeHandle(Environ_Birds); 
+    else if(name == "stars")result = environManager().getTypeHandle(Environ_Stars);
+    else if(name == "moon")result = environManager().getTypeHandle(Environ_Moon);
+    else if(name == "lightnings")result = environManager().getTypeHandle(Environ_Lightnings);
+    else if(name == "rain")result = environManager().getTypeHandle(Environ_Rain);
+    else if(name == "clouds")result = environManager().getTypeHandle(Environ_Clouds);
+    else if(name == "leaves")result = environManager().getTypeHandle(Environ_Leaves);
+    else if(name == "birds")result = environManager().getTypeHandle(Environ_Birds);
 
     return result;
 }
@@ -503,11 +503,11 @@ std::string DebugWatcher::addWatchCommon(Watch* watch, std::vector<std::string> 
             else
             {
                 answer += "Error: unspecified 'of' parameter or it's argument.\n";
-            }   
+            }
         }
         else if( command.find("environ") != command.npos)
         {
-            std::map<Target, TargetInfo> targets = getTargets(it+1, commandSet.end(), tEnvironObject, answer);           
+            std::map<Target, TargetInfo> targets = getTargets(it+1, commandSet.end(), tEnvironObject, answer);
             answer += add_member_watch(watch, *it, EnvironObjectFields, EnvironObjectFieldsCount, targets, evalute_EnvironObject);
             watchNormal = true;
         }
@@ -521,7 +521,7 @@ std::string DebugWatcher::addWatchCommon(Watch* watch, std::vector<std::string> 
             addWatchToConsole(watch);
             watchNormal = true;
         }
-      
+
     }
     if(watch->Type != NotAWatch && watchNormal)
     {
@@ -582,7 +582,7 @@ std::string DebugWatcher::add_member_watch(Watch* watch, std::string command,
                 bool normal = false;
                 for(int i=0;i < memberCount; ++i)
                 {
-                    if(members[i] == memberName) 
+                    if(members[i] == memberName)
                     {
                         normal = true;
                         break;
@@ -600,7 +600,7 @@ std::string DebugWatcher::add_member_watch(Watch* watch, std::string command,
             }
         }
         //Remove last comma and space
-        if( membersToAddStr.size() > 2) 
+        if( membersToAddStr.size() > 2)
         {
             membersToAddStr.erase(membersToAddStr.end() - 2, membersToAddStr.end());
             answer += "Members to watch: " + membersToAddStr + ". \n";
@@ -618,7 +618,7 @@ std::string DebugWatcher::add_member_watch(Watch* watch, std::string command,
         for(tit = targets.begin(); tit != targets.end(); ++tit)
         {
             Target target = tit->first;
-            std::string partName = tit->second.first; 
+            std::string partName = tit->second.first;
             Body* parentBody = tit->second.second;
             bool bodyTarget = target.type() == typeid(parentBody) ||  target.type() == typeid(parentBody->getb2Body());
             Watch* parentWatch = NULL;
@@ -678,7 +678,7 @@ std::string DebugWatcher::add_member_watch(Watch* watch, std::string command,
         }
          //Remove last comma and space
         targetsStr.erase(targetsStr.end() - 2, targetsStr.end());
-        answer += "Targets: " + targetsStr + ". \n"; 
+        answer += "Targets: " + targetsStr + ". \n";
     }//if(targets.size() > 0)
     else
     {
@@ -717,11 +717,11 @@ std::map<Target, TargetInfo> DebugWatcher::getTargets(StrIterator command, StrIt
             {
                  answer += "Error: parameter 'of' not specified.\n";
             }
-        } 
+        }
         else
         {
             answer += "Error: parameter 'of' not specified.\n";
-        } 
+        }
     }//if(type & tEnvironObject)
     // Commands synapsis: of objName(fixture_number_or_name)
     if(command != end)
@@ -755,7 +755,7 @@ std::map<Target, TargetInfo> DebugWatcher::getTargets(StrIterator command, StrIt
                         if(objNameAndFixtures.size() > 1)
                         {
                             std::vector<std::string>::iterator it2;
-                            for(it2 = ++(objNameAndFixtures.begin()); 
+                            for(it2 = ++(objNameAndFixtures.begin());
                                   it2 != objNameAndFixtures.end(); ++it2)
                             {
                                 std::string partID = *it2;
@@ -777,11 +777,11 @@ std::map<Target, TargetInfo> DebugWatcher::getTargets(StrIterator command, StrIt
                                             }
                                             if(type & tBodyMaterial)
                                             {
-                                                result.insert(std::pair<Target, TargetInfo>(part->getMaterial(), TargetInfo(partID, obj)));
+                                                result.insert(std::pair<Target, TargetInfo>(part->getMaterial().get(), TargetInfo(partID, obj)));
                                             }
                                             if(type & tBodyState)
                                             {
-                                                result.insert(std::pair<Target, TargetInfo>(part->getState(), TargetInfo(partID, obj)));
+                                                result.insert(std::pair<Target, TargetInfo>(part->getState().get(), TargetInfo(partID, obj)));
                                             }
                                         }
                                     }
@@ -792,13 +792,13 @@ std::map<Target, TargetInfo> DebugWatcher::getTargets(StrIterator command, StrIt
                                     }
                                 }//if(partID != "")
                             }
-                        }//if(objNameAndFixtures.size() > 1) 
-                        else 
+                        }//if(objNameAndFixtures.size() > 1)
+                        else
                         {
                             // Get all parts
                             b2Body* body = obj->getb2Body();
                             int i = 0;
-                            for(b2Fixture* fixture = body->GetFixtureList(); 
+                            for(b2Fixture* fixture = body->GetFixtureList();
                                      fixture != NULL; fixture = fixture->GetNext())
                             {
                                 std::string id = IntToStr(i);
@@ -813,11 +813,11 @@ std::map<Target, TargetInfo> DebugWatcher::getTargets(StrIterator command, StrIt
                                     }
                                     if(type & tBodyMaterial)
                                     {
-                                        result.insert(std::pair<Target, TargetInfo>(part->getMaterial(),  TargetInfo(id, obj)));
+                                        result.insert(std::pair<Target, TargetInfo>(part->getMaterial().get(),  TargetInfo(id, obj)));
                                     }
                                     if(type & tBodyState)
                                     {
-                                        result.insert(std::pair<Target, TargetInfo>(part->getState(),  TargetInfo(id, obj)));
+                                        result.insert(std::pair<Target, TargetInfo>(part->getState().get(),  TargetInfo(id, obj)));
                                     }
                                 }
                                 if(type & tb2Fixture)
@@ -854,7 +854,7 @@ std::vector<b2Fixture*> DebugWatcher::getFixtures(Body* obj, std::string* partID
     b2Body* body = obj->getb2Body();
     if(*partID == "all")
     {
-         for(b2Fixture* fixture = body->GetFixtureList(); 
+         for(b2Fixture* fixture = body->GetFixtureList();
                      fixture != NULL; fixture = fixture->GetNext())
          {
             result.push_back(fixture);
@@ -876,7 +876,7 @@ std::vector<b2Fixture*> DebugWatcher::getFixtures(Body* obj, std::string* partID
         if(numberID)
         {
             int currentPartNumber = 0;
-            for(b2Fixture* fixture = body->GetFixtureList(); 
+            for(b2Fixture* fixture = body->GetFixtureList();
                      fixture != NULL; fixture = fixture->GetNext())
             {
                 if(currentPartNumber == partNumber)
@@ -894,7 +894,7 @@ std::vector<b2Fixture*> DebugWatcher::getFixtures(Body* obj, std::string* partID
         }
         else
         {
-            for(b2Fixture* fixture = body->GetFixtureList(); 
+            for(b2Fixture* fixture = body->GetFixtureList();
                      fixture != NULL; fixture = fixture->GetNext())
             {
                 BodyPart* part = reinterpret_cast<BodyPart*>(fixture->GetUserData());
@@ -910,8 +910,8 @@ std::vector<b2Fixture*> DebugWatcher::getFixtures(Body* obj, std::string* partID
             }
         }
     }
-    
-    
+
+
     return result;
 }
 
@@ -935,7 +935,7 @@ std::vector<Watch*> DebugWatcher::getWatches(StrIterator specIt, StrIterator end
                     }
                 }
             }
-            else 
+            else
             {
                 answer += "Error: can't find last watch: no one exists.\n";
             }
@@ -1005,7 +1005,7 @@ std::string DebugWatcher::process_remove(StrIterator commandIt, StrIterator endI
             {
                 delete watch;
             }
-            answer += "Removed " + IntToStr(removed) + " watches.\n"; 
+            answer += "Removed " + IntToStr(removed) + " watches.\n";
         }
         else if(*parIt == "object")
         {
@@ -1046,8 +1046,8 @@ std::string DebugWatcher::process_hide(StrIterator commandIt, StrIterator endIt)
                     }
                     child->Active = false;
                     removeWatchFromConsole(child);
-                    hiden++; 
-                }                
+                    hiden++;
+                }
             }
         }
     }
@@ -1062,10 +1062,10 @@ std::string DebugWatcher::process_hide(StrIterator commandIt, StrIterator endIt)
             }
             watch->Active = false;
             removeWatchFromConsole(watch);
-            hiden++;            
+            hiden++;
         }
     }
-    answer += "Hiden " + IntToStr(hiden) + " watches.\n"; 
+    answer += "Hiden " + IntToStr(hiden) + " watches.\n";
     return answer;
 }
 
@@ -1152,7 +1152,7 @@ std::string DebugWatcher::process_stop_resume(StrIterator commandIt, StrIterator
                         answer += unassignWatchFromFile(watch, false);
                     }
                     else
-                    {   
+                    {
                         answer += assignWatchToFile(watch, watch->OutFile, false);
                     }
                 }
@@ -1164,7 +1164,7 @@ std::string DebugWatcher::process_stop_resume(StrIterator commandIt, StrIterator
         answer += "Error: argument not specified for command 'stop' or 'resume'.\n";
     }
     std::string processedStr = (stop)? "Stopped ":"Resumed ";
-    answer += processedStr + IntToStr(processed) + " watches.\n"; 
+    answer += processedStr + IntToStr(processed) + " watches.\n";
     return answer;
 }
 
@@ -1286,13 +1286,13 @@ std::string DebugWatcher::unassignWatchFromFile(Watch* watch, bool dispose)
             if(fit != mFiles.end())
             {
                 filePath = fit->first;
-                if(dispose) 
+                if(dispose)
                 {
                     mFiles.erase(fit);
                 }
             }
-            if(dispose) 
-            { 
+            if(dispose)
+            {
                 mFilesUsing.erase(fileUseIt);
             }
 
@@ -1387,7 +1387,7 @@ void DebugWatcher::update(Watch* watch)
                     std::string record = "";
                     std::string time = boost::posix_time::to_simple_string(boost::posix_time::microsec_clock::local_time());
                     record = time + " : [" + watch->ID + "] " + watch->Name + " = " + watch->Expression(watch)+ "\n";
-                    watch->OutFile->write(record.c_str(), record.size());                        
+                    watch->OutFile->write(record.c_str(), record.size());
                 }
                 else
                 {

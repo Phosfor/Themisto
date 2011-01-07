@@ -25,7 +25,6 @@
 #include <ClanLib/core.h>
 
 #include "World/WorldManager.hpp"
-#include "Physic/AreaManager.hpp"
 #include "World/Objects/Object.hpp"
 
 class BodyVisual;
@@ -34,35 +33,27 @@ class BodyPart;
 class BodyState;
 class Impact;
 class BodyMaterial;
+
 class PhysicObject: public Object
 {
     private:
-        BodyVisual *mBodyVisual;
-        Body* mBody;
+        boost::shared_ptr<BodyVisual> mBodyVisual;
+        boost::shared_ptr<Body> mBody;
 
     public:
-        PhysicObject(Body* body, BodyVisual* visual);
-        ~PhysicObject();
+        PhysicObject(boost::shared_ptr<Body> body, boost::shared_ptr<BodyVisual> visual);
 
-        // Get/set 
-        void setVisual(BodyVisual* visualiser);
-        BodyVisual& getVisual();
-        void setBody(Body* body);
-        Body& getBody();
+        // Get/set
+        void setVisual(boost::shared_ptr<BodyVisual> visualiser);
+        boost::shared_ptr<BodyVisual> getVisual();
+        void setBody(boost::shared_ptr<Body> body);
+        boost::shared_ptr<Body> getBody();
 
         void updateVisual();
         void step(float32 elapsed); // Physic
 
-        // Should body free memory under mBodyVisual object at destroing
-        // Default value is true
-        bool mShouldFreeBodyVisual;
-
-        // Should body free memory under mBody object at destroing
-        // Default is true
-        bool mShouldFreeBody; 
-
         // Parsing object
-        static Object* ParsePhysicObject(CL_DomElement* node, std::string &desc);
+        static boost::shared_ptr<Object> ParsePhysicObject(CL_DomElement* node, std::string &desc);
 
         // --- Object implementation ---
         CL_Pointf getPosition();

@@ -44,7 +44,6 @@ set(Themisto_srcs
     Physic/BodyMaterial.cpp
     Physic/Impact.cpp
     Physic/BodyState.cpp
-    Physic/AreaManager.cpp
     Physic/PhysicRain.cpp
     Physic/PhysicWind.cpp
     Physic/BodyPart.cpp
