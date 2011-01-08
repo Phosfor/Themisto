@@ -8,5 +8,6 @@ bin/*.log
 bin/Themisto
 additional/*
 bin/DebugConsole
-bin/DebugVisualisator
 bin/settings.info
+bin/DebugVisualisator
+
