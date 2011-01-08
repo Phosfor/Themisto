@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<inkscape-extension xmlns="http://www.inkscape.org/namespace/inkscape/extension">
+    <_name>Svg2Themisto:Level</_name>
+    <id>org.inkscape.svg2themisto_level</id>
+    
+	<dependency type="extension">org.inkscape.output.svg.inkscape</dependency>
+	
+	<dependency type="executable" location="extensions">svg2themisto_level.py</dependency>
+	<dependency type="executable" location="extensions">inkex.py</dependency>
+	
+
+	<param name="directory" type="string" _gui-text="Directory to save level shape to">~/</param>
+	<param name="filename" type="string" _gui-text="File name (without extension)"></param> 
+	
+    <effect needs-live-preview="false">
+                <object-type>all</object-type>
+                <effects-menu>
+                      <submenu _name="Export"/>
+                </effects-menu>
+    </effect>
+    
+    <script>
+        <command reldir="extensions" interpreter="python">svg2themisto_level.py</command>
+    </script>
+</inkscape-extension>
