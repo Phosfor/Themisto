@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <ThemistoLevel version="0.1" authors="Wincode team" name="First level">
+    <Templates>
+       <Include>test2.tpl</Include>
+    </Templates>
     <World image="levels/test.png" cameraPosX="0" cameraPosY="0">
 
         <Environ active="true">
@@ -20,42 +23,8 @@
 
         <Objects>
 
-            <Object name="Level" type="PhysicBodyObject" template="test" />
+            <Object name="Level" type="PhysicBodyObject" template="test2" />
 
-            <Object name="Ground" type="PhysicBodyObject" z-index="2">
-                <Body>
-                    <b2Body>
-                        <Position>
-                            <x>100.0</x>
-                            <y>500</y>
-                        </Position>
-                        <Type>StaticBody</Type>
-                    </b2Body>
-                    <Part>
-                        <Name>GroundPart1</Name>
-                        <MaxDampness>10.0</MaxDampness>
-                        <b2Fixture>
-                            <Friction>0.3</Friction>
-                            <Restitution>0.3</Restitution>
-                            <Shape>
-                                <Type>e_polygon</Type>
-                                <Vertices>
-                                    <Vertex>
-                                        <x>0.0</x>
-                                        <y>0.0</y>
-                                    </Vertex>
-                                    <Vertex>
-                                        <x>200.0</x>
-                                        <y>0.0</y>
-                                    </Vertex>
-                            </Shape>
-                        </b2Fixture>
-                        <Material>
-                            <DampReceptivity>1</DampReceptivity>
-                        </Material>
-                    </Part>
-                </Body>
-            </Object>
              <Object name="Stone" type="PhysicBodyObject">
                 <Visual>
                     <Size width="90" height="90" />
@@ -68,7 +37,7 @@
                             <x>300.0</x>
                             <y>20.0</y>
                         </Position>
-                        <Type>StaticBody</Type>
+                        <Type>DynamicBody</Type>
                     </b2Body>
                     <Part>
                         <b2Fixture>
@@ -87,7 +56,5 @@
         </Objects>
 
     </World>
-    <Templates>
-       <Include>test.tpl</Include>
-    </Templates>
+
 </ThemistoLevel>

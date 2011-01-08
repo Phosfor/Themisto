@@ -37,7 +37,7 @@ void DebugDraw::DrawPolygon(const b2Vec2* vertices, int32 vertexCount, const b2C
 void DebugDraw::DrawSolidPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color)
 {
     CL_Rectf camPos = levelManager().getAbsoluteCameraPos();
-    CL_Colorf cl_color(color.r, color.g, color.b);
+    CL_Colorf cl_color(color.r, color.g, color.b, 0.4f);
 
     for (uint16_t i=0; i < vertexCount - 1; ++i)
     {
