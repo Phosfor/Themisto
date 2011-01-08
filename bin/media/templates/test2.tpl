@@ -223,8 +223,8 @@
       <Type>e_polygon</Type>
       <Vertices>
        <Vertex id="vertex0">
-        <x>366.1</x>
-        <y>350.3</y>
+        <x>365.5</x>
+        <y>352.0</y>
        </Vertex>
        <Vertex id="vertex1">
         <x>365.8</x>

@@ -71,7 +71,7 @@ Rain::Rain(uint16_t maxDrops)
     mMaxObjects = maxDrops;
 
     mDropColor = CL_Colorf::black;
-    mDropColor.a = kDropAlpha;
+    mDropColor.a = static_cast<float>(rand() % 5 + 3) / 10.0f;
 
     mGC = appManager().getGraphic();
 

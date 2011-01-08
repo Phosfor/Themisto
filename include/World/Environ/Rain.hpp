@@ -30,7 +30,7 @@
 #include "World/Environ/Object.hpp"
 
 const float kTail = 0.025f;
-const float kDropAlpha = 0.5f;
+//const float kDropAlpha = 0.5f;
 
 struct Data
 {

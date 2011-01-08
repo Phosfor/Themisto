@@ -75,8 +75,6 @@ void DebugDragAndDrop::mouseDown(const CL_InputEvent &ev, const CL_InputState &s
         mMousePos->Set(static_cast<float>(Pixels2Meters(ev.mouse_pos.x + camPos.left)),
                 static_cast<float>(Pixels2Meters(ev.mouse_pos.y + camPos.top)));
 
-        /*std::cout << "x: " << Pixels2Meters(ev.mouse_pos.x) + camPos.left << "\n";
-        std::cout << "y: " << Pixels2Meters(ev.mouse_pos.x) + camPos.top << "\n";*/
         b2AABB region;
         region.lowerBound.Set(mMousePos->x - 0.001f, mMousePos->y - 0.0f);
         region.upperBound.Set(mMousePos->x + 0.001f, mMousePos->y + 0.001f);

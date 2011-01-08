@@ -33,6 +33,7 @@
 #include <boost/serialization/singleton.hpp>
 #include "Core/ConfigManager.hpp"
 #include "Core/LogManager.hpp"
+#include "Core/LevelManager.hpp"
 #include "Core/ApplicationManager.hpp"
 #include "Utils.hpp"
 #include <boost/shared_ptr.hpp>

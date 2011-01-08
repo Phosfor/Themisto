@@ -49,7 +49,7 @@ void MenuState::init()
 
 void MenuState::shutdown()
 {
-    delete mInfoLabel;
+    /*delete mInfoLabel;
 
     delete mDropLabel;
     delete mDropSlider;
@@ -58,7 +58,7 @@ void MenuState::shutdown()
     delete mWindSlider;
 
     delete mLeavesLabel;
-    delete mLeavesSlider;
+    delete mLeavesSlider;*/
 
     delete mDnD;
     delete mDraw;

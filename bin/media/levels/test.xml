@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <ThemistoLevel version="0.1" authors="Wincode team" name="First level">
-    <Templates>
-       <Include>test2.tpl</Include>
-    </Templates>
+
     <World image="levels/test.png" cameraPosX="0" cameraPosY="0">
 
         <Environ active="true">
@@ -28,7 +26,7 @@
              <Object name="Stone" type="PhysicBodyObject">
                 <Visual>
                     <Size width="90" height="90" />
-                    <Position x="0" y="0" />
+                    <Position x="-45" y="-45" />
                     <Texture section="Stuff" name="stone" />
                 </Visual>
                 <Body>
@@ -56,5 +54,7 @@
         </Objects>
 
     </World>
-
+    <Templates>
+       <Include>test2.tpl</Include>
+    </Templates>
 </ThemistoLevel>

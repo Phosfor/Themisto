@@ -23,7 +23,7 @@
 #include "Core/Utils.hpp"
 #include "Core/ResourceManager.hpp"
 #include "Core/ApplicationManager.hpp"
-
+//#include "Core/LevelManager.hpp"
 #include "Physic/Body.hpp"
 
 class BodyState;
@@ -34,6 +34,7 @@ class BodyVisual
         CL_Sprite mImageHandle;
         bool mHasVisual;
         boost::shared_ptr<Body> mParentBody;
+        CL_GraphicContext mGC;
 
     public:
         BodyVisual();
@@ -44,7 +45,7 @@ class BodyVisual
         float mSizeWidth, mSizeHeight;
         std::string mTextureName, mSectionName;
 
-        void redrawBody();
+        void redrawBody(float newX, float newY);
         void configureVisual(boost::shared_ptr<Body> parent);
 };
 

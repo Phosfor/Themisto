@@ -25,10 +25,20 @@ ObjectsManager::ObjectsManager()
 
 void ObjectsManager::update()
 {
+    CL_Rectf camPos = levelManager().getAbsoluteCameraPos();
     float elapsed = appManager().getElapsed();
+
     for (ObjectMapTypeSorted::const_iterator it=mObjectsSorted.begin();
             it != mObjectsSorted.end(); ++it)
     {
+        CL_Rectf objRect = it->second->getRectangle();
+
+        if (camPos.is_overlapped(objRect))
+        {
+            CL_Pointf position = it->second->getPosition();
+            it->second->updateVisual(position.x - camPos.left, position.y - camPos.top);
+        }
+
         it->second->update(elapsed);
     }
 }

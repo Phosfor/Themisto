@@ -58,6 +58,7 @@ class PhysicObject: public Object
         // --- Object implementation ---
         CL_Pointf getPosition();
         void update(float elapsed);
+        void updateVisual(float newX, float newY);
         CL_Rectf getRectangle();
 };
 

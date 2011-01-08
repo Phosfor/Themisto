@@ -19,14 +19,21 @@
 
 BodyVisual::BodyVisual()
 {
+    mGC = appManager().getGraphic();
 }
 
-void BodyVisual::redrawBody()
+void BodyVisual::redrawBody(float newX, float newY)
 {
+    // We have to do this once for all objects:
+    //CL_Rectf camPos = levelManager().getAbsoluteCameraPos();
+
     b2Body *body = mParentBody->getb2Body();
     mImageHandle.set_angle(CL_Angle::from_radians(body->GetAngle()));
-    b2Vec2 position = body->GetPosition();
-    mImageHandle.draw(appManager().getGraphic(), Meters2Pixels(position.x)+mXPos, Meters2Pixels(position.y)+mYPos);
+    mImageHandle.draw(mGC, newX + mXPos, newY + mYPos);
+    //b2Vec2 position = body->GetPosition();
+    /*mImageHandle.draw(mGC,
+                     (Meters2Pixels(position.x)+mXPos) - camPos.left,
+                     (Meters2Pixels(position.y)+mYPos) - camPos.top);*/
 }
 
 void BodyVisual::configureVisual(boost::shared_ptr<Body> parent)
@@ -34,6 +41,8 @@ void BodyVisual::configureVisual(boost::shared_ptr<Body> parent)
     mParentBody = parent;
 
     mImageHandle = resourceManager().getSprite(mSectionName, mTextureName);
+
+    // TODO: Check if body is circle, set origin_center, otherwise - skip
     //mImageHandle.set_alignment(origin_);
 
     float koefX = mSizeWidth / mImageHandle.get_width();

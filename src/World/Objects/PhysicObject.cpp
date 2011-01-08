@@ -38,11 +38,11 @@ PhysicObject::PhysicObject(boost::shared_ptr<Body> body, boost::shared_ptr<BodyV
     mType = PhysicBodyObject;
 }
 
-void PhysicObject::updateVisual()
+void PhysicObject::updateVisual(float newX, float newY)
 {
     if(mBodyVisual)
     {
-        if (mBodyVisual->getVisualState()) mBodyVisual->redrawBody();
+        if (mBodyVisual->getVisualState()) mBodyVisual->redrawBody(newX, newY);
     }
     else
     {
@@ -71,17 +71,17 @@ CL_Rectf PhysicObject::getRectangle()
 {
     b2AABB rect;
     b2Fixture* fixture = mBody->getb2Body()->GetFixtureList();
-    for(fixture; fixture != NULL; fixture = fixture->GetNext())
-    {
+    if (fixture != NULL) rect = fixture->GetAABB();
+    for(; fixture != NULL; fixture=fixture->GetNext())
         rect.Combine(rect, fixture->GetAABB());
-    }
-    return CL_Rectf(rect.upperBound.x, rect.upperBound.y, rect.lowerBound.x, rect.lowerBound.y);
+
+    return CL_Rectf(Meters2Pixels(rect.lowerBound.x), Meters2Pixels(rect.upperBound.y),
+            Meters2Pixels(rect.upperBound.x), Meters2Pixels(rect.lowerBound.y));
 }
 
 void PhysicObject::update(float elapsed)
 {
     step(elapsed);
-    updateVisual();
 }
 
 // -----------------------------------------------------------------
@@ -265,6 +265,7 @@ boost::shared_ptr<Object> PhysicObject::ParsePhysicObject(CL_DomElement* tag, st
     b2body = physicManager().getWorld().CreateBody(&bdef);
     bodyHandle = boost::shared_ptr<Body>(new Body(b2body));
 
+    LOG_NOFORMAT("\tParsed parts: ");
     // Go through all physic parts
     CL_DomNodeList parts = body.get_elements_by_tag_name("Part");
     for (int i=0; i < parts.get_length(); ++i)
@@ -279,6 +280,8 @@ boost::shared_ptr<Object> PhysicObject::ParsePhysicObject(CL_DomElement* tag, st
         boost::shared_ptr<BodyState> stateHandle;
         boost::shared_ptr<BodyPart> partHandle;
         b2Filter filter;
+
+        LOG_NOFORMAT(cl_format("%1; ", parts.item(i).to_element().get_attribute("id")).c_str());
 
         // Parse b2Fixture
         CL_DomElement physicPart = parts.item(i).to_element();
@@ -678,6 +681,8 @@ boost::shared_ptr<Object> PhysicObject::ParsePhysicObject(CL_DomElement* tag, st
 
         partHandle->setMaterial(materialHandle);
     } // for (int i=0; i < parts.get_length(); ++i)
+
+    LOG_NOFORMAT("\n");
 
     return boost::shared_ptr<PhysicObject>(new PhysicObject(bodyHandle, visualHandle));
 }
