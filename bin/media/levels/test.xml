@@ -20,12 +20,14 @@
 
         <Objects>
 
+            <Object name="Level" type="PhysicBodyObject" template="test" />
+
             <Object name="Ground" type="PhysicBodyObject" z-index="2">
                 <Body>
                     <b2Body>
                         <Position>
-                            <x>0.0</x>
-                            <y>800</y>
+                            <x>100.0</x>
+                            <y>500</y>
                         </Position>
                         <Type>StaticBody</Type>
                     </b2Body>
@@ -43,10 +45,9 @@
                                         <y>0.0</y>
                                     </Vertex>
                                     <Vertex>
-                                        <x>1152.0</x>
+                                        <x>200.0</x>
                                         <y>0.0</y>
                                     </Vertex>
-                                </Vertices>
                             </Shape>
                         </b2Fixture>
                         <Material>
@@ -55,83 +56,10 @@
                     </Part>
                 </Body>
             </Object>
-
-            <Object name="BoundingBox1" type="PhysicBodyObject">
-                <Body>
-                    <b2Body>
-                        <Position>
-                            <x>0</x>
-                            <y>0</y>
-                        </Position>
-                        <Type>StaticBody</Type>
-                    </b2Body>
-                    <Part>
-                        <Name>Part1</Name>
-                        <MaxDampness>10.0</MaxDampness>
-                        <b2Fixture>
-                            <Friction>0.1</Friction>
-                            <Restitution>0.1</Restitution>
-                            <Shape>
-                                <Type>e_polygon</Type>
-                                <Vertices>
-                                    <Vertex>
-                                        <x>0.0</x>
-                                        <y>0.0</y>
-                                    </Vertex>
-                                    <Vertex>
-                                        <x>0</x>
-                                        <y>864</y>
-                                    </Vertex>
-                                </Vertices>
-                            </Shape>
-                        </b2Fixture>
-                        <Material>
-                            <DampReceptivity>1</DampReceptivity>
-                        </Material>
-                    </Part>
-                </Body>
-            </Object>
-
-            <Object name="BoundingBox2" type="PhysicBodyObject">
-                <Body>
-                    <b2Body>
-                        <Position>
-                            <x>0</x>
-                            <y>0</y>
-                        </Position>
-                        <Type>StaticBody</Type>
-                    </b2Body>
-                    <Part>
-                        <Name>Part1</Name>
-                        <MaxDampness>10.0</MaxDampness>
-                        <b2Fixture>
-                            <Friction>0.1</Friction>
-                            <Restitution>0.1</Restitution>
-                            <Shape>
-                                <Type>e_polygon</Type>
-                                <Vertices>
-                                    <Vertex>
-                                        <x>1152</x>
-                                        <y>0.0</y>
-                                    </Vertex>
-                                    <Vertex>
-                                        <x>1152</x>
-                                        <y>864</y>
-                                    </Vertex>
-                                </Vertices>
-                            </Shape>
-                        </b2Fixture>
-                        <Material>
-                            <DampReceptivity>1</DampReceptivity>
-                        </Material>
-                    </Part>
-                </Body>
-            </Object>
-<!--
              <Object name="Stone" type="PhysicBodyObject">
                 <Visual>
                     <Size width="90" height="90" />
-                    <Position x="-45" y="-45" />
+                    <Position x="0" y="0" />
                     <Texture section="Stuff" name="stone" />
                 </Visual>
                 <Body>
@@ -140,7 +68,7 @@
                             <x>300.0</x>
                             <y>20.0</y>
                         </Position>
-                        <Type>DynamicBody</Type>
+                        <Type>StaticBody</Type>
                     </b2Body>
                     <Part>
                         <b2Fixture>
@@ -155,134 +83,11 @@
                     </Part>
                   </Body>
              </Object>
--->
-<!--
-            <Object name="House" type="PhysicBodyObject" z-index="-1">
-                <Visual>
-                    <Size width="562" height="273" />
-                    <Position x="0" y="0" />
-                    <Texture section="Stuff" name="house" />
-                </Visual>
-                <Body>
-                    <b2Body>
-                        <Position>
-                            <x>100</x>
-                            <y>533</y>
-                        </Position>
-                        <Type>StaticBody</Type>
-                    </b2Body>
-                    <Part>
-                        <Name>HousePart1</Name>
-                        <MaxDampness>10.0</MaxDampness>
-                        <b2Fixture>
-                            <Friction>0.3</Friction>
-                            <Restitution>0.3</Restitution>
-                            <Shape>
-                                <Type>e_polygon</Type>
-                                  <Vertices>
-                                   <Vertex id="vertex0">
-                                    <x>22.6</x>
-                                    <y>193.8</y>
-                                   </Vertex>
-                                   <Vertex id="vertex1">
-                                    <x>256.8</x>
-                                    <y>144.0</y>
-                                   </Vertex>
-                                   <Vertex id="vertex2">
-                                    <x>507.8</x>
-                                    <y>191.4</y>
-                                   </Vertex>
-                                   <Vertex id="vertex3">
-                                    <x>568.0</x>
-                                    <y>275.3</y>
-                                   </Vertex>
-                                   <Vertex id="vertex4">
-                                    <x>0.6</x>
-                                    <y>273.6</y>
-                                   </Vertex>
-                                   <Vertex id="vertex5">
-                                    <x>0.0</x>
-                                    <y>214.0</y>
-                                   </Vertex>
-                                  </Vertices>
-                            </Shape>
-                        </b2Fixture>
-                        <Material>
-                            <DampReceptivity>1</DampReceptivity>
-                        </Material>
-                    </Part>
-                    <Part>
-                        <Name>HousePart2</Name>
-                        <MaxDampness>10.0</MaxDampness>
-                        <b2Fixture>
-                            <Friction>0.3</Friction>
-                            <Restitution>0.3</Restitution>
-                            <Shape>
-                                <Type>e_polygon</Type>
-                                  <Vertices>
-                                   <Vertex id="vertex0">
-                                    <x>257.4</x>
-                                    <y>142.9</y>
-                                   </Vertex>
-                                   <Vertex id="vertex1">
-                                    <x>366.1</x>
-                                    <y>59.0</y>
-                                   </Vertex>
-                                   <Vertex id="vertex2">
-                                    <x>524.6</x>
-                                    <y>158.5</y>
-                                   </Vertex>
-                                   <Vertex id="vertex3">
-                                    <x>507.2</x>
-                                    <y>191.4</y>
-                                   </Vertex>
-                                  </Vertices>
-                            </Shape>
-                        </b2Fixture>
-                        <Material>
-                            <DampReceptivity>1</DampReceptivity>
-                        </Material>
-                    </Part>
-                    <Part>
-                        <Name>HousePart3</Name>
-                        <MaxDampness>10.0</MaxDampness>
-                        <b2Fixture>
-                            <Friction>0.3</Friction>
-                            <Restitution>0.3</Restitution>
-                            <Shape>
-                                <Type>e_polygon</Type>
-                                  <Vertices>
-                                   <Vertex id="vertex0">
-                                    <x>365.0</x>
-                                    <y>59.0</y>
-                                   </Vertex>
-                                   <Vertex id="vertex1">
-                                    <x>371.3</x>
-                                    <y>15.0</y>
-                                   </Vertex>
-                                   <Vertex id="vertex2">
-                                    <x>393.3</x>
-                                    <y>2.9</y>
-                                   </Vertex>
-                                   <Vertex id="vertex3">
-                                    <x>416.4</x>
-                                    <y>3.5</y>
-                                   </Vertex>
-                                   <Vertex id="vertex4">
-                                    <x>525.2</x>
-                                    <y>159.6</y>
-                                   </Vertex>
-                                  </Vertices>
-                            </Shape>
-                        </b2Fixture>
-                        <Material>
-                            <DampReceptivity>1</DampReceptivity>
-                        </Material>
-                    </Part>
-                </Body>
-            </Object>
--->
+
         </Objects>
 
     </World>
+    <Templates>
+       <Include>test.tpl</Include>
+    </Templates>
 </ThemistoLevel>
