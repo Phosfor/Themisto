@@ -29,6 +29,7 @@ void SceneLoader::loadScene(const std::string &sceneName)
 void SceneLoader::_threadWrapper(const std::string &sceneName)
 {
     //mMutex.lock();
+    std::cout << "\t ---------- Parsing scene ----------\n";
 
     TemplatesProcessor proc;
     std::string error= "";
@@ -47,7 +48,6 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
     }
 
     CL_DomElement root = document->get_document_element();
-    std::cout << "\t ---------- Parsing scene ----------\n";
     CL_DomElement world = root.get_elements_by_tag_name("World").item(0).to_element();
     CL_DomElement environ = world.get_elements_by_tag_name("Environ").item(0).to_element();
     CL_DomElement objects = world.get_elements_by_tag_name("Objects").item(0).to_element();
@@ -57,7 +57,7 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
     CL_String version = root.get_attribute("version");
     CL_String name = root.get_attribute("name");
 
-    LOG(cl_format("Loading new scene with name `%1` (in file `%2`) for the game version: `%3`. Created by: `%3`."
+    LOG(cl_format("Loading new scene with name `%1` (in file `%2`) for the game version: `%3`. Created by: `%4`."
                   , name, sceneName, version, authors));
 
     // Check versions of the game and the level
@@ -161,12 +161,11 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
 
             std::string name = tag.get_attribute("name").c_str();
             std::string type = tag.get_attribute("type").c_str();
+            LOG_NOFORMAT(cl_format("- Parsing object `%1` of type `%2`\n", name, type));
 
             int z_index = 0;
             if (tag.has_attribute("z-index"))
                 z_index = boost::lexical_cast<int>(tag.get_attribute("z-index").c_str());
-
-            LOG_NOFORMAT(cl_format("- Parsing object `%1` of type `%2`\n", name, type));
 
             // TODO: Call template parsing here...
 

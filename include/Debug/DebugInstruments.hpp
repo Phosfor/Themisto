@@ -25,6 +25,7 @@
 #include "Core/ApplicationManager.hpp"
 #include "Core/PhysicManager.hpp"
 #include "Core/InputManager.hpp"
+#include "Core/LevelManager.hpp"
 
 class Body;
 class DebugDragAndDrop: public b2QueryCallback
