@@ -31,7 +31,7 @@ ResourceManager::ResourceManager()
 CL_Image ResourceManager::getImage(const std::string &section, const std::string &name)
 {
     if (mTexturesData.find(section + '/' + name) == mTexturesData.end())
-        throw new CL_Exception(cl_format("Failed to getImage from `%1/%2`.", section, name));
+        throw CL_Exception(cl_format("Failed to getImage from `%1/%2`.", section, name));
 
     CL_Texture temp = mTexturesData[section + '/' + name];
     return CL_Image(appManager().getGraphic(), temp, CL_Rectf(0, 0, temp.get_width(), temp.get_height()));
@@ -44,7 +44,7 @@ CL_Sprite ResourceManager::getSprite(const std::string &section, const std::vect
     BOOST_FOREACH(std::string name, names)
     {
         if (mTexturesData.find(section + '/' + name) == mTexturesData.end())
-            throw new CL_Exception(cl_format("Failed to getSprite from `%1/%2`.", section, name));
+            throw CL_Exception(cl_format("Failed to getSprite from `%1/%2`.", section, name));
 
         CL_Texture temp = mTexturesData[section + '/' + name];
         desc.add_frame(temp);
@@ -56,7 +56,7 @@ CL_Sprite ResourceManager::getSprite(const std::string &section, const std::vect
 CL_Sprite ResourceManager::getSprite(const std::string &section, const std::string &name)
 {
     if (mTexturesData.find(section + '/' + name) == mTexturesData.end())
-        throw new CL_Exception(cl_format("Failed to getSprite from `%1/%2`.", section, name));
+        throw CL_Exception(cl_format("Failed to getSprite from `%1/%2`.", section, name));
 
     CL_Texture temp = mTexturesData[section + '/' + name];
     CL_SpriteDescription desc;

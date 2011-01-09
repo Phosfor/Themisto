@@ -27,7 +27,7 @@
 #include "Core/EnvironManager.hpp"
 #include "Core/Utils.hpp"
 
-class Body;
+
 class BodyPart;
 class BodyState;
 class BodyMaterial;
@@ -51,7 +51,6 @@ typedef boost::variant<
    BodyState*,
    b2Body*,
    b2Fixture*,
-   Body*,
    BodyPart*,
    ApplicationManager*,
    EnvironObject*,
@@ -61,7 +60,6 @@ typedef boost::variant<
 enum TargetType
 {
     tError = 0,
-    tBody=1,
     tBodyPart=2,
     tBodyMaterial=4,
     tBodyState=8,

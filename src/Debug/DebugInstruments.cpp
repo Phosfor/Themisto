@@ -16,7 +16,6 @@
 */
 
 #include "Debug/DebugInstruments.hpp"
-#include "Physic/Body.hpp"
 
 void DebugDragAndDrop::init()
 {
@@ -47,16 +46,6 @@ bool DebugDragAndDrop::ReportFixture(b2Fixture *fixture)
         jointDef.bodyB = draggingBody;
         jointDef.frequencyHz = 60.0f;
         jointDef.dampingRatio = 0.0f;
-        std::list<Body*> bodies = physicManager().getBodies();
-
-        /*for(std::list<Body*>::iterator body = bodies.begin(); body != bodies.end(); ++body)
-        {
-            if((*body)->getb2Body()->GetType() == b2_staticBody)
-            {
-                jointDef.bodyA = (*body)->getb2Body();
-                break;
-            }
-        }*/
 
         jointDef.target =*mMousePos;
         jointDef.maxForce = 1000.0f * draggingBody->GetMass();

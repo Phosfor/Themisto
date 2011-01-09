@@ -16,7 +16,7 @@
 */
 
 #include "Core/PhysicManager.hpp"
-#include "Physic/Body.hpp"
+
 
 PhysicManager::PhysicManager()
 {
@@ -43,14 +43,14 @@ b2World& PhysicManager::getWorld()
     return *mWorld;
 }
 
-std::list<Body*> PhysicManager::getBodies()
+std::list<PhysicObject*> PhysicManager::getBodies()
 {
-    std::list<Body*> result;
+    std::list<PhysicObject*> result;
     for(b2Body* body = mWorld->GetBodyList(); body != NULL; body = body->GetNext())
     {
         if(body->GetUserData() != NULL)
         {
-            result.push_back(reinterpret_cast<Body*>(body->GetUserData()));
+            result.push_back(reinterpret_cast<PhysicObject*>(body->GetUserData()));
         }
     }
     return result;

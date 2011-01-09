@@ -170,18 +170,21 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
             // TODO: Call template parsing here...
 
             std::string desc = "";
-            boost::shared_ptr<Object> object = typesManager().parseObject(&tag, type, desc);
-            object->setIndex(z_index);
-            if(object != NULL)
+
+            boost::shared_ptr<Object> object;
+            try
             {
-                objectsManager().addObject(name, object);
+                object = typesManager().parseObject(&tag, type, desc);
             }
-            else
+            catch(CL_Exception& e)
             {
-                LOG(desc);
-                LOG("Terminating parsing...");
+                LOG(e.what());
+                LOG("Level parsing stopped.");
                 return;
             }
+            object->setIndex(z_index);
+            objectsManager().addObject(name, object);
+
         }
     }
     // END OF OBJECTS PARSING -------------------------------------------

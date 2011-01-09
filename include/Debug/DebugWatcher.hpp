@@ -49,7 +49,6 @@
 #include "Debug/Watch.hpp"
 
 class BodyPart;
-class Body;
 using namespace evalute;
 
 typedef std::vector<std::string>::iterator StrIterator;

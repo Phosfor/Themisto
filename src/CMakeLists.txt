@@ -40,23 +40,22 @@ set(Themisto_srcs
     World/States/MenuState.cpp
 
     # Physic
-    Physic/BodyVisual.cpp
     Physic/BodyMaterial.cpp
     Physic/Impact.cpp
     Physic/BodyState.cpp
     Physic/PhysicRain.cpp
     Physic/PhysicWind.cpp
     Physic/BodyPart.cpp
-    Physic/Body.cpp
+    Physic/PhysicParser.cpp
 
     # Debug
-    Debug/DebugIO.cpp
+    #Debug/DebugIO.cpp
     Debug/DebugDraw.cpp
     Debug/DebugInstruments.cpp
-    Debug/EvaluteFunctions.cpp
-    Debug/DebugWatcher.cpp
-    Debug/Watch.cpp
-    Debug/PhysicTests.cpp
+    #Debug/EvaluteFunctions.cpp
+    #Debug/DebugWatcher.cpp
+    #Debug/Watch.cpp
+    #Debug/PhysicTests.cpp
 
     main.cpp
 )

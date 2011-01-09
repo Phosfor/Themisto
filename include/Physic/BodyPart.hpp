@@ -32,13 +32,11 @@
 #include "World/WorldManager.hpp"
 #include "Physic/BodyMaterial.hpp"
 #include "Physic/BodyState.hpp"
-#include "Physic/BodyVisual.hpp"
 #include "Physic/Impact.hpp"
 
 class BodyMaterial;
 class Impact;
 class BodyState;
-class BodyVisual;
 
 class BodyPart
 {
