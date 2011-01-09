@@ -1,6 +1,9 @@
 <Templates>
 <Template name="test2">
  <Object type="PhysicObject">
+  <Visual>
+    <Texture section="Levels" name="test" />
+  </Visual>
   <Body id="tbody1">
    <b2Body>
     <Position><x>0.0</x><y>0.0</y></Position>

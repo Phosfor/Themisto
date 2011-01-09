@@ -44,6 +44,10 @@
                             <Shape>
                                 <Type>e_circle</Type>
                                 <Radius>45.0</Radius>
+                                <Center>
+                                    <x>45</x>
+                                    <y>45</y>
+                                </Center>
                             </Shape>
                         </b2Fixture>
                     </Part>

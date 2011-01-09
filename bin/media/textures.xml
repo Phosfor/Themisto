@@ -1,5 +1,9 @@
 <resources>
 
+    <section name="Levels">
+        <texture name="test" file="levels/test.png" />
+    </section>
+
     <section name="Stuff">
         <texture name="stone" file="stone.png" />
         <texture name="house" file="house.png" />
