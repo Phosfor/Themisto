@@ -16,8 +16,6 @@
 */
 
 #include "Debug/DebugIO.hpp"
-
-#include "Physic/Body.hpp"
 #include "Physic/BodyPart.hpp"
 #include "Debug/Watch.hpp"
 
@@ -34,7 +32,7 @@ void DebugIO::init()
     catch(CL_Exception& e)
     {
         LOG("Torubles with standing debug server");
-        LOG(e.what()); 
+        LOG(e.what());
     }
     slotEventReceived = mConsoleServer.sig_event_received().connect(this, &DebugIO::eventHandler);
     slotDisconnect = mConsoleServer.sig_client_disconnected().connect(this, &DebugIO::on_disconnected);
@@ -50,7 +48,7 @@ void DebugIO::on_disconnected(CL_NetGameConnection * connection)
 
 void DebugIO::step()
 {
-    mConsoleServer.process_events();  
+    mConsoleServer.process_events();
 }
 
 void DebugIO::eventHandler( CL_NetGameConnection *connection,const CL_NetGameEvent &event)
@@ -71,7 +69,7 @@ void DebugIO::commandHandler(const CL_NetGameEvent &event,  CL_NetGameConnection
         mCommand.invoke((std::string)event.get_argument(0).to_string(), &answer);
         CL_NetGameEvent response(CL_String("Answer"), CL_String(answer));
         connection->send_event(response);
-    } 
+    }
 }
 
 
@@ -86,7 +84,7 @@ void DebugIO::parter(const CL_NetGameEvent &event,  CL_NetGameConnection *connec
                 mVisualisatorConnection = connection;
             }
         }
-    } 
+    }
 }
 
 void DebugIO::addWatch(std::string id, std::string name, std::string value, std::string parent)
@@ -97,7 +95,7 @@ void DebugIO::addWatch(std::string id, std::string name, std::string value, std:
     {
         try
         {
-            mVisualisatorConnection->send_event(addWatchRequest);    
+            mVisualisatorConnection->send_event(addWatchRequest);
         }
         catch(CL_Exception& e)
         {
@@ -118,19 +116,19 @@ void DebugIO::updateWatch(std::string id, std::string newVal)
     {
         try
         {
-            mVisualisatorConnection->send_event(updateWatchRequest);  
+            mVisualisatorConnection->send_event(updateWatchRequest);
         }
         catch(CL_Exception& e)
         {
             std::string msg = e.what();
             LOG("Error: Can't update watch in visualiser; Reason: " + msg);
-        } 
+        }
     }
     else
     {
         //LOG("Error: visualiser not available.");
         LOG("[" + id + "] " + " = " + newVal);
-    } 
+    }
 }
 void DebugIO::removeWatch(std::string id)
 {
@@ -139,17 +137,17 @@ void DebugIO::removeWatch(std::string id)
     {
         try
         {
-            mVisualisatorConnection->send_event(removeWatchRequest);  
+            mVisualisatorConnection->send_event(removeWatchRequest);
         }
         catch(CL_Exception& e)
         {
             std::string msg = e.what();
             LOG("Error: Can't remove watch from visualiser; Reason: " + msg);
-        }  
+        }
      }
     else
     {
         LOG("Error: visualiser not available.");
         LOG("[" + id + "] " + "removed ");
-    }  
+    }
 }

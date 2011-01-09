@@ -22,11 +22,11 @@
 
 #include <boost/serialization/singleton.hpp>
 #include <Box2D/Box2D.h>
-
 #include "Core/Utils.hpp"
 #include "Core/ApplicationManager.hpp"
 
-class Body;
+class PhysicObject;
+
 class PhysicManager : public boost::serialization::singleton<PhysicManager>
 {
     private:
@@ -41,7 +41,7 @@ class PhysicManager : public boost::serialization::singleton<PhysicManager>
         ~PhysicManager();
 
         b2World& getWorld();
-        std::list<Body*> getBodies();
+        std::list<PhysicObject*> getBodies();
         void step();
         void disposeScene();
 };

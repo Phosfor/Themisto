@@ -21,11 +21,13 @@
 #include <Box2D/Box2D.h>
 #include <Box2D/Collision/Shapes/b2PolygonShape.h>
 #include <Box2D/Common/b2Math.h>
-
 #include <ClanLib/core.h>
 
 #include "World/WorldManager.hpp"
 #include "World/Objects/Object.hpp"
+#include "Core/Utils.hpp"
+#include "Core/ResourceManager.hpp"
+#include "Core/ApplicationManager.hpp"
 
 class BodyVisual;
 class Body;
@@ -37,17 +39,24 @@ class BodyMaterial;
 class PhysicObject: public Object
 {
     private:
-        boost::shared_ptr<BodyVisual> mBodyVisual;
-        boost::shared_ptr<Body> mBody;
+        std::vector< boost::shared_ptr<BodyPart> > mParts;
+        b2Body *mBody;
+
+        // Visual
+        CL_Sprite mImageHandle;
+        CL_GraphicContext mGC;
 
     public:
-        PhysicObject(boost::shared_ptr<Body> body, boost::shared_ptr<BodyVisual> visual);
+        explicit PhysicObject();
+        ~PhysicObject();
 
         // Get/set
-        void setVisual(boost::shared_ptr<BodyVisual> visualiser);
-        boost::shared_ptr<BodyVisual> getVisual();
-        void setBody(boost::shared_ptr<Body> body);
-        boost::shared_ptr<Body> getBody();
+        std::vector< boost::shared_ptr<BodyPart> > getParts();
+        void setParts(std::vector< boost::shared_ptr<BodyPart> > parts);
+        b2Body* getb2Body();
+        void setb2Body(b2Body* body);
+        void setVisual(std::string textureName, std::string textureSection, float width, float height);
+        void setVisual(std::string textureName, std::string textureSection);
 
         void updateVisual();
         void step(float32 elapsed); // Physic
@@ -60,6 +69,10 @@ class PhysicObject: public Object
         void update(float elapsed);
         void updateVisual(float newX, float newY);
         CL_Rectf getRectangle();
+
+        // Should body free memory under mBody object at destroing
+        // Default is true
+        bool mShouldFreeB2Body;
 };
 
 #endif /* _PHYSIC_OBJECT_HPP_ */
