@@ -40,7 +40,7 @@ void PhysicObject::setVisual(std::string textureName, std::string textureSection
 
 void PhysicObject::setVisual(std::string textureName, std::string textureSection, float width, float height)
 {
-    mImageHandle = resourceManager().getSprite(textureName, textureSection);
+    mImageHandle = resourceManager().getSprite(textureSection, textureName);
     if(!mImageHandle.is_null())
     {
         float koefX = 1;

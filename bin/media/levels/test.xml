@@ -24,11 +24,10 @@
             <Object name="Level" type="PhysicBodyObject" template="test2" />
 
              <Object name="Stone" type="PhysicBodyObject">
-                <!--Visual>
+                <Visual>
                     <Size width="90" height="90" />
-                    <Position x="-45" y="-45" />
                     <Texture section="Stuff" name="stone" />
-                </Visual-->
+                </Visual>
                 <Body>
                     <b2Body>
                         <Position>

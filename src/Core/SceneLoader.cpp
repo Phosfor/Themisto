@@ -153,7 +153,6 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
 
     // START OF OBJECTS PARSING -------------------------------------------
     {
-
         CL_DomNodeList childList = objects.get_child_nodes();
         for (int i=0; i < childList.get_length(); ++i)
         {
