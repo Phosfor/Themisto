@@ -29,50 +29,90 @@
 #include <ClanLib/gui.h>
 
 #include <boost/serialization/singleton.hpp>
+#include <boost/shared_ptr.hpp>
+#include <boost/cstdint.hpp>
 #include <boost/cstdint.hpp>
 
 #include "Core/ApplicationManager.hpp"
 #include "Core/Utils.hpp"
 
+// Used for objects map to achive z-index
+struct Compare
+{
+    bool operator()(const std::string &a, const std::string &b) const
+    {
+        unsigned int index1 = a.find_first_of('_');
+        std::string num1 = a.substr(0, index1);
+        int num_1 = atoi(num1.c_str());
+
+        unsigned int index2 = b.find_first_of('_');
+        std::string num2 = b.substr(0, index2);
+        int num_2 = atoi(num2.c_str());
+
+        return num_1 <= num_2;
+    }
+};
+
+class Object;
+typedef std::map<std::string, boost::shared_ptr<Object> > ObjectMapTypeAccess;
+typedef std::map<std::string, boost::shared_ptr<Object>, Compare> ObjectMapTypeSorted;
+
 class LevelManager : public boost::serialization::singleton<LevelManager>
 {
     private:
+        // Level stuff
         std::string mLevelName;
         std::string mForegroundTexture;
-
-        // Is foreground image enabled
-        bool mForeground;
-        bool mFixedForeground;
-        int mForegroundDelta; // If level texture is < then window height
+        bool mForeground;      // Is foreground image enabled
+        bool mFixedForeground; // If foreground image shouldn't move with camera
+        int mForegroundDelta;  // If level texture is < then window height
         // Average real foreground image size refer to full window size (in percents)
         uint16_t mForegroundActualSize;
-        float mCameraSpeed;
         CL_Size mTextureSize;
 
+        // Camera stuff
+        float mCameraSpeed;
         CL_Rectf mCameraViewport;
 
+        // Objects stuff
+        ObjectMapTypeAccess mObjects;
+        ObjectMapTypeSorted mObjectsSorted;
+        uint16_t mNumObjects;
+
     public:
+        LevelManager();
+
+        // Level stuff
         void setForegroundTexture(const std::string &resourceName);
         std::string getForegroundTexture();
+
         bool getForegroundEnabled();
+
         bool getForegroundFixed();
-        uint16_t getForegroundSize();
-        void setForegroundSize(uint16_t size);
         void setForegroundFixed(bool fixed);
 
-        void setCamViewport(const CL_Rectf &viewport);
-        CL_Rectf getCamViewport();
-        void translateCamera(float x, float y);
-
-        float getCameraSpeed();
-        void setCameraSpeed(float speed);
+        uint16_t getForegroundSize();
+        void setForegroundSize(uint16_t size);
 
         std::string getLevelName();
         void setLevelName(const std::string &name);
 
+        // Camera stuff
+        void setCamViewport(const CL_Rectf &viewport);
+        CL_Rectf getCamViewport();
+
+        void translateCamera(float x, float y);
         CL_Rectf getAbsoluteCameraPos();
 
+        float getCameraSpeed();
+        void setCameraSpeed(float speed);
+
+        // Init level manager with level texture
         void init(const std::string &textureName);
+
+        // Objects stuff
+        void addObject(const std::string &name, boost::shared_ptr<Object> obj);
+        void update(float elapsed);
 };
 
 inline LevelManager &levelManager() { return LevelManager::get_mutable_instance(); }

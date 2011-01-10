@@ -15,22 +15,14 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _ENVIRON_TYPES_HPP_
-#define _ENVIRON_TYPES_HPP_
+#include "World/Environ/Objects.hpp"
 
-// Numbers show the priority of render
-enum EnvironTypes
+Objects::Objects()
+    : mLevelManager(levelManager())
 {
-    Environ_Sky    = 0,
-    Environ_Stars  = 1,
-    Environ_Moon   = 2,
-    Environ_Lightnings = 3,
-    Environ_Clouds = 4,
-    Environ_Foreground = 5,
-    Environ_Birds  = 6,
-    Environ_Objects = 7,
-    Environ_Leaves = 8,
-    Environ_Rain   = 9
-};
+}
 
-#endif /* _ENVIRON_TYPES_HPP_ */
+void Objects::update(float elapsed)
+{
+    mLevelManager.update(elapsed);
+}

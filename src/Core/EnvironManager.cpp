@@ -26,6 +26,9 @@
 #include "World/Environ/Birds.hpp"
 #include "World/Environ/Lightnings.hpp"
 #include "World/Environ/Foreground.hpp"
+#include "World/Environ/Objects.hpp"
+
+// Abstract base
 #include "World/Environ/Object.hpp"
 
 void EnvironManager::initEnviron()
@@ -70,7 +73,7 @@ void EnvironManager::setEnvironTime(int _hours, int _minutes, int _seconds)
 
 float EnvironManager::getAbsTime()
 {
-    return mTotalSec / 3600.0f;
+    return mTotalHours;
 }
 
 void EnvironManager::update()
@@ -81,7 +84,7 @@ void EnvironManager::update()
 
     mTotalSec += gameSeconds;
     mEnvironTime[2] += gameSeconds;
-    float totalHours = mTotalSec/60.0/60.0;
+    mTotalHours = mTotalSec/3600.0f;
 
     if (mEnvironTime[2] >= 60)
     {
@@ -124,6 +127,7 @@ void EnvironManager::enableType(bool state, EnvironTypes type, int limit)
             case Environ_Rain:   temp = new Rain();   break;
             case Environ_Leaves: temp = new Leaves(); break;
             case Environ_Birds:  temp = new Birds();  break;
+            case Environ_Objects:  temp = new Objects();  break;
             case Environ_Foreground:  temp = new Foreground();  break;
             case Environ_Lightnings:  temp = new Lightnings();  break;
         }

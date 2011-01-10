@@ -14,7 +14,6 @@ set(Themisto_srcs
     Core/SceneLoader.cpp
     Core/EnvironManager.cpp
     Core/InputManager.cpp
-    Core/ObjectsManager.cpp
     Core/LevelManager.cpp
     Core/TemplatesProcessing.cpp
 
@@ -30,6 +29,7 @@ set(Themisto_srcs
     World/Environ/Birds.cpp
     World/Environ/Lightnings.cpp
     World/Environ/Foreground.cpp
+    World/Environ/Objects.cpp
 
     # Objects
     World/Objects/Grass.cpp

@@ -13,6 +13,7 @@
             <Leaves enabled="true" limit="8" />
             <Stars enabled="true" limit="400" />
             <Birds enabled="true" />
+            <Objects enabled="true" />
             <!-- actual_size is average real foreground image size refer to full window size -->
             <!-- If fixed is true, foreground wouldn't move with camera and level -->
             <Foreground image="test" actual_size="40" fixed="false" />

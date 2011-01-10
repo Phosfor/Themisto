@@ -44,6 +44,7 @@ class Birds;
 class Lightnings;
 class EnvironObject;
 class Foreground;
+class Objects;
 class EnvironManager : public boost::serialization::singleton<EnvironManager>
 {
     private:
@@ -54,6 +55,7 @@ class EnvironManager : public boost::serialization::singleton<EnvironManager>
         bool mNight, mEnvironEnabled;
         int mEnvironTime[3]; // 0 - hours; 1 - minutes; 2 - seconds
         float mTotalSec;
+        float mTotalHours;
 
     public:
         ~EnvironManager();

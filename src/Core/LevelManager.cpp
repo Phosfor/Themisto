@@ -1,18 +1,28 @@
 #include "Core/LevelManager.hpp"
+#include "World/Objects/Object.hpp"
+
+LevelManager::LevelManager()
+{
+    mNumObjects = 0;
+    mCameraSpeed = 10.0f;
+}
 
 void LevelManager::init(const std::string &textureName)
 {
     std::string path = utils().getMediaFolder() + "/" + textureName;
     if (!boost::filesystem::exists(path)) LOG_NOFORMAT(cl_format("Error: Level texture `%1` doesn't exist!", path));
     mTextureSize = CL_Image(appManager().getGraphic(), path).get_size();
-
-    mCameraSpeed = 10.0f;
 }
 
 void LevelManager::setForegroundTexture(const std::string &resourceName)
 {
     mForegroundTexture = resourceName;
     mForeground = true;
+}
+
+std::string LevelManager::getForegroundTexture()
+{
+    return mForegroundTexture;
 }
 
 bool LevelManager::getForegroundEnabled()
@@ -28,11 +38,6 @@ bool LevelManager::getForegroundFixed()
 void LevelManager::setForegroundFixed(bool fixed)
 {
     mFixedForeground = fixed;
-}
-
-std::string LevelManager::getForegroundTexture()
-{
-    return mForegroundTexture;
 }
 
 uint16_t LevelManager::getForegroundSize()
@@ -113,4 +118,37 @@ void LevelManager::setLevelName(const std::string &name)
 std::string LevelManager::getLevelName()
 {
     return mLevelName;
+}
+
+void LevelManager::addObject(const std::string &name, boost::shared_ptr<Object> obj)
+{
+    if (mObjects.find(name) == mObjects.end())
+    {
+        mObjects.insert(std::make_pair(name, obj));
+        mObjectsSorted.insert(std::make_pair(IntToStr(obj->getIndex()) + "_" + name, obj));
+        mNumObjects++;
+    }
+    else
+    {
+        LOG(cl_format("Object with name `%1` already exists!", name));
+    }
+}
+
+void LevelManager::update(float elapsed)
+{
+    CL_Rectf camPos = getAbsoluteCameraPos();
+
+    for (ObjectMapTypeSorted::const_iterator it=mObjectsSorted.begin();
+            it != mObjectsSorted.end(); ++it)
+    {
+        CL_Rectf objRect = it->second->getRectangle();
+
+        if (camPos.is_overlapped(objRect))
+        {
+            CL_Pointf position = it->second->getPosition();
+            it->second->updateVisual(position.x - camPos.left, position.y - camPos.top);
+        }
+
+        it->second->update(elapsed);
+    }
 }

@@ -68,11 +68,8 @@ void MenuState::update()
 {
     mGC.clear();
 
-    if (mEnvironEnabled) environManager().update();
-
-    //levelManager().update();
     physicManager().step();
-    objectsManager().update();
+    if (mEnvironEnabled) environManager().update();
 
     if (mDrawDebug) physicManager().getWorld().DrawDebugData();
     if (mDetailedOutput)

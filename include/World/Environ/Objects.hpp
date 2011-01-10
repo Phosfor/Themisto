@@ -15,22 +15,29 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _ENVIRON_TYPES_HPP_
-#define _ENVIRON_TYPES_HPP_
+#ifndef _ENVIRON_OBJECTS_HPP_
+#define _ENVIRON_OBJECTS_HPP_
 
-// Numbers show the priority of render
-enum EnvironTypes
+#include <math.h>
+
+#include <ClanLib/core.h>
+#include <ClanLib/display.h>
+#include <boost/cstdlib.hpp>
+
+#include "Core/Utils.hpp"
+#include "Core/ApplicationManager.hpp"
+#include "Core/EnvironManager.hpp"
+#include "Core/LevelManager.hpp"
+#include "World/Environ/Object.hpp"
+
+class Objects : public EnvironObject
 {
-    Environ_Sky    = 0,
-    Environ_Stars  = 1,
-    Environ_Moon   = 2,
-    Environ_Lightnings = 3,
-    Environ_Clouds = 4,
-    Environ_Foreground = 5,
-    Environ_Birds  = 6,
-    Environ_Objects = 7,
-    Environ_Leaves = 8,
-    Environ_Rain   = 9
+    private:
+        LevelManager &mLevelManager;
+
+    public:
+        Objects();
+        void update(float elapsed);
 };
 
-#endif /* _ENVIRON_TYPES_HPP_ */
+#endif /* _ENVIRON_OBJECTS_HPP_ */

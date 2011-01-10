@@ -124,6 +124,7 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
         deps["Leaves"] = Environ_Leaves;
         deps["Stars"] = Environ_Stars;
         deps["Birds"] = Environ_Birds;
+        deps["Objects"] = Environ_Objects;
 
         CL_DomNodeList childList = environ.get_child_nodes();
         for (int i=0; i < childList.get_length(); ++i)
@@ -183,7 +184,7 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
                 return;
             }
             object->setIndex(z_index);
-            objectsManager().addObject(name, object);
+            levelManager().addObject(name, object);
         }
     }
     // END OF OBJECTS PARSING -------------------------------------------
