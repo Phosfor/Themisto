@@ -36,22 +36,6 @@ void Leaves::processLeaves(CL_GraphicContext &gc, float windPower, LeafData &cur
 
     current.animation = false;
 
-    // Where to create new leaf (refers to the wind blowing direction)
-    if (firstTime)
-    {
-        current.x = rand() % mWindowWidth;
-        current.timeout = 0;
-    }
-    else
-    {
-        if (windPower < 0)
-            current.x = mWindowWidth;
-        else
-            current.x = 0;
-
-        current.timeout = rand() % 250;
-    }
-
     // The height where new leaf will be located
     current.y = mWindowHeight - mWindowHeight*((rand()%6+2)/10.0);
 
@@ -75,6 +59,22 @@ void Leaves::processLeaves(CL_GraphicContext &gc, float windPower, LeafData &cur
     current.imageHandle.set_color(CL_Colorf(17/255.0f, 30/255.0f, 35/255.0f));
 
     current.speed_koef = rand()%70 + 50;
+
+    // Where to create new leaf (refers to the wind blowing direction)
+    if (firstTime)
+    {
+        current.x = rand() % mWindowWidth;
+        current.timeout = 0;
+    }
+    else
+    {
+        if (windPower < 0)
+            current.x = mWindowWidth;
+        else
+            current.x = 0 - current.imageHandle.get_width();
+
+        current.timeout = rand() % 250;
+    }
 }
 
 Leaves::Leaves(uint16_t maxLeaves)
