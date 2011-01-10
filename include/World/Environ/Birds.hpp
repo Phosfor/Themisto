@@ -48,7 +48,7 @@ class Birds : public EnvironObject
     public:
         explicit Birds(uint16_t maxBirds = 1);
         void setLimit(uint16_t limit);
-        void update(float windPower, float elapsed, float globalTime);
+        void update(float elapsed);
 };
 
 #endif /* _ENVIRON_BIRDS_HPP_ */

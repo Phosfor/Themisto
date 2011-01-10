@@ -74,7 +74,7 @@ Birds::Birds(uint16_t maxBirds)
         mBirds.push_back(BirdData());
 }
 
-void Birds::update(float windPower, float elapsed, float globalTime)
+void Birds::update(float elapsed)
 {
     if (mFirstTime)
     {

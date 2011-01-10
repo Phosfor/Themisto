@@ -15,8 +15,8 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _WEATHER_MOON_HPP_
-#define _WEATHER_MOON_HPP_
+#ifndef _ENVIRON_MOON_HPP_
+#define _ENVIRON_MOON_HPP_
 
 #include <ClanLib/core.h>
 #include <ClanLib/display.h>
@@ -26,6 +26,7 @@
 
 #include "Core/ApplicationManager.hpp"
 #include "Core/ResourceManager.hpp"
+#include "Core/EnvironManager.hpp"
 #include "World/Environ/Object.hpp"
 
 #include <math.h>
@@ -52,7 +53,7 @@ class Moon : public EnvironObject
         Moon();
         void setScale(float _scaleX, float _scaleY);
         float getMoonAngle();
-        void update(float windPower, float elapsed, float globalTime);
+        void update(float elapsed);
 };
 
-#endif /* _WEATHER_MOON_HPP_ */
+#endif /* _ENVIRON_MOON_HPP_ */

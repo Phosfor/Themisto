@@ -84,9 +84,10 @@ Rain::Rain(uint16_t maxDrops)
     }
 }
 
-void Rain::update(float windPower, float elapsed, float globalTime)
+void Rain::update(float elapsed)
 {
-    float newXSpeed = windPower * elapsed;
+    float _windPower = environManager().getWindPower();
+    float newXSpeed = _windPower * elapsed;
     float newYSpeed = Gravity * elapsed;
     for (uint16_t i=0; i < mMaxObjects; i++)
     {
@@ -99,7 +100,7 @@ void Rain::update(float windPower, float elapsed, float globalTime)
         else
         {
             if (current.y > mWindowHeight || current.x > mWindowWidth || current.x < 0)
-                processDrops(windPower, current, i);
+                processDrops(_windPower, current, i);
 
             current.x += current.x_speed * elapsed;
             current.y += current.y_speed * elapsed;

@@ -15,8 +15,8 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _WEATHER_CLOUDS_HPP_
-#define _WEATHER_CLOUDS_HPP_
+#ifndef _ENVIRON_CLOUDS_HPP_
+#define _ENVIRON_CLOUDS_HPP_
 
 #include <ClanLib/core.h>
 #include <ClanLib/display.h>
@@ -27,6 +27,7 @@
 #include "Core/Utils.hpp"
 #include "Core/ApplicationManager.hpp"
 #include "Core/ResourceManager.hpp"
+#include "Core/EnvironManager.hpp"
 #include "World/Environ/Object.hpp"
 #include "Core/LevelManager.hpp"
 
@@ -50,10 +51,10 @@ class Clouds : public EnvironObject
     public:
         explicit Clouds(uint16_t maxClouds = 20);
         void setLimit(uint16_t limit);
-        void update(float windPower, float elapsed, float globalTime);
+        void update(float elapsed);
 
         // For the lightning
         CL_Pointf getCloudPos();
 };
 
-#endif /* _WEATHER_CLOUDS_HPP_ */
+#endif /* _ENVIRON_CLOUDS_HPP_ */

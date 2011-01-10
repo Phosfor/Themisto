@@ -15,13 +15,14 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _WEATHER_SKY_HPP_
-#define _WEATHER_SKY_HPP_
+#ifndef _ENVIRON_SKY_HPP_
+#define _ENVIRON_SKY_HPP_
 
 #include <ClanLib/core.h>
 #include <ClanLib/display.h>
 #include "Core/Utils.hpp"
 #include "Core/ApplicationManager.hpp"
+#include "Core/EnvironManager.hpp"
 #include "World/Environ/Object.hpp"
 
 class Sky : public EnvironObject
@@ -56,7 +57,7 @@ class Sky : public EnvironObject
 
     public:
         Sky();
-        void update(float windPower, float elapsed, float globalTime);
+        void update(float elapsed);
 };
 
-#endif /* _WEATHER_SKY_HPP_ */
+#endif /* _ENVIRON_SKY_HPP_ */

@@ -4,9 +4,8 @@ void LevelManager::init(const std::string &textureName)
 {
     std::string path = utils().getMediaFolder() + "/" + textureName;
     if (!boost::filesystem::exists(path)) LOG_NOFORMAT(cl_format("Error: Level texture `%1` doesn't exist!", path));
-    mLevelTexture = CL_Image(appManager().getGraphic(), path);
+    mTextureSize = CL_Image(appManager().getGraphic(), path).get_size();
 
-    mGC = appManager().getGraphic();
     mCameraSpeed = 10.0f;
 }
 
@@ -46,18 +45,13 @@ void LevelManager::setForegroundSize(uint16_t size)
     mForegroundActualSize = size;
 }
 
-void LevelManager::update()
-{
-    mLevelTexture.draw(mGC, mCameraViewport.left, mCameraViewport.top);
-}
-
 void LevelManager::setCamViewport(const CL_Rectf  &viewport)
 {
     mCameraViewport = viewport;
 
     // If level texture height is smaller then window resolution, draw texture
     // At the bottom of the screen
-    mForegroundDelta = mLevelTexture.get_height() - ScreenResolutionY;
+    mForegroundDelta = mTextureSize.height - ScreenResolutionY;
     if (mForegroundDelta < 0)
         mCameraViewport.top += abs(mForegroundDelta);
     else
@@ -83,7 +77,7 @@ void LevelManager::translateCamera(float x, float y)
 {
     // Check X-moving
     if (mCameraViewport.left + x > 0 ||
-        abs(mCameraViewport.left) - x + ScreenResolutionX > mLevelTexture.get_width())
+        abs(mCameraViewport.left) - x + ScreenResolutionX > mTextureSize.width)
         return;
 
     // Check Y-moving
@@ -96,7 +90,7 @@ void LevelManager::translateCamera(float x, float y)
     else
     {
         if (mCameraViewport.top + y > 0 ||
-            abs(mCameraViewport.top) - y + ScreenResolutionY > mLevelTexture.get_height())
+            abs(mCameraViewport.top) - y + ScreenResolutionY > mTextureSize.height)
             return;
     }
 

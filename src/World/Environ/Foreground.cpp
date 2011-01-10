@@ -7,7 +7,7 @@ Foreground::Foreground()
     mGC = appManager().getGraphic();
 }
 
-void Foreground::update(float windPower, float elapsed, float globalTime)
+void Foreground::update(float elapsed)
 {
     float yPos = 0.0f;
     if (!levelManager().getForegroundFixed()) yPos = levelManager().getCamViewport().top;

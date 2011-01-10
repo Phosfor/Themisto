@@ -15,8 +15,8 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _WEATHER_LEAVES_HPP_
-#define _WEATHER_LEAVES_HPP_
+#ifndef _ENVIRON_LEAVES_HPP_
+#define _ENVIRON_LEAVES_HPP_
 
 #include <ClanLib/core.h>
 #include <ClanLib/display.h>
@@ -53,7 +53,7 @@ class Leaves : public EnvironObject
     public:
         explicit Leaves(uint16_t maxLeaves = 5);
         void setLimit(uint16_t limit);
-        void update(float windPower, float elapsed, float globalTime);
+        void update(float elapsed);
 };
 
-#endif /* _WEATHER_LEAVES_HPP_ */
+#endif /* _ENVIRON_LEAVES_HPP_ */

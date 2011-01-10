@@ -70,9 +70,9 @@ void MenuState::update()
 
     if (mEnvironEnabled) environManager().update();
 
-    levelManager().update();
+    //levelManager().update();
     physicManager().step();
-    objectsManager().update();
+    //objectsManager().update();
 
     if (mDrawDebug) physicManager().getWorld().DrawDebugData();
     if (mDetailedOutput)

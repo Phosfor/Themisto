@@ -37,7 +37,6 @@
 class LevelManager : public boost::serialization::singleton<LevelManager>
 {
     private:
-        CL_Image mLevelTexture;
         std::string mLevelName;
         std::string mForegroundTexture;
 
@@ -48,9 +47,9 @@ class LevelManager : public boost::serialization::singleton<LevelManager>
         // Average real foreground image size refer to full window size (in percents)
         uint16_t mForegroundActualSize;
         float mCameraSpeed;
+        CL_Size mTextureSize;
 
         CL_Rectf mCameraViewport;
-        CL_GraphicContext mGC;
 
     public:
         void setForegroundTexture(const std::string &resourceName);
@@ -74,7 +73,6 @@ class LevelManager : public boost::serialization::singleton<LevelManager>
         CL_Rectf getAbsoluteCameraPos();
 
         void init(const std::string &textureName);
-        void update();
 };
 
 inline LevelManager &levelManager() { return LevelManager::get_mutable_instance(); }

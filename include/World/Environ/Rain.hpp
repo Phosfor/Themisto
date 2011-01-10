@@ -15,8 +15,8 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _WEATHER_RAIN_HPP_
-#define _WEATHER_RAIN_HPP_
+#ifndef _ENVIRON_RAIN_HPP_
+#define _ENVIRON_RAIN_HPP_
 
 #include <math.h>
 
@@ -51,7 +51,7 @@ class Rain : public EnvironObject
     public:
         explicit Rain(uint16_t maxDrops = 150);
         void setLimit(uint16_t limit);
-        void update(float windPower, float elapsed, float globalTime);
+        void update(float elapsed);
 };
 
-#endif /* _WEATHER_RAIN_HPP_ */
+#endif /* _ENVIRON_RAIN_HPP_ */

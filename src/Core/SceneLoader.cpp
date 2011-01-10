@@ -36,7 +36,7 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
     DocumentPtr document;
     try
     {
-        document = proc.processTemplates("media/levels/" + sceneName);
+        document = proc.processTemplates(utils().getMediaFolder() + "/levels/" + sceneName);
         //CL_File writeFile("out.xml", CL_File::create_always, CL_File::access_write);
         //document->save(writeFile);
     }
@@ -67,6 +67,7 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
     // Get world dimensions
     if (!world.has_attribute("image")) LOG_NOFORMAT("Error: World tag should have `image` attribute!");
     levelManager().init(world.get_attribute("image"));
+
 
     levelManager().setLevelName(name);
 
@@ -183,7 +184,6 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
             }
             object->setIndex(z_index);
             objectsManager().addObject(name, object);
-
         }
     }
     // END OF OBJECTS PARSING -------------------------------------------

@@ -47,7 +47,7 @@ class Lightnings : public EnvironObject
 
     public:
         Lightnings();
-        void update(float windPower, float elapsed, float globalTime);
+        void update(float elapsed);
 };
 
 #endif /* _ENVIRON_LIGHTNINGS_HPP_ */

@@ -78,6 +78,8 @@ class EnvironManager : public boost::serialization::singleton<EnvironManager>
         void setEnvironTime(int _hours, int _minutes, int _seconds);
         int *getEnvironTime();
 
+        float getAbsTime();
+
         void update();
 };
 

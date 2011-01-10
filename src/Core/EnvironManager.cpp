@@ -48,7 +48,7 @@ void EnvironManager::setWindPower(float _power)
 
 float EnvironManager::getWindPower()
 {
-    return Pixels2Meters(mWindPower);
+    return mWindPower;
 }
 
 int *EnvironManager::getEnvironTime()
@@ -68,11 +68,16 @@ void EnvironManager::setEnvironTime(int _hours, int _minutes, int _seconds)
     mEnvironTime[2] = _seconds;
 }
 
+float EnvironManager::getAbsTime()
+{
+    return mTotalSec / 3600.0f;
+}
+
 void EnvironManager::update()
 {
     float elapsed = appManager().getElapsed();
     float gameSeconds = GameSeconds(elapsed);
-    elapsed /= 1000.f;
+    elapsed *= 0.001f;
 
     mTotalSec += gameSeconds;
     mEnvironTime[2] += gameSeconds;
@@ -96,7 +101,7 @@ void EnvironManager::update()
     // Update all environ objects
     for (MapType::const_iterator it = mObjectsMap.begin(); it != mObjectsMap.end(); ++it)
     {
-        it->second->update(mWindPower, elapsed, totalHours);
+        it->second->update(elapsed);
     }
 }
 

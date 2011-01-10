@@ -41,8 +41,10 @@ Sky::Sky()
     quad2 = CL_Rectf(0, mWindowHeight/2.0, mWindowWidth, mWindowHeight);
 }
 
-void Sky::update(float windPower, float elapsed, float globalTime)
+void Sky::update(float elapsed)
 {
+    float globalTime = environManager().getAbsTime();
+
     // Make atmosphere scattering? [9; 11] globalTime
     if (globalTime <= 7.0f) {
         t1 = 0.0f;

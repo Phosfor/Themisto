@@ -48,8 +48,10 @@ void Moon::setScale(float _scaleX, float _scaleY)
     mMoon.set_scale(_scaleX, _scaleY);
 }
 
-void Moon::update(float windPower, float elapsed, float globalTime)
+void Moon::update(float elapsed)
 {
+    float globalTime = environManager().getAbsTime();
+
     // Set moon back
     if (!mRenderMoon && (globalTime == 0.0f || globalTime <= 0.3f ))
     {

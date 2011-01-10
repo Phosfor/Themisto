@@ -62,8 +62,9 @@ Stars::Stars(uint16_t maxStars)
         mImageStars.push_back(ImageStarsData(mGC, mWindowWidth, mWindowHeight));
 }
 
-void Stars::update(float windPower, float elapsed, float globalTime)
+void Stars::update(float elapsed)
 {
+    float globalTime = environManager().getAbsTime();
     if (globalTime <= 10.0f) {
         t1 = 0.0f;
     } else if (globalTime >= 14.0f) {

@@ -41,7 +41,7 @@ class EnvironObject : public boost::noncopyable
       bool getEnabled();
       void setEnabled(bool state);
 
-      virtual void update(float windPower, float elapsed, float globalTime) = 0;
+      virtual void update(float elapsed) = 0;
 };
 
 #endif

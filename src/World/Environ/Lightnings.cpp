@@ -34,7 +34,7 @@ Lightnings::Lightnings()
         mCloudsHandle = reinterpret_cast<Clouds*>(environManager().getTypeHandle(Environ_Clouds));
 }
 
-void Lightnings::update(float windPower, float elapsed, float globalTime)
+void Lightnings::update(float elapsed)
 {
     if (mEnabled && !mAnimation && rand() % mProbability == 0)
     {

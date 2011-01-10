@@ -37,7 +37,7 @@ class Foreground : public EnvironObject
 
     public:
         Foreground();
-        void update(float windPower, float elapsed, float globalTime);
+        void update(float elapsed);
 };
 
 #endif /* _ENVIRON_FOREGROUND_HPP_ */
