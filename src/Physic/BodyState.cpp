@@ -1,5 +1,5 @@
 /*
-   Copyright 2010 Tyslenko Max, Bogatirev Pavel.
+   Copyright 2010-2011 Tyslenko Max, Bogatirev Pavel.
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
