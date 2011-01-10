@@ -176,7 +176,14 @@ std::pair< b2Body*, std::vector< boost::shared_ptr<BodyPart> > > ParsePhysicBody
         boost::shared_ptr<BodyPart> partHandle;
         b2Filter filter;
 
-        LOG_NOFORMAT(cl_format("%1; ", parts.item(i).to_element().get_attribute("id")).c_str());
+        if (parts.item(i).to_element().has_attribute("id"))
+        {
+            LOG_NOFORMAT(cl_format("%1; ", parts.item(i).to_element().get_attribute("id")).c_str());
+        }
+        else
+        {
+            LOG_NOFORMAT(cl_format("%1", i).c_str());
+        }
 
         // Parse b2Fixture
         CL_DomElement physicPart = parts.item(i).to_element();
