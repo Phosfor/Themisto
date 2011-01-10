@@ -20,9 +20,7 @@
         </Environ>
 
         <Objects>
-
-            <Object name="Level" type="PhysicBodyObject" template="test2" />
-
+             <Object name="Level" type="PhysicBodyObject" template="test2" />
              <Object name="Stone" type="PhysicBodyObject">
                 <Visual>
                     <Size width="90" height="90" />
@@ -49,7 +47,6 @@
                     </Part>
                   </Body>
              </Object>
-
         </Objects>
 
     </World>

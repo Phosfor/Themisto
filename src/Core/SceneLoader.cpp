@@ -163,7 +163,7 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
             std::string type = tag.get_attribute("type").c_str();
             LOG_NOFORMAT(cl_format("- Parsing object `%1` of type `%2`\n", name, type));
 
-            int z_index = 0;
+            int z_index = 1;
             if (tag.has_attribute("z-index"))
                 z_index = boost::lexical_cast<int>(tag.get_attribute("z-index").c_str());
 

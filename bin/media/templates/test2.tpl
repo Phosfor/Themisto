@@ -1,6 +1,6 @@
 <Templates>
 <Template name="test2">
- <Object type="PhysicObject">
+ <Object type="PhysicObject" z-index="0">
   <Visual>
     <Texture section="Levels" name="test" />
   </Visual>
