@@ -67,7 +67,17 @@ int Application::main(const std::vector<CL_String> &args)
         CL_Slot slotQuit = appManager().getWindow().sig_window_close().connect(Application::onWindowClose);
         CL_Slot slotInput = inputManager().getKeyboard().sig_key_up().connect(Application::onInput);
 
-        stateManager().push(new MenuState);
+        // Queueing the states
+        bool editor = false;
+        for (unsigned int i=0; i < args.size(); i++)
+        {
+           if (args[i] == "editor") editor = true;
+        }
+
+        if (editor)
+           stateManager().push(new EditorState);
+        else
+           stateManager().push(new MenuState);
 
         while (appManager().getRunning())
         {

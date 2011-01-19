@@ -38,6 +38,7 @@ set(Themisto_srcs
 
     # States
     World/States/MenuState.cpp
+    World/States/EditorState.cpp
 
     # Physic
     Physic/BodyMaterial.cpp
