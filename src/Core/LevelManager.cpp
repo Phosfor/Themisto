@@ -143,7 +143,13 @@ void LevelManager::update(float elapsed)
     {
         CL_Rectf objRect = it->second->getRectangle();
 
-        if (camPos.is_overlapped(objRect))
+        // Check whether object is in camera space
+        if ( !(objRect.right - camPos.left < 0                 || // <-
+               objRect.left  - camPos.left > ScreenResolutionX || // ->
+               objRect.top   - camPos.top< 0                   || // up
+               objRect.top   - camPos.top > ScreenResolutionY     // down
+              )
+            )
         {
             CL_Pointf position = it->second->getPosition();
             it->second->updateVisual(position.x - camPos.left, position.y - camPos.top);

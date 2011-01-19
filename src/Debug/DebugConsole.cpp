@@ -156,15 +156,15 @@ void Client::parseCommand(std::string &command)
     }
     else if(command == "run" || command == "r")
     {
-        exec("./Themisto physic &", false);
+        exec("./Themisto&", false);
     }
     else if(command == "run console" || command == "rc")
     {
-        system("gnome-terminal -e './Themisto physic&' &");
+        system("gnome-terminal -e './Themisto&' &");
     }
     else if(command == "run here" || command == "rh")
     {
-        system("./Themisto physic");
+        system("./Themisto");
     }
     else if(command == "build" || command == "b" || command == "make")
     {

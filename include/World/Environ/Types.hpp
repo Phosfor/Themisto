@@ -28,8 +28,8 @@ enum EnvironTypes
     Environ_Clouds = 4,
     Environ_Foreground = 5,
     Environ_Birds  = 6,
-    Environ_Objects = 7,
-    Environ_Leaves = 8,
+    Environ_Leaves = 7,
+    Environ_Objects = 8,
     Environ_Rain   = 9
 };
 
