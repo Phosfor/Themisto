@@ -144,16 +144,21 @@ void LevelManager::update(float elapsed)
         CL_Rectf objRect = it->second->getRectangle();
 
         // Check whether object is in camera space
-        if ( !( false
-               //objRect.right - camPos.left < 0    //             || // <-
-               //objRect.left  - camPos.left > ScreenResolutionX || // ->
-               //objRect.bottom - camPos.top < 0               || // up
-               //objRect.top   - camPos.top > ScreenResolutionY     // down
+        if ( !(
+               objRect.right - camPos.left < 0                    || // <-
+               objRect.left  - camPos.left > ScreenResolutionX    || // ->
+               objRect.top   - camPos.top  < 0                    || // up
+               objRect.bottom - camPos.top > ScreenResolutionY       // down
               )
             )
         {
+            std::cout << "visible\n";
             CL_Pointf position = it->second->getPosition();
             it->second->updateVisual(position.x - camPos.left, position.y - camPos.top);
+        }
+        else
+        {
+            std::cout << "invisible!\n";
         }
 
         it->second->update(elapsed);
