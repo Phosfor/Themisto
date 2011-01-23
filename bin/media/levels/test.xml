@@ -16,13 +16,13 @@
             <Objects enabled="true" />
             <!-- actual_size is average real foreground image size refer to full window size -->
             <!-- If fixed is true, foreground wouldn't move with camera and level -->
-            <Foreground image="test" actual_size="40" fixed="false" />
+
             <Wind power="-2" />
         </Environ>
 
         <Objects>
              <Object name="Level" type="PhysicBodyObject" template="test2" />
-             <Object name="Stone" type="PhysicBodyObject">
+             <Object name="Stone" type="PhysicBodyObject" z-index='-1'>
                 <Visual>
                     <Size width="90" height="90" />
                     <Texture section="Stuff" name="stone" />
@@ -43,6 +43,10 @@
                             <Shape>
                                 <Type>e_circle</Type>
                                 <Radius>45.0</Radius>
+                                <Center>
+                                    <x>45</x>
+                                    <y>45</y>
+                                </Center>
                             </Shape>
                         </b2Fixture>
                     </Part>

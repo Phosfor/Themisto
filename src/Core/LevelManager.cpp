@@ -144,10 +144,11 @@ void LevelManager::update(float elapsed)
         CL_Rectf objRect = it->second->getRectangle();
 
         // Check whether object is in camera space
-        if ( !(objRect.right - camPos.left < 0                 || // <-
-               objRect.left  - camPos.left > ScreenResolutionX || // ->
-               objRect.top   - camPos.top< 0                   || // up
-               objRect.top   - camPos.top > ScreenResolutionY     // down
+        if ( !( false
+               //objRect.right - camPos.left < 0    //             || // <-
+               //objRect.left  - camPos.left > ScreenResolutionX || // ->
+               //objRect.bottom - camPos.top < 0               || // up
+               //objRect.top   - camPos.top > ScreenResolutionY     // down
               )
             )
         {

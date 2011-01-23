@@ -55,6 +55,7 @@ void PhysicObject::setVisual(std::string textureName, std::string textureSection
         }
         mImageHandle.set_scale(koefX, koefY);
         mImageHandle.set_linear_filter(true);
+        mImageHandle.set_rotation_hotspot(origin_top_left, 0, 0);
     }
 }
 
