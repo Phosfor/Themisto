@@ -149,7 +149,10 @@ void LevelManager::update(float elapsed)
     {
         CL_Rectf objRect = it->second->getRectangle();
 
-        if (mDrawDebugData) CL_Draw::box(appManager().getGraphic(), objRect, CL_Colorf::red);
+        if (mDrawDebugData) CL_Draw::box(appManager().getGraphic(),
+                objRect.right - camPos.left, objRect.top - camPos.top,
+                objRect.left - camPos.left, objRect.bottom - camPos.top,
+                CL_Colorf::red);
 
         // Check whether object is in camera space
         if ( !(
