@@ -44,8 +44,8 @@ void LightColumn::setVisual(std::string textureName, std::string textureSection,
     mImageHandle = resourceManager().getSprite(textureSection, textureName);
     // Improove this shit
     mLighting = resourceManager().getSprite("Stuff", "light");
-    mBug = resourceManager().getSprite("Stars", "1");
-    mBug.set_scale(0.3, 0.3);
+    mBug = resourceManager().getSprite("Stars", "3");
+    mBug.set_scale(0.7, 0.7);
     //mLighting.set_scale(3, 3);
     mLighting.set_alignment(origin_center);
     if(!mImageHandle.is_null())
@@ -85,9 +85,6 @@ void LightColumn::updateVisual(float newX, float newY)
 
         float alpha = 1 - len / mImageHandle.get_width()*1.5f;
         float alpha_ = 1 - len_ / mImageHandle.get_width()*1.5f;
-
-        alpha += 2.0f;
-        alpha_ += 2.0f;
 
         CL_Colorf col;
         mImageHandle.draw(mGC, newX, newY);
