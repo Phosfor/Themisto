@@ -15,8 +15,8 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _PHYSIC_OBJECT_HPP_
-#define _PHYSIC_OBJECT_HPP_
+#ifndef _LIGHTCOLUMN_OBJECT_HPP_
+#define _LIGHTCOLUMN_OBJECT_HPP_
 
 #include <Box2D/Box2D.h>
 #include <Box2D/Collision/Shapes/b2PolygonShape.h>
@@ -28,41 +28,34 @@
 #include "Core/Utils.hpp"
 #include "Core/ResourceManager.hpp"
 #include "Core/ApplicationManager.hpp"
+#include "Core/InputManager.hpp"
 
-class BodyVisual;
-class Body;
-class BodyPart;
-class BodyState;
-class Impact;
-class BodyMaterial;
-
-class PhysicObject: public Object
+class LightColumn: public Object
 {
     private:
-        std::vector< boost::shared_ptr<BodyPart> > mParts;
-        b2Body *mBody;
-
         // Visual
-        CL_Sprite mImageHandle;
+        CL_Sprite mImageHandle, mLighting, mBug;
         CL_GraphicContext mGC;
 
+        CL_Pointf mPos;
+        CL_Rectf mBoundingBox;
+
+        // For bugs
+        float mAbsTime;
+        float x, y, x_, y_;
+
     public:
-        explicit PhysicObject();
-        ~PhysicObject();
+        explicit LightColumn();
+        ~LightColumn();
 
         // Get/set
-        std::vector< boost::shared_ptr<BodyPart> > getParts();
-        void setParts(std::vector< boost::shared_ptr<BodyPart> > parts);
-        b2Body* getb2Body();
-        void setb2Body(b2Body* body);
         void setVisual(std::string textureName, std::string textureSection, float width, float height);
         void setVisual(std::string textureName, std::string textureSection);
 
         void updateVisual();
-        void step(float32 elapsed); // Physic
 
         // Parsing object
-        static boost::shared_ptr<Object> ParsePhysicObject(CL_DomElement* node, std::string &desc);
+        static boost::shared_ptr<Object> ParseLightColumn(CL_DomElement* node, std::string &desc);
 
         // --- Object implementation ---
         CL_Pointf getPosition();
@@ -70,10 +63,6 @@ class PhysicObject: public Object
         void update(float elapsed);
         void updateVisual(float newX, float newY);
         CL_Rectf getRectangle();
-
-        // Should body free memory under mBody object at destroing
-        // Default is true
-        bool mShouldFreeB2Body;
 };
 
-#endif /* _PHYSIC_OBJECT_HPP_ */
+#endif /* _LIGHTCOLUMN_OBJECT_HPP_ */

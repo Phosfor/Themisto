@@ -19,10 +19,12 @@
 
 #include "World/Objects/Object.hpp"
 #include "World/Objects/PhysicObject.hpp"
+#include "World/Objects/LightColumn.hpp"
 
 boost::shared_ptr<Object> TypesManager::empty_parser(CL_DomElement* p, std::string& desc)
 {
     desc += "Error: object type not registered.";
+    LOG("Error: object type not registered\n");
     return boost::shared_ptr<Object>();
 }
 
@@ -37,6 +39,7 @@ Parser TypesManager::getParser(std::string type)
 TypesManager::TypesManager()
 {
     registerParser("PhysicBodyObject", PhysicObject::ParsePhysicObject);
+    registerParser("LightColumnObject", LightColumn::ParseLightColumn);
 }
 
 boost::shared_ptr<Object> TypesManager::parseObject(CL_DomElement* objectTag, const std::string &type, std::string &desc)

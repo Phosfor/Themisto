@@ -158,8 +158,8 @@ void LevelManager::update(float elapsed)
         if ( !(
                objRect.right - camPos.left < 0                    || // <-
                objRect.left  - camPos.left > ScreenResolutionX    || // ->
-               objRect.top   - camPos.top  < 0                    || // up
-               objRect.bottom - camPos.top > ScreenResolutionY       // down
+               objRect.bottom - camPos.top  < 0                   || // up
+               objRect.top - camPos.top > ScreenResolutionY          // down
               )
             )
         {

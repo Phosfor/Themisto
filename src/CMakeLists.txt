@@ -33,6 +33,7 @@ set(Themisto_srcs
 
     # Objects
     World/Objects/Grass.cpp
+    World/Objects/LightColumn.cpp
     World/Objects/TypesManager.cpp
     World/Objects/PhysicObject.cpp
 

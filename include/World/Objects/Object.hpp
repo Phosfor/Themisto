@@ -24,7 +24,8 @@ enum ObjectTypes
 {
     NotAnObject = 0,
     PhysicBodyObject,
-    GrassObject
+    GrassObject,
+    LightColumnObject
 };
 
 class Object : public boost::noncopyable
@@ -43,6 +44,7 @@ class Object : public boost::noncopyable
 
         virtual ObjectTypes getType() { return mType; }
 
+        virtual void setPosition(CL_Pointf newPos) = 0;
         virtual CL_Pointf getPosition() = 0;
         virtual CL_Rectf getRectangle() = 0;
 

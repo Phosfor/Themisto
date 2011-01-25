@@ -22,7 +22,14 @@
         </Environ>
 
         <Objects>
-             <Object name="Level" type="PhysicBodyObject" template="test2" />
+             <Object name="Level" type="PhysicBodyObject" template="level_phys" />
+             <Object name="Lamp" type="LightColumnObject">
+                 <Visual>
+                    <Size width="100" height="380" />
+                    <Texture section="Stuff" name="lightcolumn" />
+                    <Position x="2650" y="400" />
+                 </Visual>
+             </Object>
              <Object name="Stone" type="PhysicBodyObject" z-index='-1'>
                 <Visual>
                     <Size width="90" height="90" />
@@ -57,6 +64,6 @@
 
     </World>
     <Templates>
-       <Include>test2.tpl</Include>
+       <Include>level_phys.tpl</Include>
     </Templates>
 </ThemistoLevel>

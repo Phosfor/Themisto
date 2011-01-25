@@ -7,6 +7,8 @@
     <section name="Stuff">
         <texture name="stone" file="stone.png" />
         <texture name="house" file="house.png" />
+        <texture name="light" file="light.png" />
+        <texture name="lightcolumn" file="light_column.png" />
     </section>
 
     <section name="Clouds">

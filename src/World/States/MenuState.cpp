@@ -138,21 +138,24 @@ void MenuState::onKeyDown(const CL_InputEvent &key, const CL_InputState &state)
     }
 
     float camSpeed = levelManager().getCameraSpeed();
-    if (key.id == CL_KEY_RIGHT)
+    if (!inputManager().keyPressed(CL_KEY_CONTROL))
     {
-        levelManager().translateCamera(-camSpeed, 0);
-    }
-    else if (key.id == CL_KEY_LEFT)
-    {
-        levelManager().translateCamera(+camSpeed, 0);
-    }
-    else if (key.id == CL_KEY_UP)
-    {
-        levelManager().translateCamera(0, +camSpeed);
-    }
-    else if (key.id == CL_KEY_DOWN)
-    {
-        levelManager().translateCamera(0, -camSpeed);
+        if (key.id == CL_KEY_RIGHT)
+        {
+            levelManager().translateCamera(-camSpeed, 0);
+        }
+        else if (key.id == CL_KEY_LEFT)
+        {
+            levelManager().translateCamera(+camSpeed, 0);
+        }
+        else if (key.id == CL_KEY_UP)
+        {
+            levelManager().translateCamera(0, +camSpeed);
+        }
+        else if (key.id == CL_KEY_DOWN)
+        {
+            levelManager().translateCamera(0, -camSpeed);
+        }
     }
 }
 

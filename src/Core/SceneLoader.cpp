@@ -168,10 +168,7 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
             if (tag.has_attribute("z-index"))
                 z_index = boost::lexical_cast<int>(tag.get_attribute("z-index").c_str());
 
-            // TODO: Call template parsing here...
-
             std::string desc = "";
-
             boost::shared_ptr<Object> object;
             try
             {
