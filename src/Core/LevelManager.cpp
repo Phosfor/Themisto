@@ -5,6 +5,7 @@ LevelManager::LevelManager()
 {
     mNumObjects = 0;
     mCameraSpeed = 10.0f;
+    mDrawDebugData = false;
 }
 
 void LevelManager::init(const std::string &textureName)
@@ -66,6 +67,11 @@ void LevelManager::setCamViewport(const CL_Rectf  &viewport)
 CL_Rectf LevelManager::getCamViewport()
 {
     return mCameraViewport;
+}
+
+void LevelManager::setDrawDebugData(bool draw)
+{
+    mDrawDebugData = draw;
 }
 
 float LevelManager::getCameraSpeed()
@@ -143,6 +149,8 @@ void LevelManager::update(float elapsed)
     {
         CL_Rectf objRect = it->second->getRectangle();
 
+        if (mDrawDebugData) CL_Draw::box(appManager().getGraphic(), objRect, CL_Colorf::red);
+
         // Check whether object is in camera space
         if ( !(
                objRect.right - camPos.left < 0                    || // <-
@@ -152,13 +160,8 @@ void LevelManager::update(float elapsed)
               )
             )
         {
-            std::cout << "visible\n";
             CL_Pointf position = it->second->getPosition();
             it->second->updateVisual(position.x - camPos.left, position.y - camPos.top);
-        }
-        else
-        {
-            std::cout << "invisible!\n";
         }
 
         it->second->update(elapsed);

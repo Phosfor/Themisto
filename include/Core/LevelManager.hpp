@@ -74,6 +74,9 @@ class LevelManager : public boost::serialization::singleton<LevelManager>
         float mCameraSpeed;
         CL_Rectf mCameraViewport;
 
+        // Draw bounding boxes of objects?
+        bool mDrawDebugData;
+
         // Objects stuff
         ObjectMapTypeAccess mObjects;
         ObjectMapTypeSorted mObjectsSorted;
@@ -106,6 +109,8 @@ class LevelManager : public boost::serialization::singleton<LevelManager>
 
         float getCameraSpeed();
         void setCameraSpeed(float speed);
+
+        void setDrawDebugData(bool draw);
 
         // Init level manager with level texture
         void init(const std::string &textureName);

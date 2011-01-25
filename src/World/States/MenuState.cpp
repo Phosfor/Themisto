@@ -124,6 +124,8 @@ void MenuState::onKeyDown(const CL_InputEvent &key, const CL_InputState &state)
         if (inputManager().keyPressed(CL_KEY_CONTROL))
         {
             mDrawDebug = !mDrawDebug;
+
+            levelManager().setDrawDebugData(mDrawDebug);
         }
     }
 
