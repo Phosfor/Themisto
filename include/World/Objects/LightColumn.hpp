@@ -42,7 +42,7 @@ class LightColumn: public Object
 
         // For bugs
         float mAbsTime;
-        float x, y, x_, y_;
+        float x, y, x_, y_, x__, y__;
 
     public:
         explicit LightColumn();

@@ -31,7 +31,7 @@ LightColumn::LightColumn()
     mGC = appManager().getGraphic();
 
     // bugs
-    mAbsTime = x = y = x_ = y_ = 0.0f;
+    mAbsTime = x = y = x_ = y_ = x__ = y__ = 0.0f;
 }
 
 void LightColumn::setVisual(std::string textureName, std::string textureSection)
@@ -82,9 +82,11 @@ void LightColumn::updateVisual(float newX, float newY)
         // x_;y_
         float len = sqrt( x*x + y*y );
         float len_ = sqrt( x_*x_ + y_*y_ );
+        float len__ = sqrt( x__*x__ + y__*y__ );
 
         float alpha = 1 - len / mImageHandle.get_width()*1.5f;
         float alpha_ = 1 - len_ / mImageHandle.get_width()*1.5f;
+        float alpha__ = 1 - len__ / mImageHandle.get_width()*1.5f;
 
         CL_Colorf col;
         mImageHandle.draw(mGC, newX, newY);
@@ -98,6 +100,9 @@ void LightColumn::updateVisual(float newX, float newY)
 
         mBug.draw(mGC, newX + mImageHandle.get_width()/3.0f + x_, newY + mImageHandle.get_width()/3.0f + y_);
         mBug.set_alpha(alpha_);
+
+        mBug.draw(mGC, newX + mImageHandle.get_width()/3.0f + x__, newY + mImageHandle.get_width()/3.0f + y__);
+        mBug.set_alpha(alpha__);
         /*col.set_alpha(alpha_);
         CL_Draw::circle(mGC, x_ + newX + mImageHandle.get_width()/3.0f, y_ + newY + mImageHandle.get_width()/3.0f,
                 1.0f, col);*/
@@ -128,6 +133,9 @@ void LightColumn::update(float elapsed)
 
     x_ = 70 * sinf(15*mAbsTime + 1.5f);
     y_ = 70 * sinf(23*mAbsTime);
+
+    x__ = 70 * sinf(17*mAbsTime + 1.2f);
+    y__ = 70 * sinf(27*mAbsTime);
 }
 
 boost::shared_ptr<Object> LightColumn::ParseLightColumn(CL_DomElement* tag, std::string& desc)
