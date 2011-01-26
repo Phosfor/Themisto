@@ -32,6 +32,19 @@ BodyPart::BodyPart(b2Fixture* fixture, boost::shared_ptr<BodyMaterial> material)
     mMaxKindleLevel = 0;
     mMaxDampness = 0;
     mAcceptsCord = false;
+      // How big flame dance on body
+    // 0 - no flame, maxKindleLevel - flare for full stench
+    KindleLevel = 0;
+
+     // 0 - body ok, 1 - burned to dust
+    CarbonizeLevel = 0;
+
+    // Temperature in Kelvins
+    Temperature = worldManager().mEnvironTemperature;
+
+    Wet = false;
+
+    IsFrozen = false;
 }
 
 void BodyPart::findStaticCollisions()

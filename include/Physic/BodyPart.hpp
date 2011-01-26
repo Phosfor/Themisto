@@ -42,7 +42,6 @@ class BodyPart
 {
     protected:
         b2Fixture* mFixture;
-        boost::shared_ptr<BodyState> mState;
         std::list< boost::shared_ptr<Impact> > mAppliedImpacts;
         b2World *mParentWorld;
         boost::shared_ptr<Impact> mRainImpact;
@@ -53,17 +52,21 @@ class BodyPart
         boost::shared_ptr<BodyMaterial> mMaterial;
         std::string mName;
 
-        float mMaxKindleLevel;
-        float mMaxDampness;
-        bool mAcceptsCord;
         bool mIsDefaultMaterial;
-
-        float mCurrentMaxKindle;
         float mCurrentKindleTemperature;
-        float mCurrentKindleReceptivity;
         float mCurrentFrozingTemperature;
-        float mCurrentMaxDampness;
-        float mCurrentElectricalConductivity;
+
+        // Is body temperature under the ForzingTemperature
+        bool mIsFrozen;
+
+        // 0 - body ok, 1 - burned to dust
+        float mCarbonizeLevel;
+
+        // Temperature in Kelvins
+        float Temperature;
+
+        bool Wet;
+
 
         virtual void calculateImpacts(float32 timeStep);
         virtual void calculateInfluences(float32 timeStep);
@@ -92,19 +95,6 @@ class BodyPart
         virtual void applyRainImpact(boost::shared_ptr<Impact> impact);
         // Wind impact of natural wind
         virtual void applyWindImpact(boost::shared_ptr<Impact> impact);
-
-
-        // How big flame can store this body
-        float getMaxKindleLevel() { return mMaxKindleLevel; }
-        void setMaxKindleLevel(float value) { mMaxKindleLevel = value; }
-
-        // How many water body can soak up
-        float getMaxDampness(){ return mMaxDampness; }
-        void setMaxDampness(float value){ mMaxDampness = value; }
-
-        // Possible to cord up body
-        bool getAcceptsCord() { return mAcceptsCord; }
-        void setAcceptsCord(bool value) { mAcceptsCord = value; }
 
         std::string getName() { return mName; }
         void setName(const std::string &value){ mName.assign(value); }
