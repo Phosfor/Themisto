@@ -42,22 +42,14 @@ set(Themisto_srcs
     World/States/EditorState.cpp
 
     # Physic
-    Physic/BodyMaterial.cpp
-    Physic/Impact.cpp
-    Physic/BodyState.cpp
     Physic/PhysicRain.cpp
     Physic/PhysicWind.cpp
-    Physic/BodyPart.cpp
+    Physic/Body.cpp
     Physic/PhysicParser.cpp
 
     # Debug
-    #Debug/DebugIO.cpp
     Debug/DebugDraw.cpp
     Debug/DebugInstruments.cpp
-    #Debug/EvaluteFunctions.cpp
-    #Debug/DebugWatcher.cpp
-    #Debug/Watch.cpp
-    #Debug/PhysicTests.cpp
 
     main.cpp
 )

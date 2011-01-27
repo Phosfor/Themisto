@@ -29,18 +29,15 @@
 #include "Core/ResourceManager.hpp"
 #include "Core/ApplicationManager.hpp"
 
-class BodyVisual;
+
 class Body;
-class BodyPart;
-class BodyState;
 class Impact;
-class BodyMaterial;
+
 
 class PhysicObject: public Object
 {
     private:
-        std::vector< boost::shared_ptr<BodyPart> > mParts;
-        b2Body *mBody;
+        boost::shared_ptr<Body> mBody;
 
         // Visual
         CL_Sprite mImageHandle;
@@ -48,13 +45,10 @@ class PhysicObject: public Object
 
     public:
         explicit PhysicObject();
-        ~PhysicObject();
 
         // Get/set
-        std::vector< boost::shared_ptr<BodyPart> > getParts();
-        void setParts(std::vector< boost::shared_ptr<BodyPart> > parts);
-        b2Body* getb2Body();
-        void setb2Body(b2Body* body);
+        boost::shared_ptr<Body> getBody();
+        void setBody(boost::shared_ptr<Body> body);
         void setVisual(std::string textureName, std::string textureSection, float width, float height);
         void setVisual(std::string textureName, std::string textureSection);
 
@@ -71,9 +65,7 @@ class PhysicObject: public Object
         void updateVisual(float newX, float newY);
         CL_Rectf getRectangle();
 
-        // Should body free memory under mBody object at destroing
-        // Default is true
-        bool mShouldFreeB2Body;
+
 };
 
 #endif /* _PHYSIC_OBJECT_HPP_ */

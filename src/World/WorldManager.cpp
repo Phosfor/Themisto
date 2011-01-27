@@ -16,7 +16,6 @@
 */
 
 #include "World/WorldManager.hpp"
-#include "Physic/BodyMaterial.hpp"
 
 void WorldManager::initWorld()
 {
@@ -25,7 +24,6 @@ void WorldManager::initWorld()
 
 WorldManager::WorldManager()
 {
-    mDefaultMaterial = boost::shared_ptr<BodyMaterial>(new BodyMaterial);
     mEnvironTemperature = 20;
     mUniqueIDCounter = 0;
 }

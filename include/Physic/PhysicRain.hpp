@@ -23,7 +23,6 @@
 
 
 class Impact;
-class BodyPart;
 
 class PhysicRain
 {

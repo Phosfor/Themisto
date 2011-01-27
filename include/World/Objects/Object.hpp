@@ -19,6 +19,7 @@
 #define _WORLD_OBJECT_HPP_
 
 #include <ClanLib/core.h>
+#include <boost/utility.hpp>
 
 enum ObjectTypes
 {

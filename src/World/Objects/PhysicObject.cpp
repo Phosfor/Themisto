@@ -17,19 +17,15 @@
 
 #include "World/Objects/PhysicObject.hpp"
 
-
-#include "Physic/BodyPart.hpp"
-#include "Physic/BodyState.hpp"
+#include "Physic/Body.hpp"
 #include "Physic/Impact.hpp"
-#include "Physic/BodyMaterial.hpp"
+
 
 
 PhysicObject::PhysicObject()
 {
-    mBody = NULL;
     mName = worldManager().generateUniqueID();
     mType = PhysicBodyObject;
-    mShouldFreeB2Body = true;
     mGC = appManager().getGraphic();
 }
 
@@ -59,44 +55,37 @@ void PhysicObject::setVisual(std::string textureName, std::string textureSection
     }
 }
 
-PhysicObject::~PhysicObject()
-{
-    if(mShouldFreeB2Body && mBody) mBody->GetWorld()->DestroyBody(mBody);
-}
+
 
 void PhysicObject::updateVisual(float newX, float newY)
 {
     if(!mImageHandle.is_null())
     {
-        mImageHandle.set_angle(CL_Angle::from_radians(mBody->GetAngle()));
+        mImageHandle.set_angle(CL_Angle::from_radians(mBody->getBody()->GetAngle()));
         mImageHandle.draw(mGC, newX, newY);
     }
 }
 
 void PhysicObject::step(float32 elapsed)
 {
-    std::vector< boost::shared_ptr<BodyPart> >::iterator partsIt;
-    for(partsIt = mParts.begin(); partsIt != mParts.end(); ++partsIt)
-    {
-        (*partsIt)->step(elapsed);
-    }
 }
 
 void PhysicObject::setPosition(CL_Pointf newPos)
 {
     // TODO: Implement me
+    throw CL_Exception("Can't move body, after it created.");
 }
 
 CL_Pointf PhysicObject::getPosition()
 {
-    b2Vec2 position = mBody->GetPosition();
+    b2Vec2 position = mBody->getBody()->GetPosition();
     return CL_Pointf(Meters2Pixels(position.x), Meters2Pixels(position.y));
 }
 
 CL_Rectf PhysicObject::getRectangle()
 {
     b2AABB rect;
-    b2Fixture* fixture = mBody->GetFixtureList();
+    b2Fixture* fixture = mBody->getBody()->GetFixtureList();
     if (fixture != NULL) rect = fixture->GetAABB();
     for(; fixture != NULL; fixture=fixture->GetNext())
         rect.Combine(rect, fixture->GetAABB());
@@ -110,29 +99,17 @@ void PhysicObject::update(float elapsed)
     step(elapsed);
 }
 
-b2Body* PhysicObject::getb2Body()
+ boost::shared_ptr<Body> PhysicObject::getBody()
 {
     return mBody;
 }
-void PhysicObject::setParts(std::vector< boost::shared_ptr<BodyPart> > parts)
-{
-    mParts = parts;
-}
 
-void PhysicObject::setb2Body(b2Body* body)
+void PhysicObject::setBody(boost::shared_ptr<Body> body)
 {
-    if(mBody != NULL)
-    {
-        mBody->SetUserData(NULL);
-    }
     mBody = body;
-    mBody->SetUserData(this);
 }
 
-std::vector< boost::shared_ptr<BodyPart> >
-PhysicObject::getParts(){  return mParts; }
-
-std::pair< b2Body*, std::vector< boost::shared_ptr<BodyPart> > > ParsePhysicBody(CL_DomElement body, std::string& desc);
+boost::shared_ptr<Body> ParsePhysicBody(CL_DomElement body, std::string& desc);
 
 boost::shared_ptr<Object> PhysicObject::ParsePhysicObject(CL_DomElement* tag, std::string& desc)
 {
@@ -178,9 +155,8 @@ boost::shared_ptr<Object> PhysicObject::ParsePhysicObject(CL_DomElement* tag, st
         if (bodyTags.get_length() == 1)
         {
             CL_DomElement bodyTag = bodyTags.item(0).to_element();
-            std::pair<b2Body*, std::vector< boost::shared_ptr<BodyPart> > > physic = ParsePhysicBody(bodyTag, desc);
-            result->setb2Body(physic.first);
-            result->setParts(physic.second);
+            boost::shared_ptr<Body> physic = ParsePhysicBody(bodyTag, desc);
+            result->setBody(physic);
         }
     }
 

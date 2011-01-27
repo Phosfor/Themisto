@@ -22,7 +22,6 @@
 #include <ClanLib/core.h>
 
 class Impact;
-class BodyPart;
 class PhysicWind
 {
     private:

@@ -1,14 +1,14 @@
 window
 {
-    width "1152"
-    height "864"
+    width "800"
+    height "500"
     fullscreen "false"
 
     ; Available:
     ;    - opengl1
     ;    - opengl2
     ;    - software
-    render "opengl2"
+    render "software"
 }
 
 application
