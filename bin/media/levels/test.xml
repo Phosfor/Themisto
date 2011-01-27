@@ -29,6 +29,32 @@
                     <Texture section="Stuff" name="lightcolumn" />
                     <Position x="2650" y="400" />
                  </Visual>
+                 <Lighting>
+                     <Size width="500" height="500" />
+                     <Texture section="Stuff" name="light" />
+                     <Position x="50" y="50" />
+                 </Lighting>
+                 <Bug>
+                     <Bounding value="70" />
+                     <Texture section="Stars" name="3" />
+                     <Koef a="11" b="13" />
+                     <Position x="50" y="50" />
+                     <TextureScale x="0.5" y="0.5" />
+                 </Bug>
+                 <Bug>
+                     <Bounding value="70" />
+                     <Texture section="Stars" name="3" />
+                     <Koef a="15" b="23" />
+                     <Position x="50" y="50" />
+                     <TextureScale x="0.5" y="0.5" />
+                 </Bug>
+                 <Bug>
+                     <Bounding value="70" />
+                     <Texture section="Stars" name="3" />
+                     <Koef a="17" b="27" />
+                     <Position x="50" y="50" />
+                     <TextureScale x="0.5" y="0.5" />
+                 </Bug>
              </Object>
              <Object name="Stone" type="PhysicBodyObject" z-index='-1'>
                 <Visual>

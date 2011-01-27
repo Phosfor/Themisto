@@ -17,21 +17,13 @@
 
 #include "World/Objects/LightColumn.hpp"
 
-
-#include "Physic/BodyPart.hpp"
-#include "Physic/BodyState.hpp"
-#include "Physic/Impact.hpp"
-#include "Physic/BodyMaterial.hpp"
-
-
 LightColumn::LightColumn()
 {
     mName = worldManager().generateUniqueID();
     mType = LightColumnObject;
     mGC = appManager().getGraphic();
 
-    // bugs
-    mAbsTime = x = y = x_ = y_ = x__ = y__ = 0.0f;
+    mAbsTime = 0.0f;
 }
 
 void LightColumn::setVisual(std::string textureName, std::string textureSection)
@@ -42,30 +34,41 @@ void LightColumn::setVisual(std::string textureName, std::string textureSection)
 void LightColumn::setVisual(std::string textureName, std::string textureSection, float width, float height)
 {
     mImageHandle = resourceManager().getSprite(textureSection, textureName);
-    // Improove this shit
-    mLighting = resourceManager().getSprite("Stuff", "light");
-    mBug = resourceManager().getSprite("Stars", "3");
-    mBug.set_scale(0.7, 0.7);
-    //mLighting.set_scale(3, 3);
-    mLighting.set_alignment(origin_center);
     if(!mImageHandle.is_null())
     {
-        float koefX = 1;
-        if(width > 0)
-        {
-            koefX = width / mImageHandle.get_width();
-        }
-        float koefY = 1;
-        if(height > 0)
-        {
-            koefY = height / mImageHandle.get_height();
-        }
+        float koefX, koefY;
+        koefX = koefY = 1;
+        if(width > 0) koefX = width / mImageHandle.get_width();
+        if(height > 0) koefY = height / mImageHandle.get_height();
         mImageHandle.set_scale(koefX, koefY);
         mImageHandle.set_linear_filter(true);
         mImageHandle.set_rotation_hotspot(origin_top_left, 0, 0);
-        mBoundingBox = CL_Rectf(mPos.x, mPos.y, mPos.x + mImageHandle.get_width() * koefX, 
+        mBoundingBox = CL_Rectf(mPos.x, mPos.y, mPos.x + mImageHandle.get_width() * koefX,
                 mPos.y + mImageHandle.get_height() * koefY);
     }
+}
+
+void LightColumn::addLighting(const std::string &textureName, const std::string &textureSection, float width, float height)
+{
+    CL_Sprite light = resourceManager().getSprite(textureSection, textureName);
+    light.set_alignment(origin_center);
+    mLightings.push_back(light);
+    float koefX, koefY;
+    koefX = koefY = 1;
+    if(width > 0) koefX = width / mLightings[mLightings.size()-1].get_width();
+    if(height > 0) koefY = height / mLightings[mLightings.size()-1].get_height();
+    mLightings[mLightings.size()-1].set_scale(koefX, koefY);
+    mLightings[mLightings.size()-1].set_linear_filter(true);
+}
+
+void LightColumn::addBug(LightBug &bug)
+{
+    mBugs.push_back(bug);
+}
+
+void LightColumn::setLightingPos(CL_Pointf pos)
+{
+    mLightingsPos.push_back(pos);
 }
 
 LightColumn::~LightColumn()
@@ -76,36 +79,17 @@ void LightColumn::updateVisual(float newX, float newY)
 {
     if(!mImageHandle.is_null())
     {
-        /*float centerX = newX + mImageHandle.get_width()/3.0f;
-        float centerY = newY + mImageHandle.get_width()/3.0f;*/
-        // x;y
-        // x_;y_
-        float len = sqrt( x*x + y*y );
-        float len_ = sqrt( x_*x_ + y_*y_ );
-        float len__ = sqrt( x__*x__ + y__*y__ );
-
-        float alpha = 1 - len / mImageHandle.get_width()*1.5f;
-        float alpha_ = 1 - len_ / mImageHandle.get_width()*1.5f;
-        float alpha__ = 1 - len__ / mImageHandle.get_width()*1.5f;
-
-        CL_Colorf col;
+        // Drawing postlight
         mImageHandle.draw(mGC, newX, newY);
-        mLighting.draw(mGC, newX + mImageHandle.get_width()/3.0f, newY + mImageHandle.get_width()/3.0f);
 
-        col.set_alpha(alpha);
-        /*CL_Draw::circle(mGC, newX + mImageHandle.get_width()/3.0f + x, newY + mImageHandle.get_width()/3.0f + y,
-                1.0f, col);*/
-        mBug.draw(mGC, newX + mImageHandle.get_width()/3.0f + x, newY + mImageHandle.get_width()/3.0f + y);
-        mBug.set_alpha(alpha);
+        // Drawing lightings
+        for (uint16_t i=0; i < mLightings.size(); ++i)
+            mLightings[i].draw(mGC, newX + mLightingsPos[i].x, newY + mLightingsPos[i].y);
 
-        mBug.draw(mGC, newX + mImageHandle.get_width()/3.0f + x_, newY + mImageHandle.get_width()/3.0f + y_);
-        mBug.set_alpha(alpha_);
-
-        mBug.draw(mGC, newX + mImageHandle.get_width()/3.0f + x__, newY + mImageHandle.get_width()/3.0f + y__);
-        mBug.set_alpha(alpha__);
-        /*col.set_alpha(alpha_);
-        CL_Draw::circle(mGC, x_ + newX + mImageHandle.get_width()/3.0f, y_ + newY + mImageHandle.get_width()/3.0f,
-                1.0f, col);*/
+        BOOST_FOREACH(LightBug &bug, mBugs)
+        {
+            bug.imageHandle.draw(mGC, newX + bug.x + bug.offsetX, newY + bug.y + bug.offsetY);
+        }
     }
 }
 
@@ -128,14 +112,11 @@ void LightColumn::update(float elapsed)
 {
     mAbsTime += elapsed / 3.5f;
 
-    x = 70 * sinf(11*mAbsTime);
-    y = 70 * sinf(13*mAbsTime);
-
-    x_ = 70 * sinf(15*mAbsTime + 1.5f);
-    y_ = 70 * sinf(23*mAbsTime);
-
-    x__ = 70 * sinf(17*mAbsTime + 1.2f);
-    y__ = 70 * sinf(27*mAbsTime);
+    BOOST_FOREACH(LightBug &bug, mBugs)
+    {
+        bug.x = bug.boundingValue * sinf(bug.koef1 * mAbsTime);
+        bug.y = bug.boundingValue * sinf(bug.koef2 * mAbsTime);
+    }
 }
 
 boost::shared_ptr<Object> LightColumn::ParseLightColumn(CL_DomElement* tag, std::string& desc)
@@ -180,6 +161,104 @@ boost::shared_ptr<Object> LightColumn::ParseLightColumn(CL_DomElement* tag, std:
         else if(VisualTags.get_length() > 1 )
         {
             throw CL_Exception("Error: only one tag Visual may be in Object.");
+        }
+
+        // Parsing lightings images
+        CL_DomNodeList lightingNodes = tag->get_elements_by_tag_name("Lighting");
+        for (int i=0; i < lightingNodes.get_length(); ++i)
+        {
+            CL_DomElement lightHandle = lightingNodes.item(i).to_element();
+            CL_DomNodeList lightChildren = lightHandle.get_child_nodes();
+
+            int width, height;
+            width = height = 1;
+            std::string textureSection, textureName;
+            float xPos, yPos;
+            xPos = yPos = 0;
+            for (int j=0; j < lightChildren.get_length(); ++j)
+            {
+                CL_DomElement child = lightChildren.item(j).to_element();
+
+                if (child.get_node_name() == "Size")
+                {
+                    width = boost::lexical_cast<int>(child.get_attribute("width").c_str());
+                    height = boost::lexical_cast<int>(child.get_attribute("height").c_str());
+
+                }
+                if (child.get_node_name() == "Texture")
+                {
+                    textureSection = child.get_attribute("section").c_str();
+                    textureName = child.get_attribute("name").c_str();
+                }
+                if (child.get_node_name() == "Position")
+                {
+                    xPos = boost::lexical_cast<float>(child.get_attribute("x").c_str());
+                    yPos = boost::lexical_cast<float>(child.get_attribute("y").c_str());
+                }
+            }
+            result->addLighting(textureName, textureSection, width, height);
+            result->setLightingPos(CL_Pointf(xPos, yPos));
+        }
+
+        // Parsing bugs images
+        CL_DomNodeList bugNodes = tag->get_elements_by_tag_name("Bug");
+        for (int i=0; i < bugNodes.get_length(); ++i)
+        {
+            CL_DomElement bugHandle = bugNodes.item(i).to_element();
+            CL_DomNodeList bugChildren = bugHandle.get_child_nodes();
+
+            std::string textureSection, textureName;
+            float bounding = 0;
+            float a, b;
+            a = b = 1;
+            float xPos, yPos;
+            xPos = yPos = 0;
+            float scaleX, scaleY;
+            scaleX = scaleY = 1;
+            for (int j=0; j < bugChildren.get_length(); ++j)
+            {
+                CL_DomElement child = bugChildren.item(j).to_element();
+
+                if (child.get_node_name() == "Bounding")
+                {
+                    bounding = boost::lexical_cast<int>(child.get_attribute("value").c_str());
+
+                }
+                if (child.get_node_name() == "Texture")
+                {
+                    textureSection = child.get_attribute("section").c_str();
+                    textureName = child.get_attribute("name").c_str();
+                }
+                if (child.get_node_name() == "Koef")
+                {
+                    a = boost::lexical_cast<float>(child.get_attribute("a").c_str());
+                    b = boost::lexical_cast<float>(child.get_attribute("b").c_str());
+                }
+                if (child.get_node_name() == "Position")
+                {
+                    xPos = boost::lexical_cast<float>(child.get_attribute("x").c_str());
+                    yPos = boost::lexical_cast<float>(child.get_attribute("y").c_str());
+                }
+                if (child.get_node_name() == "TextureScale")
+                {
+                    scaleX = boost::lexical_cast<float>(child.get_attribute("x").c_str());
+                    scaleY = boost::lexical_cast<float>(child.get_attribute("y").c_str());
+                }
+            }
+            LightBug bug;
+
+            CL_Sprite light = resourceManager().getSprite(textureSection, textureName);
+            light.set_alignment(origin_center);
+            light.set_scale(scaleX, scaleY);
+
+            bug.boundingValue = bounding;
+            bug.koef1 = a;
+            bug.koef2 = b;
+            bug.offsetX = xPos;
+            bug.offsetY = yPos;
+            bug.imageHandle = light;
+
+            result->addBug(bug);
         }
     }
 

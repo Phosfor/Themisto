@@ -30,19 +30,39 @@
 #include "Core/ApplicationManager.hpp"
 #include "Core/InputManager.hpp"
 
+struct LightBug
+{
+    int boundingValue;
+    CL_Sprite imageHandle;
+    int koef1, koef2;
+
+    float x, y, offsetX, offsetY;
+
+    LightBug() : boundingValue(10), koef1(1), koef2(3), x(0), y(0), offsetX(0), offsetY(0) { }
+};
+
 class LightColumn: public Object
 {
     private:
         // Visual
-        CL_Sprite mImageHandle, mLighting, mBug;
+        // Main lightpost image
+        CL_Sprite mImageHandle;
+        // Lightings images
+        std::vector<CL_Sprite> mLightings;
+
         CL_GraphicContext mGC;
 
+        // Position of main lightpost image
         CL_Pointf mPos;
+        // Position of each lighting image
+        std::vector<CL_Pointf> mLightingsPos;
+
+        std::vector<LightBug> mBugs;
+
         CL_Rectf mBoundingBox;
 
         // For bugs
         float mAbsTime;
-        float x, y, x_, y_, x__, y__;
 
     public:
         explicit LightColumn();
@@ -51,6 +71,11 @@ class LightColumn: public Object
         // Get/set
         void setVisual(std::string textureName, std::string textureSection, float width, float height);
         void setVisual(std::string textureName, std::string textureSection);
+
+        void addLighting(const std::string &textureName, const std::string &textureSection, float width, float height);
+        void setLightingPos(CL_Pointf pos);
+
+        void addBug(LightBug &bug);
 
         void updateVisual();
 
