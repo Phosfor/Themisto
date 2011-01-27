@@ -16,7 +16,6 @@
 */
 
 #include "Physic/PhysicRain.hpp"
-#include "Physic/BodyPart.hpp"
 #include "Physic/Impact.hpp"
 
 void PhysicRain::init(float intencity)

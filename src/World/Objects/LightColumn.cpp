@@ -18,10 +18,7 @@
 #include "World/Objects/LightColumn.hpp"
 
 
-#include "Physic/BodyPart.hpp"
-#include "Physic/BodyState.hpp"
 #include "Physic/Impact.hpp"
-#include "Physic/BodyMaterial.hpp"
 
 
 LightColumn::LightColumn()
@@ -63,7 +60,7 @@ void LightColumn::setVisual(std::string textureName, std::string textureSection,
         mImageHandle.set_scale(koefX, koefY);
         mImageHandle.set_linear_filter(true);
         mImageHandle.set_rotation_hotspot(origin_top_left, 0, 0);
-        mBoundingBox = CL_Rectf(mPos.x, mPos.y, mPos.x + mImageHandle.get_width() * koefX, 
+        mBoundingBox = CL_Rectf(mPos.x, mPos.y, mPos.x + mImageHandle.get_width() * koefX,
                 mPos.y + mImageHandle.get_height() * koefY);
     }
 }

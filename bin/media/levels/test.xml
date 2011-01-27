@@ -43,21 +43,19 @@
                         </Position>
                         <Type>DynamicBody</Type>
                     </b2Body>
-                    <Part>
-                        <b2Fixture>
-                            <Friction>0.3</Friction>
-                            <Restitution>0.3</Restitution>
-                            <Density>0.3</Density>
-                            <Shape>
-                                <Type>e_circle</Type>
-                                <Radius>45.0</Radius>
-                                <Center>
-                                    <x>45</x>
-                                    <y>45</y>
-                                </Center>
-                            </Shape>
-                        </b2Fixture>
-                    </Part>
+                    <b2Fixture>
+                        <Friction>0.3</Friction>
+                        <Restitution>0.3</Restitution>
+                        <Density>0.3</Density>
+                        <Shape>
+                            <Type>e_circle</Type>
+                            <Radius>45.0</Radius>
+                            <Center>
+                                <x>45</x>
+                                <y>45</y>
+                            </Center>
+                        </Shape>
+                    </b2Fixture>
                   </Body>
              </Object>
         </Objects>

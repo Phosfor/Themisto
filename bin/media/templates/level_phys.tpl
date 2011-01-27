@@ -9,7 +9,6 @@
     <Position><x>0.0</x><y>0.0</y></Position>
     <Type>StaticBody</Type>
    </b2Body>
-   <Part id="part0">
     <b2Fixture>
      <Shape>
       <Type>e_polygon</Type>
@@ -25,8 +24,6 @@
       </Vertices>
      </Shape>
     </b2Fixture>
-   </Part>
-   <Part id="part1">
     <b2Fixture>
      <Shape>
       <Type>e_polygon</Type>
@@ -42,8 +39,6 @@
       </Vertices>
      </Shape>
     </b2Fixture>
-   </Part>
-   <Part id="part2">
     <b2Fixture>
      <Shape>
       <Type>e_polygon</Type>
@@ -59,8 +54,6 @@
       </Vertices>
      </Shape>
     </b2Fixture>
-   </Part>
-   <Part id="part3">
     <b2Fixture>
      <Shape>
       <Type>e_polygon</Type>
@@ -76,8 +69,6 @@
       </Vertices>
      </Shape>
     </b2Fixture>
-   </Part>
-   <Part id="part4">
     <b2Fixture>
      <Shape>
       <Type>e_polygon</Type>
@@ -93,8 +84,6 @@
       </Vertices>
      </Shape>
     </b2Fixture>
-   </Part>
-   <Part id="part5">
     <b2Fixture>
      <Shape>
       <Type>e_polygon</Type>
@@ -110,8 +99,6 @@
       </Vertices>
      </Shape>
     </b2Fixture>
-   </Part>
-   <Part id="part6">
     <b2Fixture>
      <Shape>
       <Type>e_polygon</Type>
@@ -127,8 +114,6 @@
       </Vertices>
      </Shape>
     </b2Fixture>
-   </Part>
-   <Part id="part7">
     <b2Fixture>
      <Shape>
       <Type>e_polygon</Type>
@@ -144,8 +129,6 @@
       </Vertices>
      </Shape>
     </b2Fixture>
-   </Part>
-   <Part id="part8">
     <b2Fixture>
      <Shape>
       <Type>e_polygon</Type>
@@ -161,8 +144,6 @@
       </Vertices>
      </Shape>
     </b2Fixture>
-   </Part>
-   <Part id="part9">
     <b2Fixture>
      <Shape>
       <Type>e_polygon</Type>
@@ -178,8 +159,6 @@
       </Vertices>
      </Shape>
     </b2Fixture>
-   </Part>
-   <Part id="part10">
     <b2Fixture>
      <Shape>
       <Type>e_polygon</Type>
@@ -195,8 +174,6 @@
       </Vertices>
      </Shape>
     </b2Fixture>
-   </Part>
-   <Part id="part11">
     <b2Fixture>
      <Shape>
       <Type>e_polygon</Type>
@@ -212,8 +189,6 @@
       </Vertices>
      </Shape>
     </b2Fixture>
-   </Part>
-   <Part id="part12">
     <b2Fixture>
      <Shape>
       <Type>e_polygon</Type>
@@ -229,8 +204,6 @@
       </Vertices>
      </Shape>
     </b2Fixture>
-   </Part>
-   <Part id="part13">
     <b2Fixture>
      <Shape>
       <Type>e_polygon</Type>
@@ -246,8 +219,6 @@
       </Vertices>
      </Shape>
     </b2Fixture>
-   </Part>
-   <Part id="part14">
     <b2Fixture>
      <Shape>
       <Type>e_polygon</Type>
@@ -263,8 +234,6 @@
       </Vertices>
      </Shape>
     </b2Fixture>
-   </Part>
-   <Part id="part15">
     <b2Fixture>
      <Shape>
       <Type>e_polygon</Type>
@@ -280,8 +249,6 @@
       </Vertices>
      </Shape>
     </b2Fixture>
-   </Part>
-   <Part id="part16">
     <b2Fixture>
      <Shape>
       <Type>e_polygon</Type>
@@ -297,8 +264,6 @@
       </Vertices>
      </Shape>
     </b2Fixture>
-   </Part>
-   <Part id="part17">
     <b2Fixture>
      <Shape>
       <Type>e_polygon</Type>
@@ -314,8 +279,6 @@
       </Vertices>
      </Shape>
     </b2Fixture>
-   </Part>
-   <Part id="part18">
     <b2Fixture>
      <Shape>
       <Type>e_polygon</Type>
@@ -331,8 +294,6 @@
       </Vertices>
      </Shape>
     </b2Fixture>
-   </Part>
-   <Part id="part19">
     <b2Fixture>
      <Shape>
       <Type>e_polygon</Type>
@@ -348,8 +309,6 @@
       </Vertices>
      </Shape>
     </b2Fixture>
-   </Part>
-   <Part id="part20">
     <b2Fixture>
      <Shape>
       <Type>e_polygon</Type>
@@ -365,8 +324,6 @@
       </Vertices>
      </Shape>
     </b2Fixture>
-   </Part>
-   <Part id="part21">
     <b2Fixture>
      <Shape>
       <Type>e_polygon</Type>
@@ -382,8 +339,6 @@
       </Vertices>
      </Shape>
     </b2Fixture>
-   </Part>
-   <Part id="part22">
     <b2Fixture>
      <Shape>
       <Type>e_polygon</Type>
@@ -399,8 +354,6 @@
       </Vertices>
      </Shape>
     </b2Fixture>
-   </Part>
-   <Part id="part23">
     <b2Fixture>
      <Shape>
       <Type>e_polygon</Type>
@@ -416,8 +369,6 @@
       </Vertices>
      </Shape>
     </b2Fixture>
-   </Part>
-   <Part id="part24">
     <b2Fixture>
      <Shape>
       <Type>e_polygon</Type>
@@ -433,8 +384,6 @@
       </Vertices>
      </Shape>
     </b2Fixture>
-   </Part>
-   <Part id="part25">
     <b2Fixture>
      <Shape>
       <Type>e_polygon</Type>
@@ -450,8 +399,6 @@
       </Vertices>
      </Shape>
     </b2Fixture>
-   </Part>
-   <Part id="part26">
     <b2Fixture>
      <Shape>
       <Type>e_polygon</Type>
@@ -475,7 +422,6 @@
       </Vertices>
      </Shape>
     </b2Fixture>
-   </Part>
   </Body>
  </Object>
 </Template>
