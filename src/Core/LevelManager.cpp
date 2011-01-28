@@ -4,7 +4,7 @@
 LevelManager::LevelManager()
 {
     mNumObjects = 0;
-    mCameraSpeed = 10.0f;
+    mCameraSpeed = configManager().getValue<float>("application.camera_speed", 10.0f);
     mDrawDebugData = false;
 }
 

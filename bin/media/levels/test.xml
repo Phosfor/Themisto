@@ -2,7 +2,7 @@
 
 <ThemistoLevel version="0.1" authors="Wincode team" name="First level">
 
-    <World image="levels/test.png" cameraPosX="0" cameraPosY="0">
+    <World image="levels/test.png" cameraPosX="1000" cameraPosY="0">
 
         <Environ active="true">
             <Rain enabled="true" limit="150" />

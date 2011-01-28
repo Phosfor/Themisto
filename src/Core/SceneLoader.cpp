@@ -74,10 +74,10 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
     // Camera viewport settings
     float cameraPosX = 0, cameraPosY = 0;
     if (world.has_attribute("cameraPosX"))
-        cameraPosX = boost::lexical_cast<float>(world.get_attribute("cameraPosX").c_str());
+        cameraPosX = -abs(boost::lexical_cast<float>(world.get_attribute("cameraPosX").c_str()));
 
     if (world.has_attribute("cameraPosY"))
-        cameraPosY = boost::lexical_cast<float>(world.get_attribute("cameraPosY").c_str());
+        cameraPosY = -abs(boost::lexical_cast<float>(world.get_attribute("cameraPosY").c_str()));
 
     CL_Rectf camViewport(CL_Pointf(cameraPosX, cameraPosY), CL_Sizef(ScreenResolutionX, ScreenResolutionY));
     levelManager().setCamViewport(camViewport);

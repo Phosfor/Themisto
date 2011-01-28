@@ -61,10 +61,10 @@ void LightColumn::addLighting(const std::string &textureName, const std::string 
     mLightings[mLightings.size()-1].set_linear_filter(true);
 
     CL_Pointf pos = mLightingsPos[mLightingsPos.size()-1];
-    std::cout << "lighting pos: " << pos << "\n";
-    std::cout << "mPos.x: " << mPos.x << "; mPos.y: " << mPos.y << "\n";
-    std::cout << "light.width(): " << light.get_width() << "; light.get_height(): " << light.get_height() << "\n";
-    mBoundingBox.bounding_rect(CL_Rectf(mPos.x + pos.x, mPos.y + pos.y, mPos.x + pos.x + light.get_width(), mPos.y + pos.y + light.get_height()));
+    mBoundingBox.bounding_rect(CL_Rectf(mPos.x + pos.x,
+                mPos.y + pos.y,
+                mPos.x + pos.x + light.get_width(),
+                mPos.y + pos.y + light.get_height()));
 }
 
 void LightColumn::addBug(LightBug &bug)
