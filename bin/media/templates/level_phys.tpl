@@ -422,6 +422,171 @@
       </Vertices>
      </Shape>
     </b2Fixture>
+    <b2Fixture>
+     <Shape>
+      <Type>e_polygon</Type>
+      <Vertices>
+       <Vertex id="vertex0">
+        <x>1766.0</x>
+        <y>202.6</y>
+       </Vertex>
+       <Vertex id="vertex1">
+        <x>1579.2</x>
+        <y>243.6</y>
+       </Vertex>
+      </Vertices>
+     </Shape>
+    </b2Fixture>
+    <b2Fixture>
+     <Shape>
+      <Type>e_polygon</Type>
+      <Vertices>
+       <Vertex id="vertex0">
+        <x>1829.2</x>
+        <y>183.7</y>
+       </Vertex>
+       <Vertex id="vertex1">
+        <x>1766.4</x>
+        <y>203.7</y>
+       </Vertex>
+      </Vertices>
+     </Shape>
+    </b2Fixture>
+    <b2Fixture>
+     <Shape>
+      <Type>e_polygon</Type>
+      <Vertices>
+       <Vertex id="vertex0">
+        <x>1923.1</x>
+        <y>110.8</y>
+       </Vertex>
+       <Vertex id="vertex1">
+        <x>1829.5</x>
+        <y>182.6</y>
+       </Vertex>
+      </Vertices>
+     </Shape>
+    </b2Fixture>
+    <b2Fixture>
+     <Shape>
+      <Type>e_polygon</Type>
+      <Vertices>
+       <Vertex id="vertex0">
+        <x>1928.7</x>
+        <y>62.4</y>
+       </Vertex>
+       <Vertex id="vertex1">
+        <x>1922.8</x>
+        <y>109.7</y>
+       </Vertex>
+      </Vertices>
+     </Shape>
+    </b2Fixture>
+    <b2Fixture>
+     <Shape>
+      <Type>e_polygon</Type>
+      <Vertices>
+       <Vertex id="vertex0">
+        <x>1949.1</x>
+        <y>49.1</y>
+       </Vertex>
+       <Vertex id="vertex1">
+        <x>1929.8</x>
+        <y>62.7</y>
+       </Vertex>
+      </Vertices>
+     </Shape>
+    </b2Fixture>
+    <b2Fixture>
+     <Shape>
+      <Type>e_polygon</Type>
+      <Vertices>
+       <Vertex id="vertex0">
+        <x>1974.3</x>
+        <y>50.5</y>
+       </Vertex>
+       <Vertex id="vertex1">
+        <x>1949.4</x>
+        <y>50.8</y>
+       </Vertex>
+      </Vertices>
+     </Shape>
+    </b2Fixture>
+    <b2Fixture>
+     <Shape>
+      <Type>e_polygon</Type>
+      <Vertices>
+       <Vertex id="vertex0">
+        <x>2080.2</x>
+        <y>200.5</y>
+       </Vertex>
+       <Vertex id="vertex1">
+        <x>1974.6</x>
+        <y>51.5</y>
+       </Vertex>
+      </Vertices>
+     </Shape>
+    </b2Fixture>
+    <b2Fixture>
+     <Shape>
+      <Type>e_polygon</Type>
+      <Vertices>
+       <Vertex id="vertex0">
+        <x>2064.0</x>
+        <y>237.7</y>
+       </Vertex>
+       <Vertex id="vertex1">
+        <x>2079.1</x>
+        <y>200.2</y>
+       </Vertex>
+      </Vertices>
+     </Shape>
+    </b2Fixture>
+    <b2Fixture>
+     <Shape>
+      <Type>e_polygon</Type>
+      <Vertices>
+       <Vertex id="vertex0">
+        <x>2108.2</x>
+        <y>297.3</y>
+       </Vertex>
+       <Vertex id="vertex1">
+        <x>2065.1</x>
+        <y>237.3</y>
+       </Vertex>
+      </Vertices>
+     </Shape>
+    </b2Fixture>
+    <b2Fixture>
+     <Shape>
+      <Type>e_polygon</Type>
+      <Vertices>
+       <Vertex id="vertex0">
+        <x>1559.9</x>
+        <y>260.8</y>
+       </Vertex>
+       <Vertex id="vertex1">
+        <x>1579.2</x>
+        <y>243.6</y>
+       </Vertex>
+      </Vertices>
+     </Shape>
+    </b2Fixture>
+    <b2Fixture>
+     <Shape>
+      <Type>e_polygon</Type>
+      <Vertices>
+       <Vertex id="vertex0">
+        <x>1595.0</x>
+        <y>297.3</y>
+       </Vertex>
+       <Vertex id="vertex1">
+        <x>1560.3</x>
+        <y>261.2</y>
+       </Vertex>
+      </Vertices>
+     </Shape>
+    </b2Fixture>
   </Body>
  </Object>
 </Template>

@@ -5,13 +5,13 @@
     <World image="levels/test.png" cameraPosX="0" cameraPosY="0">
 
         <Environ active="true">
-            <Rain enabled="true" limit="50" />
+            <Rain enabled="true" limit="150" />
             <Clouds enabled="true" limit="20" />
             <!--<Lightnings enabled="true" />-->
             <Sky enabled="true" />
             <Moon enabled="true" />
-            <Leaves enabled="true" limit="8" />
-            <Stars enabled="true" limit="400" />
+            <Leaves enabled="true" limit="10" />
+            <Stars enabled="true" limit="600" />
             <Birds enabled="true" />
             <Objects enabled="true" />
             <!-- actual_size is average real foreground image size refer to full window size -->
@@ -121,7 +121,7 @@
                     </b2Fixture>
                   </Body>
              </Object>
-             <Object type="Player" Name="player" >
+             <Object type="Player" name="player" >
                 <Position>
                     <x>250.0</x>
                     <y>200.0</y>

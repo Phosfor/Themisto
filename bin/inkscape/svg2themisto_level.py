@@ -50,7 +50,7 @@ class Svg2Themisto_Shape(inkex.Effect):
         fileHandle.write('<Templates>\n<Template name="'+ self.options.filename +'">\n <Object type="PhysicObject">\n  <Body id="tbody1">\n')
         fileHandle.write('   <b2Body>\n    <Position><x>0.0</x><y>0.0</y></Position>\n    <Type>StaticBody</Type>\n   </b2Body>\n')
         for fixture in self.fixturesList:
-            fileHandle.write('   <Part id="part'+ str(fixtureCounter) +'">\n    <b2Fixture>\n')
+            fileHandle.write('   <b2Fixture>\n')
             fileHandle.write('     <Shape>\n      <Type>'+ fixture[0] +'</Type>\n')
 
             if fixture[0] == "e_polygon":
@@ -76,7 +76,7 @@ class Svg2Themisto_Shape(inkex.Effect):
                 fileHandle.write('       <y>'+ str(fixture[2][1]) +'</y>\n')
                 fileHandle.write('      </Center>\n')
 
-            fileHandle.write('     </Shape>\n    </b2Fixture>\n   </Part>\n')
+            fileHandle.write('     </Shape>\n    </b2Fixture>\n')
 
         fileHandle.write('  </Body>\n </Object>\n</Template>\n</Templates>\n')
 
