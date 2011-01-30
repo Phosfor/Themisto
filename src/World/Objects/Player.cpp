@@ -35,11 +35,31 @@ Player::Player()
 
 void Player::keyDown(const CL_InputEvent& ev, const CL_InputState& state)
 {
+    float speed = 10;
+    if(ev.id == CL_KEY_D)
+    {
+        mJoint->EnableLimit(false);
+        mJoint->SetMaxMotorTorque(1000);
+        mJoint->SetMotorSpeed(-speed);
+        mJoint->EnableMotor(true);
+    }
+    else if(ev.id == CL_KEY_A)
+    {
+        mJoint->EnableLimit(false);
+        mJoint->SetMaxMotorTorque(1000);
+        mJoint->SetMotorSpeed(speed);
+        mJoint->EnableMotor(true);
+    }
 }
 
 void Player::keyUp(const CL_InputEvent& ev, const CL_InputState& state)
 {
-    //mBody->getBody()->SetLinearVelocity(b2Vec2(0,0));
+    if( (ev.id == CL_KEY_D) || (ev.id == CL_KEY_A) )
+    {
+        mJoint->EnableMotor(false);
+        mJoint->SetLimits(mJoint->GetJointAngle(),mJoint->GetJointAngle());
+        mJoint->EnableLimit(true);
+    }
 }
 
 void Player::updateVisual(float newX, float newY)
@@ -48,26 +68,6 @@ void Player::updateVisual(float newX, float newY)
 
 void Player::step(float32 elapsed)
 {
-    b2Vec2 velocity = mBody->getBody()->GetLinearVelocity();
-    float speed = 10;
-    if(mInputManager->keyPressed(CL_KEY_D))
-    {
-        if(velocity.x < speed)
-        {
-            velocity.x += speed;
-            if(velocity.x > speed) velocity.x = speed;
-        }
-        mBody->getBody()->SetLinearVelocity(velocity);
-    }
-    else if(mInputManager->keyPressed(CL_KEY_A))
-    {
-        if(velocity.x > -speed)
-        {
-            velocity.x -= speed;
-            if(velocity.x < -speed) velocity.x = -speed;
-        }
-        mBody->getBody()->SetLinearVelocity(velocity);
-    }
 
 }
 
@@ -79,20 +79,14 @@ void Player::setPosition(CL_Pointf newPos)
 
 CL_Pointf Player::getPosition()
 {
-    b2Vec2 position = mBody->getBody()->GetPosition();
+    b2Vec2 position = mTopBoxBody->getBody()->GetPosition();
     return CL_Pointf(Meters2Pixels(position.x), Meters2Pixels(position.y));
 }
 
 CL_Rectf Player::getRectangle()
 {
-    b2AABB rect;
-    b2Fixture* fixture = mBody->getBody()->GetFixtureList();
-    if (fixture != NULL) rect = fixture->GetAABB();
-    for(; fixture != NULL; fixture=fixture->GetNext())
-        rect.Combine(rect, fixture->GetAABB());
-
-    return CL_Rectf(Meters2Pixels(rect.lowerBound.x), Meters2Pixels(rect.lowerBound.y),
-            Meters2Pixels(rect.upperBound.x), Meters2Pixels(rect.upperBound.y));
+    b2Vec2 pos = mTopBoxBody->getBody()->GetPosition();
+    return CL_Rectf(pos.x, pos.y, pos.x + PlayerWidth, pos.y + PlayerHeight);
 }
 
 void Player::update(float elapsed)
@@ -100,14 +94,13 @@ void Player::update(float elapsed)
     step(elapsed);
 }
 
- boost::shared_ptr<Body> Player::getBody()
+void Player::setPhysic(boost::shared_ptr<Body> bodyTopBox,
+                       boost::shared_ptr<Body> bodyCircle,
+                       b2RevoluteJoint* joint)
 {
-    return mBody;
-}
-
-void Player::setBody(boost::shared_ptr<Body> body)
-{
-    mBody = body;
+    mTopBoxBody = bodyTopBox;
+    mCircleBody = bodyCircle;
+    mJoint = joint;
 }
 
 boost::shared_ptr<Object> Player::ParsePlayer(CL_DomElement* tag, std::string& desc)
@@ -135,29 +128,102 @@ boost::shared_ptr<Object> Player::ParsePlayer(CL_DomElement* tag, std::string& d
             throw CL_Exception("Error: one, and only one tag Position can be in Player.");
         }
     }
-    b2BodyDef bodyDef;
-    bodyDef.position.Set(x, y);
-    bodyDef.type = b2_dynamicBody;
-    bodyDef.fixedRotation = true;
-    b2Body* body = physicManager().getWorld().CreateBody(&bodyDef);
 
-    // Box shape
-    b2PolygonShape shape;
-    shape.SetAsBox(Pixels2Meters(PlayerWidth), Pixels2Meters(PlayerHeight));
+    // Player consists of three objects: two rectangles on roll
+
+    boost::shared_ptr<Body> topBoxHandle = boost::shared_ptr<Body>(new Body());
+    boost::shared_ptr<Body> circleHandle = boost::shared_ptr<Body>(new Body());
+
+    //* Core body
+    b2BodyDef coreBodyDef;
+    coreBodyDef.position.Set((x+PlayerWidth/2), (y+PlayerHeight - PlayerWidth/2 ));
+    coreBodyDef.type = b2_dynamicBody;
+    coreBodyDef.fixedRotation = true;
+    b2Body* coreBody = physicManager().getWorld().CreateBody(&coreBodyDef);
+    //b2PolygonShape coreShape;
+    //coreShape.SetAsBox(0.1, PlayerWidth/2);
+    //b2FixtureDef  fixdefCore;
+    //fixdefCore.shape = &coreShape;
+    //coreBody->CreateFixture(&fixdefCore);*/
+
+    // Top Box part
+
+    b2BodyDef topBoxDef;
+    topBoxDef.position.Set((x), (y));
+    topBoxDef.type = b2_dynamicBody;
+    topBoxDef.fixedRotation = true;
+    topBoxDef.bullet = true;
+    b2Body* topBox = physicManager().getWorld().CreateBody(&topBoxDef);
+    // Shape
+    b2PolygonShape topBoxshape;
+    b2Vec2 vertices[4];
+    vertices[0] = b2Vec2(0, 0);
+    vertices[1] = b2Vec2(PlayerWidth, 0);
+    vertices[2] = b2Vec2(PlayerWidth, PlayerHeight/2);
+    vertices[3] = b2Vec2(0, PlayerHeight/2);
+    topBoxshape.Set(vertices, 4);
+    b2FixtureDef  fixdefTop;
+    fixdefTop.restitution = 0;
+    fixdefTop.shape = &topBoxshape;
+    fixdefTop.filter.groupIndex = -7;
+    topBox->CreateFixture(&fixdefTop);
+
+    // Bottom Box part
+    b2PolygonShape bottomBoxshape;
+    b2Vec2 vertices2[4];
+    vertices2[0] = b2Vec2(0, PlayerHeight/2);
+    vertices2[1] = b2Vec2(PlayerWidth, PlayerHeight/2);
+    vertices2[2] = b2Vec2(PlayerWidth, PlayerHeight - PlayerWidth/2);
+    vertices2[3] = b2Vec2(0, PlayerHeight - PlayerWidth/2);
+    bottomBoxshape.Set(vertices2, 4);
     b2FixtureDef  fixdef;
-    fixdef.shape = &shape;
-    fixdef.friction = 1;
+    fixdef.shape = &bottomBoxshape;
     fixdef.restitution = 0;
-    body->CreateFixture(&fixdef);
+    fixdef.filter.groupIndex = -7;
+    topBox->CreateFixture(&fixdef);
 
-    // Mass
-    b2MassData mass;
-    mass.mass = PlayerMass;
-    body->SetMassData(&mass);
+    topBoxHandle->setBody(topBox);
 
-    boost::shared_ptr<Body> bodyHandle = boost::shared_ptr<Body>(new Body());
-    bodyHandle->setBody(body);
-    result->setBody(bodyHandle);
+    // Circle part
+
+    b2BodyDef circleDef;
+    circleDef.position.Set(x+PlayerWidth/2, y + PlayerHeight - PlayerWidth/2 );
+    circleDef.type = b2_dynamicBody;
+    b2Body* circle = physicManager().getWorld().CreateBody(&circleDef);
+
+    circleHandle->setBody(circle);
+
+    b2CircleShape circleShape;
+    circleShape.m_radius = (PlayerWidth/2);
+    b2FixtureDef fixdefCircle;
+    fixdefCircle.shape = &circleShape;
+    fixdefCircle.friction = 30;
+    fixdefCircle.restitution = 0;
+    fixdefCircle.density = 10;
+    fixdefCircle.filter.groupIndex = -7;
+    circle->CreateFixture(&fixdefCircle);
+
+    //b2MassData mass;
+    //mass.mass = PlayerMass/2;
+    //circle->SetMassData(&mass);
+    //topBox->SetMassData(&mass);
+
+    // Join the bodies
+
+    b2RevoluteJointDef jointDef;
+    jointDef.Initialize( circle, topBox, circle->GetWorldCenter());
+    jointDef.collideConnected = false;
+    b2RevoluteJoint* joint = (b2RevoluteJoint*) physicManager().getWorld().CreateJoint(&jointDef);
+
+/*
+    // Amortization
+    b2DistanceJointDef ajointDef;
+    ajointDef.Initialize(coreBody, topBox, coreBody->GetWorldCenter(),  coreBody->GetWorldCenter());
+    ajointDef.collideConnected = false;
+    ajointDef.dampingRatio = 0;
+    physicManager().getWorld().CreateJoint(&ajointDef);*/
+
+    result->setPhysic(topBoxHandle, circleHandle, joint);
 
     return boost::shared_ptr<Object>(result);
 }

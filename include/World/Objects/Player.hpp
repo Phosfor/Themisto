@@ -44,7 +44,9 @@ class Player: public Object
 {
     private:
         InputManager *mInputManager;
-        boost::shared_ptr<Body> mBody;
+        boost::shared_ptr<Body> mTopBoxBody;
+        boost::shared_ptr<Body> mCircleBody;
+        b2RevoluteJoint* mJoint;
         CL_Slot mKeyDownSlot;
         CL_Slot mKeyUpSlot;
 
@@ -55,15 +57,16 @@ class Player: public Object
         void keyUp(const CL_InputEvent& ev, const CL_InputState& state);
 
     public:
-        static const float PlayerHeight = 80.0;
-        static const float PlayerWidth = 30.0;
-        static const float PlayerMass = 60.0;
+        static const float PlayerHeight = 4;
+        static const float PlayerWidth = 1.5;
+        static const float PlayerMass = 30.0;
 
         explicit Player();
 
         // Get/set
-        boost::shared_ptr<Body> getBody();
-        void setBody(boost::shared_ptr<Body> body);
+        void setPhysic(boost::shared_ptr<Body> bodyTopBox,
+                       boost::shared_ptr<Body> bodyCircle,
+                       b2RevoluteJoint* joint);
 
 
         void updateVisual();
