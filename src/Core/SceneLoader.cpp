@@ -103,55 +103,47 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
     // Foreground tag isn't available
     catch (...) { }
 
-    // Check whether environ should be enabled
-    bool mEnvironEnabled = false;
-    if (environ.get_attribute("active") == "true") mEnvironEnabled = true;
-    environManager().setEnvironEnabled(mEnvironEnabled);
-    if (mEnvironEnabled) LOG_NOFORMAT("- Environ is enabled!\n");
+    LOG_NOFORMAT("- Loading Environ objects\n");
+    environManager().initEnviron();
 
-    // If Environ is enabled, go through all environ-params in the level file
-    if (mEnvironEnabled)
+    // CHANGEABLE ENVIRON [For grepping, don't remove]
+    std::map<std::string, EnvironTypes> deps;
+    deps["Rain"] = Environ_Rain;
+    deps["Clouds"] = Environ_Clouds;
+    deps["Foreground"] = Environ_Foreground;
+    deps["Lightnings"] = Environ_Lightnings;
+    deps["Sky"] = Environ_Sky;
+    deps["Moon"] = Environ_Moon;
+    deps["Leaves"] = Environ_Leaves;
+    deps["Stars"] = Environ_Stars;
+    deps["Birds"] = Environ_Birds;
+    deps["Objects"] = Environ_Objects;
+
+    CL_DomNodeList childList = environ.get_child_nodes();
+    for (int i=0; i < childList.get_length(); ++i)
     {
-        environManager().initEnviron();
-
-        std::map<std::string, EnvironTypes> deps;
-        deps["Rain"] = Environ_Rain;
-        deps["Clouds"] = Environ_Clouds;
-        deps["Foreground"] = Environ_Foreground;
-        deps["Lightnings"] = Environ_Lightnings;
-        deps["Sky"] = Environ_Sky;
-        deps["Moon"] = Environ_Moon;
-        deps["Leaves"] = Environ_Leaves;
-        deps["Stars"] = Environ_Stars;
-        deps["Birds"] = Environ_Birds;
-        deps["Objects"] = Environ_Objects;
-
-        CL_DomNodeList childList = environ.get_child_nodes();
-        for (int i=0; i < childList.get_length(); ++i)
+        CL_DomNode tag = childList.item(i);
+        if (tag.get_node_name() == "Wind")
         {
-            CL_DomNode tag = childList.item(i);
-            if (tag.get_node_name() == "Wind")
-            {
-                float pow = boost::lexical_cast<float>(tag.to_element().get_attribute("power").c_str());
-                environManager().setWindPower(pow);
-            }
-            if (tag.get_node_name() == "Foreground")
-            {
-                levelManager().setForegroundTexture(tag.to_element().get_attribute("image").c_str());
-            }
-
-            EnvironTypes type = deps[tag.get_node_name().c_str()];
-
-            bool enabled = tag.to_element().get_attribute("enabled") == "true";
-
-            int lim = -1;
-            CL_String s_lim = tag.to_element().get_attribute("limit");
-            if (s_lim != "") lim = boost::lexical_cast<int>(s_lim.c_str());
-
-            environManager().enableType(enabled, type, lim);
+            float pow = boost::lexical_cast<float>(tag.to_element().get_attribute("power").c_str());
+            environManager().setWindPower(pow);
         }
-        LOG_NOFORMAT("- All environ objects are loaded.\n");
+        if (tag.get_node_name() == "Foreground")
+        {
+            levelManager().setForegroundTexture(tag.to_element().get_attribute("image").c_str());
+        }
+
+        EnvironTypes type = deps[tag.get_node_name().c_str()];
+
+        bool enabled = tag.to_element().get_attribute("enabled") == "true";
+
+        int lim = -1;
+        CL_String s_lim = tag.to_element().get_attribute("limit");
+        if (s_lim != "") lim = boost::lexical_cast<int>(s_lim.c_str());
+
+        if (enabled) environManager().enableType(enabled, type, lim);
     }
+    LOG_NOFORMAT("- All environ objects are loaded.\n");
 
     // START OF OBJECTS PARSING -------------------------------------------
     {

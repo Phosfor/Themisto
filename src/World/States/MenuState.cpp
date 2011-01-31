@@ -42,8 +42,6 @@ void MenuState::init()
     physicManager().getWorld().SetDebugDraw(mDraw);
     mInputSlot = inputManager().getKeyboard().sig_key_down().connect(this, &MenuState::onKeyDown);
 
-    mEnvironEnabled = environManager().getEnvironEnabled();
-
     initGui();
 }
 
@@ -69,7 +67,7 @@ void MenuState::update()
     mGC.clear();
 
     physicManager().step();
-    if (mEnvironEnabled) environManager().update();
+    environManager().update();
 
     if (mDrawDebug) physicManager().getWorld().DrawDebugData();
     if (mDetailedOutput)

@@ -170,13 +170,3 @@ bool EnvironManager::getTypeEnabled(EnvironTypes type)
 
     return false;
 }
-
-bool EnvironManager::getEnvironEnabled()
-{
-    return mEnvironEnabled;
-}
-
-void EnvironManager::setEnvironEnabled(bool state)
-{
-    mEnvironEnabled = state;
-}

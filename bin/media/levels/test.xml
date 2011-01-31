@@ -4,7 +4,7 @@
 
     <World image="levels/test.png" cameraPosX="0" cameraPosY="0">
 
-        <Environ active="false">
+        <Environ>
             <Rain enabled="false" limit="150" />
             <Clouds enabled="false" limit="20" />
             <!--<Lightnings enabled="true" />-->

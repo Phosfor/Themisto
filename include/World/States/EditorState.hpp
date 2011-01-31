@@ -38,7 +38,6 @@ class EditorState : public State
         DebugDraw *mDraw;
         DebugDragAndDrop *mDnD;
 
-        bool mEnvironEnabled;
         CL_GraphicContext mGC;
 
         // Remove this later

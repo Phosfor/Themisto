@@ -40,8 +40,6 @@ void EditorState::init()
     sceneLoader().loadScene("test.xml");
     physicManager().getWorld().SetDebugDraw(mDraw);
     mInputSlot = inputManager().getKeyboard().sig_key_down().connect(this, &EditorState::onKeyDown);
-
-    mEnvironEnabled = environManager().getEnvironEnabled();
 }
 
 void EditorState::shutdown()
@@ -55,7 +53,7 @@ void EditorState::update()
     mGC.clear();
 
     physicManager().step();
-    if (mEnvironEnabled) environManager().update();
+    environManager().update();
 
     if (mDrawDebug) physicManager().getWorld().DrawDebugData();
 }
