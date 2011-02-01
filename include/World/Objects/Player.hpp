@@ -45,11 +45,14 @@ class Player: public Object
     private:
         InputManager *mInputManager;
         boost::shared_ptr<Body> mTopBoxBody;
-        boost::shared_ptr<Body> mCircleBody;
-        b2RevoluteJoint* mJoint;
+        boost::shared_ptr<Body> mCircleBody1;
+        boost::shared_ptr<Body> mCircleBody2;
+        boost::shared_ptr<Body> mCircleBody3;
+        boost::shared_ptr<Body> mCircleBody4;
         CL_Slot mKeyDownSlot;
         CL_Slot mKeyUpSlot;
         float mRollAngularVelocity;
+        float mJumpVelocity;
 
         // Visual
         CL_GraphicContext mGC;
@@ -67,8 +70,10 @@ class Player: public Object
 
         // Get/set
         void setPhysic(boost::shared_ptr<Body> bodyTopBox,
-                       boost::shared_ptr<Body> bodyCircle,
-                       b2RevoluteJoint* joint);
+                       boost::shared_ptr<Body> bodyCircle1,
+                       boost::shared_ptr<Body> bodyCircle2,
+                       boost::shared_ptr<Body> bodyCircle3,
+                       boost::shared_ptr<Body> bodyCircle4);
 
 
         void updateVisual();
