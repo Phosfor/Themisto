@@ -5,20 +5,20 @@
     <World image="levels/test.png" cameraPosX="0" cameraPosY="0">
 
         <Environ>
-            <Rain enabled="false" limit="150" />
-            <Clouds enabled="false" limit="20" />
-            <Lightnings enabled="false" />
-            <Sky enabled="false" />
-            <Moon enabled="false" />
-            <Leaves enabled="false" limit="10" />
-            <Stars enabled="false" limit="600" />
-            <Birds enabled="false" />
+            <Rain enabled="true" limit="150" />
+            <Clouds enabled="true" limit="20" />
+            <Lightnings enabled="true" />
+            <Sky enabled="true" />
+            <Moon enabled="true" />
+            <Leaves enabled="true" limit="10" />
+            <Stars enabled="true" limit="600" />
+            <Birds enabled="true" />
             <Objects enabled="true" />
             <!-- actual_size is average real foreground image size refer to full window size -->
             <!-- If fixed is true, foreground wouldn't move with camera and level -->
-            <Foreground enabled="false" image="test" actual_size="40" fixed="false" />
+            <Foreground enabled="true" image="test" actual_size="40" fixed="false" />
 
-            <Wind enabled="false" power="-2" />
+            <Wind enabled="true" power="-2" />
         </Environ>
 
         <Objects>

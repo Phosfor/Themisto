@@ -31,11 +31,13 @@ class PhysicManager : public boost::serialization::singleton<PhysicManager>
 {
     private:
         b2World* mWorld;
+        float mAccomulated;
 
     public:
         float32 mTimeStep;
         int32 mVelocityIterations;
         int32 mPositionIterations;
+
 
         PhysicManager();
         ~PhysicManager();

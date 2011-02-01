@@ -25,6 +25,7 @@ PhysicManager::PhysicManager()
     mTimeStep = 1.0f / 60.0f;
     mVelocityIterations = 7;
     mPositionIterations = 5;
+    mAccomulated = 0;
 }
 
 PhysicManager::~PhysicManager()
@@ -55,10 +56,16 @@ std::list<PhysicObject*> PhysicManager::getBodies()
     }
     return result;
 }
-
+float mAccomulated = 0;
 void PhysicManager::step()
 {
-    mWorld->Step(mTimeStep, mVelocityIterations, mPositionIterations);
-    mWorld->ClearForces();
+    float elapsed = appManager().getElapsed()*0.001;
+    float acc;
+    for(acc = mTimeStep; acc < elapsed+ mAccomulated; acc += mTimeStep)
+    {
+        mWorld->Step(mTimeStep, mVelocityIterations, mPositionIterations);
+        mWorld->ClearForces();
+    }
+    mAccomulated = acc - (elapsed + mAccomulated);
 }
 
