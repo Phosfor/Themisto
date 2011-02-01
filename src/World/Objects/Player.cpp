@@ -35,35 +35,24 @@ Player::Player()
 
 void Player::keyDown(const CL_InputEvent& ev, const CL_InputState& state)
 {
-    /*float speed = 25;
-    if(ev.id == CL_KEY_D)
+    if(inputManager().keyPressed( CL_KEY_D) || inputManager().keyPressed( CL_KEY_A) )
     {
-        if(mJoint->GetMotorSpeed() != -speed || !mJoint->IsMotorEnabled())
-        {
-            mJoint->EnableLimit(false);
-            mJoint->SetMotorSpeed(-speed);
-            mJoint->EnableMotor(true);
-        }
+        mCircleBody->getBody()->SetFixedRotation(false);
     }
-    else if(ev.id == CL_KEY_A)
-    {
-        if(mJoint->GetMotorSpeed() != speed || !mJoint->IsMotorEnabled())
-        {
-            mJoint->EnableLimit(false);
-            mJoint->SetMotorSpeed(speed);
-            mJoint->EnableMotor(true);
-        }
-    }*/
 }
 
 void Player::keyUp(const CL_InputEvent& ev, const CL_InputState& state)
 {
-    if( (ev.id == CL_KEY_D) || (ev.id == CL_KEY_A) )
+    if(!inputManager().keyPressed( CL_KEY_D) && !inputManager().keyPressed( CL_KEY_A) )
     {
-        //mJoint->EnableMotor(false);
-        //mJoint->SetLimits(mJoint->GetJointAngle(),mJoint->GetJointAngle());
+        //mJoint->EnableMotor(true);
+        //mJoint->SetLimits(mJoint->GetJointAngle()- 0.01 ,mJoint->GetJointAngle() + 0.01);
         //mJoint->EnableLimit(true);
+        mCircleBody->getBody()->SetAngularVelocity(0);
+        mCircleBody->getBody()->SetFixedRotation(true);
+
     }
+
 }
 
 void Player::updateVisual(float newX, float newY)
@@ -72,7 +61,48 @@ void Player::updateVisual(float newX, float newY)
 
 void Player::step(float32 elapsed)
 {
-    mCircleBody->getBody()->SetAngularVelocity(-25);
+    // A - left, D - right
+    float speed = 0;
+    if(inputManager().keyPressed( CL_KEY_D))
+    {
+        speed = 5;//levelManager().getCameraSpeed();
+    }
+    else if(inputManager().keyPressed( CL_KEY_A))
+    {
+        speed = -5;//levelManager().getCameraSpeed();
+    }
+    if(speed != 0)
+    {
+        // If roll touching something, then player can go
+        for(b2ContactEdge* ce = mCircleBody->getBody()->GetContactList(); ce != NULL; ce = ce->next)
+        {
+            if( ce->contact->IsTouching())
+            {
+                b2Vec2 velocity(0,0);
+                b2WorldManifold m;
+                ce->contact->GetWorldManifold(&m);
+                b2Vec2 normal = m.normal;
+                velocity.Set(normal.y, -normal.x);
+                float koef = speed;
+                // If we going up, do it slower
+                if( (normal.x < 0 && speed>0) || (normal.x > 0 && speed<0))
+                {
+                    float slowerKoef = normal.y*normal.y;
+                    if(slowerKoef <= 0.2) slowerKoef = 0;
+                    koef *= slowerKoef;
+                }
+                velocity = koef * velocity;
+                if( (velocity.x >0 && speed <0) ||(velocity.x <0 && speed >0) )
+                {
+                    velocity = -1 * velocity;
+                }
+                velocity += ce->other->GetLinearVelocity();
+                // Calculate angular velocity impact
+                mCircleBody->getBody()->SetLinearVelocity(velocity);
+                break;
+            }
+        }
+    }
 }
 
 
@@ -138,25 +168,12 @@ boost::shared_ptr<Object> Player::ParsePlayer(CL_DomElement* tag, std::string& d
     boost::shared_ptr<Body> topBoxHandle = boost::shared_ptr<Body>(new Body());
     boost::shared_ptr<Body> circleHandle = boost::shared_ptr<Body>(new Body());
 
-    // Core body
-    //b2BodyDef coreBodyDef;
-    //coreBodyDef.position.Set((x+PlayerWidth/2), (y+PlayerHeight - PlayerWidth/2 ));
-    //coreBodyDef.type = b2_dynamicBody;
-    //coreBodyDef.fixedRotation = true;
-    //b2Body* coreBody = physicManager().getWorld().CreateBody(&coreBodyDef);
-    //b2PolygonShape coreShape;
-    //coreShape.SetAsBox(0.1, PlayerWidth/2);
-    //b2FixtureDef  fixdefCore;
-    //fixdefCore.shape = &coreShape;
-    //coreBody->CreateFixture(&fixdefCore);
-
     // Top Box part
 
     b2BodyDef topBoxDef;
     topBoxDef.position.Set((x), (y));
     topBoxDef.type = b2_dynamicBody;
     topBoxDef.fixedRotation = true;
-    topBoxDef.bullet = true;
     b2Body* topBox = physicManager().getWorld().CreateBody(&topBoxDef);
     // Shape
     b2PolygonShape topBoxshape;
@@ -168,6 +185,7 @@ boost::shared_ptr<Object> Player::ParsePlayer(CL_DomElement* tag, std::string& d
     topBoxshape.Set(vertices, 4);
     b2FixtureDef  fixdefTop;
     fixdefTop.restitution = 0;
+    fixdefTop.density = 1;
     fixdefTop.shape = &topBoxshape;
     fixdefTop.filter.groupIndex = -7;
     topBox->CreateFixture(&fixdefTop);
@@ -177,102 +195,53 @@ boost::shared_ptr<Object> Player::ParsePlayer(CL_DomElement* tag, std::string& d
     b2Vec2 vertices2[4];
     vertices2[0] = b2Vec2(0, PlayerHeight/2);
     vertices2[1] = b2Vec2(PlayerWidth, PlayerHeight/2);
-    vertices2[2] = b2Vec2(PlayerWidth, PlayerHeight - PlayerWidth/3);
-    vertices2[3] = b2Vec2(0, PlayerHeight - PlayerWidth/3);
+    vertices2[2] = b2Vec2(PlayerWidth, PlayerHeight - PlayerWidth/2);
+    vertices2[3] = b2Vec2(0, PlayerHeight - PlayerWidth/2);
     bottomBoxshape.Set(vertices2, 4);
     b2FixtureDef  fixdef;
     fixdef.shape = &bottomBoxshape;
     fixdef.restitution = 0;
     fixdef.filter.groupIndex = -7;
+    fixdef.density = 1;
     topBox->CreateFixture(&fixdef);
 
     topBoxHandle->setBody(topBox);
 
-    // Circle left part
+    // Circle part
 
-    b2BodyDef circleLeftDef;
-    circleLeftDef.position.Set(x+PlayerWidth/7, y + PlayerHeight -PlayerWidth/3);
-    circleLeftDef.type = b2_dynamicBody;
-    b2Body* circleLeft = physicManager().getWorld().CreateBody(&circleLeftDef);
+    b2BodyDef circleDef;
+    circleDef.position.Set(x+PlayerWidth/2, y + PlayerHeight - PlayerWidth/2 );
+    circleDef.type = b2_dynamicBody;
+    b2Body* circle = physicManager().getWorld().CreateBody(&circleDef);
+
+    circleHandle->setBody(circle);
 
     b2CircleShape circleShape;
-    circleShape.m_radius = (PlayerWidth/8);
+    circleShape.m_radius = (PlayerWidth/2);
     b2FixtureDef fixdefCircle;
     fixdefCircle.shape = &circleShape;
-    fixdefCircle.friction = 0;
+    fixdefCircle.friction = 30;
     fixdefCircle.restitution = 0;
-    fixdefCircle.density = 10;
+    fixdefCircle.density = 1;
     fixdefCircle.filter.groupIndex = -7;
-    circleLeft->CreateFixture(&fixdefCircle);
+    circle->CreateFixture(&fixdefCircle);
 
-    // Circle right part
-
-    b2BodyDef circleRightDef;
-    circleRightDef.position.Set(x+PlayerWidth*6/7, y + PlayerHeight-PlayerWidth/3);
-    circleRightDef.type = b2_dynamicBody;
-    b2Body* circleRight = physicManager().getWorld().CreateBody(&circleRightDef);
-    circleRight->CreateFixture(&fixdefCircle);
-
-    // Circle center part
-
-    b2BodyDef circleCenterDef;
-    circleCenterDef.position.Set(x+PlayerWidth/2, y + PlayerHeight-PlayerWidth/4);
-    circleCenterDef.type = b2_dynamicBody;
-    b2Body* circleCenter = physicManager().getWorld().CreateBody(&circleCenterDef);
-    b2CircleShape circleCenterShape;
-    circleCenterShape.m_radius = (PlayerWidth/3);
-    b2FixtureDef fixdefCenterCircle;
-    fixdefCenterCircle.shape = &circleCenterShape;
-    fixdefCenterCircle.friction = 70;
-    fixdefCenterCircle.restitution = 0;
-    fixdefCenterCircle.density = 10;
-    fixdefCenterCircle.filter.groupIndex = -7;
-    circleCenter->CreateFixture(&fixdefCenterCircle);
-    circleHandle->setBody(circleCenter); // main (with motor)
-
-
-
-    //b2MassData mass;
-    //mass.mass = PlayerMass/2;
-    //circle->SetMassData(&mass);
-    //topBox->SetMassData(&mass);
+    b2MassData mass;
+    mass.mass = PlayerMass/3;
+    mass.I = 0.01;
+    mass.center.Set(0,0);
+    topBox->SetMassData(&mass);
+    mass.mass = PlayerMass*2/3;
+    circle->SetMassData(&mass);
 
     // Join the bodies
 
-    b2RevoluteJointDef jointLeftDef;
-    jointLeftDef.Initialize( circleLeft, topBox, circleLeft->GetWorldCenter());
-    jointLeftDef.collideConnected = false;
-    physicManager().getWorld().CreateJoint(&jointLeftDef);
-
-     b2RevoluteJointDef jointCenterDef;
-    jointCenterDef.Initialize( circleCenter, topBox, circleCenter->GetWorldCenter());
-    jointCenterDef.collideConnected = false;
-    jointCenterDef.maxMotorTorque = 1000;
-    b2RevoluteJoint* joint = (b2RevoluteJoint*) physicManager().getWorld().CreateJoint(&jointCenterDef);
-
-     b2RevoluteJointDef jointRightDef;
-    jointRightDef.Initialize( circleRight, topBox, circleRight->GetWorldCenter());
-    jointRightDef.collideConnected = false;
-    physicManager().getWorld().CreateJoint(&jointRightDef);
-
-    //b2LineJointDef ajointDef;
-    //ajointDef.Initialize( coreBody, topBox, circle->GetWorldCenter(), b2Vec2(0, 1));
-    //ajointDef.collideConnected = false;
-    //ajointDef.lowerTranslation = -1.0f;
-    //ajointDef.upperTranslation = 1.0f;
-    //ajointDef.enableLimit = true;
-    //ajointDef.maxMotorForce = 10.0f;
-    //ajointDef.motorSpeed = -10.0f;
-    //ajointDef.enableMotor = true;
-    //physicManager().getWorld().CreateJoint(&ajointDef);
-
-/*
-    // Amortization
-    b2DistanceJointDef ajointDef;
-    ajointDef.Initialize(coreBody, topBox, coreBody->GetWorldCenter(),  coreBody->GetWorldCenter());
-    ajointDef.collideConnected = false;
-    ajointDef.dampingRatio = 0;
-    physicManager().getWorld().CreateJoint(&ajointDef);*/
+    b2RevoluteJointDef jointDef;
+    jointDef.Initialize( circle, topBox, circle->GetWorldCenter());
+    jointDef.collideConnected = false;
+    jointDef.maxMotorTorque = 400;
+    jointDef.motorSpeed = 0;
+    b2RevoluteJoint* joint = (b2RevoluteJoint*) physicManager().getWorld().CreateJoint(&jointDef);
 
     result->setPhysic(topBoxHandle, circleHandle, joint);
 

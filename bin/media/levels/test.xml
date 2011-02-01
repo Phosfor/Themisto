@@ -6,19 +6,19 @@
 
         <Environ>
             <Rain enabled="false" limit="150" />
-            <Clouds enabled="true" limit="20" />
-            <Lightnings enabled="true" />
-            <Sky enabled="true" />
-            <Moon enabled="true" />
+            <Clouds enabled="false" limit="20" />
+            <Lightnings enabled="false" />
+            <Sky enabled="false" />
+            <Moon enabled="false" />
             <Leaves enabled="false" limit="10" />
-            <Stars enabled="true" limit="600" />
+            <Stars enabled="false" limit="600" />
             <Birds enabled="false" />
             <Objects enabled="true" />
             <!-- actual_size is average real foreground image size refer to full window size -->
             <!-- If fixed is true, foreground wouldn't move with camera and level -->
-            <Foreground enabled="true" image="test" actual_size="40" fixed="false" />
+            <Foreground enabled="false" image="test" actual_size="40" fixed="false" />
 
-            <Wind enabled="true" power="-2" />
+            <Wind enabled="false" power="-2" />
         </Environ>
 
         <Objects>
@@ -88,7 +88,7 @@
                 <Body>
                     <b2Body>
                         <Position>
-                            <x>300.0</x>
+                            <x>400.0</x>
                             <y>70.0</y>
                         </Position>
                         <Type>DynamicBody</Type>
@@ -110,11 +110,11 @@
                        </Vertex>
                         <Vertex id="3">
                         <x>50</x>
-                        <y>100</y>
+                        <y>200</y>
                        </Vertex>
                        <Vertex id="4">
                         <x>0</x>
-                        <y>100</y>
+                        <y>200</y>
                        </Vertex>
                       </Vertices>
                      </Shape>

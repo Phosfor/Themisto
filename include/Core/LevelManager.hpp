@@ -69,6 +69,7 @@ class LevelManager : public boost::serialization::singleton<LevelManager>
         // Average real foreground image size refer to full window size (in percents)
         uint16_t mForegroundActualSize;
         CL_Size mTextureSize;
+        bool mDebugDrawOnly;
 
         // Camera stuff
         float mCameraSpeed;
