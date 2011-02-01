@@ -65,43 +65,15 @@ void Player::step(float32 elapsed)
     float speed = 0;
     if(inputManager().keyPressed( CL_KEY_D))
     {
-        speed = 5;//levelManager().getCameraSpeed();
+        speed = mRollAngularVelocity;
     }
     else if(inputManager().keyPressed( CL_KEY_A))
     {
-        speed = -5;//levelManager().getCameraSpeed();
+        speed = -mRollAngularVelocity;
     }
     if(speed != 0)
     {
-        // If roll touching something, then player can go
-        for(b2ContactEdge* ce = mCircleBody->getBody()->GetContactList(); ce != NULL; ce = ce->next)
-        {
-            if( ce->contact->IsTouching())
-            {
-                b2Vec2 velocity(0,0);
-                b2WorldManifold m;
-                ce->contact->GetWorldManifold(&m);
-                b2Vec2 normal = m.normal;
-                velocity.Set(normal.y, -normal.x);
-                float koef = speed;
-                // If we going up, do it slower
-                if( (normal.x < 0 && speed>0) || (normal.x > 0 && speed<0))
-                {
-                    float slowerKoef = normal.y*normal.y;
-                    if(slowerKoef <= 0.2) slowerKoef = 0;
-                    koef *= slowerKoef;
-                }
-                velocity = koef * velocity;
-                if( (velocity.x >0 && speed <0) ||(velocity.x <0 && speed >0) )
-                {
-                    velocity = -1 * velocity;
-                }
-                velocity += ce->other->GetLinearVelocity();
-                // Calculate angular velocity impact
-                mCircleBody->getBody()->SetLinearVelocity(velocity);
-                break;
-            }
-        }
+        mCircleBody->getBody()->SetAngularVelocity(speed);
     }
 }
 
@@ -135,6 +107,7 @@ void Player::setPhysic(boost::shared_ptr<Body> bodyTopBox,
     mTopBoxBody = bodyTopBox;
     mCircleBody = bodyCircle;
     mJoint = joint;
+    mRollAngularVelocity = PlayerSpeed / mCircleBody->getBody()->GetFixtureList()->GetShape()->m_radius;
 }
 
 boost::shared_ptr<Object> Player::ParsePlayer(CL_DomElement* tag, std::string& desc)
@@ -220,7 +193,7 @@ boost::shared_ptr<Object> Player::ParsePlayer(CL_DomElement* tag, std::string& d
     circleShape.m_radius = (PlayerWidth/2);
     b2FixtureDef fixdefCircle;
     fixdefCircle.shape = &circleShape;
-    fixdefCircle.friction = 30;
+    fixdefCircle.friction = 10;
     fixdefCircle.restitution = 0;
     fixdefCircle.density = 1;
     fixdefCircle.filter.groupIndex = -7;
@@ -239,8 +212,6 @@ boost::shared_ptr<Object> Player::ParsePlayer(CL_DomElement* tag, std::string& d
     b2RevoluteJointDef jointDef;
     jointDef.Initialize( circle, topBox, circle->GetWorldCenter());
     jointDef.collideConnected = false;
-    jointDef.maxMotorTorque = 400;
-    jointDef.motorSpeed = 0;
     b2RevoluteJoint* joint = (b2RevoluteJoint*) physicManager().getWorld().CreateJoint(&jointDef);
 
     result->setPhysic(topBoxHandle, circleHandle, joint);

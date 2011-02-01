@@ -49,6 +49,7 @@ class Player: public Object
         b2RevoluteJoint* mJoint;
         CL_Slot mKeyDownSlot;
         CL_Slot mKeyUpSlot;
+        float mRollAngularVelocity;
 
         // Visual
         CL_GraphicContext mGC;
@@ -60,6 +61,7 @@ class Player: public Object
         static const float PlayerHeight = 4;
         static const float PlayerWidth = 1.5;
         static const float PlayerMass = 30.0;
+        static const float PlayerSpeed = 5.0;
 
         explicit Player();
 
