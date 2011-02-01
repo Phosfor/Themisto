@@ -31,7 +31,7 @@ Player::Player()
     CL_InputDevice keyb = inputManager().getKeyboard();
     mKeyDownSlot = keyb.sig_key_down().connect(this, &Player::keyDown);
     mKeyUpSlot = keyb.sig_key_up().connect(this, &Player::keyUp);
-    mJumpVelocity = 27;
+    mJumpVelocity = sqrt(20*PlayerHeight/2);
 }
 
 b2ContactEdge* getFirstTouchingContact(boost::shared_ptr<Body> body)
@@ -87,7 +87,9 @@ void Player::keyDown(const CL_InputEvent& ev, const CL_InputState& state)
                 float koef = m.normal.y*m.normal.y*m.normal.y*m.normal.y;
                 jumpVelocity = koef * jumpVelocity;
             }
-            jumpVelocity += mTopBoxBody->getBody()->GetLinearVelocity();
+            jumpVelocity += ce->other->GetLinearVelocity();
+            mTopBoxBody->getBody()->SetLinearVelocity(jumpVelocity);
+            mRollBaseBody->getBody()->SetLinearVelocity(jumpVelocity);
             mCircleBody1->getBody()->SetLinearVelocity(jumpVelocity);
             mCircleBody2->getBody()->SetLinearVelocity(jumpVelocity);
             mCircleBody3->getBody()->SetLinearVelocity(jumpVelocity);
@@ -162,12 +164,14 @@ void Player::update(float elapsed)
 }
 
 void Player::setPhysic(boost::shared_ptr<Body> bodyTopBox,
+                       boost::shared_ptr<Body> bodyRollBase,
                        boost::shared_ptr<Body> bodyCircle1,
                        boost::shared_ptr<Body> bodyCircle2,
                        boost::shared_ptr<Body> bodyCircle3,
                        boost::shared_ptr<Body> bodyCircle4)
 {
     mTopBoxBody = bodyTopBox;
+    mRollBaseBody = bodyRollBase;
     mCircleBody1 = bodyCircle1;
     mCircleBody2 = bodyCircle2;
     mCircleBody3 = bodyCircle3;
@@ -204,6 +208,7 @@ boost::shared_ptr<Object> Player::ParsePlayer(CL_DomElement* tag, std::string& d
     // Player consists of three objects: two rectangles on roll
 
     boost::shared_ptr<Body> topBoxHandle = boost::shared_ptr<Body>(new Body());
+    boost::shared_ptr<Body> rollBaseHandle = boost::shared_ptr<Body>(new Body());
     boost::shared_ptr<Body> circle1Handle = boost::shared_ptr<Body>(new Body());
     boost::shared_ptr<Body> circle2Handle = boost::shared_ptr<Body>(new Body());
     boost::shared_ptr<Body> circle3Handle = boost::shared_ptr<Body>(new Body());
@@ -263,6 +268,7 @@ boost::shared_ptr<Object> Player::ParsePlayer(CL_DomElement* tag, std::string& d
     rollFixdef.density = 1;
     rollFixdef.friction = 0;
     rollBase->CreateFixture(&rollFixdef);
+    rollBaseHandle->setBody(rollBase);
 
     // Circles
     b2CircleShape circleShape;
@@ -343,7 +349,7 @@ boost::shared_ptr<Object> Player::ParsePlayer(CL_DomElement* tag, std::string& d
     physicManager().getWorld().CreateJoint(&circleJointDef);
 
 
-    result->setPhysic(topBoxHandle, circle1Handle, circle2Handle,circle3Handle,circle4Handle);
+    result->setPhysic(topBoxHandle, rollBaseHandle, circle1Handle, circle2Handle,circle3Handle,circle4Handle);
 
     return boost::shared_ptr<Object>(result);
 }

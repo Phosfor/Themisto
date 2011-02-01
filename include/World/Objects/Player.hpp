@@ -45,6 +45,7 @@ class Player: public Object
     private:
         InputManager *mInputManager;
         boost::shared_ptr<Body> mTopBoxBody;
+        boost::shared_ptr<Body> mRollBaseBody;
         boost::shared_ptr<Body> mCircleBody1;
         boost::shared_ptr<Body> mCircleBody2;
         boost::shared_ptr<Body> mCircleBody3;
@@ -70,6 +71,7 @@ class Player: public Object
 
         // Get/set
         void setPhysic(boost::shared_ptr<Body> bodyTopBox,
+                       boost::shared_ptr<Body> bodyRollBase,
                        boost::shared_ptr<Body> bodyCircle1,
                        boost::shared_ptr<Body> bodyCircle2,
                        boost::shared_ptr<Body> bodyCircle3,

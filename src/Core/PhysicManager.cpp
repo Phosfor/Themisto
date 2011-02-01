@@ -23,8 +23,8 @@ PhysicManager::PhysicManager()
     b2Vec2 gravity(0.0f, 10.0f);
     mWorld = new b2World(gravity, true);
     mTimeStep = 1.0f / 60.0f;
-    mVelocityIterations = 6;
-    mPositionIterations = 4;
+    mVelocityIterations = 7;
+    mPositionIterations = 5;
 }
 
 PhysicManager::~PhysicManager()
