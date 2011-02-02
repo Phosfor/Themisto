@@ -66,7 +66,7 @@ void MenuState::update()
 {
     mGC.clear();
 
-    physicManager().step();
+
     environManager().update();
 
     if (mDrawDebug) physicManager().getWorld().DrawDebugData();

@@ -24,6 +24,7 @@
 #include <Box2D/Box2D.h>
 #include "Core/Utils.hpp"
 #include "Core/ApplicationManager.hpp"
+#include "Core/LevelManager.hpp"
 
 class PhysicObject;
 
@@ -32,6 +33,7 @@ class PhysicManager : public boost::serialization::singleton<PhysicManager>
     private:
         b2World* mWorld;
         float mAccomulated;
+        LevelManager *mLevelManager;
 
     public:
         float32 mTimeStep;
@@ -44,7 +46,7 @@ class PhysicManager : public boost::serialization::singleton<PhysicManager>
 
         b2World& getWorld();
         std::list<PhysicObject*> getBodies();
-        void step();
+        void update(float elapsed);
         void disposeScene();
 };
 

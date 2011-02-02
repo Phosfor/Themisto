@@ -29,11 +29,13 @@
 #include "Core/EnvironManager.hpp"
 #include "Core/LevelManager.hpp"
 #include "World/Environ/Object.hpp"
+#include "Core/PhysicManager.hpp"
 
 class Objects : public EnvironObject
 {
     private:
         LevelManager &mLevelManager;
+        PhysicManager *mPhysicManager;
 
     public:
         Objects();

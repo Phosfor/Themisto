@@ -118,7 +118,8 @@ class LevelManager : public boost::serialization::singleton<LevelManager>
 
         // Objects stuff
         void addObject(const std::string &name, boost::shared_ptr<Object> obj);
-        void update(float elapsed);
+        void updateVisual(float elapsed);
+        void updateLogic(float elapsed);
 };
 
 inline LevelManager &levelManager() { return LevelManager::get_mutable_instance(); }

@@ -20,9 +20,11 @@
 Objects::Objects()
     : mLevelManager(levelManager())
 {
+    mPhysicManager = &physicManager();
 }
 
 void Objects::update(float elapsed)
 {
-    mLevelManager.update(elapsed);
+    mPhysicManager->update(elapsed);
+    mLevelManager.updateVisual(elapsed);
 }

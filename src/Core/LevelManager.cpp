@@ -141,7 +141,18 @@ void LevelManager::addObject(const std::string &name, boost::shared_ptr<Object> 
     }
 }
 
-void LevelManager::update(float elapsed)
+void LevelManager::updateLogic(float elapsed)
+{
+    CL_Rectf camPos = getAbsoluteCameraPos();
+
+    for (ObjectMapTypeSorted::const_iterator it=mObjectsSorted.begin();
+            it != mObjectsSorted.end(); ++it)
+    {
+        it->second->update(elapsed);
+    }
+}
+
+void LevelManager::updateVisual(float elapsed)
 {
     CL_Rectf camPos = getAbsoluteCameraPos();
 
@@ -170,6 +181,5 @@ void LevelManager::update(float elapsed)
                 it->second->updateVisual(position.x - camPos.left, position.y - camPos.top);
             }
         }
-        it->second->update(elapsed);
     }
 }
