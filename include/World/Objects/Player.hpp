@@ -46,10 +46,8 @@ class Player: public Object
         InputManager *mInputManager;
         boost::shared_ptr<Body> mTopBoxBody;
         boost::shared_ptr<Body> mRollBaseBody;
-        boost::shared_ptr<Body> mCircleBody1;
-        boost::shared_ptr<Body> mCircleBody2;
-        boost::shared_ptr<Body> mCircleBody3;
-        boost::shared_ptr<Body> mCircleBody4;
+        std::vector< boost::shared_ptr<Body> > mRolls;
+        std::vector<b2RevoluteJoint*> mJoints;
         CL_Slot mKeyDownSlot;
         CL_Slot mKeyUpSlot;
         float mRollAngularVelocity;
@@ -62,20 +60,18 @@ class Player: public Object
         void keyUp(const CL_InputEvent& ev, const CL_InputState& state);
 
     public:
-        static const float PlayerHeight = 4;
-        static const float PlayerWidth = 1.5;
-        static const float PlayerMass = 30.0;
-        static const float PlayerSpeed = 5.0;
+        static const float PlayerHeight = 2;
+        static const float PlayerWidth = 0.5;
+        static const float PlayerMass = 60.0;
+        static const float PlayerSpeed = 2.0;
 
         explicit Player();
 
         // Get/set
         void setPhysic(boost::shared_ptr<Body> bodyTopBox,
                        boost::shared_ptr<Body> bodyRollBase,
-                       boost::shared_ptr<Body> bodyCircle1,
-                       boost::shared_ptr<Body> bodyCircle2,
-                       boost::shared_ptr<Body> bodyCircle3,
-                       boost::shared_ptr<Body> bodyCircle4);
+                       std::vector< boost::shared_ptr<Body> > circles,
+                       std::vector<b2RevoluteJoint*> joints);
 
 
         void updateVisual();
