@@ -60,9 +60,9 @@ class Player: public Object
         void keyUp(const CL_InputEvent& ev, const CL_InputState& state);
 
     public:
-        static const float PlayerHeight = 2;
+        static const float PlayerHeight = 1.7;
         static const float PlayerWidth = 0.5;
-        static const float PlayerMass = 60.0;
+        static const float PlayerMass = 70.0;
         static const float PlayerSpeed = 2.0;
 
         explicit Player();

@@ -20,7 +20,7 @@
 Body::Body()
 {
     mName = worldManager().generateUniqueID();
-    mShouldFreeB2Body = true;
+    mShouldFreeB2Body = false;
 }
 
 Body::~Body()

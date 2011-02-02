@@ -55,7 +55,7 @@ class Body
         void setName(const std::string &value);
 
         // Should body free memory under mBody object at destroing
-        // Default is true
+        // Default is false
         bool mShouldFreeB2Body;
 };
 
