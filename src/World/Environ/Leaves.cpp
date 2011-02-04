@@ -97,8 +97,8 @@ Leaves::Leaves(uint16_t maxLeaves)
 void Leaves::update(float elapsed)
 {
     float windPower = environManager().getWindPower();
-    float newSpeed1 = windPower * elapsed;
-    float newSpeed2 = Gravity * 5 * elapsed;
+    float newSpeed1 = windPower * elapsed * 0.4;
+    float newSpeed2 = Gravity * elapsed;
     for (uint16_t i=0; i < mMaxObjects; i++)
     {
         LeafData &current = mLeaves[i];

@@ -81,7 +81,8 @@ inline float LERP(float oldState, float newState, float k)
 const float MagicKoef = configManager().getValue<float>("application.resolution_koef", 19.2f);
 
 // How many pixels in one game meter in current screen height
-const float PixelsPerMeter = static_cast<float>(ScreenResolutionY) / MagicKoef;
+//const float PixelsPerMeter = static_cast<float>(ScreenResolutionY) / MagicKoef;
+const float PixelsPerMeter = MagicKoef;
 
 // Some conversions
 inline float Meters2Pixels(float meters) { return meters * PixelsPerMeter; }

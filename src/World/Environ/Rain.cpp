@@ -50,7 +50,7 @@ void Rain::processDrops(float windPower, Data &current, bool firstTime)
     current.x = posX;
 
     current.x_speed = windPower;
-    current.y_speed = Gravity;
+    current.y_speed = Gravity * 0.7;
 
     if (firstTime)
     {
@@ -88,7 +88,7 @@ void Rain::update(float elapsed)
 {
     float _windPower = environManager().getWindPower();
     float newXSpeed = _windPower * elapsed;
-    float newYSpeed = Gravity * elapsed;
+    float newYSpeed = Gravity * elapsed * 0.7;
     for (uint16_t i=0; i < mMaxObjects; i++)
     {
         // Cache it, yeah

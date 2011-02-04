@@ -22,10 +22,6 @@ Moon::Moon()
     std::string media = utils().getMediaFolder();
     CL_GraphicContext gc = appManager().getGraphic();
     mMoon = resourceManager().getImage("Moons", "0");
-
-    float koef = Meters2Pixels(9.0) / mMoon.get_width();
-    mMoon.set_scale(koef, koef);
-
     mMoonColor = mMoon.get_color();
     mG = mB = 1.0f;
 
@@ -33,7 +29,7 @@ Moon::Moon()
 
     mMoon.set_alignment(origin_center_right);
 
-    mRadius = Meters2Pixels(15); // The orbit radius is about 15 game meters
+    mRadius = Meters2Pixels(7);  // The orbit radius is about 15 game meters
     mAngle = Deg2Rad(-90);       // Start Moon position
 
     // Center (x;y) of the Moon orbit

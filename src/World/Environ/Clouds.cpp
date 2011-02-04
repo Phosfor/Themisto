@@ -83,7 +83,7 @@ Clouds::Clouds(uint16_t maxClouds)
 void Clouds::update(float elapsed)
 {
     float windPower = environManager().getWindPower();
-    float newSpeed = windPower * elapsed;
+    float newSpeed = windPower * elapsed * 0.5;
     for (uint16_t i=0; i < mMaxObjects; i++)
     {
         CloudData &current = mClouds[i];
