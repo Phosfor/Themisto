@@ -120,7 +120,7 @@ void LightColumn::update(float elapsed)
 
     BOOST_FOREACH(LightBug &bug, mBugs)
     {
-        bug.x = bug.boundingValue * sinf(bug.koef1 * mAbsTime);
+        bug.x = bug.boundingValue * sinf(bug.koef1 * mAbsTime + bug.theta);
         bug.y = bug.boundingValue * sinf(bug.koef2 * mAbsTime);
     }
 }

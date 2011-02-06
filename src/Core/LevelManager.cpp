@@ -5,7 +5,7 @@ LevelManager::LevelManager()
 {
     mNumObjects = 0;
     mCameraSpeed = configManager().getValue<float>("application.camera_speed", 10.0f);
-    mDebugDrawOnly = configManager().getValue<bool>("application.debug_draw_only", 10.0f);
+    mDebugDrawOnly = configManager().getValue<bool>("application.debug_draw_only", false);
     mDrawDebugData = false;
 }
 

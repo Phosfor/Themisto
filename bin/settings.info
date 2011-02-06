@@ -19,5 +19,6 @@ application
     camera_speed "50"
 
     debug "true"
+    debug_draw_only "false"
     media-folder "media"
 }

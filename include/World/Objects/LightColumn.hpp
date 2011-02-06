@@ -36,9 +36,10 @@ struct LightBug
     CL_Sprite imageHandle;
     int koef1, koef2;
 
-    float x, y, offsetX, offsetY;
+    float x, y, offsetX, offsetY, theta;
 
-    LightBug() : boundingValue(10), koef1(1), koef2(3), x(0), y(0), offsetX(0), offsetY(0) { }
+    LightBug() : boundingValue(10), koef1(1), koef2(3), x(0), y(0), 
+        offsetX(0), offsetY(0), theta((float)(rand()%10 + 5)/10.0f) { }
 };
 
 class LightColumn: public Object
