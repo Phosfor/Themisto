@@ -108,7 +108,7 @@ void EnvironManager::update()
     }
 }
 
-void EnvironManager::enableType(bool state, EnvironTypes type, int limit)
+void EnvironManager::enableType(bool state, EnvironTypes type, float limit)
 {
     // If the type is already exists in map
     if (mObjectsMap.find(type) != mObjectsMap.end())
@@ -135,7 +135,11 @@ void EnvironManager::enableType(bool state, EnvironTypes type, int limit)
         mObjectsMap.insert(MapType::value_type(type, temp));
     }
 
-    if (limit != -1) mObjectsMap[type]->setLimit(limit);
+    if (limit != -1)
+    {
+        float area = Pixels2Meters(ScreenResolutionX) * Pixels2Meters(ScreenResolutionY);
+        mObjectsMap[type]->setLimit(limit * area);
+    }
 }
 
 EnvironObject *EnvironManager::getTypeHandle(EnvironTypes type)

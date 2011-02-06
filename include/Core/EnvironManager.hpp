@@ -69,7 +69,7 @@ class EnvironManager : public boost::serialization::singleton<EnvironManager>
         void setLimit(EnvironTypes type, int limit);
         int getLimit(EnvironTypes type);
 
-        void enableType(bool state, EnvironTypes type, int limit = -1);
+        void enableType(bool state, EnvironTypes type, float = -1);
         EnvironObject *getTypeHandle(EnvironTypes type);
 
         bool getTypeEnabled(EnvironTypes type);

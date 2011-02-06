@@ -137,9 +137,9 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
 
         bool enabled = tag.to_element().get_attribute("enabled") == "true";
 
-        int lim = -1;
+        float lim = -1;
         CL_String s_lim = tag.to_element().get_attribute("limit");
-        if (s_lim != "") lim = boost::lexical_cast<int>(s_lim.c_str());
+        if (s_lim != "") lim = boost::lexical_cast<float>(s_lim.c_str());
 
         if (enabled) environManager().enableType(enabled, type, lim);
     }
