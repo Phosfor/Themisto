@@ -101,13 +101,12 @@ void Player::keyDown(const CL_InputEvent& ev, const CL_InputState& state)
                 float koef = m.normal.y*m.normal.y*m.normal.y*m.normal.y;
                 jumpVelocity = koef * jumpVelocity;
             }
-            jumpVelocity += ce->other->GetLinearVelocity();
-            mTopBoxBody->getBody()->SetLinearVelocity(jumpVelocity);
-            mRollBaseBody->getBody()->SetLinearVelocity(jumpVelocity);
-            mRolls[0]->getBody()->SetLinearVelocity(jumpVelocity);
-            mRolls[1]->getBody()->SetLinearVelocity(jumpVelocity);
-            mRolls[2]->getBody()->SetLinearVelocity(jumpVelocity);
-            mRolls[3]->getBody()->SetLinearVelocity(jumpVelocity);
+            jumpVelocity += b2Vec2(mMiddleBoxBody->getBody()->GetLinearVelocity().x, 0);
+
+            for(unsigned int i =0; i<mBodies.size(); ++i)
+            {
+                mBodies[i]->getBody()->SetLinearVelocity(jumpVelocity);
+            }
             ce->other->ApplyLinearImpulse((-1*PlayerMass)*jumpVelocity, b2Vec2(0,0));
         }
     }
@@ -133,24 +132,6 @@ void Player::updateVisual(float newX, float newY)
 
 void Player::step(float32 elapsed)
 {
-    /*
-    // A - left, D - right
-    float speed = 0;
-    if(inputManager().keyPressed( CL_KEY_D))
-    {
-        speed = mRollAngularVelocity;
-    }
-    else if(inputManager().keyPressed( CL_KEY_A))
-    {
-        speed = -mRollAngularVelocity;
-    }
-    if(speed != 0)
-    {
-        mRolls[0]->getBody()->SetAngularVelocity(speed);
-        mRolls[1]->getBody()->SetAngularVelocity(speed);
-        mRolls[2]->getBody()->SetAngularVelocity(speed);
-        mRolls[3]->getBody()->SetAngularVelocity(speed);
-    }*/
 }
 
 
@@ -176,16 +157,21 @@ void Player::update(float elapsed)
     step(elapsed);
 }
 
-void Player::setPhysic(boost::shared_ptr<Body> bodyTopBox,
-                       boost::shared_ptr<Body> bodyRollBase,
-                       std::vector< boost::shared_ptr<Body> > circles,
+void Player::setPhysic(std::vector< boost::shared_ptr<Body> > bodies,
                        std::vector<b2RevoluteJoint*> joints)
 {
-    mTopBoxBody = bodyTopBox;
-    mRollBaseBody = bodyRollBase;
-    mRolls = circles;
+    mBodies = bodies;
+    mRolls.push_back(bodies[0]);
+    mRolls.push_back(bodies[1]);
+    mRolls.push_back(bodies[2]);
+    mRolls.push_back(bodies[3]);
+    mTopBoxBody = bodies[4];
+    mMiddleBoxBody = bodies[5];
+    mShoulderBody = bodies[6];
+    mRollBaseBody = bodies[7];
+
     mJoints = joints;
-    mRollAngularVelocity = PlayerSpeed / mRolls[0]->getBody()->GetFixtureList()->GetShape()->m_radius;
+    mRollAngularVelocity = PlayerSpeed / mBodies[0]->getBody()->GetFixtureList()->GetShape()->m_radius;
 }
 
 boost::shared_ptr<Object> Player::ParsePlayer(CL_DomElement* tag, std::string& desc)
@@ -214,22 +200,32 @@ boost::shared_ptr<Object> Player::ParsePlayer(CL_DomElement* tag, std::string& d
         }
     }
 
-    // Player consists of three objects: two rectangles on roll
 
     boost::shared_ptr<Body> topBoxHandle = boost::shared_ptr<Body>(new Body());
+    boost::shared_ptr<Body> middleBoxHandle = boost::shared_ptr<Body>(new Body());
+    boost::shared_ptr<Body> shoulderHandle = boost::shared_ptr<Body>(new Body());
     boost::shared_ptr<Body> rollBaseHandle = boost::shared_ptr<Body>(new Body());
-    std::vector< boost::shared_ptr<Body> > circlesHandles;
-    circlesHandles.push_back(boost::shared_ptr<Body>(new Body()));
-    circlesHandles.push_back(boost::shared_ptr<Body>(new Body()));
-    circlesHandles.push_back(boost::shared_ptr<Body>(new Body()));
-    circlesHandles.push_back(boost::shared_ptr<Body>(new Body()));
+
+    std::vector< boost::shared_ptr<Body> > bodyHandles;
+    bodyHandles.push_back(boost::shared_ptr<Body>(new Body()));
+    bodyHandles.push_back(boost::shared_ptr<Body>(new Body()));
+    bodyHandles.push_back(boost::shared_ptr<Body>(new Body()));
+    bodyHandles.push_back(boost::shared_ptr<Body>(new Body()));
+    bodyHandles.push_back(topBoxHandle);
+    bodyHandles.push_back(middleBoxHandle);
+    bodyHandles.push_back(shoulderHandle);
+    bodyHandles.push_back(rollBaseHandle);
+
+    b2FixtureDef  fixdef;
+    fixdef.restitution = 0;
+    fixdef.filter.groupIndex = -7;
+    fixdef.density = 1;
 
     // Top Box part
 
     b2BodyDef topBoxDef;
     topBoxDef.position.Set((x), (y));
     topBoxDef.type = b2_dynamicBody;
-    topBoxDef.fixedRotation = true;
     b2Body* topBox = physicManager().getWorld().CreateBody(&topBoxDef);
     // Shape
     b2PolygonShape topBoxshape;
@@ -239,29 +235,36 @@ boost::shared_ptr<Object> Player::ParsePlayer(CL_DomElement* tag, std::string& d
     vertices[2] = b2Vec2(PlayerWidth, PlayerHeight/2);
     vertices[3] = b2Vec2(0, PlayerHeight/2);
     topBoxshape.Set(vertices, 4);
-    b2FixtureDef  fixdefTop;
-    fixdefTop.restitution = 0;
-    fixdefTop.density = 1;
-    fixdefTop.shape = &topBoxshape;
-    fixdefTop.filter.groupIndex = -7;
-    topBox->CreateFixture(&fixdefTop);
-
-    // Bottom Box part
-    b2PolygonShape bottomBoxshape;
-    b2Vec2 vertices2[4];
-    vertices2[0] = b2Vec2(0, PlayerHeight/2);
-    vertices2[1] = b2Vec2(PlayerWidth, PlayerHeight/2);
-    vertices2[2] = b2Vec2(PlayerWidth*3/4, PlayerHeight - PlayerWidth/2);
-    vertices2[3] = b2Vec2(PlayerWidth/4, PlayerHeight - PlayerWidth/2);
-    bottomBoxshape.Set(vertices2, 4);
-    b2FixtureDef  fixdef;
-    fixdef.shape = &bottomBoxshape;
-    fixdef.restitution = 0;
-    fixdef.filter.groupIndex = -7;
-    fixdef.density = 1;
+    fixdef.shape = &topBoxshape;
     topBox->CreateFixture(&fixdef);
 
-    topBoxHandle->setBody(topBox);
+    // Middle Box part
+    b2BodyDef middleBoxDef;
+    middleBoxDef.position.Set((x), (y+PlayerHeight/2));
+    middleBoxDef.type = b2_dynamicBody;
+    middleBoxDef.fixedRotation = true;
+    b2Body* middleBox = physicManager().getWorld().CreateBody(&middleBoxDef);
+    b2PolygonShape middleBoxshape;
+    b2Vec2 vertices2[4];
+    vertices2[0] = b2Vec2(0, 0);
+    vertices2[1] = b2Vec2(PlayerWidth, 0);
+    vertices2[2] = b2Vec2(PlayerWidth*3/4, PlayerHeight/2 - PlayerWidth/2);
+    vertices2[3] = b2Vec2(PlayerWidth/4, PlayerHeight/2 - PlayerWidth/2);
+    middleBoxshape.Set(vertices2, 4);
+    fixdef.shape = &middleBoxshape;
+    middleBox->CreateFixture(&fixdef);
+    middleBoxHandle->setBody(topBox);
+
+    // Shoulder
+    b2BodyDef shoulderDef;
+    shoulderDef.position.Set((x+PlayerWidth/2), (y+PlayerHeight/4));
+    shoulderDef.type = b2_dynamicBody;
+    b2Body* shoulder = physicManager().getWorld().CreateBody(&shoulderDef);
+    b2CircleShape shoulderShape;
+    shoulderShape.m_radius = PlayerWidth/4;
+    fixdef.shape = &shoulderShape;
+    shoulder->CreateFixture(&fixdef);
+    shoulderHandle->setBody(topBox);
 
     // Roll base
 
@@ -272,63 +275,55 @@ boost::shared_ptr<Object> Player::ParsePlayer(CL_DomElement* tag, std::string& d
     b2Body* rollBase = physicManager().getWorld().CreateBody(&rollBaseDef);
     b2PolygonShape rollBaseShape;
     rollBaseShape.SetAsBox(PlayerWidth/2, PlayerWidth/12);
-    b2FixtureDef  rollFixdef;
-    rollFixdef.shape = &rollBaseShape;
-    rollFixdef.filter.groupIndex = -7;
-    rollFixdef.density = 1;
-    rollFixdef.friction = 0;
-    rollBase->CreateFixture(&rollFixdef);
+    fixdef.shape = &rollBaseShape;
+    rollBase->CreateFixture(&fixdef);
     rollBaseHandle->setBody(rollBase);
 
     // Circles
+    b2BodyDef circleDef;
+    circleDef.type = b2_dynamicBody;
     b2CircleShape circleShape;
     circleShape.m_radius = (PlayerWidth/5);
     b2FixtureDef fixdefCircle;
     fixdefCircle.shape = &circleShape;
-    fixdefCircle.friction = 5;
+    fixdefCircle.friction = 3;
     fixdefCircle.restitution = 0;
     fixdefCircle.density = 1;
     fixdefCircle.filter.groupIndex = -7;
 
-    b2BodyDef circle1Def;
-    circle1Def.position.Set(x + PlayerWidth/5, y + PlayerHeight - PlayerWidth/5 );
-    circle1Def.type = b2_dynamicBody;
-    b2Body* circle1 = physicManager().getWorld().CreateBody(&circle1Def);
+    circleDef.position.Set(x + PlayerWidth/5, y + PlayerHeight - PlayerWidth/5 );
+    b2Body* circle1 = physicManager().getWorld().CreateBody(&circleDef);
     circle1->CreateFixture(&fixdefCircle);
-    circlesHandles[0]->setBody(circle1);
+    bodyHandles[0]->setBody(circle1);
 
-    b2BodyDef circle2Def;
-    circle2Def.position.Set(x + PlayerWidth*2/5, y + PlayerHeight - PlayerWidth/5 );
-    circle2Def.type = b2_dynamicBody;
-    b2Body* circle2 = physicManager().getWorld().CreateBody(&circle2Def);
+    circleDef.position.Set(x + PlayerWidth*2/5, y + PlayerHeight - PlayerWidth/5 );
+    b2Body* circle2 = physicManager().getWorld().CreateBody(&circleDef);
     circle2->CreateFixture(&fixdefCircle);
-    circlesHandles[1]->setBody(circle2);
+    bodyHandles[1]->setBody(circle2);
 
-    b2BodyDef circle3Def;
-    circle3Def.position.Set(x + PlayerWidth*3/5, y + PlayerHeight - PlayerWidth/5 );
-    circle3Def.type = b2_dynamicBody;
-    b2Body* circle3 = physicManager().getWorld().CreateBody(&circle3Def);
+    circleDef.position.Set(x + PlayerWidth*3/5, y + PlayerHeight - PlayerWidth/5 );
+    b2Body* circle3 = physicManager().getWorld().CreateBody(&circleDef);
     circle3->CreateFixture(&fixdefCircle);
-    circlesHandles[2]->setBody(circle3);
+    bodyHandles[2]->setBody(circle3);
 
-    b2BodyDef circle4Def;
-    circle4Def.position.Set(x + PlayerWidth*4/5, y + PlayerHeight - PlayerWidth/5 );
-    circle4Def.type = b2_dynamicBody;
-    b2Body* circle4 = physicManager().getWorld().CreateBody(&circle4Def);
+    circleDef.position.Set(x + PlayerWidth*4/5, y + PlayerHeight - PlayerWidth/5 );
+    b2Body* circle4 = physicManager().getWorld().CreateBody(&circleDef);
     circle4->CreateFixture(&fixdefCircle);
-    circlesHandles[3]->setBody(circle4);
+    bodyHandles[3]->setBody(circle4);
 
+    float m = 0;
+    m+= rollBase->GetMass();
+    m+= middleBox->GetMass();
+    m+= topBox->GetMass();
+    m+= shoulder->GetMass();
     b2MassData mass;
-    mass.mass = PlayerMass*7/32;
-    mass.I = 0.01;
+    mass.mass = (PlayerMass-m)/4;
+    mass.I = 1;
     mass.center.Set(0,0);
     circle1->SetMassData(&mass);
     circle2->SetMassData(&mass);
     circle3->SetMassData(&mass);
     circle4->SetMassData(&mass);
-    mass.mass = PlayerMass*2/32;
-    topBox->SetMassData(&mass);
-    rollBase->SetMassData(&mass);
 
     // Join the bodies
 
@@ -350,15 +345,31 @@ boost::shared_ptr<Object> Player::ParsePlayer(CL_DomElement* tag, std::string& d
     joints.push_back((b2RevoluteJoint*) physicManager().getWorld().CreateJoint(&circleJointDef));
 
     b2RevoluteJointDef jointDef;
-    jointDef.Initialize( rollBase, topBox,  rollBase->GetWorldCenter());
+    jointDef.Initialize( rollBase,middleBox,  rollBase->GetWorldCenter());
     jointDef.lowerAngle = -0.78; // pi/4
     jointDef.upperAngle = 0.78;
     jointDef.enableLimit = true;
     jointDef.collideConnected = false;
     joints.push_back((b2RevoluteJoint*) physicManager().getWorld().CreateJoint(&jointDef));
 
+    b2RevoluteJointDef topToMiddleDef;
+    topToMiddleDef.Initialize( topBox, middleBox,  b2Vec2(x+PlayerWidth/2, y+PlayerHeight/2));
+    topToMiddleDef.lowerAngle = 0;
+    topToMiddleDef.upperAngle = 0;
+    topToMiddleDef.enableLimit = true;
+    topToMiddleDef.collideConnected = false;
+    joints.push_back((b2RevoluteJoint*) physicManager().getWorld().CreateJoint(&topToMiddleDef));
 
-    result->setPhysic(topBoxHandle, rollBaseHandle,circlesHandles, joints);
+    b2RevoluteJointDef shoudlerToTopDef;
+    shoudlerToTopDef.Initialize( topBox, shoulder,  shoulder->GetWorldCenter());
+    shoudlerToTopDef.lowerAngle = 0;
+    shoudlerToTopDef.upperAngle = 0;
+    shoudlerToTopDef.enableLimit = true;
+    shoudlerToTopDef.collideConnected = false;
+    joints.push_back((b2RevoluteJoint*) physicManager().getWorld().CreateJoint(&shoudlerToTopDef));
+
+
+    result->setPhysic(bodyHandles, joints);
 
     return boost::shared_ptr<Object>(result);
 }

@@ -63,12 +63,12 @@ void PhysicManager::update(float _elapsed)
     float elapsed = _elapsed;
     elapsed += mAccomulated;
     if(elapsed > 0.1) elapsed = 0.1;
-    float acc;
+    float acc = 0;
     for(acc = mTimeStep; acc < elapsed ; acc += mTimeStep)
     {
-        mLevelManager->updateLogic(mTimeStep);
         mWorld->Step(mTimeStep, mVelocityIterations, mPositionIterations);
         mWorld->ClearForces();
+        mLevelManager->updateLogic(mTimeStep);
     }
     mAccomulated = elapsed - (acc - mTimeStep);
 

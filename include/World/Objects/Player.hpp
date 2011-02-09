@@ -46,7 +46,10 @@ class Player: public Object
         InputManager *mInputManager;
         boost::shared_ptr<Body> mTopBoxBody;
         boost::shared_ptr<Body> mRollBaseBody;
+        boost::shared_ptr<Body> mMiddleBoxBody;
+        boost::shared_ptr<Body> mShoulderBody;
         std::vector< boost::shared_ptr<Body> > mRolls;
+        std::vector< boost::shared_ptr<Body> > mBodies;
         std::vector<b2RevoluteJoint*> mJoints;
         CL_Slot mKeyDownSlot;
         CL_Slot mKeyUpSlot;
@@ -68,9 +71,7 @@ class Player: public Object
         explicit Player();
 
         // Get/set
-        void setPhysic(boost::shared_ptr<Body> bodyTopBox,
-                       boost::shared_ptr<Body> bodyRollBase,
-                       std::vector< boost::shared_ptr<Body> > circles,
+        void setPhysic(std::vector< boost::shared_ptr<Body> > bodies,
                        std::vector<b2RevoluteJoint*> joints);
 
 
