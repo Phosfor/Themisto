@@ -50,7 +50,10 @@ class Player: public Object
         boost::shared_ptr<Body> mShoulderBody;
         std::vector< boost::shared_ptr<Body> > mRolls;
         std::vector< boost::shared_ptr<Body> > mBodies;
-        std::vector<b2RevoluteJoint*> mJoints;
+        std::vector<b2RevoluteJoint*> mRollJoints;
+        b2RevoluteJoint* mShoulderJoint;
+        b2RevoluteJoint* mTopBoxJoint;
+        b2PrismaticJoint* mJumpJoint;
         CL_Slot mKeyDownSlot;
         CL_Slot mKeyUpSlot;
         float mRollAngularVelocity;
@@ -69,11 +72,6 @@ class Player: public Object
         static const float PlayerSpeed = 2.0;
 
         explicit Player();
-
-        // Get/set
-        void setPhysic(std::vector< boost::shared_ptr<Body> > bodies,
-                       std::vector<b2RevoluteJoint*> joints);
-
 
         void updateVisual();
         void step(float32 elapsed); // Physic
