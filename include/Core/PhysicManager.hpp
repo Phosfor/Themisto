@@ -27,19 +27,41 @@
 #include "Core/LevelManager.hpp"
 
 class PhysicObject;
+class PhysicManager;
+PhysicManager &physicManager();
+
+class ContactListener: public b2ContactListener
+{
+    private:
+        PhysicManager* mPhysicManager;
+    public:
+        ContactListener();
+        void BeginContact (b2Contact *contact);
+        void EndContact (b2Contact *contact);
+        void PreSolve (b2Contact *contact, const b2Manifold *oldManifold);
+        void PostSolve (b2Contact *contact, const b2ContactImpulse *impulse);
+};
 
 class PhysicManager : public boost::serialization::singleton<PhysicManager>
 {
+    friend class ContactListener;
+
     private:
         b2World* mWorld;
         float mAccomulated;
         LevelManager *mLevelManager;
+        ContactListener* mContactListener;
+
 
     public:
         float32 mTimeStep;
         int32 mVelocityIterations;
         int32 mPositionIterations;
 
+        CL_Signal_v1<b2Contact*> BeginContact;
+        CL_Signal_v1<b2Contact*> EndContact;
+        CL_Signal_v2<b2Contact*, const b2Manifold*> PreSolveContact;
+        CL_Signal_v2<b2Contact*, const b2ContactImpulse*> PostSolveContact;
 
         PhysicManager();
         ~PhysicManager();
@@ -48,6 +70,8 @@ class PhysicManager : public boost::serialization::singleton<PhysicManager>
         std::list<PhysicObject*> getBodies();
         void update(float elapsed);
         void disposeScene();
+
+
 };
 
 inline PhysicManager &physicManager() { return PhysicManager::get_mutable_instance(); }

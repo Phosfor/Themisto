@@ -32,32 +32,43 @@
 #include "Core/ApplicationManager.hpp"
 #include "Core/PhysicManager.hpp"
 #include "Core/InputManager.hpp"
-
-
-
+#include "World/Objects/Actor.hpp"
 
 class Body;
 class Impact;
 
-
-class Player: public Object
+class Player: public Actor
 {
     private:
         InputManager *mInputManager;
+
+        // State
+        bool mGoingLeft;
+        bool mGoingRight;
+        bool mJumpBegun;
+
+        // Bodies
         boost::shared_ptr<Body> mTopBoxBody;
         boost::shared_ptr<Body> mRollBaseBody;
         boost::shared_ptr<Body> mMiddleBoxBody;
         boost::shared_ptr<Body> mShoulderBody;
         std::vector< boost::shared_ptr<Body> > mRolls;
         std::vector< boost::shared_ptr<Body> > mBodies;
+
+        // Joints
         std::vector<b2RevoluteJoint*> mRollJoints;
         b2RevoluteJoint* mShoulderJoint;
         b2RevoluteJoint* mTopBoxJoint;
         b2PrismaticJoint* mJumpJoint;
+
+        // Slots
         CL_Slot mKeyDownSlot;
         CL_Slot mKeyUpSlot;
+
+        // Params
         float mRollAngularVelocity;
         float mJumpVelocity;
+        float mJumpDeep;
 
         // Visual
         CL_GraphicContext mGC;
@@ -86,6 +97,13 @@ class Player: public Object
         void updateVisual(float newX, float newY);
         CL_Rectf getRectangle();
 
+        // --- Actor implementation ---
+
+         void GoLeft();
+         void GoRight();
+         void StopMoving();
+         void BeginJump();
+         void EndJump();
 
 };
 

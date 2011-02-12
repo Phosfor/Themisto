@@ -18,10 +18,37 @@
 #include "Core/PhysicManager.hpp"
 
 
+ContactListener::ContactListener()
+{
+    mPhysicManager = NULL;
+}
+void ContactListener::BeginContact (b2Contact *contact)
+{
+    if(mPhysicManager == NULL) mPhysicManager = &physicManager();
+    mPhysicManager->BeginContact.invoke(contact);
+}
+void ContactListener::EndContact (b2Contact *contact)
+{
+    if(mPhysicManager == NULL) mPhysicManager = &physicManager();
+    mPhysicManager->EndContact.invoke(contact);
+}
+void ContactListener::PreSolve(b2Contact *contact, const b2Manifold *oldManifold)
+{
+    if(mPhysicManager == NULL) mPhysicManager = &physicManager();
+    mPhysicManager->PreSolveContact.invoke(contact, oldManifold);
+}
+void ContactListener::PostSolve (b2Contact *contact, const b2ContactImpulse *impulse)
+{
+    if(mPhysicManager == NULL) mPhysicManager = &physicManager();
+    mPhysicManager->PostSolveContact.invoke(contact, impulse);
+}
+
 PhysicManager::PhysicManager()
 {
     b2Vec2 gravity(0.0f, 10.0f);
     mWorld = new b2World(gravity, true);
+    mContactListener = new ContactListener();
+    mWorld->SetContactListener(mContactListener);
     mTimeStep = 1.0f / 60.0f;
     mVelocityIterations = 7;
     mPositionIterations = 5;
@@ -32,6 +59,7 @@ PhysicManager::PhysicManager()
 PhysicManager::~PhysicManager()
 {
     disposeScene();
+    delete mContactListener;
 }
 
 void PhysicManager::disposeScene()
