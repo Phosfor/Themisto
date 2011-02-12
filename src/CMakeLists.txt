@@ -37,6 +37,7 @@ set(Themisto_srcs
     World/Objects/TypesManager.cpp
     World/Objects/PhysicObject.cpp
     World/Objects/Player.cpp
+    World/Objects/CustomActions.cpp
 
     # States
     World/States/MenuState.cpp

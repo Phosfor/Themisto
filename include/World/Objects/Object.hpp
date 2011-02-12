@@ -20,6 +20,7 @@
 
 #include <ClanLib/core.h>
 #include <boost/utility.hpp>
+#include "World/Objects/Action.hpp"
 
 enum ObjectTypes
 {
@@ -51,6 +52,8 @@ class Object : public boost::noncopyable
 
         virtual void update(float elapsed) = 0;
         virtual void updateVisual(float newX, float newY) = 0;
+
+        virtual std::vector<Action> getAvailableActions() { return std::vector<Action>();}
 };
 
 #endif /* _WORLD_OBJECT_HPP_ */
