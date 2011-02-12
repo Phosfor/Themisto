@@ -38,12 +38,12 @@ void Player::keyDown(const CL_InputEvent& ev, const CL_InputState& state)
     // Right
     if(ev.id == CL_KEY_D)
     {
-        GoRight();
+        goRight();
     }
     // Left
     else if(ev.id == CL_KEY_A)
     {
-        GoLeft();
+        goLeft();
     }
 }
 
@@ -57,13 +57,13 @@ void Player::keyUp(const CL_InputEvent& ev, const CL_InputState& state)
 {
     if(!inputManager().keyPressed( CL_KEY_D) && !inputManager().keyPressed( CL_KEY_A) )
     {
-        StopMoving();
+        stopMoving();
     }
 
     if((ev.id == CL_KEY_W || ev.id == CL_KEY_SPACE)&&
        (!inputManager().keyPressed(CL_KEY_W) && !inputManager().keyPressed(CL_KEY_SPACE)) )
     {
-        EndJump();
+        endJump();
     }
 }
 
@@ -90,7 +90,7 @@ void Player::step(float32 elapsed)
     // Get ready to jump (begin seating down)
     if( (inputManager().keyPressed(CL_KEY_W) || inputManager().keyPressed(CL_KEY_SPACE)) && !mJumpJoint->IsMotorEnabled())
     {
-        BeginJump();
+        beginJump();
     }
 }
 
@@ -116,7 +116,7 @@ void Player::update(float elapsed)
     step(elapsed);
 }
 
-void Player::GoLeft()
+void Player::goLeft()
 {
     float speed = mRollAngularVelocity;
     for(int i=0; i<4; i++)
@@ -127,7 +127,7 @@ void Player::GoLeft()
     }
     mGoingLeft = true;
 }
-void Player::GoRight()
+void Player::goRight()
 {
     float speed = -mRollAngularVelocity;
     for(int i=0; i<4; i++)
@@ -139,7 +139,7 @@ void Player::GoRight()
     mGoingRight = true;
 }
 
-void Player::StopMoving()
+void Player::stopMoving()
 {
     if(mGoingLeft || mGoingRight)
     {
@@ -166,7 +166,7 @@ b2ContactEdge* getFirstTouchingContact(boost::shared_ptr<Body> body)
     return NULL;
 }
 
-void Player::BeginJump()
+void Player::beginJump()
 {
     b2ContactEdge* ce = getFirstTouchingContact(mRolls[0]);
     if(ce == NULL) ce = getFirstTouchingContact(mRolls[1]);
@@ -179,13 +179,30 @@ void Player::BeginJump()
     mJumpBegun = true;
 }
 
-void Player::EndJump()
+void Player::endJump()
 {
     mTopBoxBody->getBody()->SetLinearVelocity(mMiddleBoxBody->getBody()->GetLinearVelocity());
     mJumpJoint->SetMotorSpeed(mJumpVelocity);
     mJumpJoint->EnableMotor(true);
     mJumpBegun = false;
 }
+boost::shared_ptr<Body> Player::getShoulder()
+{
+    return mShoulderBody;
+}
+b2RevoluteJoint* Player::getShoulderJoint()
+{
+    return mShoulderJoint;
+}
+boost::shared_ptr<Body> Player::getTrunk()
+{
+    return mTopBoxBody;
+}
+b2RevoluteJoint* Player::getTrunkJoint()
+{
+    return mTopBoxJoint;
+}
+
 
 boost::shared_ptr<Object> Player::ParsePlayer(CL_DomElement* tag, std::string& desc)
 {
@@ -400,7 +417,7 @@ boost::shared_ptr<Object> Player::ParsePlayer(CL_DomElement* tag, std::string& d
     jumpJointDef.enableLimit = true;
     float jumpSpeed = sqrt(20*PlayerHeight/2);
     jumpJointDef.maxMotorForce = PlayerMass*(jumpSpeed*jumpSpeed/(2*result->mJumpDeep) + 10);
-    std::cout << jumpJointDef.maxMotorForce << std::endl;
+    //std::cout << jumpJointDef.maxMotorForce << std::endl;
     result->mJumpVelocity = -jumpSpeed;
     jumpJointDef.motorSpeed = -jumpSpeed;
     jumpJointDef.enableMotor = false;

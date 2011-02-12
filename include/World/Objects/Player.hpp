@@ -99,11 +99,15 @@ class Player: public Actor
 
         // --- Actor implementation ---
 
-         void GoLeft();
-         void GoRight();
-         void StopMoving();
-         void BeginJump();
-         void EndJump();
+         void goLeft();
+         void goRight();
+         void stopMoving();
+         void beginJump();
+         void endJump();
+         boost::shared_ptr<Body> getShoulder();
+         b2RevoluteJoint* getShoulderJoint();
+         boost::shared_ptr<Body> getTrunk();
+         b2RevoluteJoint* getTrunkJoint();
 
 };
 

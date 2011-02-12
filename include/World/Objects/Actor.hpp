@@ -17,14 +17,20 @@
 
 #include "World/Objects/Object.hpp"
 
+class Body;
+
 class Actor : public Object
 {
     protected:
         Actor() {}
     public:
-        virtual void GoLeft() = 0;
-        virtual void GoRight() = 0;
-        virtual void StopMoving() = 0; // Cancel current doing
-        virtual void BeginJump() = 0;
-        virtual void EndJump() = 0;
+        virtual void goLeft() = 0;
+        virtual void goRight() = 0;
+        virtual void stopMoving() = 0;
+        virtual void beginJump() = 0;
+        virtual void endJump() = 0;
+        virtual boost::shared_ptr<Body> getShoulder() = 0;
+        virtual b2RevoluteJoint* getShoulderJoint() = 0;
+        virtual boost::shared_ptr<Body> getTrunk() = 0;
+        virtual b2RevoluteJoint* getTrunkJoint() = 0;
 };
