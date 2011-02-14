@@ -15,7 +15,20 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-namespace CustomActions
+#include <ClanLib/display.h>
+#include "Core/Utils.hpp"
+
+class Actor;
+
+class Action
 {
-    // Functions will be here
-}
+    public:
+        virtual std::string getName() = 0;
+        virtual std::string getDescription() = 0;
+        virtual CL_Sprite getIcon() = 0;
+        virtual void beginExecution(Actor* actor) = 0;
+        virtual void stopExecution() = 0;
+        virtual bool canExecute(Actor* actor) = 0;
+        virtual void update(float step) = 0;
+        virtual void updateVisual(float actorX, float actorY) = 0;
+};

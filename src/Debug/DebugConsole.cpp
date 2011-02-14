@@ -75,11 +75,11 @@ void Client::on_disconnected()
     connected = false;
 }
 
-void Client::on_event_received(const CL_NetGameEvent &e) 
+void Client::on_event_received(const CL_NetGameEvent &e)
 {
     if(e.get_name() == "Answer")
     {
-        std::string answer = (std::string)e.get_argument(0).to_string(); 
+        std::string answer = (std::string)e.get_argument(0).to_string();
         if( *(answer.rbegin()) != '\n') answer += "\n";
         boost::replace_all(answer, "\n", "\n# ");
         std::size_t posLastEndl = answer.rfind("\n# ");
@@ -98,15 +98,15 @@ void Client::disconnect()
     connected = false;
 }
 
-// A static variable for holding the line. 
+// A static variable for holding the line.
 static char *line_read = reinterpret_cast<char*>(NULL);
 
 // Read a string, and return a pointer to it.
-// Returns NULL on EOF. 
+// Returns NULL on EOF.
 char* readCommand()
 {
     // If the buffer has already been allocated,
-    // return the memory to the free pool. 
+    // return the memory to the free pool.
     if (line_read)
     {
       free (line_read);
@@ -117,7 +117,7 @@ char* readCommand()
     line_read = readline (">");
 
     // If the line has any text in it,
-    // save it on the history. 
+    // save it on the history.
     if (line_read && *line_read)
       add_history (line_read);
 
@@ -164,7 +164,7 @@ void Client::parseCommand(std::string &command)
     }
     else if(command == "run here" || command == "rh")
     {
-        system("./Themisto");
+         system("./Themisto");
     }
     else if(command == "build" || command == "b" || command == "make")
     {
@@ -275,7 +275,7 @@ int main(int argc, char* argv[])
             {
                 client.quit = true;
             }
-            else if (command != "") 
+            else if (command != "")
             {
                 client.parseCommand(command);
             }

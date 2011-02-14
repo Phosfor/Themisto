@@ -117,7 +117,7 @@ void EnvironManager::enableType(bool state, EnvironTypes type, float limit)
     }
     else
     {
-        EnvironObject *temp;
+        EnvironObject *temp = NULL;
         switch (type)
         {
             case Environ_Sky:    temp = new Sky();    break;
@@ -130,6 +130,7 @@ void EnvironManager::enableType(bool state, EnvironTypes type, float limit)
             case Environ_Objects:  temp = new Objects();  break;
             case Environ_Foreground:  temp = new Foreground();  break;
             case Environ_Lightnings:  temp = new Lightnings();  break;
+            default: throw CL_Exception("Unknown environ type");
         }
         temp->setEnabled(state);
         mObjectsMap.insert(MapType::value_type(type, temp));

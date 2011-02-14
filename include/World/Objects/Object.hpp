@@ -19,8 +19,10 @@
 #define _WORLD_OBJECT_HPP_
 
 #include <ClanLib/core.h>
+#include <boost/shared_ptr.hpp>
 #include <boost/utility.hpp>
-#include "World/Objects/Action.hpp"
+
+class Action;
 
 enum ObjectTypes
 {
@@ -53,7 +55,8 @@ class Object : public boost::noncopyable
         virtual void update(float elapsed) = 0;
         virtual void updateVisual(float newX, float newY) = 0;
 
-        virtual std::vector<Action> getAvailableActions() { return std::vector<Action>();}
+        virtual std::vector< boost::shared_ptr<Action> > getAvailableActions()
+        { return std::vector< boost::shared_ptr<Action> >();}
 };
 
 #endif /* _WORLD_OBJECT_HPP_ */

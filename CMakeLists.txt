@@ -20,9 +20,9 @@ find_package(PNG REQUIRED)
 find_package(JPEG REQUIRED)
 find_package(Box2D REQUIRED)
 
-add_definitions(-Wall -g -msse2)
+add_definitions(-Wall -g -O2 -msse2)
 #add_definitions(-Wall -pg -g)
-set(CMAKE_BUILD_TYPE "Debug")
+set(CMAKE_BUILD_TYPE "Release")
 #set(CMAKE_EXE_LINKER_FLAGS "-pg")
 
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/bin)

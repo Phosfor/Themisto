@@ -16,12 +16,16 @@
 */
 
 #include "World/Objects/Object.hpp"
+#include "World/Actions/Action.hpp"
+#include <Box2D/Box2D.h>
 
 class Body;
 
-class Actor : public Object
+class Actor: public Object
 {
     protected:
+        boost::shared_ptr<Action> mActiveAction;
+
         Actor() {}
     public:
         virtual void goLeft() = 0;
@@ -31,6 +35,19 @@ class Actor : public Object
         virtual void endJump() = 0;
         virtual boost::shared_ptr<Body> getShoulder() = 0;
         virtual b2RevoluteJoint* getShoulderJoint() = 0;
+        virtual float getHandPower() = 0;
+        virtual float getHandLength() = 0;
         virtual boost::shared_ptr<Body> getTrunk() = 0;
         virtual b2RevoluteJoint* getTrunkJoint() = 0;
+        virtual void goToNormalState() = 0;
+
+        // Actions
+        void executeAction(boost::shared_ptr<Action> action);
+        void stopActiveAction();
+        boost::shared_ptr<Action> getActiveAction();
+        bool canExecuteAction(boost::shared_ptr<Action> action);
+        // Atention! Inheritors should call base realisation of update and updateVisual
+        // (action updation is here).
+        virtual void update(float elapsed);
+        virtual void updateVisual(float newX, float newY);
 };

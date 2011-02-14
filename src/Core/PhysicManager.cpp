@@ -99,6 +99,5 @@ void PhysicManager::update(float _elapsed)
         mLevelManager->updateLogic(mTimeStep);
     }
     mAccomulated = elapsed - (acc - mTimeStep);
-
 }
 

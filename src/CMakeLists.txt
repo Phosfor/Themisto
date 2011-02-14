@@ -37,8 +37,8 @@ set(Themisto_srcs
     World/Objects/TypesManager.cpp
     World/Objects/PhysicObject.cpp
     World/Objects/Player.cpp
-    World/Objects/CustomActions.cpp
-
+    World/Objects/Actor.cpp    
+    
     # States
     World/States/MenuState.cpp
     World/States/EditorState.cpp

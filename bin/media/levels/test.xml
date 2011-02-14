@@ -2,7 +2,7 @@
 
 <ThemistoLevel version="0.1" authors="Wincode team" name="First level">
 
-    <World image="levels/test.png" cameraPosX="0" cameraPosY="0">
+    <World image="levels/test.png" cameraPosX="0" cameraPosY="300">
 
         <Environ>
             <Rain enabled="true" limit="1.5" />
@@ -17,7 +17,6 @@
             <!-- actual_size is average real foreground image size refer to full window size -->
             <!-- If fixed is true, foreground wouldn't move with camera and level -->
             <Foreground enabled="true" image="test" actual_size="40" fixed="false" />
-
             <Wind enabled="true" power="-2" />
         </Environ>
 
@@ -96,7 +95,7 @@
                     <b2Fixture>
                         <Friction>1</Friction>
                         <Restitution>0.3</Restitution>
-                        <Density>500</Density>
+                        <Density>5000</Density>
                      <Shape>
                       <Type>e_polygon</Type>
                       <Vertices>
@@ -121,10 +120,50 @@
                     </b2Fixture>
                   </Body>
              </Object>
+             <Object name="tadam" type="PhysicBodyObject" >
+                <Body>
+                    <b2Body>
+                        <Position>
+                            <x>400.0</x>
+                            <y>70.0</y>
+                        </Position>
+                        <Type>DynamicBody</Type>
+                    </b2Body>
+                    <b2Fixture>
+                        <Friction>0.3</Friction>
+                        <Restitution>0.3</Restitution>
+                        <Density>100</Density>
+                     <Shape>
+                      <Type>e_polygon</Type>
+                      <Vertices>
+                       <Vertex id="vertex0">
+                        <x>0</x>
+                        <y>0</y>
+                       </Vertex>
+                       <Vertex id="vertex1">
+                        <x>20</x>
+                        <y>0</y>
+                       </Vertex>
+                        <Vertex id="3">
+                        <x>20</x>
+                        <y>20</y>
+                       </Vertex>
+                       <Vertex id="4">
+                        <x>0</x>
+                        <y>20</y>
+                       </Vertex>
+                      </Vertices>
+                     </Shape>
+                    </b2Fixture>
+                    <Properties>
+                        <TakePoints>(5,5)(15,5)(5,15)(15,15)</TakePoints>
+                    </Properties>
+                  </Body>
+             </Object>
              <Object type="Player" name="player" >
                 <Position>
                     <x>500.0</x>
-                    <y>10.0</y>
+                    <y>500.0</y>
                 </Position>
              </Object>
         </Objects>

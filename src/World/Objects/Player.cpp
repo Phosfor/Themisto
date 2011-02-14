@@ -69,6 +69,7 @@ void Player::keyUp(const CL_InputEvent& ev, const CL_InputState& state)
 
 void Player::updateVisual(float newX, float newY)
 {
+    Actor::updateVisual(newX, newY);
 }
 
 
@@ -113,6 +114,7 @@ CL_Rectf Player::getRectangle()
 
 void Player::update(float elapsed)
 {
+    Actor::update(elapsed);
     step(elapsed);
 }
 
@@ -203,6 +205,23 @@ b2RevoluteJoint* Player::getTrunkJoint()
     return mTopBoxJoint;
 }
 
+float Player::getHandPower()
+{
+    return 40;
+}
+float Player::getHandLength()
+{
+    return PlayerHeight/2;
+}
+
+void Player::goToNormalState()
+{
+    mTopBoxJoint->SetLimits(0,0);
+    if(mJumpBegun)
+    {
+        endJump();
+    }
+}
 
 boost::shared_ptr<Object> Player::ParsePlayer(CL_DomElement* tag, std::string& desc)
 {
@@ -417,7 +436,6 @@ boost::shared_ptr<Object> Player::ParsePlayer(CL_DomElement* tag, std::string& d
     jumpJointDef.enableLimit = true;
     float jumpSpeed = sqrt(20*PlayerHeight/2);
     jumpJointDef.maxMotorForce = PlayerMass*(jumpSpeed*jumpSpeed/(2*result->mJumpDeep) + 10);
-    //std::cout << jumpJointDef.maxMotorForce << std::endl;
     result->mJumpVelocity = -jumpSpeed;
     jumpJointDef.motorSpeed = -jumpSpeed;
     jumpJointDef.enableMotor = false;

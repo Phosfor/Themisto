@@ -108,7 +108,9 @@ class Player: public Actor
          b2RevoluteJoint* getShoulderJoint();
          boost::shared_ptr<Body> getTrunk();
          b2RevoluteJoint* getTrunkJoint();
-
+         float getHandPower();
+         float getHandLength();
+         void goToNormalState();
 };
 
 #endif

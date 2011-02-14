@@ -63,6 +63,7 @@ class PhysicManager : public boost::serialization::singleton<PhysicManager>
         CL_Signal_v2<b2Contact*, const b2Manifold*> PreSolveContact;
         CL_Signal_v2<b2Contact*, const b2ContactImpulse*> PostSolveContact;
 
+
         PhysicManager();
         ~PhysicManager();
 
