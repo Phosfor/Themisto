@@ -39,6 +39,9 @@ set(Themisto_srcs
     World/Objects/Player.cpp
     World/Objects/Actor.cpp    
     
+    # Actions
+    World/Actions/TakeAction.cpp
+        
     # States
     World/States/MenuState.cpp
     World/States/EditorState.cpp

@@ -28,7 +28,7 @@
 #include "Core/Utils.hpp"
 #include "Core/ResourceManager.hpp"
 #include "Core/ApplicationManager.hpp"
-
+#include "World/Actions/TakeAction.hpp"
 
 class Body;
 class Impact;
@@ -38,6 +38,7 @@ class PhysicObject: public Object
 {
     private:
         boost::shared_ptr<Body> mBody;
+        std::vector< boost::shared_ptr<Action> > mActions;
 
         // Visual
         CL_Sprite mImageHandle;
@@ -48,7 +49,6 @@ class PhysicObject: public Object
 
         // Get/set
         boost::shared_ptr<Body> getBody();
-        void setBody(boost::shared_ptr<Body> body);
         void setVisual(std::string textureName, std::string textureSection, float width, float height);
         void setVisual(std::string textureName, std::string textureSection);
 
@@ -64,6 +64,7 @@ class PhysicObject: public Object
         void update(float elapsed);
         void updateVisual(float newX, float newY);
         CL_Rectf getRectangle();
+        std::vector< boost::shared_ptr<Action> > getAvailableActions();
 
 
 };

@@ -15,6 +15,9 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#ifndef _ACTION_HPP_
+#define _ACTION_HPP_
+
 #include <ClanLib/display.h>
 #include "Core/Utils.hpp"
 
@@ -23,12 +26,19 @@ class Actor;
 class Action
 {
     public:
+        CL_Signal_v1<Action*> mExecutionBegun;
+        CL_Signal_v1<Action*> mExecutionCompleted;
+        CL_Signal_v1<Action*> mExecutionStopped;
+
         virtual std::string getName() = 0;
         virtual std::string getDescription() = 0;
         virtual CL_Sprite getIcon() = 0;
         virtual void beginExecution(Actor* actor) = 0;
         virtual void stopExecution() = 0;
         virtual bool canExecute(Actor* actor) = 0;
+        virtual bool executing() = 0;
         virtual void update(float step) = 0;
         virtual void updateVisual(float actorX, float actorY) = 0;
 };
+
+#endif

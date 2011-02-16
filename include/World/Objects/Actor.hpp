@@ -15,6 +15,9 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#ifndef _ACTOR_HPP_
+#define _ACTOR_HPP_
+
 #include "World/Objects/Object.hpp"
 #include "World/Actions/Action.hpp"
 #include <Box2D/Box2D.h>
@@ -51,3 +54,5 @@ class Actor: public Object
         virtual void update(float elapsed);
         virtual void updateVisual(float newX, float newY);
 };
+
+#endif
