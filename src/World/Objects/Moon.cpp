@@ -24,13 +24,9 @@ Moon::Moon()
 
     std::string media = utils().getMediaFolder();
     CL_GraphicContext gc = appManager().getGraphic();
-    mMoon = resourceManager().getImage("Moons", "0");
-    mMoonColor = mMoon.get_color();
     mG = mB = 1.0f;
 
     mRenderMoon = true;
-
-    mMoon.set_alignment(origin_center_right);
 
     mRadius = Meters2Pixels(7);  // The orbit radius is about 7 game meters
     mAngle = Deg2Rad(-90);       // Start Moon position
@@ -43,6 +39,19 @@ Moon::Moon()
 }
 
 Moon::~Moon() { }
+
+float Moon::getOrbitRadius()
+{
+    return mRadius;
+}
+void Moon::setOrbitRadius(float radius)
+{
+    mRadius = radius;
+}
+void Moon::setMoonAngle(float angle)
+{
+    mAngle = angle;
+}
 
 void Moon::updateVisual(float newX, float newY)
 {
@@ -112,7 +121,67 @@ void Moon::setPosition(CL_Pointf newPos)
 {
 }
 
-boost::shared_ptr<Object> Moon::ParseMoon(CL_DomElement *node, std::string &desc)
+boost::shared_ptr<Object> Moon::ParseMoon(CL_DomElement *tag, std::string &desc)
 {
-    return boost::shared_ptr<Object>(new Moon);
+    Moon *result = new Moon();
+
+    CL_DomNodeList VisualTags = tag->get_elements_by_tag_name("Visual");
+    std::string textureName;
+    std::string textureSection;
+    float width = -1;
+    float height = -1;
+
+    CL_DomNodeList childList = VisualTags.item(0).get_child_nodes();
+    for (int i=0; i < childList.get_length(); ++i)
+    {
+        CL_DomElement tag2 = childList.item(i).to_element();
+        if (tag2.get_node_name() == "Size")
+        {
+            width = boost::lexical_cast<float>(tag2.get_attribute("width").c_str());
+            height = boost::lexical_cast<float>(tag2.get_attribute("height").c_str());
+        }
+        if (tag2.get_node_name() == "Texture")
+        {
+            textureSection = tag2.get_attribute("section").c_str();
+            textureName = tag2.get_attribute("name").c_str();
+        }
+    }
+    result->setVisual(textureName, textureSection, width, height);
+
+    float radius = Meters2Pixels(7);
+    float angle = Deg2Rad(-90);
+
+    CL_DomElement radiusElement = tag->get_elements_by_tag_name("Radius").item(0).to_element();
+    if (radiusElement.has_attribute("value"))
+        radius = Meters2Pixels(boost::lexical_cast<float>(radiusElement.get_attribute("value").c_str()));
+
+    CL_DomElement angleElement = tag->get_elements_by_tag_name("StartAngle").item(0).to_element();
+    if (angleElement.has_attribute("value"))
+        angle = Deg2Rad(boost::lexical_cast<float>(angleElement.get_attribute("value").c_str()));
+
+    result->setOrbitRadius(radius);
+    result->setMoonAngle(angle);
+
+    return boost::shared_ptr<Object>(result);
+}
+
+void Moon::setVisual(std::string textureName, std::string textureSection)
+{
+    setVisual(textureName, textureSection, -1, -1);
+}
+
+void Moon::setVisual(std::string textureName, std::string textureSection, float width, float height)
+{
+    mMoon = resourceManager().getImage(textureSection, textureName);
+    mMoonColor = mMoon.get_color();
+    mMoon.set_alignment(origin_center_right);
+
+    if(!mMoon.is_null())
+    {
+        float koefX, koefY;
+        koefX = koefY = 1;
+        if(width > 0) koefX = width / mMoon.get_width();
+        if(height > 0) koefY = height / mMoon.get_height();
+        mMoon.set_scale(koefX, koefY);
+    }
 }

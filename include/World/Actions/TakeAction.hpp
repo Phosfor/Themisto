@@ -26,6 +26,7 @@
 
 
 
+static const float TrunkRotateSpeed = 3.14/2; // To 90 degrees per second
 class TakeAction: public Action
 {
     private:
@@ -47,7 +48,6 @@ class TakeAction: public Action
     public:
         explicit TakeAction(std::vector< boost::shared_ptr<Body> > bodies);
 
-        static const float TrunkRotateSpeed = 3.14/2; // To 90 degrees per second
 
         b2PrismaticJoint* getHandJoint();
 

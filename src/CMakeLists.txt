@@ -41,7 +41,7 @@ set(Themisto_srcs
     World/Objects/Moon.cpp
 
     # Actions
-    World/Actions/TakeAction.cpp
+    #World/Actions/TakeAction.cpp
 
     # States
     World/States/MenuState.cpp

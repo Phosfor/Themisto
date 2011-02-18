@@ -51,6 +51,13 @@ class Moon : public Object
 
         void setScale(float _scaleX, float _scaleY);
         float getMoonAngle();
+        void setMoonAngle(float angle);
+
+        float getOrbitRadius();
+        void setOrbitRadius(float radius);
+
+        void setVisual(std::string textureName, std::string textureSection, float width, float height);
+        void setVisual(std::string textureName, std::string textureSection);
 
         // Parser
         static boost::shared_ptr<Object> ParseMoon(CL_DomElement *node, std::string &desc);

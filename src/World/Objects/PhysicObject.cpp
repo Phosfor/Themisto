@@ -20,8 +20,6 @@
 #include "Physic/Body.hpp"
 #include "Physic/Impact.hpp"
 
-
-
 PhysicObject::PhysicObject()
 {
     mName = worldManager().generateUniqueID();
@@ -159,7 +157,7 @@ boost::shared_ptr<Object> PhysicObject::ParsePhysicObject(CL_DomElement* tag, st
             result->mBody = physic;
             std::vector< boost::shared_ptr<Body> > bodies;
             bodies.push_back(physic);
-            result->mActions.push_back(boost::shared_ptr<Action>(new TakeAction(bodies)));
+            //result->mActions.push_back(boost::shared_ptr<Action>(new TakeAction(bodies)));
         }
     }
 

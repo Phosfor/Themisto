@@ -28,7 +28,8 @@
 #include "Core/Utils.hpp"
 #include "Core/ResourceManager.hpp"
 #include "Core/ApplicationManager.hpp"
-#include "World/Actions/TakeAction.hpp"
+
+//#include "World/Actions/TakeAction.hpp"
 
 class Body;
 class Impact;
@@ -65,8 +66,6 @@ class PhysicObject: public Object
         void updateVisual(float newX, float newY);
         CL_Rectf getRectangle();
         std::vector< boost::shared_ptr<Action> > getAvailableActions();
-
-
 };
 
 #endif /* _PHYSIC_OBJECT_HPP_ */
