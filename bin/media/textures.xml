@@ -90,5 +90,7 @@
     <section name="Foreground">
         <texture name="test" file="levels/test_foreground.png" />
     </section>
-
+    <section name="Actions">
+        <texture name="take" file="actions/take.png" />
+    </section>
 </resources>

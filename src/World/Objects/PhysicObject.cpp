@@ -104,9 +104,9 @@ void PhysicObject::update(float elapsed)
     return mBody;
 }
 
-void PhysicObject::setBody(boost::shared_ptr<Body> body)
+std::vector< boost::shared_ptr<Action> > PhysicObject::getAvailableActions()
 {
-    mBody = body;
+    return mActions;
 }
 
 boost::shared_ptr<Body> ParsePhysicBody(CL_DomElement body, std::string& desc);
@@ -156,7 +156,10 @@ boost::shared_ptr<Object> PhysicObject::ParsePhysicObject(CL_DomElement* tag, st
         {
             CL_DomElement bodyTag = bodyTags.item(0).to_element();
             boost::shared_ptr<Body> physic = ParsePhysicBody(bodyTag, desc);
-            result->setBody(physic);
+            result->mBody = physic;
+            std::vector< boost::shared_ptr<Body> > bodies;
+            bodies.push_back(physic);
+            result->mActions.push_back(boost::shared_ptr<Action>(new TakeAction(bodies)));
         }
     }
 

@@ -40,6 +40,9 @@ set(Themisto_srcs
     World/Objects/Actor.cpp
     World/Objects/Moon.cpp
 
+    # Actions
+    World/Actions/TakeAction.cpp
+
     # States
     World/States/MenuState.cpp
     World/States/EditorState.cpp
