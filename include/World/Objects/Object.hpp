@@ -29,7 +29,8 @@ enum ObjectTypes
     NotAnObject = 0,
     PhysicBodyObject,
     GrassObject,
-    LightColumnObject
+    LightColumnObject,
+    MoonObject
 };
 
 class Object : public boost::noncopyable
@@ -38,6 +39,7 @@ class Object : public boost::noncopyable
         std::string mName;
         ObjectTypes mType;
         int z_index;
+        bool mAlwaysDraw;
 
     public:
         virtual std::string getName() { return mName; }
@@ -45,6 +47,9 @@ class Object : public boost::noncopyable
 
         virtual int getIndex() { return z_index; }
         virtual void setIndex(int _z_index) { z_index = _z_index; }
+
+        virtual bool getAlwaysDraw() { return mAlwaysDraw; }
+        virtual void setAlwaysDraw(bool state) { mAlwaysDraw = state; }
 
         virtual ObjectTypes getType() { return mType; }
 

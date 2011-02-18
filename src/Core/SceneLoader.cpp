@@ -160,6 +160,10 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
             if (tag.has_attribute("z-index"))
                 z_index = boost::lexical_cast<int>(tag.get_attribute("z-index").c_str());
 
+            bool always_draw = false;
+            if (tag.has_attribute("always_draw"))
+                always_draw = tag.get_attribute("always_draw") == "true";
+
             std::string desc = "";
             boost::shared_ptr<Object> object;
             try
@@ -173,6 +177,7 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
                 return;
             }
             object->setIndex(z_index);
+            object->setAlwaysDraw(always_draw);
             levelManager().addObject(name, object);
         }
     }

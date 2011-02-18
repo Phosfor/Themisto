@@ -2,14 +2,14 @@
 
 <ThemistoLevel version="0.1" authors="Wincode team" name="First level">
 
-    <World image="levels/test.png" cameraPosX="0" cameraPosY="300">
+    <World image="levels/test.png" cameraPosX="0" cameraPosY="0">
 
         <Environ>
             <Rain enabled="true" limit="1.5" />
             <Clouds enabled="true" limit="0.2" />
             <Lightnings enabled="true" />
             <Sky enabled="true" />
-            <Moon enabled="true" />
+            <!--<Moon enabled="true" />-->
             <Leaves enabled="true" limit="0.15" />
             <Stars enabled="true" limit="6.0" />
             <Birds enabled="true" />
@@ -22,6 +22,7 @@
 
         <Objects>
              <Object name="Level" type="PhysicBodyObject" template="level_phys" />
+             <Object name="MoonObj" type="MoonObject" z-index="-3" always_draw="true" />
              <Object name="Lamp" type="LightColumnObject">
                  <Visual>
                     <Size width="100" height="380" />

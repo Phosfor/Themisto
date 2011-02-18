@@ -35,7 +35,7 @@
 #include <map>
 
 class Rain;
-class Moon;
+//class Moon;
 class Stars;
 class Sky;
 class Leaves;

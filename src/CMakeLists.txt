@@ -21,7 +21,7 @@ set(Themisto_srcs
     World/WorldManager.cpp
     World/Environ/Object.cpp
     World/Environ/Rain.cpp
-    World/Environ/Moon.cpp
+    #World/Environ/Moon.cpp
     World/Environ/Stars.cpp
     World/Environ/Sky.cpp
     World/Environ/Leaves.cpp
@@ -37,8 +37,9 @@ set(Themisto_srcs
     World/Objects/TypesManager.cpp
     World/Objects/PhysicObject.cpp
     World/Objects/Player.cpp
-    World/Objects/Actor.cpp    
-    
+    World/Objects/Actor.cpp
+    World/Objects/Moon.cpp
+
     # States
     World/States/MenuState.cpp
     World/States/EditorState.cpp

@@ -20,6 +20,7 @@
 #include "World/Objects/Object.hpp"
 #include "World/Objects/PhysicObject.hpp"
 #include "World/Objects/LightColumn.hpp"
+#include "World/Objects/Moon.hpp"
 #include "World/Objects/Player.hpp"
 
 boost::shared_ptr<Object> TypesManager::empty_parser(CL_DomElement* p, std::string& desc)
@@ -41,6 +42,7 @@ TypesManager::TypesManager()
 {
     registerParser("PhysicBodyObject", PhysicObject::ParsePhysicObject);
     registerParser("LightColumnObject", LightColumn::ParseLightColumn);
+    registerParser("MoonObject", Moon::ParseMoon);
     registerParser("Player", Player::ParsePlayer);
 }
 

@@ -143,8 +143,6 @@ void LevelManager::addObject(const std::string &name, boost::shared_ptr<Object> 
 
 void LevelManager::updateLogic(float elapsed)
 {
-    CL_Rectf camPos = getAbsoluteCameraPos();
-
     for (ObjectMapTypeSorted::const_iterator it=mObjectsSorted.begin();
             it != mObjectsSorted.end(); ++it)
     {
@@ -161,22 +159,32 @@ void LevelManager::updateVisual(float elapsed)
     {
         if(!mDebugDrawOnly)
         {
-            CL_Rectf objRect = it->second->getRectangle();
-
-            if (mDrawDebugData) CL_Draw::box(appManager().getGraphic(),
-                    objRect.right - camPos.left, objRect.top - camPos.top,
-                    objRect.left - camPos.left, objRect.bottom - camPos.top,
-                    CL_Colorf::red);
-
-            // Check whether object is in camera space
-            if ( !(
-                   objRect.right - camPos.left < 0                    || // <-
-                   objRect.left  - camPos.left > ScreenResolutionX    || // ->
-                   objRect.bottom - camPos.top  < 0                   || // up
-                   objRect.top - camPos.top > ScreenResolutionY          // down
-                  )
-                )
+            if (!it->second->getAlwaysDraw())
             {
+                CL_Rectf objRect = it->second->getRectangle();
+
+                if (mDrawDebugData) CL_Draw::box(appManager().getGraphic(),
+                        objRect.right - camPos.left, objRect.top - camPos.top,
+                        objRect.left - camPos.left, objRect.bottom - camPos.top,
+                        CL_Colorf::red);
+
+                // Check whether object is in camera space
+                if ( !(
+                       objRect.right - camPos.left < 0                    || // <-
+                       objRect.left  - camPos.left > ScreenResolutionX    || // ->
+                       objRect.bottom - camPos.top  < 0                   || // up
+                       objRect.top - camPos.top > ScreenResolutionY          // down
+                      )
+                    )
+                {
+                    CL_Pointf position = it->second->getPosition();
+                    it->second->updateVisual(position.x - camPos.left, position.y - camPos.top);
+                }
+            }
+            else
+            {
+                CL_Rectf objRect = it->second->getRectangle();
+                if (mDrawDebugData) CL_Draw::box(appManager().getGraphic(), objRect, CL_Colorf::red);
                 CL_Pointf position = it->second->getPosition();
                 it->second->updateVisual(position.x - camPos.left, position.y - camPos.top);
             }

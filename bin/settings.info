@@ -1,7 +1,7 @@
 window
 {
-    width "1152"
-    height "864"
+    width "1680"
+    height "1050"
     fullscreen "false"
 
     ; Available:
@@ -18,7 +18,7 @@ application
     resolution_koef "100"
     camera_speed "50"
 
-    debug "true"
+    debug "false"
     debug_draw_only "false"
     media-folder "media"
 }
