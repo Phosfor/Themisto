@@ -1,24 +1,22 @@
 window
 {
-    width "1680"
-    height "1050"
+    width "800"
+    height "500"
     fullscreen "false"
 
     ; Available:
     ;    - opengl1
     ;    - opengl2
     ;    - software
-    render "opengl2"
+    render "opengl1"
 }
 
 application
 {
     version "0.1"
     game_speed "3000"
-    resolution_koef "100"
-    camera_speed "50"
+    resolution_koef "19.2"
 
-    debug "false"
-    debug_draw_only "false"
+    debug "true"
     media-folder "media"
 }

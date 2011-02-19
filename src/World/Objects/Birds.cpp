@@ -15,7 +15,7 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "World/Environ/Birds.hpp"
+#include "World/Objects/Birds.hpp"
 
 void Birds::setLimit(uint16_t limit)
 {
@@ -43,7 +43,7 @@ void Birds::processBirds(CL_GraphicContext &gc, uint16_t width, uint16_t height,
     for (uint16_t j=0; j < birdHandle.get_child_nodes().get_length(); j++)
         textures.push_back(cl_format(boost::lexical_cast<std::string>(j)));
 
-    mBirds[i].mBirdImage = 
+    mBirds[i].mBirdImage =
         resourceManager().getSprite(cl_format("Birds/%1", birdHandle.get_attribute("name")).c_str(), textures);
     mBirds[i].mBirdImage.set_scale(0.5, 0.5);
     mBirds[i].mBirdImage.set_linear_filter(true);
@@ -65,16 +65,18 @@ void Birds::processBirds(CL_GraphicContext &gc, uint16_t width, uint16_t height,
 }
 
 Birds::Birds(uint16_t maxBirds)
-    : EnvironObject(), mProbability(1000), mFirstTime(true)
+    : mFirstTime(true)
 {
     mGC = appManager().getGraphic();
     mMaxObjects = maxBirds;
+    mWindowWidth = levelManager().getCamViewport().get_width();
+    mWindowHeight = levelManager().getCamViewport().get_height();
 
     for (uint16_t i=0; i < maxBirds; i++)
         mBirds.push_back(BirdData());
 }
 
-void Birds::update(float elapsed)
+void Birds::updateVisual(float newx, float newy)
 {
     if (mFirstTime)
     {
@@ -84,6 +86,15 @@ void Birds::update(float elapsed)
     }
     for (uint16_t i=0; i < mMaxObjects; i++)
     {
+        mBirds[i].mBirdImage.update();
+        mBirds[i].mBirdImage.draw(mGC, mBirds[i].x, mBirds[i].y);
+    }
+}
+
+void Birds::update(float elapsed)
+{
+    for (uint16_t i=0; i < mMaxObjects; i++)
+    {
         if (mBirds[i].timeout > 0)
         {
             mBirds[i].timeout--;
@@ -91,13 +102,35 @@ void Birds::update(float elapsed)
         else
         {
             mBirds[i].x += mBirds[i].side * mBirds[i].x_speed * elapsed;
-            mBirds[i].mBirdImage.update();
-            mBirds[i].mBirdImage.draw(mGC, mBirds[i].x, mBirds[i].y);
 
-            if (mBirds[i].side == 1 && mBirds[i].x >= mWindowWidth) 
+            if (mBirds[i].side == 1 && mBirds[i].x >= mWindowWidth)
                 processBirds(mGC, mWindowWidth, mWindowHeight, i);
             else if (mBirds[i].side == -1 && mBirds[i].x <= 0 - mBirds[i].mBirdImage.get_width())
                 processBirds(mGC, mWindowWidth, mWindowHeight, i);
         }
     }
+}
+
+
+void Birds::setPosition(CL_Pointf newPos)
+{
+}
+CL_Pointf Birds::getPosition()
+{
+    return levelManager().getCamViewport().get_top_left();
+}
+CL_Rectf Birds::getRectangle()
+{
+    return levelManager().getCamViewport();
+}
+
+boost::shared_ptr<Object> Birds::ParseBirds(CL_DomElement* birdsElement, std::string& desc)
+{
+    float maxBirds = 0;
+    if(birdsElement->has_attribute("maxBirds"))
+    {
+        std::string maxBirdsStr = birdsElement->get_attribute("maxBirds").c_str();
+        maxBirds = boost::lexical_cast<float>(maxBirdsStr);
+    }
+    return boost::shared_ptr<Object>(new Birds(maxBirds));
 }
