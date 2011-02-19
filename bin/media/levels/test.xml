@@ -12,7 +12,6 @@
             <!--<Moon enabled="true" />-->
             <Leaves enabled="true" limit="0.15" />
             <Stars enabled="true" limit="6.0" />
-            <Birds enabled="true" />
             <Objects enabled="true" />
             <!-- actual_size is average real foreground image size refer to full window size -->
             <!-- If fixed is true, foreground wouldn't move with camera and level -->
@@ -21,6 +20,7 @@
         </Environ>
 
         <Objects>
+            <Object name="BirdsObj" type="Birds" maxBirds="7" />
              <Object name="Level" type="PhysicBodyObject" template="level_phys" />
              <Object name="MoonObj" type="MoonObject" z-index="-3" always_draw="true">
                  <Visual>

@@ -22,6 +22,7 @@
 #include "World/Objects/LightColumn.hpp"
 #include "World/Objects/Moon.hpp"
 #include "World/Objects/Player.hpp"
+#include "World/Objects/Birds.hpp"
 
 boost::shared_ptr<Object> TypesManager::empty_parser(CL_DomElement* p, std::string& desc)
 {
@@ -44,6 +45,7 @@ TypesManager::TypesManager()
     registerParser("LightColumnObject", LightColumn::ParseLightColumn);
     registerParser("MoonObject", Moon::ParseMoon);
     registerParser("Player", Player::ParsePlayer);
+    registerParser("Birds", Birds::ParseBirds);
 }
 
 boost::shared_ptr<Object> TypesManager::parseObject(CL_DomElement* objectTag, const std::string &type, std::string &desc)

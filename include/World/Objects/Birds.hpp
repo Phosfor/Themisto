@@ -25,22 +25,25 @@
 #include "Core/Utils.hpp"
 #include "Core/ApplicationManager.hpp"
 #include "Core/ResourceManager.hpp"
-#include "World/Environ/Object.hpp"
+#include "World/Objects/Object.hpp"
+#include "Core/LevelManager.hpp"
 
 struct BirdData
 {
     float x, y, x_speed, scale, side, timeout;
+
     CL_SpriteDescription mImageDesc;
     CL_Sprite mBirdImage;
 };
 
-class Birds : public EnvironObject
+class Birds : public Object
 {
     private:
         std::vector<BirdData> mBirds;
         uint16_t mProbability; // The probability that bird will begin to fly current frame
         bool mFirstTime;
-
+        float mMaxObjects;
+        float mWindowHeight, mWindowWidth;
         CL_GraphicContext mGC;
 
         void processBirds(CL_GraphicContext &gc, uint16_t width, uint16_t height, uint16_t i);
@@ -48,7 +51,13 @@ class Birds : public EnvironObject
     public:
         explicit Birds(uint16_t maxBirds = 1);
         void setLimit(uint16_t limit);
+        void updateVisual(float newx, float newy);
         void update(float elapsed);
+        void setPosition(CL_Pointf newPos);
+        CL_Pointf getPosition();
+        CL_Rectf getRectangle();
+
+        static boost::shared_ptr<Object> ParseBirds(CL_DomElement* birdsElement, std::string& desc);
 };
 
 #endif /* _ENVIRON_BIRDS_HPP_ */
