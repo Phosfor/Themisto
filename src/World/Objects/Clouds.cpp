@@ -74,6 +74,7 @@ Clouds::Clouds(uint16_t maxClouds)
     mWindowWidth = levelManager().getCamViewport().get_width();
     mWindowHeight = levelManager().getCamViewport().get_height();
 
+    mType = CloudsObject;
 
     float windPower = environManager().getWindPower();
     for (uint16_t i=0; i < mMaxObjects; i++)

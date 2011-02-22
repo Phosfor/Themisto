@@ -66,7 +66,7 @@ class LightColumn: public Object
         float mAbsTime;
 
     public:
-        explicit LightColumn();
+        LightColumn();
         ~LightColumn();
 
         // Get/set

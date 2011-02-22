@@ -30,7 +30,9 @@ enum ObjectTypes
     PhysicBodyObject,
     GrassObject,
     LightColumnObject,
-    MoonObject
+    MoonObject,
+    CloudsObject,
+    RainObject
 };
 
 class Object : public boost::noncopyable

@@ -15,57 +15,53 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _ENVIRON_CLOUDS_HPP_
-#define _ENVIRON_CLOUDS_HPP_
+#ifndef _RAIN_OBJECT_HPP_
+#define _RAIN_OBJECT_HPP_
+
+#include <math.h>
 
 #include <ClanLib/core.h>
 #include <ClanLib/display.h>
-
-#include <boost/foreach.hpp>
-#include <boost/cstdint.hpp>
+#include <boost/cstdlib.hpp>
 
 #include "Core/Utils.hpp"
 #include "Core/ApplicationManager.hpp"
-#include "Core/ResourceManager.hpp"
 #include "Core/EnvironManager.hpp"
 #include "World/Objects/Object.hpp"
-#include "Core/LevelManager.hpp"
 
-
-struct CloudData
+const float kTail = 0.025f;
+struct Data
 {
-        float x, y_offset, x_speed, speed_koef;
-        uint16_t cloudType, timeout;
-        CL_Sprite imageHandle;
-        CL_Colorf mColor;
+    float x, y, x_speed, y_speed, timeout;
+    Data();
 };
 
-class Clouds : public Object
+class Rain : public Object
 {
     private:
-        std::vector<CloudData> mClouds;
+        std::vector<Data> mData;
+        CL_Colorf mDropColor;
         CL_GraphicContext mGC;
-        bool mFirstTime;
-        float mMaxObjects;
+        float mKoef1;
+
+        int mMaxObjects;
         float mWindowHeight, mWindowWidth;
 
-        void processClouds(CL_GraphicContext &gc, float windPower, CloudData &current, bool firstTime=false);
+        void processDrops(float windPower, Data &current, bool firstTime=false);
 
     public:
-        explicit Clouds(uint16_t maxClouds);
-        void setLimit(uint16_t limit);
+        explicit Rain(uint16_t maxDrops);
 
-        void setPosition(CL_Pointf newPos);
-        CL_Pointf getPosition();
-        CL_Rectf getRectangle();
+        static boost::shared_ptr<Object> ParseRain(CL_DomElement* element, std::string& desc);
 
+        // --- Object implementation ---
         void update(float elapsed);
         void updateVisual(float newX, float newY);
 
-        static boost::shared_ptr<Object> ParseClouds(CL_DomElement* cloudsElement, std::string& desc);
+        CL_Pointf getPosition();
+        void setPosition(CL_Pointf newPos);
 
-        // For the lightning
-        CL_Pointf getCloudPos();
+        CL_Rectf getRectangle();
 };
 
-#endif /* _ENVIRON_CLOUDS_HPP_ */
+#endif /* _RAIN_OBJECT_HPP_ */
