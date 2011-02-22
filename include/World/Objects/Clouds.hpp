@@ -28,8 +28,9 @@
 #include "Core/ApplicationManager.hpp"
 #include "Core/ResourceManager.hpp"
 #include "Core/EnvironManager.hpp"
-#include "World/Environ/Object.hpp"
+#include "World/Objects/Object.hpp"
 #include "Core/LevelManager.hpp"
+
 
 struct CloudData
 {
@@ -39,19 +40,29 @@ struct CloudData
         CL_Colorf mColor;
 };
 
-class Clouds : public EnvironObject
+class Clouds : public Object
 {
     private:
         std::vector<CloudData> mClouds;
         CL_GraphicContext mGC;
         bool mFirstTime;
+        float mMaxObjects;
+        float mWindowHeight, mWindowWidth;
+
 
         void processClouds(CL_GraphicContext &gc, float windPower, CloudData &current, bool firstTime=false);
 
     public:
         explicit Clouds(uint16_t maxClouds = 20);
         void setLimit(uint16_t limit);
+        void setPosition(CL_Pointf newPos);
+        CL_Pointf getPosition();
+        CL_Rectf getRectangle();
+
         void update(float elapsed);
+        void updateVisual(float newX, float newY);
+
+        static boost::shared_ptr<Object> ParseClouds(CL_DomElement* cloudsElement, std::string& desc);
 
         // For the lightning
         CL_Pointf getCloudPos();

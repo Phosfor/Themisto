@@ -17,7 +17,7 @@
 
 #include "World/Environ/Lightnings.hpp"
 #include "Core/EnvironManager.hpp"
-#include "World/Environ/Clouds.hpp"
+#include "World/Objects/Clouds.hpp"
 
 Lightnings::Lightnings()
     : EnvironObject(), mProbability(1000), mAnimation(false), alpha(0)

@@ -5,12 +5,11 @@
     <World image="levels/test.png" cameraPosX="0" cameraPosY="0">
 
         <Environ>
-            <Rain enabled="true" limit="1.5" />
-            <Clouds enabled="true" limit="0.2" />
+            <Rain enabled="false" limit="1.5" />
             <Lightnings enabled="true" />
             <Sky enabled="true" />
             <!--<Moon enabled="true" />-->
-            <Leaves enabled="true" limit="0.15" />
+            <Leaves enabled="false" limit="0.15" />
             <Stars enabled="true" limit="6.0" />
             <Objects enabled="true" />
             <!-- actual_size is average real foreground image size refer to full window size -->
@@ -21,6 +20,8 @@
 
         <Objects>
              <Object name="BirdsObj" type="Birds" maxBirds="7" />
+             <Object name="BirdsObj" type="Birds" maxBirds="3"  always_draw="true"/>
+             <Object name="CloudsObj" type="Clouds" maxClouds="7" z-index="-2"  always_draw="true" />
              <Object name="Level" type="PhysicBodyObject" template="level_phys" />
              <Object name="MoonObj" type="MoonObject" z-index="-3" always_draw="true">
                  <Visual>
@@ -132,7 +133,7 @@
                 <Body>
                     <b2Body>
                         <Position>
-                            <x>400.0</x>
+                            <x>800.0</x>
                             <y>70.0</y>
                         </Position>
                         <Type>DynamicBody</Type>
