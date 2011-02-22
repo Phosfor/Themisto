@@ -20,7 +20,7 @@
         </Environ>
 
         <Objects>
-            <Object name="BirdsObj" type="Birds" maxBirds="7" />
+             <Object name="BirdsObj" type="Birds" maxBirds="7" />
              <Object name="Level" type="PhysicBodyObject" template="level_phys" />
              <Object name="MoonObj" type="MoonObject" z-index="-3" always_draw="true">
                  <Visual>
