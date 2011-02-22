@@ -64,7 +64,6 @@ Rain::Rain(uint16_t maxDrops)
     mDropColor.a = static_cast<float>(rand() % 5 + 3) / 10.0f;
 
     mGC = appManager().getGraphic();
-    mType = RainObject;
 
     mKoef1 = mWindowHeight / Gravity;
     float windPower = environManager().getWindPower();

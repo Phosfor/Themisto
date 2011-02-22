@@ -20,7 +20,6 @@
 Grass::Grass(CL_Pointf position)
 {
     mPosition = position;
-    mType = GrassObject;
     mGC = appManager().getGraphic();
     mImageHandle = CL_Sprite(mGC, "media/plants/3.png");
 

@@ -45,7 +45,7 @@ TypesManager::TypesManager()
 {
     registerParser("PhysicBodyObject", PhysicObject::ParsePhysicObject);
     registerParser("LightColumnObject", LightColumn::ParseLightColumn);
-    registerParser("MoonObject", Moon::ParseMoon);
+    registerParser("Moon", Moon::ParseMoon);
     registerParser("Player", Player::ParsePlayer);
     registerParser("Birds", Birds::ParseBirds);
     registerParser("Clouds", Clouds::ParseClouds);

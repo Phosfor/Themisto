@@ -23,7 +23,6 @@
 PhysicObject::PhysicObject()
 {
     mName = worldManager().generateUniqueID();
-    mType = PhysicBodyObject;
     mGC = appManager().getGraphic();
 }
 

@@ -177,6 +177,7 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
                 return;
             }
             object->setIndex(z_index);
+            object->setType(type);
             object->setAlwaysDraw(always_draw);
             levelManager().addObject(name, object);
         }

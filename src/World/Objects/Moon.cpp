@@ -19,7 +19,6 @@
 
 Moon::Moon()
 {
-    mType = MoonObject;
     mGC = appManager().getGraphic();
 
     std::string media = utils().getMediaFolder();

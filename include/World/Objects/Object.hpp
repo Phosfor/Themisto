@@ -24,7 +24,7 @@
 
 class Action;
 
-enum ObjectTypes
+/*enum ObjectTypes
 {
     NotAnObject = 0,
     PhysicBodyObject,
@@ -33,13 +33,13 @@ enum ObjectTypes
     MoonObject,
     CloudsObject,
     RainObject
-};
+};*/
 
 class Object : public boost::noncopyable
 {
     protected:
         std::string mName;
-        ObjectTypes mType;
+        std::string mType;
         int z_index;
         bool mAlwaysDraw;
 
@@ -53,7 +53,8 @@ class Object : public boost::noncopyable
         virtual bool getAlwaysDraw() { return mAlwaysDraw; }
         virtual void setAlwaysDraw(bool state) { mAlwaysDraw = state; }
 
-        virtual ObjectTypes getType() { return mType; }
+        virtual std::string getType() { return mType; }
+        virtual void setType(const std::string &typeName) { mType = typeName; }
 
         virtual void setPosition(CL_Pointf newPos) = 0;
         virtual CL_Pointf getPosition() = 0;

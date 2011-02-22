@@ -22,8 +22,8 @@
              <Object name="BirdsObj" type="Birds" maxBirds="3"  always_draw="true"/>
              <Object name="RainObj" type="Rain" maxDrops="1.5"  always_draw="true"/>
              <Object name="CloudsObj" type="Clouds" maxClouds="7" z-index="-2"  always_draw="true" />
-             <Object name="Level" type="PhysicBodyObject" template="level_phys" />
-             <Object name="MoonObj" type="MoonObject" z-index="-3" always_draw="true">
+             <Object name="LevelObj" type="PhysicBodyObject" template="level_phys" />
+             <Object name="MoonObj" type="Moon" z-index="-3" always_draw="true">
                  <Visual>
                     <Size width="379" height="379" />
                     <Texture section="Moons" name="0" />

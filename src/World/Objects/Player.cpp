@@ -24,7 +24,6 @@ Player::Player()
 {
     mName = worldManager().generateUniqueID();
     mInputManager = &inputManager();
-    mType = PhysicBodyObject;
     mGC = appManager().getGraphic();
     CL_InputDevice keyb = inputManager().getKeyboard();
     mKeyDownSlot = keyb.sig_key_down().connect(this, &Player::keyDown);

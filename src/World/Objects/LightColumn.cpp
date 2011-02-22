@@ -20,7 +20,6 @@
 LightColumn::LightColumn()
 {
     mName = worldManager().generateUniqueID();
-    mType = LightColumnObject;
     mGC = appManager().getGraphic();
 
     mAbsTime = 0.0f;
