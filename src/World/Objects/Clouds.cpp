@@ -15,8 +15,8 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "World/Environ/Clouds.hpp"
-#include "Core/EnvironManager.hpp"
+#include "World/Objects/Clouds.hpp"
+
 
 void Clouds::setLimit(uint16_t limit)
 {
@@ -32,7 +32,7 @@ void Clouds::setLimit(uint16_t limit)
 void Clouds::processClouds(CL_GraphicContext &gc, float windPower, CloudData &current, bool firstTime)
 {
     uint16_t actualSize = levelManager().getForegroundSize();
-    current.y_offset = rand() % (mWindowHeight - (mWindowHeight * actualSize / 100));
+    current.y_offset = rand() %  (int)(mWindowHeight - (mWindowHeight * actualSize / 100));
     //current.y_offset = rand() % static_cast<uint16_t>((mWindowHeight * 0.5));
 
     current.x_speed = 0;
@@ -51,7 +51,7 @@ void Clouds::processClouds(CL_GraphicContext &gc, float windPower, CloudData &cu
     }
     else
     {
-        current.x = rand() % mWindowWidth;
+        current.x = rand() % (int)mWindowWidth;
         current.timeout = 0;
     }
 
@@ -65,12 +65,15 @@ void Clouds::processClouds(CL_GraphicContext &gc, float windPower, CloudData &cu
 }
 
 Clouds::Clouds(uint16_t maxClouds)
-    : EnvironObject(), mFirstTime(true)
+    : mFirstTime(true)
 {
     srand(time(NULL));
 
     mMaxObjects = maxClouds;
     mGC = appManager().getGraphic();
+    mWindowWidth = levelManager().getCamViewport().get_width();
+    mWindowHeight = levelManager().getCamViewport().get_height();
+
 
     float windPower = environManager().getWindPower();
     for (uint16_t i=0; i < mMaxObjects; i++)
@@ -78,6 +81,45 @@ Clouds::Clouds(uint16_t maxClouds)
         mClouds.push_back(CloudData());
         processClouds(mGC, windPower, mClouds[i], true);
     }
+}
+
+CL_Pointf Clouds::getCloudPos()
+{
+    uint16_t counter = 0;
+    CL_Pointf result(-1, -1);
+    while (result.x == -1)
+    {
+        ++counter;
+        if (counter == 4) break;
+
+        uint16_t index = rand() % (int)mMaxObjects + 1;
+        CloudData &current = mClouds[index];
+        if (current.x > mWindowWidth*0.1 &&
+            current.x < mWindowWidth - mWindowWidth*0.1)
+        {
+            result.x = current.x;
+            result.y = current.y_offset +
+                current.imageHandle.get_height() / 2.0f;
+        }
+        else
+        {
+            continue;
+        }
+    }
+
+    return result;
+}
+
+void Clouds::setPosition(CL_Pointf newPos)
+{
+}
+CL_Pointf Clouds::getPosition()
+{
+     return levelManager().getCamViewport().get_top_left();
+}
+CL_Rectf Clouds::getRectangle()
+{
+    return levelManager().getCamViewport();
 }
 
 void Clouds::update(float elapsed)
@@ -103,36 +145,31 @@ void Clouds::update(float elapsed)
 
             current.x += current.x_speed * elapsed;
             current.x_speed = current.speed_koef * newSpeed;
+        }
+    }
 
+}
+void Clouds::updateVisual(float newX, float newY)
+{
+    for (uint16_t i=0; i < mMaxObjects; i++)
+    {
+        CloudData &current = mClouds[i];
+        if(current.timeout <= 0 )
+        {
             current.imageHandle.set_color(current.mColor);
             current.imageHandle.draw(mGC, current.x, current.y_offset);
         }
     }
 }
 
-CL_Pointf Clouds::getCloudPos()
+
+boost::shared_ptr<Object> Clouds::ParseClouds(CL_DomElement* cloudsElement, std::string& desc)
 {
-    uint16_t counter = 0;
-    CL_Pointf result(-1, -1);
-    while (result.x == -1)
+    float maxClouds = 0;
+    if(cloudsElement->has_attribute("maxClouds"))
     {
-        ++counter;
-        if (counter == 4) break;
-
-        uint16_t index = rand() % mMaxObjects + 1;
-        CloudData &current = mClouds[index];
-        if (current.x > mWindowWidth*0.1 &&
-            current.x < mWindowWidth - mWindowWidth*0.1)
-        {
-            result.x = current.x;
-            result.y = current.y_offset + 
-                current.imageHandle.get_height() / 2.0f;
-        }
-        else
-        {
-            continue;
-        }
+        std::string maxCloudsStr = cloudsElement->get_attribute("maxClouds").c_str();
+        maxClouds = boost::lexical_cast<float>(maxCloudsStr);
     }
-
-    return result;
+    return boost::shared_ptr<Object>(new Clouds(maxClouds));
 }

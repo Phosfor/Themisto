@@ -16,7 +16,7 @@
 */
 
 #include "World/Environ/Leaves.hpp"
-#include "World/Environ/Clouds.hpp"
+#include "World/Objects/Clouds.hpp"
 
 void Leaves::setLimit(uint16_t limit)
 {
@@ -109,7 +109,7 @@ void Leaves::update(float elapsed)
         else
         {
             if (windPower > 0) {
-                if (current.x > mWindowWidth + 10 || current.y > mWindowHeight) 
+                if (current.x > mWindowWidth + 10 || current.y > mWindowHeight)
                     processLeaves(mGC, windPower, current);
             } else {
                 if (current.x < -current.imageHandle.get_width() || current.y > mWindowHeight)
