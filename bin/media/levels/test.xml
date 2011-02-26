@@ -14,7 +14,7 @@
             <Objects enabled="true" />
             <!-- actual_size is average real foreground image size refer to full window size -->
             <!-- If fixed is true, foreground wouldn't move with camera and level -->
-            <Foreground enabled="true" image="test" actual_size="40" fixed="false" />
+            <!--<Foreground enabled="true" image="test" actual_size="40" fixed="false" />-->
             <Wind enabled="true" power="-2" />
         </Environ>
 
@@ -30,6 +30,14 @@
                  </Visual>
                  <Radius value="7" />
                  <StartAngle value="-90" />
+             </Object>
+             <Object name="ForegroundObj" type="Foreground" z-index="-2" always_draw="true">
+                 <Visual>
+                    <!--<Size width="379" height="379" />-->
+                    <Texture section="Foreground" name="test" />
+                 </Visual>
+                 <Fixed value="true" />
+                 <ActualSize value="40" />
              </Object>
              <Object name="Lamp" type="LightColumnObject">
                  <Visual>

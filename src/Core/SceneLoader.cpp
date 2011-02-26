@@ -108,15 +108,15 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
 
     // CHANGEABLE ENVIRON [For grepping, don't remove]
     std::map<std::string, EnvironTypes> deps;
-    deps["Rain"] = Environ_Rain;
-    deps["Clouds"] = Environ_Clouds;
-    deps["Foreground"] = Environ_Foreground;
+    //deps["Rain"] = Environ_Rain;
+    //deps["Clouds"] = Environ_Clouds;
+    //deps["Foreground"] = Environ_Foreground;
     deps["Lightnings"] = Environ_Lightnings;
     deps["Sky"] = Environ_Sky;
-    deps["Moon"] = Environ_Moon;
+    //deps["Moon"] = Environ_Moon;
     deps["Leaves"] = Environ_Leaves;
     deps["Stars"] = Environ_Stars;
-    deps["Birds"] = Environ_Birds;
+    //deps["Birds"] = Environ_Birds;
     deps["Objects"] = Environ_Objects;
 
     CL_DomNodeList childList = environ.get_child_nodes();

@@ -26,7 +26,7 @@ set(Themisto_srcs
     World/Environ/Sky.cpp
     World/Environ/Leaves.cpp
     World/Environ/Lightnings.cpp
-    World/Environ/Foreground.cpp
+    #World/Environ/Foreground.cpp
     World/Environ/Objects.cpp
 
     # Objects
@@ -40,6 +40,7 @@ set(Themisto_srcs
     World/Objects/Birds.cpp
     World/Objects/Clouds.cpp
     World/Objects/Rain.cpp
+    World/Objects/Foreground.cpp
 
     # Actions
     #World/Actions/TakeAction.cpp

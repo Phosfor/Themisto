@@ -43,7 +43,7 @@ class Clouds;
 class Birds;
 class Lightnings;
 class EnvironObject;
-class Foreground;
+//class Foreground;
 class Objects;
 class EnvironManager : public boost::serialization::singleton<EnvironManager>
 {

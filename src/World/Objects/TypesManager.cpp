@@ -25,6 +25,7 @@
 #include "World/Objects/Birds.hpp"
 #include "World/Objects/Clouds.hpp"
 #include "World/Objects/Rain.hpp"
+#include "World/Objects/Foreground.hpp"
 
 boost::shared_ptr<Object> TypesManager::empty_parser(CL_DomElement* p, std::string& desc)
 {
@@ -50,6 +51,7 @@ TypesManager::TypesManager()
     registerParser("Birds", Birds::ParseBirds);
     registerParser("Clouds", Clouds::ParseClouds);
     registerParser("Rain", Rain::ParseRain);
+    registerParser("Foreground", Foreground::ParseForeground);
 }
 
 
