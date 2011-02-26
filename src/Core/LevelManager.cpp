@@ -1,5 +1,4 @@
 #include "Core/LevelManager.hpp"
-#include "World/Objects/Object.hpp"
 
 LevelManager::LevelManager()
 {

@@ -35,6 +35,7 @@
 
 #include "Core/ApplicationManager.hpp"
 #include "Core/Utils.hpp"
+#include "World/Objects/Object.hpp"
 
 // Used for objects map to achive z-index
 struct Compare
@@ -53,7 +54,7 @@ struct Compare
     }
 };
 
-class Object;
+//class Object;
 typedef std::map<std::string, boost::shared_ptr<Object> > ObjectMapTypeAccess;
 typedef std::map<std::string, boost::shared_ptr<Object>, Compare> ObjectMapTypeSorted;
 
@@ -118,6 +119,28 @@ class LevelManager : public boost::serialization::singleton<LevelManager>
 
         // Objects stuff
         void addObject(const std::string &name, boost::shared_ptr<Object> obj);
+
+        template<class T>
+        boost::shared_ptr<T> getObject(const std::string &name)
+        {
+            if (mObjects.find(name) == mObjects.end())
+                LOG(cl_format("Failed to get object `%1`, it doesn't exist!", name));
+            else
+                return mObjects[name];
+        }
+
+        template<class T>
+        std::vector< boost::shared_ptr<T> > getObjectsByType(const std::string &type)
+        {
+            std::vector< boost::shared_ptr<T> > res;
+            BOOST_FOREACH(ObjectMapTypeAccess::value_type &pair, mObjects)
+            {
+                if (pair.second->getType() == type) res.push_back(mObjects[pair.first]);
+            }
+
+            return res;
+        }
+
         void updateVisual(float elapsed);
         void updateLogic(float elapsed);
 };
