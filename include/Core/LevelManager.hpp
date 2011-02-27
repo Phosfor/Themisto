@@ -34,8 +34,11 @@
 #include <boost/cstdint.hpp>
 
 #include "Core/ApplicationManager.hpp"
+#include "Core/ResourceManager.hpp"
 #include "Core/Utils.hpp"
 #include "World/Objects/Object.hpp"
+#include "World/Objects/Foreground.hpp"
+#include "World/Objects/Empty.hpp"
 
 // Used for objects map to achive z-index
 struct Compare
@@ -64,11 +67,11 @@ class LevelManager : public boost::serialization::singleton<LevelManager>
         // Level stuff
         std::string mLevelName;
         std::string mForegroundTexture;
-        bool mForeground;      // Is foreground image enabled
-        bool mFixedForeground; // If foreground image shouldn't move with camera
+        //bool mForeground;      // Is foreground image enabled
+        //bool mFixedForeground; // If foreground image shouldn't move with camera
         int mForegroundDelta;  // If level texture is < then window height
         // Average real foreground image size refer to full window size (in percents)
-        uint16_t mForegroundActualSize;
+        //uint16_t mForegroundActualSize;
         CL_Size mTextureSize;
         bool mDebugDrawOnly;
 
@@ -88,16 +91,16 @@ class LevelManager : public boost::serialization::singleton<LevelManager>
         LevelManager();
 
         // Level stuff
-        void setForegroundTexture(const std::string &resourceName);
-        std::string getForegroundTexture();
+        //void setForegroundTexture(const std::string &resourceName);
+        //std::string getForegroundTexture();
 
-        bool getForegroundEnabled();
+        //bool getForegroundEnabled();
 
-        bool getForegroundFixed();
-        void setForegroundFixed(bool fixed);
+        //bool getForegroundFixed();
+        //void setForegroundFixed(bool fixed);
 
-        uint16_t getForegroundSize();
-        void setForegroundSize(uint16_t size);
+        //uint16_t getForegroundSize();
+        //void setForegroundSize(uint16_t size);
 
         std::string getLevelName();
         void setLevelName(const std::string &name);
@@ -114,31 +117,52 @@ class LevelManager : public boost::serialization::singleton<LevelManager>
 
         void setDrawDebugData(bool draw);
 
-        // Init level manager with level texture
-        void init(const std::string &textureName);
+        void init();
 
         // Objects stuff
         void addObject(const std::string &name, boost::shared_ptr<Object> obj);
 
+        // Get object by name
         template<class T>
         boost::shared_ptr<T> getObject(const std::string &name)
         {
             if (mObjects.find(name) == mObjects.end())
+            {
                 LOG(cl_format("Failed to get object `%1`, it doesn't exist!", name));
+                return boost::shared_ptr<EmptyObject>(new EmptyObject);
+            }
             else
-                return mObjects[name];
+            {
+                return boost::static_pointer_cast<T>(mObjects[name]);
+            }
         }
 
+        // Returns list of all objects by given type
         template<class T>
         std::vector< boost::shared_ptr<T> > getObjectsByType(const std::string &type)
         {
             std::vector< boost::shared_ptr<T> > res;
             BOOST_FOREACH(ObjectMapTypeAccess::value_type &pair, mObjects)
             {
-                if (pair.second->getType() == type) res.push_back(mObjects[pair.first]);
+                if (pair.second->getType() == type) 
+                    res.push_back(boost::static_pointer_cast<T>(mObjects[pair.first]));
             }
 
             return res;
+        }
+
+        // Returns first object by given type
+        template<class T>
+        boost::shared_ptr<T> getObjectByType(const std::string &type)
+        {
+            BOOST_FOREACH(ObjectMapTypeAccess::value_type &pair, mObjects)
+            {
+                if (pair.second->getType() == type)
+                    return boost::static_pointer_cast<T>(mObjects[pair.first]);
+            }
+
+            LOG(cl_format("No one object with `%1` type!", type));
+            return boost::shared_ptr<EmptyObject>(new EmptyObject);
         }
 
         void updateVisual(float elapsed);
