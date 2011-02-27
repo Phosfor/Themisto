@@ -24,6 +24,8 @@
 #include "Core/LevelManager.hpp"
 #include "World/Objects/Object.hpp"
 
+#include "boost/cstdint.hpp"
+
 class Foreground: public Object
 {
     private:
@@ -33,6 +35,8 @@ class Foreground: public Object
 
         float mYPos, mActualSize;
         bool mFixed;
+
+        std::string mTexture, mSection;
 
     public:
         Foreground();
@@ -47,8 +51,10 @@ class Foreground: public Object
         void setFixed(bool state);
         bool getFixed();
 
-        void setActualSize(float size);
-        float getActualSize();
+        void setActualSize(uint16_t size);
+        uint16_t getActualSize();
+
+        std::vector<std::string> getTextureInfo();
 
         // --- Object implementation ---
         CL_Pointf getPosition();

@@ -129,7 +129,9 @@ class LevelManager : public boost::serialization::singleton<LevelManager>
             if (mObjects.find(name) == mObjects.end())
             {
                 LOG(cl_format("Failed to get object `%1`, it doesn't exist!", name));
-                return boost::shared_ptr<EmptyObject>(new EmptyObject);
+                boost::shared_ptr<T> temp(new T);
+                temp->setType("Empty");
+                return temp;
             }
             else
             {
@@ -162,7 +164,9 @@ class LevelManager : public boost::serialization::singleton<LevelManager>
             }
 
             LOG(cl_format("No one object with `%1` type!", type));
-            return boost::shared_ptr<EmptyObject>(new EmptyObject);
+            boost::shared_ptr<T> temp(new T);
+            temp->setType("Empty");
+            return temp;
         }
 
         void updateVisual(float elapsed);
