@@ -26,6 +26,8 @@ PhysicObject::PhysicObject()
     mGC = appManager().getGraphic();
 }
 
+void PhysicObject::init() {}
+
 void PhysicObject::setVisual(std::string textureName, std::string textureSection)
 {
     setVisual(textureName, textureSection, -1, -1);

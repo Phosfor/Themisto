@@ -118,6 +118,7 @@ class LevelManager : public boost::serialization::singleton<LevelManager>
         void setDrawDebugData(bool draw);
 
         void init();
+        void initObjects();
 
         // Objects stuff
         void addObject(const std::string &name, boost::shared_ptr<Object> obj);

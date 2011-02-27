@@ -28,10 +28,11 @@ void Stars::setLimit(uint16_t limit)
 
 ImageStarsData::ImageStarsData(CL_GraphicContext gc, uint16_t width, uint16_t height)
 {
-    uint16_t actualSize = levelManager().getForegroundSize();
+    //uint16_t actualSize = levelManager().getForegroundSize();
 
     x = rand() % width;
-    y = rand() % (height - (height * actualSize / 100));
+    //y = rand() % (height - (height * actualSize / 100));
+    y = rand() % height;
 
     brightness = static_cast<float>((rand() % 10 + 2))/10.0f;
 

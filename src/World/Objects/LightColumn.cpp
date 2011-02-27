@@ -25,6 +25,8 @@ LightColumn::LightColumn()
     mAbsTime = 0.0f;
 }
 
+void LightColumn::init() {}
+
 void LightColumn::setVisual(std::string textureName, std::string textureSection)
 {
     setVisual(textureName, textureSection, -1, -1);

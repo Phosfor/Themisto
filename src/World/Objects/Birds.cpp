@@ -27,6 +27,12 @@ void Birds::setLimit(uint16_t limit)
    mMaxObjects = limit;
 }
 
+void Birds::init()
+{
+    for (uint16_t i=0; i < mMaxObjects; i++)
+        mBirds.push_back(BirdData());
+}
+
 void Birds::processBirds(CL_GraphicContext &gc, uint16_t width, uint16_t height, uint16_t i)
 {
     CL_DomElement birds = resourceManager().sectionHandle("Birds").to_element();
@@ -69,11 +75,8 @@ Birds::Birds(uint16_t maxBirds)
 {
     mGC = appManager().getGraphic();
     mMaxObjects = maxBirds;
-    mWindowWidth = levelManager().getCamViewport().get_width();
-    mWindowHeight = levelManager().getCamViewport().get_height();
-
-    for (uint16_t i=0; i < maxBirds; i++)
-        mBirds.push_back(BirdData());
+    mWindowWidth = ScreenResolutionX;
+    mWindowHeight = ScreenResolutionY;
 }
 
 void Birds::updateVisual(float newx, float newy)

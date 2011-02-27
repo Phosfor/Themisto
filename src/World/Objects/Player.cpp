@@ -31,6 +31,7 @@ Player::Player()
     mJumpVelocity = sqrt(20*PlayerHeight/2);
 }
 
+void Player::init() {}
 
 void Player::keyDown(const CL_InputEvent& ev, const CL_InputState& state)
 {

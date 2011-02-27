@@ -61,6 +61,7 @@ class Foreground: public Object
         void setPosition(CL_Pointf newPos);
         CL_Rectf getRectangle();
 
+        void init();
         void update(float elapsed);
         void updateVisual(float newX, float newY);
 };

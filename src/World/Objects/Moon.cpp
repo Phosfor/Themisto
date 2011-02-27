@@ -37,6 +37,8 @@ Moon::Moon()
     mPosX = mPosY = 0;
 }
 
+void Moon::init() {}
+
 Moon::~Moon() { }
 
 float Moon::getOrbitRadius()

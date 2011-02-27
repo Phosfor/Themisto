@@ -41,6 +41,7 @@ set(Themisto_srcs
     World/Objects/Clouds.cpp
     World/Objects/Rain.cpp
     World/Objects/Foreground.cpp
+    World/Objects/Empty.cpp
 
     # Actions
     #World/Actions/TakeAction.cpp

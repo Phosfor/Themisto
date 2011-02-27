@@ -15,8 +15,8 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _ENVIRON_CLOUDS_HPP_
-#define _ENVIRON_CLOUDS_HPP_
+#ifndef _CLOUDS_OBJECT_HPP_
+#define _CLOUDS_OBJECT_HPP_
 
 #include <ClanLib/core.h>
 #include <ClanLib/display.h>
@@ -47,7 +47,7 @@ class Clouds : public Object
         CL_GraphicContext mGC;
         bool mFirstTime;
         float mMaxObjects;
-        float mWindowHeight, mWindowWidth;
+        int mWindowHeight, mWindowWidth;
 
         void processClouds(CL_GraphicContext &gc, float windPower, CloudData &current, bool firstTime=false);
 
@@ -59,6 +59,7 @@ class Clouds : public Object
         CL_Pointf getPosition();
         CL_Rectf getRectangle();
 
+        void init();
         void update(float elapsed);
         void updateVisual(float newX, float newY);
 
@@ -68,4 +69,4 @@ class Clouds : public Object
         CL_Pointf getCloudPos();
 };
 
-#endif /* _ENVIRON_CLOUDS_HPP_ */
+#endif /* _CLOUDS_OBJECT_HPP_ */

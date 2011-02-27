@@ -8,48 +8,63 @@ LevelManager::LevelManager()
     mDrawDebugData = false;
 }
 
-void LevelManager::init(const std::string &textureName)
+void LevelManager::initObjects()
 {
-    std::string path = utils().getMediaFolder() + "/" + textureName;
-    if (!boost::filesystem::exists(path)) LOG_NOFORMAT(cl_format("Error: Level texture `%1` doesn't exist!", path));
-    mTextureSize = CL_Image(appManager().getGraphic(), path).get_size();
+    for (ObjectMapTypeSorted::const_iterator it=mObjectsSorted.begin();
+            it != mObjectsSorted.end(); ++it)
+    {
+        it->second->init();
+    }
 }
 
-void LevelManager::setForegroundTexture(const std::string &resourceName)
+void LevelManager::init()
+{
+    //std::string path = utils().getMediaFolder() + "/" + textureName;
+    //if (!boost::filesystem::exists(path)) LOG_NOFORMAT(cl_format("Error: Level texture `%1` doesn't exist!", path));
+    std::vector< boost::shared_ptr<Foreground> > foregroundData = getObjectsByType<Foreground>("Foreground");
+    if (foregroundData.size() > 0)
+    {
+        //foregroundData[0][0]
+    }
+    //resourceManager().getImage(textureSection, textureName);
+    //mTextureSize = CL_Image(appManager().getGraphic(), path).get_size();
+}
+
+/*void LevelManager::setForegroundTexture(const std::string &resourceName)
 {
     mForegroundTexture = resourceName;
     mForeground = true;
-}
+}*/
 
-std::string LevelManager::getForegroundTexture()
+/*std::string LevelManager::getForegroundTexture()
 {
     return mForegroundTexture;
-}
+}*/
 
-bool LevelManager::getForegroundEnabled()
+/*bool LevelManager::getForegroundEnabled()
 {
     return mForeground;
-}
+}*/
 
-bool LevelManager::getForegroundFixed()
+/*bool LevelManager::getForegroundFixed()
 {
     return mFixedForeground;
-}
+}*/
 
-void LevelManager::setForegroundFixed(bool fixed)
+/*void LevelManager::setForegroundFixed(bool fixed)
 {
     mFixedForeground = fixed;
-}
+}*/
 
-uint16_t LevelManager::getForegroundSize()
+/*uint16_t LevelManager::getForegroundSize()
 {
     return mForegroundActualSize;
-}
+}*/
 
-void LevelManager::setForegroundSize(uint16_t size)
+/*void LevelManager::setForegroundSize(uint16_t size)
 {
     mForegroundActualSize = size;
-}
+}*/
 
 void LevelManager::setCamViewport(const CL_Rectf  &viewport)
 {

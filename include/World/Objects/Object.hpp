@@ -23,18 +23,6 @@
 #include <boost/utility.hpp>
 
 class Action;
-
-/*enum ObjectTypes
-{
-    NotAnObject = 0,
-    PhysicBodyObject,
-    GrassObject,
-    LightColumnObject,
-    MoonObject,
-    CloudsObject,
-    RainObject
-};*/
-
 class Object : public boost::noncopyable
 {
     protected:
@@ -60,6 +48,7 @@ class Object : public boost::noncopyable
         virtual CL_Pointf getPosition() = 0;
         virtual CL_Rectf getRectangle() = 0;
 
+        virtual void init() = 0;
         virtual void update(float elapsed) = 0;
         virtual void updateVisual(float newX, float newY) = 0;
 

@@ -4,12 +4,13 @@ Foreground::Foreground()
 {
     mGC = appManager().getGraphic();
     mYPos = 0;
-    mFixed = levelManager().getForegroundFixed();
+    mFixed = true;
+    mActualSize = 0;
 }
 
-void Foreground::update(float elapsed)
-{
-}
+
+void Foreground::init() {}
+void Foreground::update(float elapsed){}
 
 void Foreground::updateVisual(float newX, float newY)
 {
@@ -27,6 +28,14 @@ CL_Rectf Foreground::getRectangle()
     return CL_Rectf(0, 0, ScreenResolutionX, ScreenResolutionY);
 }
 
+std::vector<std::string> Foreground::getTextureInfo()
+{
+    std::vector<std::string> res;
+    res.push_back(mSection);
+    res.push_back(mTexture);
+    return res;
+}
+
 void Foreground::setVisual(std::string textureName, std::string textureSection)
 {
     setVisual(textureName, textureSection, -1, -1);
@@ -42,12 +51,12 @@ bool Foreground::getFixed()
     return mFixed;
 }
 
-void Foreground::setActualSize(float size)
+void Foreground::setActualSize(uint16_t size)
 {
     mActualSize = size;
 }
 
-float Foreground::getActualSize()
+uint16_t Foreground::getActualSize()
 {
     return mActualSize;
 }
@@ -55,6 +64,8 @@ float Foreground::getActualSize()
 void Foreground::setVisual(std::string textureName, std::string textureSection, float width, float height)
 {
     mForeground = resourceManager().getImage(textureSection, textureName);
+    mTexture = textureName;
+    mSection = textureSection;
 
     if(!mForeground.is_null())
     {
@@ -93,12 +104,12 @@ boost::shared_ptr<Object> Foreground::ParseForeground(CL_DomElement *tag, std::s
     }
     result->setVisual(textureName, textureSection, width, height);
 
-    float actualSize = 50; // In percents
+    uint16_t actualSize = 0; // In percents
     bool fixed = true;
 
     CL_DomElement actualElement = tag->get_elements_by_tag_name("ActualSize").item(0).to_element();
     if (actualElement.has_attribute("value"))
-        actualSize = boost::lexical_cast<float>(actualElement.get_attribute("value").c_str());
+        actualSize = boost::lexical_cast<uint16_t>(actualElement.get_attribute("value").c_str());
 
     CL_DomElement fixedElement = tag->get_elements_by_tag_name("Fixed").item(0).to_element();
     if (fixedElement.has_attribute("value"))

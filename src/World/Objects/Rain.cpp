@@ -21,6 +21,16 @@ Data::Data()
     : x(rand()%ScreenResolutionX), y(0), timeout(rand()%130)
 { }
 
+void Rain::init()
+{
+    float windPower = environManager().getWindPower();
+    for (uint16_t i=0; i < mMaxObjects; ++i)
+    {
+        mData.push_back(Data());
+        processDrops(windPower, mData[i], true);
+    }
+}
+
 void Rain::processDrops(float windPower, Data &current, bool firstTime)
 {
     uint16_t left, right;
@@ -66,12 +76,6 @@ Rain::Rain(uint16_t maxDrops)
     mGC = appManager().getGraphic();
 
     mKoef1 = mWindowHeight / Gravity;
-    float windPower = environManager().getWindPower();
-    for (uint16_t i=0; i < mMaxObjects; ++i)
-    {
-        mData.push_back(Data());
-        processDrops(windPower, mData[i], true);
-    }
 }
 
 void Rain::updateVisual(float newX, float newY)

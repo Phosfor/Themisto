@@ -16,7 +16,7 @@
 */
 
 #include "World/Objects/Clouds.hpp"
-
+#include "World/Objects/Foreground.hpp"
 
 void Clouds::setLimit(uint16_t limit)
 {
@@ -29,11 +29,22 @@ void Clouds::setLimit(uint16_t limit)
    mMaxObjects = limit;
 }
 
+void Clouds::init()
+{
+    float windPower = environManager().getWindPower();
+    for (uint16_t i=0; i < mMaxObjects; i++)
+    {
+        mClouds.push_back(CloudData());
+        processClouds(mGC, windPower, mClouds[i], true);
+    }
+}
+
 void Clouds::processClouds(CL_GraphicContext &gc, float windPower, CloudData &current, bool firstTime)
 {
-    uint16_t actualSize = levelManager().getForegroundSize();
-    current.y_offset = rand() %  (int)(mWindowHeight - (mWindowHeight * actualSize / 100));
-    //current.y_offset = rand() % static_cast<uint16_t>((mWindowHeight * 0.5));
+    uint16_t actualSize = 0;
+    boost::shared_ptr<Foreground> temp = levelManager().getObjectByType<Foreground>("Foreground");
+    if (temp->getType() != "Empty") actualSize = temp->getActualSize();
+    current.y_offset = rand() %  mWindowHeight - (mWindowHeight * actualSize / 100);
 
     current.x_speed = 0;
     uint16_t size = resourceManager().sectionHandle("Clouds").get_child_nodes().get_length();
@@ -71,15 +82,8 @@ Clouds::Clouds(uint16_t maxClouds)
 
     mMaxObjects = maxClouds;
     mGC = appManager().getGraphic();
-    mWindowWidth = levelManager().getCamViewport().get_width();
-    mWindowHeight = levelManager().getCamViewport().get_height();
-
-    float windPower = environManager().getWindPower();
-    for (uint16_t i=0; i < mMaxObjects; i++)
-    {
-        mClouds.push_back(CloudData());
-        processClouds(mGC, windPower, mClouds[i], true);
-    }
+    mWindowWidth = ScreenResolutionY;
+    mWindowHeight = ScreenResolutionX;
 }
 
 CL_Pointf Clouds::getCloudPos()

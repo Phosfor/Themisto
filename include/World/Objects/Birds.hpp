@@ -51,8 +51,11 @@ class Birds : public Object
     public:
         explicit Birds(uint16_t maxBirds = 1);
         void setLimit(uint16_t limit);
+
         void updateVisual(float newx, float newy);
         void update(float elapsed);
+        void init();
+
         void setPosition(CL_Pointf newPos);
         CL_Pointf getPosition();
         CL_Rectf getRectangle();

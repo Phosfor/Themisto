@@ -26,6 +26,7 @@
 #include "World/Objects/Clouds.hpp"
 #include "World/Objects/Rain.hpp"
 #include "World/Objects/Foreground.hpp"
+#include "World/Objects/Empty.hpp"
 
 boost::shared_ptr<Object> TypesManager::empty_parser(CL_DomElement* p, std::string& desc)
 {
@@ -36,6 +37,10 @@ boost::shared_ptr<Object> TypesManager::empty_parser(CL_DomElement* p, std::stri
 
 Parser TypesManager::getParser(std::string type)
 {
+    // Check whether some object should have common type but it should be marked
+    if (type.find_first_of("_") != std::string::npos)
+        type = type.substr(0, type.find_first_of("_"));
+
     if (ObjectsParser.find(type) != ObjectsParser.end())
         return ObjectsParser[type];
     else

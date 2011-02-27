@@ -61,10 +61,13 @@ class PhysicObject: public Object
 
         // --- Object implementation ---
         CL_Pointf getPosition();
+        CL_Rectf getRectangle();
         void setPosition(CL_Pointf newPos);
+
+        void init();
         void update(float elapsed);
         void updateVisual(float newX, float newY);
-        CL_Rectf getRectangle();
+
         std::vector< boost::shared_ptr<Action> > getAvailableActions();
 };
 

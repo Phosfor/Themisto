@@ -65,8 +65,8 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
         LOG(cl_format("Warning! Level version is different with game one(%1). Possible faults.", version));
 
     // Get world dimensions
-    if (!world.has_attribute("image")) LOG_NOFORMAT("Error: World tag should have `image` attribute!");
-    levelManager().init(world.get_attribute("image"));
+    //if (!world.has_attribute("image")) LOG_NOFORMAT("Error: World tag should have `image` attribute!");
+    //levelManager().init(world.get_attribute("image"));
 
 
     levelManager().setLevelName(name);
@@ -82,7 +82,7 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
     CL_Rectf camViewport(CL_Pointf(cameraPosX, cameraPosY), CL_Sizef(ScreenResolutionX, ScreenResolutionY));
     levelManager().setCamViewport(camViewport);
 
-    try
+    /*try
     {
         CL_DomNode foregroundNode = environ.select_node("Foreground");
 
@@ -101,7 +101,7 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
         levelManager().setForegroundFixed(fixedImage);
     }
     // Foreground tag isn't available
-    catch (...) { }
+    catch (...) { }*/
 
     LOG_NOFORMAT("- Loading Environ objects\n");
     environManager().initEnviron();
@@ -128,10 +128,6 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
             float pow = boost::lexical_cast<float>(tag.to_element().get_attribute("power").c_str());
             environManager().setWindPower(pow);
         }
-        if (tag.get_node_name() == "Foreground")
-        {
-            levelManager().setForegroundTexture(tag.to_element().get_attribute("image").c_str());
-        }
 
         EnvironTypes type = deps[tag.get_node_name().c_str()];
 
@@ -154,6 +150,8 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
 
             std::string name = tag.get_attribute("name").c_str();
             std::string type = tag.get_attribute("type").c_str();
+            std::string subType;
+
             LOG_NOFORMAT(cl_format("- Parsing object `%1` of type `%2`\n", name, type));
 
             int z_index = 1;
@@ -181,6 +179,7 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
             object->setAlwaysDraw(always_draw);
             levelManager().addObject(name, object);
         }
+        levelManager().initObjects();
     }
     // END OF OBJECTS PARSING -------------------------------------------
 
