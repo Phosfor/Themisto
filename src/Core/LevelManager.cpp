@@ -19,52 +19,19 @@ void LevelManager::initObjects()
 
 void LevelManager::init()
 {
-    //std::string path = utils().getMediaFolder() + "/" + textureName;
-    //if (!boost::filesystem::exists(path)) LOG_NOFORMAT(cl_format("Error: Level texture `%1` doesn't exist!", path));
-    std::vector< boost::shared_ptr<Foreground> > foregroundData = getObjectsByType<Foreground>("Foreground");
-    if (foregroundData.size() > 0)
+    boost::shared_ptr<Foreground> foregroundData = getObjectByType<Foreground>("Foreground");
+    if (foregroundData->getType() != "Empty")
     {
-        //foregroundData[0][0]
+        // TODO: Get from level...
+        //std::vector<std::string> info = foregroundData->getTextureInfo();
+        //mTextureSize = resourceManager().getImage(info[0], info[1]).get_size();
+        mTextureSize = resourceManager().getImage("Levels", "test").get_size();
     }
-    //resourceManager().getImage(textureSection, textureName);
-    //mTextureSize = CL_Image(appManager().getGraphic(), path).get_size();
+    else
+    {
+        mTextureSize = CL_Size(ScreenResolutionX, ScreenResolutionY);
+    }
 }
-
-/*void LevelManager::setForegroundTexture(const std::string &resourceName)
-{
-    mForegroundTexture = resourceName;
-    mForeground = true;
-}*/
-
-/*std::string LevelManager::getForegroundTexture()
-{
-    return mForegroundTexture;
-}*/
-
-/*bool LevelManager::getForegroundEnabled()
-{
-    return mForeground;
-}*/
-
-/*bool LevelManager::getForegroundFixed()
-{
-    return mFixedForeground;
-}*/
-
-/*void LevelManager::setForegroundFixed(bool fixed)
-{
-    mFixedForeground = fixed;
-}*/
-
-/*uint16_t LevelManager::getForegroundSize()
-{
-    return mForegroundActualSize;
-}*/
-
-/*void LevelManager::setForegroundSize(uint16_t size)
-{
-    mForegroundActualSize = size;
-}*/
 
 void LevelManager::setCamViewport(const CL_Rectf  &viewport)
 {
@@ -101,6 +68,7 @@ void LevelManager::setCameraSpeed(float speed)
 
 void LevelManager::translateCamera(float x, float y)
 {
+
     // Check X-moving
     if (mCameraViewport.left + x > 0 ||
         abs(mCameraViewport.left) - x + ScreenResolutionX > mTextureSize.width)
@@ -183,17 +151,17 @@ void LevelManager::updateVisual(float elapsed)
                         CL_Colorf::red);
 
                 // Check whether object is in camera space
-                if ( !(
+                /*if ( !(
                        objRect.right - camPos.left < 0                    || // <-
                        objRect.left  - camPos.left > ScreenResolutionX    || // ->
                        objRect.bottom - camPos.top  < 0                   || // up
                        objRect.top - camPos.top > ScreenResolutionY          // down
                       )
                     )
-                {
+                {*/
                     CL_Pointf position = it->second->getPosition();
                     it->second->updateVisual(position.x - camPos.left, position.y - camPos.top);
-                }
+                //}
             }
             else
             {

@@ -16,6 +16,7 @@
 */
 
 #include "World/Environ/Stars.hpp"
+#include "World/Objects/Foreground.hpp"
 
 void Stars::setLimit(uint16_t limit)
 {
@@ -28,7 +29,9 @@ void Stars::setLimit(uint16_t limit)
 
 ImageStarsData::ImageStarsData(CL_GraphicContext gc, uint16_t width, uint16_t height)
 {
-    //uint16_t actualSize = levelManager().getForegroundSize();
+/*    uint16_t actualSize = 0;*/
+    //boost::shared_ptr<Foreground> temp = levelManager().getObjectByType<Foreground>("Foreground");
+    /*if (temp->getType() != "Empty") actualSize = temp->getActualSize();*/
 
     x = rand() % width;
     //y = rand() % (height - (height * actualSize / 100));

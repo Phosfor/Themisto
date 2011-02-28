@@ -64,13 +64,6 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
     if (boost::lexical_cast<float>(version.c_str()) != GAME_VERSION)
         LOG(cl_format("Warning! Level version is different with game one(%1). Possible faults.", version));
 
-    // Get world dimensions
-    //if (!world.has_attribute("image")) LOG_NOFORMAT("Error: World tag should have `image` attribute!");
-    //levelManager().init(world.get_attribute("image"));
-
-
-    levelManager().setLevelName(name);
-
     // Camera viewport settings
     float cameraPosX = 0, cameraPosY = 0;
     if (world.has_attribute("cameraPosX"))
@@ -80,28 +73,6 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
         cameraPosY = -abs(boost::lexical_cast<float>(world.get_attribute("cameraPosY").c_str()));
 
     CL_Rectf camViewport(CL_Pointf(cameraPosX, cameraPosY), CL_Sizef(ScreenResolutionX, ScreenResolutionY));
-    levelManager().setCamViewport(camViewport);
-
-    /*try
-    {
-        CL_DomNode foregroundNode = environ.select_node("Foreground");
-
-        uint16_t actualSize = 0;
-        if (foregroundNode.to_element().has_attribute("actual_size"))
-        {
-            actualSize = boost::lexical_cast<uint16_t>(foregroundNode.to_element().get_attribute("actual_size").c_str());
-        }
-        levelManager().setForegroundSize(actualSize);
-
-        bool fixedImage = true;
-        if (foregroundNode.to_element().has_attribute("fixed"))
-        {
-            fixedImage = foregroundNode.to_element().get_attribute("fixed") == "true";
-        }
-        levelManager().setForegroundFixed(fixedImage);
-    }
-    // Foreground tag isn't available
-    catch (...) { }*/
 
     LOG_NOFORMAT("- Loading Environ objects\n");
     environManager().initEnviron();
@@ -179,8 +150,11 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
             object->setAlwaysDraw(always_draw);
             levelManager().addObject(name, object);
         }
-        levelManager().initObjects();
     }
+    levelManager().setLevelName(name);
+    levelManager().initObjects();
+    levelManager().init();
+    levelManager().setCamViewport(camViewport);
     // END OF OBJECTS PARSING -------------------------------------------
 
     //mMutex.unlock();

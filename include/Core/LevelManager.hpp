@@ -67,11 +67,7 @@ class LevelManager : public boost::serialization::singleton<LevelManager>
         // Level stuff
         std::string mLevelName;
         std::string mForegroundTexture;
-        //bool mForeground;      // Is foreground image enabled
-        //bool mFixedForeground; // If foreground image shouldn't move with camera
         int mForegroundDelta;  // If level texture is < then window height
-        // Average real foreground image size refer to full window size (in percents)
-        //uint16_t mForegroundActualSize;
         CL_Size mTextureSize;
         bool mDebugDrawOnly;
 
@@ -91,17 +87,6 @@ class LevelManager : public boost::serialization::singleton<LevelManager>
         LevelManager();
 
         // Level stuff
-        //void setForegroundTexture(const std::string &resourceName);
-        //std::string getForegroundTexture();
-
-        //bool getForegroundEnabled();
-
-        //bool getForegroundFixed();
-        //void setForegroundFixed(bool fixed);
-
-        //uint16_t getForegroundSize();
-        //void setForegroundSize(uint16_t size);
-
         std::string getLevelName();
         void setLevelName(const std::string &name);
 
