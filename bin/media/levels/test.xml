@@ -19,22 +19,22 @@
         </Environ>
 
         <Objects>
-             <Object name="MoonObj" type="Moon" always_draw="true" z-index="-3">
+             <Object name="MoonObj" type="Moon" always_draw="true" z-index="-4">
                  <Visual>
                     <Texture section="Moons" name="0" />
                  </Visual>
                  <Radius value="7" />
                  <StartAngle value="-90" />
              </Object>
-             <Object name="CloudsObj" type="Clouds" maxClouds="25" z-index="-2"  always_draw="true" />
-             <Object name="ForegroundObj" type="Foreground"  always_draw="true" z-index="-1">
+             <Object name="CloudsObj" type="Clouds" maxClouds="25" z-index="-3"  always_draw="true" />
+             <Object name="ForegroundObj" type="Foreground"  always_draw="true" z-index="-2">
                  <Visual>
                     <Texture section="Foreground" name="test" />
                  </Visual>
                  <Fixed value="true" />
                  <ActualSize value="40" />
              </Object>
-             <Object name="LevelObj" type="PhysicBodyObject_level" template="level_phys" z-index="0" />
+             <Object name="LevelObj" type="PhysicBodyObject_level" template="level_phys" z-index="1" />
              <Object name="BirdsObj" type="Birds" maxBirds="3"  always_draw="true"/>
              <Object name="RainObj" type="Rain" maxDrops="1.5"  always_draw="true"/>
 
@@ -71,7 +71,7 @@
                      <TextureScale x="0.3" y="0.3" />
                  </Bug>
              </Object>
-             <Object name="Stone" type="PhysicBodyObject" z-index='-1'>
+             <Object name="Stone" type="PhysicBodyObject">
                 <Visual>
                     <Size width="90" height="90" />
                     <Texture section="Stuff" name="stone" />
