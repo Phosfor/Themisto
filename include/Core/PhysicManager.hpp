@@ -28,6 +28,7 @@
 
 class PhysicObject;
 class PhysicManager;
+class LevelManager;
 PhysicManager &physicManager();
 
 class ContactListener: public b2ContactListener
