@@ -33,7 +33,8 @@ std::string ResourceManager::getImagePath(const std::string &section, const std:
     if (mTexturesData.find(section + '/' + name) == mTexturesData.end())
         throw CL_Exception(cl_format("Failed to getImage from `%1/%2`.", section, name));
 
-    return texturesStorage[section][name];
+
+    return cl_format("%1/%2", mediaPath, texturesStorage[section+"/"][name]);
 }
 
 CL_Image ResourceManager::getImage(const std::string &section, const std::string &name)
