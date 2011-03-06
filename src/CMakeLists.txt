@@ -34,6 +34,7 @@ set(Themisto_srcs
     World/Objects/LightColumn.cpp
     World/Objects/TypesManager.cpp
     World/Objects/PhysicObject.cpp
+    World/Objects/Level.cpp
     World/Objects/Player.cpp
     World/Objects/Actor.cpp
     World/Objects/Moon.cpp

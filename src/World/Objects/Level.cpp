@@ -15,25 +15,25 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "World/Objects/PhysicObject.hpp"
+#include "World/Objects/Level.hpp"
 
 #include "Physic/Body.hpp"
 #include "Physic/Impact.hpp"
 
-PhysicObject::PhysicObject()
+Level::Level()
 {
     mName = worldManager().generateUniqueID();
     mGC = appManager().getGraphic();
 }
 
-void PhysicObject::init() {}
+void Level::init() {}
 
-void PhysicObject::setVisual(std::string textureName, std::string textureSection)
+void Level::setVisual(std::string textureName, std::string textureSection)
 {
     setVisual(textureName, textureSection, -1, -1);
 }
 
-void PhysicObject::setVisual(std::string textureName, std::string textureSection, float width, float height)
+void Level::setVisual(std::string textureName, std::string textureSection, float width, float height)
 {
     mImageHandle = resourceManager().getSprite(textureSection, textureName);
     if(!mImageHandle.is_null())
@@ -50,36 +50,31 @@ void PhysicObject::setVisual(std::string textureName, std::string textureSection
         }
         mImageHandle.set_scale(koefX, koefY);
         mImageHandle.set_linear_filter(true);
-        mImageHandle.set_rotation_hotspot(origin_top_left, 0, 0);
+        //mImageHandle.set_rotation_hotspot(origin_top_left, 0, 0);
     }
 }
 
-void PhysicObject::updateVisual(float newX, float newY)
+void Level::updateVisual(float newX, float newY)
 {
-    if(!mImageHandle.is_null())
-    {
-        mImageHandle.set_angle(CL_Angle::from_radians(mBody->getBody()->GetAngle()));
-        mImageHandle.draw(mGC, newX, newY);
-    }
+    mImageHandle.set_angle(CL_Angle::from_radians(mBody->getBody()->GetAngle()));
+    mImageHandle.draw(mGC, newX, newY);
 }
 
-void PhysicObject::step(float32 elapsed)
-{
-}
+void Level::update(float elapsed) {}
 
-void PhysicObject::setPosition(CL_Pointf newPos)
+void Level::setPosition(CL_Pointf newPos)
 {
     // TODO: Implement me
     throw CL_Exception("Can't move body, after it created.");
 }
 
-CL_Pointf PhysicObject::getPosition()
+CL_Pointf Level::getPosition()
 {
     b2Vec2 position = mBody->getBody()->GetPosition();
     return CL_Pointf(Meters2Pixels(position.x), Meters2Pixels(position.y));
 }
 
-CL_Rectf PhysicObject::getRectangle()
+CL_Rectf Level::getRectangle()
 {
     b2AABB rect;
     b2Fixture* fixture = mBody->getBody()->GetFixtureList();
@@ -91,27 +86,15 @@ CL_Rectf PhysicObject::getRectangle()
             Meters2Pixels(rect.upperBound.x), Meters2Pixels(rect.upperBound.y));
 }
 
-void PhysicObject::update(float elapsed)
-{
-    step(elapsed);
-}
-
-boost::shared_ptr<Body> PhysicObject::getBody()
+boost::shared_ptr<Body> Level::getBody()
 {
     return mBody;
 }
 
-std::vector< boost::shared_ptr<Action> > PhysicObject::getAvailableActions()
-{
-    return mActions;
-}
-
 boost::shared_ptr<Body> ParsePhysicBody(CL_DomElement body, std::string& desc);
-
-boost::shared_ptr<Object> PhysicObject::ParsePhysicObject(CL_DomElement* tag, std::string& desc)
+boost::shared_ptr<Object> Level::ParseLevel(CL_DomElement* tag, std::string& desc)
 {
-    PhysicObject* result = new PhysicObject(); // Smart pointer will be created at the end
-
+    Level* result = new Level(); // Smart pointer will be created at the end
 
     // Parsing visuals
     {
@@ -156,10 +139,8 @@ boost::shared_ptr<Object> PhysicObject::ParsePhysicObject(CL_DomElement* tag, st
             result->mBody = physic;
             std::vector< boost::shared_ptr<Body> > bodies;
             bodies.push_back(physic);
-            //result->mActions.push_back(boost::shared_ptr<Action>(new TakeAction(bodies)));
         }
     }
 
     return boost::shared_ptr<Object>(result);
 }
-

@@ -34,7 +34,7 @@
                  <Fixed value="true" />
                  <ActualSize value="40" />
              </Object>
-             <Object name="LevelObj" type="PhysicBodyObject_level" template="level_phys" z-index="1" />
+             <Object name="LevelObj" type="Level" template="level_phys" z-index="1" />
              <Object name="BirdsObj" type="Birds" maxBirds="3"  always_draw="true"/>
              <Object name="RainObj" type="Rain" maxDrops="1.5"  always_draw="true"/>
 

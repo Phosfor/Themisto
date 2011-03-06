@@ -15,60 +15,46 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _PHYSIC_OBJECT_HPP_
-#define _PHYSIC_OBJECT_HPP_
+#ifndef _OBJECTS_LEVEL_HPP_
+#define _OBJECTS_LEVEL_HPP_
 
-#include <Box2D/Box2D.h>
-#include <Box2D/Collision/Shapes/b2PolygonShape.h>
-#include <Box2D/Common/b2Math.h>
-#include <ClanLib/core.h>
-
-#include "World/WorldManager.hpp"
-#include "World/Objects/Object.hpp"
 #include "Core/Utils.hpp"
-#include "Core/ResourceManager.hpp"
 #include "Core/ApplicationManager.hpp"
-
-//#include "World/Actions/TakeAction.hpp"
+#include "Core/ResourceManager.hpp"
+#include "Core/LevelManager.hpp"
+#include "World/Objects/Object.hpp"
 
 class Body;
-class Impact;
-
-
-class PhysicObject: public Object
+class Level : public Object
 {
     protected:
         boost::shared_ptr<Body> mBody;
-        std::vector< boost::shared_ptr<Action> > mActions;
 
-        // Visual
         CL_Sprite mImageHandle;
         CL_GraphicContext mGC;
 
+        std::string mTexture, mSection;
+
     public:
-        explicit PhysicObject();
+        Level();
 
         // Get/set
-        boost::shared_ptr<Body> getBody();
         void setVisual(std::string textureName, std::string textureSection, float width, float height);
         void setVisual(std::string textureName, std::string textureSection);
 
-        void updateVisual();
-        void step(float32 elapsed); // Physic
+        static boost::shared_ptr<Object> ParseLevel(CL_DomElement *tag, std::string &desc);
 
-        // Parsing object
-        static boost::shared_ptr<Object> ParsePhysicObject(CL_DomElement* node, std::string &desc);
+        std::vector<std::string> getTextureInfo();
+        boost::shared_ptr<Body> getBody();
 
-        // --- Object implementation ---
+        // Object implementation
         CL_Pointf getPosition();
-        CL_Rectf getRectangle();
         void setPosition(CL_Pointf newPos);
+        CL_Rectf getRectangle();
 
         void init();
         void update(float elapsed);
         void updateVisual(float newX, float newY);
-
-        std::vector< boost::shared_ptr<Action> > getAvailableActions();
 };
 
-#endif /* _PHYSIC_OBJECT_HPP_ */
+#endif /* _OBJECTS_LEVEL_HPP_ */

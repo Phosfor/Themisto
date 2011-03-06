@@ -19,6 +19,7 @@
 
 #include "World/Objects/Object.hpp"
 #include "World/Objects/PhysicObject.hpp"
+#include "World/Objects/Level.hpp"
 #include "World/Objects/LightColumn.hpp"
 #include "World/Objects/Moon.hpp"
 #include "World/Objects/Player.hpp"
@@ -57,6 +58,7 @@ TypesManager::TypesManager()
     registerParser("Clouds", Clouds::ParseClouds);
     registerParser("Rain", Rain::ParseRain);
     registerParser("Foreground", Foreground::ParseForeground);
+    registerParser("Level", Level::ParseLevel);
 }
 
 
