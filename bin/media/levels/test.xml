@@ -9,7 +9,7 @@
             <!--<Lightnings enabled="true" />-->
             <Sky enabled="true" />
             <!--<Moon enabled="true" />-->
-            <!--<Leaves enabled="false" limit="0.15" />-->
+            <Leaves enabled="false" limit="0.15" />
             <Stars enabled="true" limit="6.0" />
             <Objects enabled="true" />
             <!-- actual_size is average real foreground image size refer to full window size -->
@@ -19,24 +19,25 @@
         </Environ>
 
         <Objects>
-             <Object name="BirdsObj" type="Birds" maxBirds="3"  always_draw="true"/>
-             <Object name="RainObj" type="Rain" maxDrops="1.5"  always_draw="true"/>
-             <Object name="CloudsObj" type="Clouds" maxClouds="7" z-index="-2"  always_draw="true" />
-             <Object name="LevelObj" type="PhysicBodyObject_level" template="level_phys" />
-             <Object name="MoonObj" type="Moon" z-index="-3" always_draw="true">
+             <Object name="MoonObj" type="Moon" always_draw="true" z-index="-4">
                  <Visual>
                     <Texture section="Moons" name="0" />
                  </Visual>
                  <Radius value="7" />
                  <StartAngle value="-90" />
              </Object>
-             <Object name="ForegroundObj" type="Foreground" z-index="-2" always_draw="true">
+             <Object name="CloudsObj" type="Clouds" maxClouds="25" z-index="-3"  always_draw="true" />
+             <Object name="ForegroundObj" type="Foreground"  always_draw="true" z-index="-2">
                  <Visual>
                     <Texture section="Foreground" name="test" />
                  </Visual>
                  <Fixed value="true" />
                  <ActualSize value="40" />
              </Object>
+             <Object name="LevelObj" type="Level" template="level_phys" z-index="1" />
+             <Object name="BirdsObj" type="Birds" maxBirds="3"  always_draw="true"/>
+             <Object name="RainObj" type="Rain" maxDrops="1.5"  always_draw="true"/>
+
              <Object name="Lamp" type="LightColumnObject">
                  <Visual>
                     <Size width="100" height="380" />
@@ -70,7 +71,7 @@
                      <TextureScale x="0.3" y="0.3" />
                  </Bug>
              </Object>
-             <Object name="Stone" type="PhysicBodyObject" z-index='-1'>
+             <Object name="Stone" type="PhysicBodyObject">
                 <Visual>
                     <Size width="90" height="90" />
                     <Texture section="Stuff" name="stone" />

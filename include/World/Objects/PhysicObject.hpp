@@ -37,7 +37,7 @@ class Impact;
 
 class PhysicObject: public Object
 {
-    private:
+    protected:
         boost::shared_ptr<Body> mBody;
         std::vector< boost::shared_ptr<Action> > mActions;
 

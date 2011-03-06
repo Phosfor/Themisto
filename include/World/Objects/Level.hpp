@@ -15,58 +15,46 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _CLOUDS_OBJECT_HPP_
-#define _CLOUDS_OBJECT_HPP_
-
-#include <ClanLib/core.h>
-#include <ClanLib/display.h>
-
-#include <boost/foreach.hpp>
-#include <boost/cstdint.hpp>
+#ifndef _OBJECTS_LEVEL_HPP_
+#define _OBJECTS_LEVEL_HPP_
 
 #include "Core/Utils.hpp"
 #include "Core/ApplicationManager.hpp"
 #include "Core/ResourceManager.hpp"
-#include "Core/EnvironManager.hpp"
-#include "World/Objects/Object.hpp"
 #include "Core/LevelManager.hpp"
+#include "World/Objects/Object.hpp"
 
-struct CloudData
+class Body;
+class Level : public Object
 {
-        float x, y_offset, x_speed, speed_koef;
-        uint16_t cloudType, timeout;
-        CL_Sprite imageHandle;
-        CL_Colorf mColor;
-};
+    protected:
+        boost::shared_ptr<Body> mBody;
 
-class Clouds : public Object
-{
-    private:
-        std::vector<CloudData> mClouds;
+        CL_Sprite mImageHandle;
         CL_GraphicContext mGC;
-        bool mFirstTime;
-        float mMaxObjects;
-        int mWindowHeight, mWindowWidth;
-        uint16_t mActualSize;
 
-        void processClouds(CL_GraphicContext &gc, float windPower, CloudData &current, bool firstTime=false);
+        std::string mTexture, mSection;
 
     public:
-        explicit Clouds(uint16_t maxClouds);
-        void setLimit(uint16_t limit);
+        Level();
 
-        void setPosition(CL_Pointf newPos);
+        // Get/set
+        void setVisual(std::string textureName, std::string textureSection, float width, float height);
+        void setVisual(std::string textureName, std::string textureSection);
+
+        static boost::shared_ptr<Object> ParseLevel(CL_DomElement *tag, std::string &desc);
+
+        std::vector<std::string> getTextureInfo();
+        boost::shared_ptr<Body> getBody();
+
+        // Object implementation
         CL_Pointf getPosition();
+        void setPosition(CL_Pointf newPos);
         CL_Rectf getRectangle();
 
         void init();
         void update(float elapsed);
         void updateVisual(float newX, float newY);
-
-        static boost::shared_ptr<Object> ParseClouds(CL_DomElement* cloudsElement, std::string& desc);
-
-        // For the lightning
-        CL_Pointf getCloudPos();
 };
 
-#endif /* _CLOUDS_OBJECT_HPP_ */
+#endif /* _OBJECTS_LEVEL_HPP_ */

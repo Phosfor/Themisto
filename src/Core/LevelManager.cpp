@@ -152,17 +152,17 @@ void LevelManager::updateVisual(float elapsed)
                         CL_Colorf::red);
 
                 // Check whether object is in camera space
-                /*if ( !(
-                       objRect.right - camPos.left < 0                    || // <-
-                       objRect.left  - camPos.left > ScreenResolutionX    || // ->
-                       objRect.bottom - camPos.top  < 0                   || // up
-                       objRect.top - camPos.top > ScreenResolutionY          // down
+                if ( !(
+                       objRect.right - camPos.left < 0                     || // <-
+                       objRect.left  - camPos.left > ScreenResolutionX     || //  ->
+                       objRect.bottom - camPos.top  < 0                    || // up
+                       objRect.top - camPos.top > ScreenResolutionY           // down
                       )
                     )
-                {*/
+                {
                     CL_Pointf position = it->second->getPosition();
                     it->second->updateVisual(position.x - camPos.left, position.y - camPos.top);
-                //}
+                }
             }
             else
             {
