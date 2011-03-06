@@ -38,7 +38,7 @@
 #include "Core/Utils.hpp"
 #include "World/Objects/Object.hpp"
 #include "World/Objects/Foreground.hpp"
-#include "World/Objects/Empty.hpp"
+#include "World/Objects/Level.hpp"
 
 // Used for objects map to achive z-index
 struct Compare

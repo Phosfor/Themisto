@@ -19,13 +19,11 @@ void LevelManager::initObjects()
 
 void LevelManager::init()
 {
-    boost::shared_ptr<Foreground> foregroundData = getObjectByType<Foreground>("Foreground");
-    if (foregroundData->getType() != "Empty")
+    boost::shared_ptr<Level> levelData = getObjectByType<Level>("Level");
+    if (levelData->getType() != "Empty")
     {
-        // TODO: Get from level...
-        //std::vector<std::string> info = foregroundData->getTextureInfo();
-        //mTextureSize = resourceManager().getImage(info[0], info[1]).get_size();
-        mTextureSize = resourceManager().getImage("Levels", "test").get_size();
+        std::vector<std::string> info = levelData->getTextureInfo();
+        mTextureSize = resourceManager().getImage(info[0], info[1]).get_size();
     }
     else
     {
