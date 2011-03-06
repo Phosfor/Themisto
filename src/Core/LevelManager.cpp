@@ -15,6 +15,7 @@ void LevelManager::initObjects()
     {
         it->second->init();
     }
+    mActiveActor = getObjectByType<Player>("Player");
 }
 
 void LevelManager::init()

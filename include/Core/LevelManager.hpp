@@ -39,6 +39,8 @@
 #include "World/Objects/Object.hpp"
 #include "World/Objects/Foreground.hpp"
 #include "World/Objects/Empty.hpp"
+#include "World/Objects/Player.hpp"
+#include "World/Objects/Actor.hpp"
 
 // Used for objects map to achive z-index
 struct Compare
@@ -70,6 +72,7 @@ class LevelManager : public boost::serialization::singleton<LevelManager>
         int mForegroundDelta;  // If level texture is < then window height
         CL_Size mTextureSize;
         bool mDebugDrawOnly;
+        boost::shared_ptr<Actor> mActiveActor;
 
         // Camera stuff
         float mCameraSpeed;
@@ -132,7 +135,7 @@ class LevelManager : public boost::serialization::singleton<LevelManager>
             std::vector< boost::shared_ptr<T> > res;
             BOOST_FOREACH(ObjectMapTypeAccess::value_type &pair, mObjects)
             {
-                if (pair.second->getType() == type) 
+                if (pair.second->getType() == type)
                     res.push_back(boost::static_pointer_cast<T>(mObjects[pair.first]));
             }
 
