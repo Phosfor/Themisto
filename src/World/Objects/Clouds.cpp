@@ -41,11 +41,6 @@ void Clouds::init()
 
 void Clouds::processClouds(CL_GraphicContext &gc, float windPower, CloudData &current, bool firstTime)
 {
-    uint16_t actualSize = 0;
-    boost::shared_ptr<Foreground> temp = levelManager().getObjectByType<Foreground>("Foreground");
-    if (temp->getType() != "Empty") actualSize = temp->getActualSize();
-    current.y_offset = rand() %  mWindowHeight - (mWindowHeight * actualSize / 100);
-
     current.x_speed = 0;
     uint16_t size = resourceManager().sectionHandle("Clouds").get_child_nodes().get_length();
     current.cloudType = rand() % size;
@@ -54,16 +49,20 @@ void Clouds::processClouds(CL_GraphicContext &gc, float windPower, CloudData &cu
     if (!firstTime)
     {
         if (windPower < 0)
-            current.x = mWindowWidth;
+            current.x = mWindowWidth + current.imageHandle.get_width();
         else
             current.x = 0 - current.imageHandle.get_width();
 
-        current.timeout = rand() % 300;
+        current.timeout = rand() % 350;
     }
     else
     {
-        current.x = rand() % (int)mWindowWidth;
+        current.x = rand() % mWindowWidth;
         current.timeout = 0;
+
+        boost::shared_ptr<Foreground> temp = levelManager().getObjectByType<Foreground>("Foreground");
+        if (temp->getType() != "Empty") mActualSize = temp->getActualSize();
+        current.y_offset = rand() %  mWindowHeight - (mWindowHeight * mActualSize / 100);
     }
 
     //float alpha = static_cast<float>((rand()%4 + 7)) / 10.0f;
@@ -84,8 +83,11 @@ Clouds::Clouds(uint16_t maxClouds)
     mGC = appManager().getGraphic();
     mWindowWidth = ScreenResolutionY;
     mWindowHeight = ScreenResolutionX;
+    mActualSize = 0;
 }
 
+// This function is required by Lightnings (make lightning only from position where
+// Cloud is positioned at current time
 CL_Pointf Clouds::getCloudPos()
 {
     uint16_t counter = 0;
@@ -127,8 +129,14 @@ CL_Rectf Clouds::getRectangle()
 
 void Clouds::update(float elapsed)
 {
+}
+
+void Clouds::updateVisual(float newX, float newY)
+{
     float windPower = environManager().getWindPower();
+    float elapsed = appManager().getElapsed() / 1000.0f;
     float newSpeed = windPower * elapsed * 0.5;
+
     for (uint16_t i=0; i < mMaxObjects; i++)
     {
         CloudData &current = mClouds[i];
@@ -148,17 +156,7 @@ void Clouds::update(float elapsed)
 
             current.x += current.x_speed * elapsed;
             current.x_speed = current.speed_koef * newSpeed;
-        }
-    }
 
-}
-void Clouds::updateVisual(float newX, float newY)
-{
-    for (uint16_t i=0; i < mMaxObjects; i++)
-    {
-        CloudData &current = mClouds[i];
-        if(current.timeout <= 0 )
-        {
             current.imageHandle.set_color(current.mColor);
             current.imageHandle.draw(mGC, current.x, current.y_offset);
         }

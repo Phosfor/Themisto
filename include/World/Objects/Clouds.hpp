@@ -31,7 +31,6 @@
 #include "World/Objects/Object.hpp"
 #include "Core/LevelManager.hpp"
 
-
 struct CloudData
 {
         float x, y_offset, x_speed, speed_koef;
@@ -48,6 +47,7 @@ class Clouds : public Object
         bool mFirstTime;
         float mMaxObjects;
         int mWindowHeight, mWindowWidth;
+        uint16_t mActualSize;
 
         void processClouds(CL_GraphicContext &gc, float windPower, CloudData &current, bool firstTime=false);
 
