@@ -177,6 +177,7 @@ class LevelManager : public boost::serialization::singleton<LevelManager>
         bool mDrawActions;
         void drawActions();
         void menuItemClicked(boost::shared_ptr<Action> clickedAction);
+        void clearMenu();
 };
 
 inline LevelManager &levelManager() { return LevelManager::get_mutable_instance(); }

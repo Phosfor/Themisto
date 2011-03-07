@@ -11,20 +11,23 @@ LevelManager::LevelManager()
 
 void LevelManager::mousePressed(const CL_InputEvent &key, const CL_InputState &state)
 {
-    /*if (mDrawActions)
+    // Check if menu is already drawn, maybe we have to hide it?
+    if (mDrawActions)
     {
-        mDrawActions = false;
-        BOOST_FOREACH(CL_PushButton *button, mButtons)
-        {
-            if (button)
-                delete button;
-        }
+        CL_Rectf objRect = mActiveObject->getRectangle();
+        CL_Rectf camPos = getAbsoluteCameraPos();
+        objRect.expand(50, 50, 0, 0); // left, top, right, bottom
 
-        mButtons.clear();
-        mActiveActions.clear();
-        mActiveObject.reset();
-    }*/
-    if (key.id == CL_MOUSE_RIGHT)
+        CL_Point p = key.mouse_pos;
+        CL_Rectf col(camPos.left + p.x, camPos.top + p.y, camPos.left + p.x, camPos.top + p.y);
+        if (!objRect.is_inside(col))
+        {
+            clearMenu();
+            return;
+        }
+    }
+
+    if (key.id == CL_MOUSE_RIGHT && !mDrawActions)
     {
         CL_Point mousePos = key.mouse_pos;
 
@@ -57,7 +60,6 @@ void LevelManager::mousePressed(const CL_InputEvent &key, const CL_InputState &s
 
                         std::vector<std::string> textureInfo = act->getTextureInfo();
                         temp->set_icon(resourceManager().getImage(textureInfo[0], textureInfo[1]));
-                        //temp->set_visible(false);
 
                         // Process click event
                         temp->func_clicked().set(this, &LevelManager::menuItemClicked, act);
@@ -71,14 +73,35 @@ void LevelManager::mousePressed(const CL_InputEvent &key, const CL_InputState &s
     }
 }
 
+void LevelManager::clearMenu()
+{
+    if (mDrawActions)
+    {
+        BOOST_FOREACH(CL_PushButton *button, mButtons)
+        {
+            if (button)
+            {
+                button->set_visible(false);
+                delete button;
+            }
+        }
+
+        mButtons.clear();
+        mActiveActions.clear();
+        mActiveObject.reset();
+        mDrawActions = false;
+    }
+}
+
 void LevelManager::drawActions()
 {
     uint16_t counter = 0;
+    CL_Rectf camPos = getAbsoluteCameraPos();
     BOOST_FOREACH(CL_PushButton *button, mButtons)
     {
         CL_Rectf newPos = mActiveObject->getRectangle();
-        button->set_geometry(CL_Rect(newPos.left - 50, newPos.top + counter, CL_Size(50, 50)));
-        counter += 52;
+        button->set_geometry(CL_Rect(newPos.left - 25 - camPos.left, newPos.top + counter - camPos.top, CL_Size(50, 50)));
+        counter += 51;
     }
 }
 
@@ -86,20 +109,7 @@ void LevelManager::menuItemClicked(boost::shared_ptr<Action> clickedAction)
 {
     std::cout << "Clicked\n";
 
-    // We should clear it after click!
-    if (mDrawActions)
-    {
-        mDrawActions = false;
-        BOOST_FOREACH(CL_PushButton *button, mButtons)
-        {
-            if (button)
-                delete button;
-        }
-
-        mButtons.clear();
-        mActiveActions.clear();
-        mActiveObject.reset();
-    }
+    clearMenu();
 }
 
 void LevelManager::initObjects()
