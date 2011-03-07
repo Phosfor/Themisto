@@ -33,8 +33,18 @@ void Level::setVisual(std::string textureName, std::string textureSection)
     setVisual(textureName, textureSection, -1, -1);
 }
 
+std::vector<std::string> Level::getTextureInfo()
+{
+    std::vector<std::string> res;
+    res.push_back(mSection);
+    res.push_back(mTexture);
+    return res;
+}
+
 void Level::setVisual(std::string textureName, std::string textureSection, float width, float height)
 {
+    mSection = textureSection;
+    mTexture = textureName;
     mImageHandle = resourceManager().getSprite(textureSection, textureName);
     if(!mImageHandle.is_null())
     {

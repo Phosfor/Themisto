@@ -172,5 +172,7 @@ boost::shared_ptr<Object> Clouds::ParseClouds(CL_DomElement* cloudsElement, std:
         std::string maxCloudsStr = cloudsElement->get_attribute("maxClouds").c_str();
         maxClouds = boost::lexical_cast<float>(maxCloudsStr);
     }
-    return boost::shared_ptr<Object>(new Clouds(maxClouds));
+
+    float area = Pixels2Meters(ScreenResolutionX) * Pixels2Meters(ScreenResolutionY);
+    return boost::shared_ptr<Object>(new Clouds(maxClouds * area));
 }

@@ -38,6 +38,7 @@
 #include "Core/Utils.hpp"
 #include "World/Objects/Object.hpp"
 #include "World/Objects/Foreground.hpp"
+#include "World/Objects/Level.hpp"
 #include "World/Objects/Empty.hpp"
 #include "World/Objects/Player.hpp"
 #include "World/Objects/Actor.hpp"
