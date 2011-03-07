@@ -169,6 +169,7 @@ class LevelManager : public boost::serialization::singleton<LevelManager>
         void updateLogic(float elapsed);
 
         CL_Point mClickedPos;
+        boost::shared_ptr<Object> mActiveObject;
         std::vector< boost::shared_ptr<Action> > mActiveActions;
         bool mDrawActions;
         void drawActions();

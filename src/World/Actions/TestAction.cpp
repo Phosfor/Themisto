@@ -37,6 +37,14 @@ CL_Sprite TestAction::getIcon()
     return resourceManager().getSprite("Actions", "take");
 }
 
+std::vector<std::string> TestAction::getTextureInfo()
+{
+    std::vector<std::string> res;
+    res.push_back("Actions");
+    res.push_back("take");
+    return res;
+}
+
 void TestAction::beginExecution(Actor* actor)
 {
     std::cout<< "Test action is begining execution" << std::endl;

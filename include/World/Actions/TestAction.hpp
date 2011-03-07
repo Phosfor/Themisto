@@ -35,6 +35,7 @@ class TestAction: public Action
         std::string getName();
         std::string getDescription();
         CL_Sprite getIcon();
+        std::vector<std::string> getTextureInfo();
         void beginExecution(Actor* actor);
         void stopExecution();
         bool canExecute(Actor* actor);

@@ -28,6 +28,7 @@ void LevelManager::mousePressed(const CL_InputEvent &key, const CL_InputState &s
                 if (!actions.empty())
                 {
                     mActiveActions = actions;
+                    mActiveObject = it->second;
                     mClickedPos = mousePos;
                     mDrawActions = true;
                 }
@@ -41,7 +42,8 @@ void LevelManager::drawActions()
 {
     BOOST_FOREACH(boost::shared_ptr<Action> &act, mActiveActions)
     {
-        act->getIcon().draw(appManager().getGraphic(), mClickedPos.x, mClickedPos.y);
+        CL_Rectf newPos = mActiveObject->getRectangle();
+        act->getIcon().draw(appManager().getGraphic(), newPos.left-act->getIcon().get_width(), newPos.top);
     }
 }
 

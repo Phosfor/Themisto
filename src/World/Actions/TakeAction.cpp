@@ -73,7 +73,13 @@ CL_Sprite TakeAction::getIcon()
 {
     return resourceManager().getSprite("Actions", "take");
 }
-
+std::vector<std::string> TakeAction::getTextureInfo()
+{
+    std::vector<std::string> res;
+    res.push_back("Actions");
+    res.push_back("take");
+    return res;
+}
 std::pair<b2Vec2, b2Body*> _getNearestPoint(std::map<b2Vec2, b2Body*> points, b2Vec2 anchor)
 {
     std::map<b2Vec2, b2Body*>::iterator it;

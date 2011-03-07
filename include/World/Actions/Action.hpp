@@ -33,6 +33,7 @@ class Action
         virtual std::string getName() = 0;
         virtual std::string getDescription() = 0;
         virtual CL_Sprite getIcon() = 0;
+        virtual std::vector<std::string> getTextureInfo() = 0;
         virtual void beginExecution(Actor* actor) = 0;
         virtual void stopExecution() = 0;
         virtual bool canExecute(Actor* actor) = 0;
