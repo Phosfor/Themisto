@@ -15,8 +15,7 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _BODY_HPP_
-#define _BODY_HPP_
+#pragma once
 
 #include <list>
 #include <map>
@@ -58,5 +57,3 @@ class Body
         // Default is false
         bool mShouldFreeB2Body;
 };
-
-#endif

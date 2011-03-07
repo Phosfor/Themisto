@@ -121,7 +121,6 @@ void Sky::init() {}
 
 void Sky::updateVisual(float newX, float newY)
 {
-    std::cout << "Update sky...\n";
     CL_Draw::gradient_fill(mGC, quad1, CL_Gradient(mColorTop, mColorMiddle));
     CL_Draw::gradient_fill(mGC, quad2, CL_Gradient(mColorMiddle, mColorBottom));
 }

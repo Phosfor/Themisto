@@ -15,8 +15,7 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DEGUG_INSTRUMENTS_HPP
-#define _DEGUG_INSTRUMENTS_HPP
+#pragma once
 
 #include <iostream>
 
@@ -48,5 +47,3 @@ class DebugDragAndDrop: public b2QueryCallback
         void init();
         ~DebugDragAndDrop();
 };
-
-#endif

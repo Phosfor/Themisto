@@ -15,8 +15,7 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _PHYSIC_OBJECT_HPP_
-#define _PHYSIC_OBJECT_HPP_
+#pragma once
 
 #include <Box2D/Box2D.h>
 #include <Box2D/Collision/Shapes/b2PolygonShape.h>
@@ -72,5 +71,3 @@ class PhysicObject: public Object
 
         std::vector< boost::shared_ptr<Action> > getAvailableActions();
 };
-
-#endif /* _PHYSIC_OBJECT_HPP_ */

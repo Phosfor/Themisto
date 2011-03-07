@@ -15,8 +15,7 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _PHYSIC_MANAGER_HPP_
-#define _PHYSIC_MANAGER_HPP_
+#pragma once
 
 #include <list>
 
@@ -77,5 +76,3 @@ class PhysicManager : public boost::serialization::singleton<PhysicManager>
 };
 
 inline PhysicManager &physicManager() { return PhysicManager::get_mutable_instance(); }
-
-#endif /* _PHYSIC_MANAGER_HPP_ */

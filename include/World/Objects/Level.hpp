@@ -15,8 +15,7 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _OBJECTS_LEVEL_HPP_
-#define _OBJECTS_LEVEL_HPP_
+#pragma once
 
 #include "Core/Utils.hpp"
 #include "Core/ApplicationManager.hpp"
@@ -57,5 +56,3 @@ class Level : public Object
         void update(float elapsed);
         void updateVisual(float newX, float newY);
 };
-
-#endif /* _OBJECTS_LEVEL_HPP_ */

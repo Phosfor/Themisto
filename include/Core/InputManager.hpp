@@ -15,8 +15,7 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _INPUT_MANAGER_HPP_
-#define _INPUT_MANAGER_HPP_
+#pragma once
 
 #include <ClanLib/display.h>
 #include <ClanLib/core.h>
@@ -53,5 +52,3 @@ class InputManager : public boost::serialization::singleton<InputManager>
 };
 
 inline InputManager &inputManager() { return InputManager::get_mutable_instance(); }
-
-#endif /* _INPUT_MANAGER_HPP_ */

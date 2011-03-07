@@ -15,8 +15,7 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _PHYSIC_RAIN_HPP_
-#define _PHYSIC_RAIN_HPP_
+#pragma once
 
 #include <Box2D/Box2D.h>
 #include <ClanLib/core.h>
@@ -32,5 +31,3 @@ class PhysicRain
         void setIntensity(float value);
         void init(float intencity);
 };
-
-#endif /* _PHYSIC_RAIN_HPP_ */

@@ -15,8 +15,7 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _CLOUDS_OBJECT_HPP_
-#define _CLOUDS_OBJECT_HPP_
+#pragma once
 
 #include <ClanLib/core.h>
 #include <ClanLib/display.h>
@@ -69,5 +68,3 @@ class Clouds : public Object
         // For the lightning
         CL_Pointf getCloudPos();
 };
-
-#endif /* _CLOUDS_OBJECT_HPP_ */

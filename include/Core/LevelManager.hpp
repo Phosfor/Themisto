@@ -15,8 +15,7 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _CORE_LEVEL_MANAGER_HPP_
-#define _CORE_LEVEL_MANAGER_HPP_
+#pragma once
 
 #include <map>
 #include <utility>
@@ -181,5 +180,3 @@ class LevelManager : public boost::serialization::singleton<LevelManager>
 };
 
 inline LevelManager &levelManager() { return LevelManager::get_mutable_instance(); }
-
-#endif /* _CORE_LEVEL_MANAGER_HPP_ */

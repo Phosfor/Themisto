@@ -15,8 +15,7 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _EVALUTE_FUNCTIONS_HPP_
-#define _EVALUTE_FUNCTIONS_HPP_
+#pragma once
 
 #include "Core/ApplicationManager.hpp"
 #include "Core/Utils.hpp"
@@ -140,5 +139,3 @@ namespace evalute
     std::string evalute_EnvironObject(Watch* watch);
     std::string evalute_elapsed(Watch* watch);
 }
-
-#endif /* _EVALUTE_FUNCTIONS_HPP */

@@ -15,8 +15,7 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _WORLD_MANAGER_HPP_
-#define _WORLD_MANAGER_HPP_
+#pragma once
 
 #include <boost/serialization/singleton.hpp>
 #include <boost/shared_ptr.hpp>
@@ -37,5 +36,3 @@ class WorldManager : public boost::serialization::singleton<WorldManager>
 };
 
 inline WorldManager &worldManager() { return WorldManager::get_mutable_instance(); }
-
-#endif /* _WORLD_MANAGER_HPP_ */

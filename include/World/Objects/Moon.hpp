@@ -15,8 +15,7 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _OBJECT_MOON_HPP_
-#define _OBJECT_MOON_HPP_
+#pragma once
 
 #include "Core/ApplicationManager.hpp"
 #include "Core/ResourceManager.hpp"
@@ -72,5 +71,3 @@ class Moon : public Object
         void setPosition(CL_Pointf newPos);
         CL_Rectf getRectangle();
 };
-
-#endif /* _OBJECT_MOON_HPP_ */

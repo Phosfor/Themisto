@@ -15,8 +15,7 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _PHYSIC_SCENE_LOADER_HPP_
-#define _PHYSIC_SCENE_LOADER_HPP_
+#pragma once
 
 #include <boost/serialization/singleton.hpp>
 #include <Box2D/Box2D.h>
@@ -50,5 +49,3 @@ class SceneLoader : public boost::serialization::singleton<SceneLoader>
 };
 
 inline SceneLoader &sceneLoader() { return SceneLoader::get_mutable_instance(); }
-
-#endif /* _PHYSIC_SCENE_LOADER_HPP_ */

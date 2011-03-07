@@ -15,8 +15,7 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _UTILS_H_
-#define _UTILS_H_
+#pragma once
 
 #include <boost/serialization/singleton.hpp>
 #include <boost/format.hpp>
@@ -142,5 +141,3 @@ inline float Hours2Seconds(float realHours) { return Minutes2Seconds(realHours *
 #define BoolToStr(p) (utils().boolToStr(p))
 
 inline Utils &utils() { return Utils::get_mutable_instance(); }
-
-#endif /* _UTILS_H_ */

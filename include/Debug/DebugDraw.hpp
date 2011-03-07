@@ -15,8 +15,7 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _PHYSIC_DEBUG_DRAW_HPP_
-#define _PHYSIC_DEBUG_DRAW_HPP_
+#pragma once
 
 #include <Box2D/Box2D.h>
 
@@ -44,5 +43,3 @@ class DebugDraw : public b2DebugDraw
     public:
         DebugDraw();
 };
-
-#endif /* _PHYSIC_DEBUG_DRAW_HPP_ */

@@ -15,8 +15,7 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _LIGHTCOLUMN_OBJECT_HPP_
-#define _LIGHTCOLUMN_OBJECT_HPP_
+#pragma once
 
 #include <Box2D/Box2D.h>
 #include <Box2D/Collision/Shapes/b2PolygonShape.h>
@@ -95,5 +94,3 @@ class LightColumn: public Object
         void update(float elapsed);
         void updateVisual(float newX, float newY);
 };
-
-#endif /* _LIGHTCOLUMN_OBJECT_HPP_ */

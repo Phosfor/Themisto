@@ -15,8 +15,7 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _EMPTY_OBJECT_HPP_
-#define _EMPTY_OBJECT_HPP_
+#pragma once
 
 #include "World/Objects/Object.hpp"
 #include "Core/ApplicationManager.hpp"
@@ -35,5 +34,3 @@ class EmptyObject : public Object
         void setPosition(CL_Pointf newPos);
         CL_Rectf getRectangle();
 };
-
-#endif /* _EMPTY_OBJECT_HPP_  */

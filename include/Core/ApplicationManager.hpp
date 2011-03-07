@@ -15,8 +15,7 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _APPLICATION_MANAGER_H_
-#define _APPLICATION_MANAGER_H_
+#pragma once
 
 #include <string>
 
@@ -61,5 +60,3 @@ class ApplicationManager : public boost::serialization::singleton<ApplicationMan
 };
 
 inline ApplicationManager &appManager() { return ApplicationManager::get_mutable_instance(); }
-
-#endif /* _APPLICATION_MANAGER_H_ */

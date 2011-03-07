@@ -15,8 +15,7 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _ENVIRON_LIGHTNINGS_HPP_
-#define _ENVIRON_LIGHTNINGS_HPP_
+#pragma once
 
 #include <ClanLib/core.h>
 #include <ClanLib/display.h>
@@ -63,5 +62,3 @@ class Lightnings : public Object
 
         static boost::shared_ptr<Object> ParseLightnings(CL_DomElement* element, std::string& desc);
 };
-
-#endif /* _ENVIRON_LIGHTNINGS_HPP_ */

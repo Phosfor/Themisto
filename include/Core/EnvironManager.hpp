@@ -15,8 +15,7 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _ENVIRON_MANAGER_HPP_
-#define _ENVIRON_MANAGER_HPP_
+#pragma once
 
 #include <ClanLib/core.h>
 #include <ClanLib/display.h>
@@ -83,5 +82,3 @@ class EnvironManager : public boost::serialization::singleton<EnvironManager>
 };
 
 inline EnvironManager &environManager() { return EnvironManager::get_mutable_instance(); }
-
-#endif /* _ENVIRON_MANAGER_HPP_ */

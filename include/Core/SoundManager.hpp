@@ -15,8 +15,7 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _SOUND_MANAGER_HPP_
-#define _SOUND_MANAGER_HPP_
+#pragma once
 
 #include <ClanLib/display.h>
 #include <ClanLib/core.h>
@@ -28,5 +27,3 @@ class SoundManager : public boost::serialization::singleton<SoundManager>
 };
 
 inline SoundManager &soundManager() { return SoundManager::get_mutable_instance(); }
-
-#endif /* _SOUND_MANAGER_HPP_ */

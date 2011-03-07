@@ -15,8 +15,7 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DEBUG_CONSOLE_HPP_
-#define _DEBUG_CONSOLE_HPP_
+#pragma once
 
 #include <iostream>
 #include <string>
@@ -65,5 +64,3 @@ class Client
         CL_NetGameEventDispatcher_v0 login_events;
         CL_NetGameEventDispatcher_v0 game_events;
 };
-
-#endif /* _DEBUG_CONSOLE_HPP_ */

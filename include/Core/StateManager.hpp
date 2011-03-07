@@ -15,8 +15,7 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _STATE_MANAGER_HPP_
-#define _STATE_MANAGER_HPP_
+#pragma once
 
 #include <deque>
 
@@ -63,5 +62,3 @@ class StateManager : public boost::serialization::singleton<StateManager>
 
 inline StateManager &stateManager() { return StateManager::get_mutable_instance(); }
 inline void READY_TO_ADVANCE() { StateManager::get_mutable_instance().setAdvanceState(true); }
-
-#endif /* _STATE_MANAGER_HPP_ */

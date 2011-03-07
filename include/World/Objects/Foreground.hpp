@@ -15,8 +15,7 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _OBJECTS_FOREGROUND_HPP_
-#define _OBJECTS_FOREGROUND_HPP_
+#pragma once
 
 #include "Core/Utils.hpp"
 #include "Core/ApplicationManager.hpp"
@@ -66,5 +65,3 @@ class Foreground: public Object
         void update(float elapsed);
         void updateVisual(float newX, float newY);
 };
-
-#endif /* _OBJECTS_FOREGROUND_HPP_ */

@@ -15,8 +15,7 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _GUI_MANAGER_HPP_
-#define _GUI_MANAGER_HPP_
+#pragma once
 
 #include <vector>
 #include <string>
@@ -50,5 +49,3 @@ class GuiManager : public boost::serialization::singleton<GuiManager>
 };
 
 inline GuiManager &guiManager() { return GuiManager::get_mutable_instance(); }
-
-#endif /* _GUI_MANAGER_HPP_ */

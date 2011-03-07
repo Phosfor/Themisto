@@ -15,8 +15,7 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _ENVIRON_BIRDS_HPP_
-#define _ENVIRON_BIRDS_HPP_
+#pragma once
 
 #include <ClanLib/core.h>
 #include <ClanLib/display.h>
@@ -63,5 +62,3 @@ class Birds : public Object
 
         static boost::shared_ptr<Object> ParseBirds(CL_DomElement* birdsElement, std::string& desc);
 };
-
-#endif /* _ENVIRON_BIRDS_HPP_ */

@@ -15,8 +15,7 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _OBJECT_TYPES_HPP_
-#define _OBJECT_TYPES_HPP_
+#pragma once
 
 #include <map>
 #include <utility>
@@ -46,5 +45,3 @@ class TypesManager : public boost::serialization::singleton<TypesManager>
 };
 
 inline TypesManager &typesManager() { return TypesManager::get_mutable_instance(); }
-
-#endif /* _OBJECT_TYPES_HPP_ */

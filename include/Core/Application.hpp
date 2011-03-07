@@ -15,8 +15,7 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _APPLICATION_HPP_
-#define _APPLICATION_HPP_
+#pragma once
 
 #include <vector>
 
@@ -57,5 +56,3 @@ class Application
         static void onWindowClose();
         static void doNothing();
 };
-
-#endif /* _APPLICATION_HPP_ */

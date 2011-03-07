@@ -15,8 +15,7 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _CONFIG_MANAGER_H_
-#define _CONFIG_MANAGER_H_
+#pragma once
 
 #include <vector>
 #include <string>
@@ -45,5 +44,3 @@ class ConfigManager : public boost::serialization::singleton<ConfigManager>
 };
 
 inline ConfigManager &configManager() { return ConfigManager::get_mutable_instance(); }
-
-#endif /* _CONFIG_MANAGER_H_ */

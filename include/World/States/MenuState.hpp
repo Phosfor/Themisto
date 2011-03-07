@@ -15,8 +15,7 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _MENU_STATE_HPP_
-#define _MENU_STATE_HPP_
+#pragma once
 
 #include <ClanLib/core.h>
 #include <ClanLib/display.h>
@@ -71,5 +70,3 @@ class MenuState : public State
 
         std::string type();
 };
-
-#endif /* _MENU_STATE_HPP_ */

@@ -15,8 +15,7 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DEBUG_WATCH_HPP_
-#define _DEBUG_WATCH_HPP_
+#pragma once
 
 #include <vector>
 #include <fstream>
@@ -89,5 +88,3 @@ struct Watch
     Watch();
     ~Watch();
 };
-
-#endif /* _DEBUG_WATCH_HPP_ */

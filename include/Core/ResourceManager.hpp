@@ -15,8 +15,7 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _RESOURCE_MANAGER_HPP_
-#define _RESOURCE_MANAGER_HPP_
+#pragma once
 
 #include <vector>
 #include <string>
@@ -64,5 +63,3 @@ class ResourceManager : public boost::serialization::singleton<ResourceManager>
 };
 
 inline ResourceManager &resourceManager() { return ResourceManager::get_mutable_instance(); }
-
-#endif /* _RESOURCE_MANAGER_HPP_ */

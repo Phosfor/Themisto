@@ -15,8 +15,7 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _ACTION_HPP_
-#define _ACTION_HPP_
+#pragma once
 
 #include <ClanLib/display.h>
 #include "Core/Utils.hpp"
@@ -41,5 +40,3 @@ class Action
         virtual void update(float step) = 0;
         virtual void updateVisual(float actorX, float actorY) = 0;
 };
-
-#endif

@@ -15,8 +15,7 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _TEMPLATES_PROCESSING_
-#define _TEMPLATES_PROCESSING_
+#pragma once
 
 #include <ClanLib/core.h>
 #include <ClanLib/display.h>
@@ -77,5 +76,3 @@ class TemplatesProcessor
         DocumentPtr processTemplates(const std::string& sceneFile);
 };
 
-
-#endif

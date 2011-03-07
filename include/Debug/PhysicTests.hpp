@@ -15,8 +15,7 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _PHYSIC_TEST_HPP_
-#define _PHYSIC_TEST_HPP_
+#pragma once
 
 #include "Physic/Body.hpp"
 #include "Debug/DebugWatcher.hpp"
@@ -39,5 +38,3 @@ class PhysicTests: public boost::serialization::singleton<PhysicTests>
 };
 
 inline PhysicTests &physicTests() { return PhysicTests::get_mutable_instance(); }
-
-#endif /* _PHYSIC_TESTS_HPP_ */

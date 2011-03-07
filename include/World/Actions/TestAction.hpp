@@ -15,8 +15,7 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _TEST_ACTION_HPP_
-#define _TEST_ACTION_HPP_
+#pragma once
 
 #include "World/Actions/Action.hpp"
 #include "Core/ResourceManager.hpp"
@@ -43,5 +42,3 @@ class TestAction: public Action
         void update(float step);
         void updateVisual(float actorX, float actorY);
 };
-
-#endif

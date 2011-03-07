@@ -15,13 +15,10 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _IMPACT_HPP_
-#define _IMPACT_HPP_
+#pragma once
 
 #include "World/Objects/Object.hpp"
 
 class Impact: public Object
 {
 };
-
-#endif /* _IMPACT_HPP_ */

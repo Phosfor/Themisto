@@ -15,8 +15,7 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CLIENT_H
-#define CLIENT_H
+#pragma once
 
 #include <ClanLib/core.h>
 #include <ClanLib/network.h>
@@ -67,5 +66,3 @@ private:
 
     CL_NetGameEventDispatcher_v0 events;
 };
-
-#endif // CLIENT_H

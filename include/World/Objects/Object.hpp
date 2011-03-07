@@ -15,8 +15,7 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _WORLD_OBJECT_HPP_
-#define _WORLD_OBJECT_HPP_
+#pragma once
 
 #include <ClanLib/core.h>
 #include <boost/shared_ptr.hpp>
@@ -57,5 +56,3 @@ class Object : public boost::noncopyable
         virtual std::vector< boost::shared_ptr<Action> > getAvailableActions()
         { return std::vector< boost::shared_ptr<Action> >();}
 };
-
-#endif /* _WORLD_OBJECT_HPP_ */

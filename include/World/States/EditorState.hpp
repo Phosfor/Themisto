@@ -15,8 +15,7 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _EDITOR_STATE_HPP_
-#define _EDITOR_STATE_HPP_
+#pragma once
 
 #include <ClanLib/core.h>
 #include <ClanLib/display.h>
@@ -51,5 +50,3 @@ class EditorState : public State
 
         std::string type();
 };
-
-#endif /* _EDITOR_STATE_HPP_ */

@@ -15,8 +15,7 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _LOG_MANAGER_H_
-#define _LOG_MANAGER_H_
+#pragma once
 
 #include <vector>
 #include <fstream>
@@ -59,5 +58,3 @@ inline void LOG_NOFORMAT(const std::string &message) { logManager().write(messag
 
 // date : function \n message
 #define LOG_META(message) logManager().write(message, "", __PRETTY_FUNCTION__)
-
-#endif

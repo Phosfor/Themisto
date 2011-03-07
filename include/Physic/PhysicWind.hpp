@@ -15,8 +15,7 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _PHYSIC_WIND_HPP_
-#define _PHYSIC_WIND_HPP_
+#pragma once
 
 #include <Box2D/Box2D.h>
 #include <ClanLib/core.h>
@@ -32,5 +31,3 @@ class PhysicWind
         void setDirrection(b2Vec2 value);
         void init(float power, b2Vec2 dirrection);
 };
-
-#endif /* _PHYSIC_WIND_HPP_ */

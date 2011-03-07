@@ -15,8 +15,7 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _WORLD_OBJECT_TYPE_BUILDER_HPP_
-#define _WORLD_OBJECT_TYPE_BUILDER_HPP_
+#pragma once
 
 // Objects
 
@@ -28,5 +27,3 @@ inline Object *BuildObjectType(const std::string &typeName)
         return new Grass;
     //else if (typeName == )
 }
-
-#endif /* _WORLD_OBJECT_TYPE_BUILDER_HPP_ */

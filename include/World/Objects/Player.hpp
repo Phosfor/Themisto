@@ -15,9 +15,7 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _PLAYER_HPP_
-#define _PLAYER_HPP_
-
+#pragma once
 
 #include <Box2D/Box2D.h>
 #include <Box2D/Collision/Shapes/b2PolygonShape.h>
@@ -115,5 +113,3 @@ class Player: public Actor
          float getHandLength();
          void goToNormalState();
 };
-
-#endif

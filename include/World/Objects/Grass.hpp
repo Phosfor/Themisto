@@ -15,8 +15,7 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _ENVIRON_GRASS_HPP_
-#define _ENVIRON_GRASS_HPP_
+#pragma once
 
 #include <ClanLib/core.h>
 #include <ClanLib/display.h>
@@ -56,5 +55,3 @@ class Grass : public Object
         Grass();
         void update(float elapsed);
 };
-
-#endif /* _ENVIRON_GRASS_HPP_ */

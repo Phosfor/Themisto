@@ -15,8 +15,7 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DEBUG_WATCHER_HPP_
-#define _DEBUG_WATCHER_HPP_
+#pragma once
 
 #include <vector>
 #include <list>
@@ -97,5 +96,3 @@ class DebugWatcher: public boost::serialization::singleton<DebugWatcher>
 };
 
 inline DebugWatcher &debugWatcher() { return DebugWatcher::get_mutable_instance(); }
-
-#endif /* _DEBUG_WATCHER_HPP_ */

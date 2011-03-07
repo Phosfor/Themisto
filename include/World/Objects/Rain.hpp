@@ -15,8 +15,7 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _RAIN_OBJECT_HPP_
-#define _RAIN_OBJECT_HPP_
+#pragma once
 
 #include <math.h>
 
@@ -65,5 +64,3 @@ class Rain : public Object
 
         CL_Rectf getRectangle();
 };
-
-#endif /* _RAIN_OBJECT_HPP_ */

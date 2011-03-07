@@ -15,8 +15,7 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _GAME_WINDOW_HPP_
-#define _GAME_WINDOW_HPP_
+#pragma once
 
 class GameWindow : public CL_Window
 {
@@ -35,5 +34,3 @@ class GameWindow : public CL_Window
             render_game(gc);
         }
 };
-
-#endif /* _GAME_WINDOW_HPP_ */
