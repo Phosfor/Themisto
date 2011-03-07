@@ -43,6 +43,7 @@ class PhysicObject: public Object
 
         // Visual
         CL_Sprite mImageHandle;
+        CL_CollisionOutline mCollision;
         CL_GraphicContext mGC;
 
     public:

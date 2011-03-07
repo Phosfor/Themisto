@@ -51,6 +51,13 @@ void PhysicObject::setVisual(std::string textureName, std::string textureSection
         mImageHandle.set_scale(koefX, koefY);
         mImageHandle.set_linear_filter(true);
         mImageHandle.set_rotation_hotspot(origin_top_left, 0, 0);
+
+        mCollision = CL_CollisionOutline(resourceManager().getImagePath(textureSection, textureName), accuracy_poor);
+        //mCollision.set_translation(100, 100);
+        mCollision.set_inside_test(true);
+        mCollision.set_scale(koefX, koefY);
+        mCollision.set_rotation_hotspot(origin_top_left, 0, 0);
+        mCollision.optimize();
     }
 }
 
@@ -60,6 +67,11 @@ void PhysicObject::updateVisual(float newX, float newY)
     {
         mImageHandle.set_angle(CL_Angle::from_radians(mBody->getBody()->GetAngle()));
         mImageHandle.draw(mGC, newX, newY);
+
+        mCollision.draw(0, 0, CL_Colorf::yellow, mGC);
+        mCollision.set_translation(newX, newY);
+        //std::cout << mCollision.get_translation() << "\n";
+
     }
 }
 
@@ -163,5 +175,8 @@ boost::shared_ptr<Object> PhysicObject::ParsePhysicObject(CL_DomElement* tag, st
     return boost::shared_ptr<Object>(result);
 }
 
-bool PhysicObject::checkCollision(CL_Pointf point) { return false; }
+bool PhysicObject::checkCollision(CL_Pointf point)
+{
+    return mCollision.point_inside(point);
+}
 
