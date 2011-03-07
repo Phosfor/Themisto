@@ -58,16 +58,19 @@ bool DebugDragAndDrop::ReportFixture(b2Fixture *fixture)
 
 void DebugDragAndDrop::mouseDown(const CL_InputEvent &ev, const CL_InputState &state)
 {
-    CL_Rectf camPos = levelManager().getAbsoluteCameraPos();
-    if(mMouseJoint == NULL)
+    if(ev.id == CL_MOUSE_LEFT)
     {
-        mMousePos->Set(static_cast<float>(Pixels2Meters(ev.mouse_pos.x + camPos.left)),
-                static_cast<float>(Pixels2Meters(ev.mouse_pos.y + camPos.top)));
+        CL_Rectf camPos = levelManager().getAbsoluteCameraPos();
+        if(mMouseJoint == NULL)
+        {
+            mMousePos->Set(static_cast<float>(Pixels2Meters(ev.mouse_pos.x + camPos.left)),
+                    static_cast<float>(Pixels2Meters(ev.mouse_pos.y + camPos.top)));
 
-        b2AABB region;
-        region.lowerBound.Set(mMousePos->x - 0.001f, mMousePos->y - 0.0f);
-        region.upperBound.Set(mMousePos->x + 0.001f, mMousePos->y + 0.001f);
-        physicManager().getWorld().QueryAABB(this, region);
+            b2AABB region;
+            region.lowerBound.Set(mMousePos->x - 0.001f, mMousePos->y - 0.0f);
+            region.upperBound.Set(mMousePos->x + 0.001f, mMousePos->y + 0.001f);
+            physicManager().getWorld().QueryAABB(this, region);
+        }
     }
 }
 
