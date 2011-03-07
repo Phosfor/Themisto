@@ -11,7 +11,7 @@ LevelManager::LevelManager()
 
 void LevelManager::mousePressed(const CL_InputEvent &key, const CL_InputState &state)
 {
-    if (mDrawActions)
+    /*if (mDrawActions)
     {
         mDrawActions = false;
         BOOST_FOREACH(CL_PushButton *button, mButtons)
@@ -23,7 +23,7 @@ void LevelManager::mousePressed(const CL_InputEvent &key, const CL_InputState &s
         mButtons.clear();
         mActiveActions.clear();
         mActiveObject.reset();
-    }
+    }*/
     if (key.id == CL_MOUSE_RIGHT)
     {
         CL_Point mousePos = key.mouse_pos;
@@ -59,6 +59,9 @@ void LevelManager::mousePressed(const CL_InputEvent &key, const CL_InputState &s
                         temp->set_icon(resourceManager().getImage(textureInfo[0], textureInfo[1]));
                         //temp->set_visible(false);
 
+                        // Process click event
+                        temp->func_clicked().set(this, &LevelManager::menuItemClicked, act);
+
                         mButtons.push_back(temp);
                     }
                 }
@@ -76,6 +79,26 @@ void LevelManager::drawActions()
         CL_Rectf newPos = mActiveObject->getRectangle();
         button->set_geometry(CL_Rect(newPos.left - 50, newPos.top + counter, CL_Size(50, 50)));
         counter += 52;
+    }
+}
+
+void LevelManager::menuItemClicked(boost::shared_ptr<Action> clickedAction)
+{
+    std::cout << "Clicked\n";
+
+    // We should clear it after click!
+    if (mDrawActions)
+    {
+        mDrawActions = false;
+        BOOST_FOREACH(CL_PushButton *button, mButtons)
+        {
+            if (button)
+                delete button;
+        }
+
+        mButtons.clear();
+        mActiveActions.clear();
+        mActiveObject.reset();
     }
 }
 

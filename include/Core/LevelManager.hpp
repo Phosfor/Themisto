@@ -176,6 +176,7 @@ class LevelManager : public boost::serialization::singleton<LevelManager>
         std::vector<CL_PushButton*> mButtons;
         bool mDrawActions;
         void drawActions();
+        void menuItemClicked(boost::shared_ptr<Action> clickedAction);
 };
 
 inline LevelManager &levelManager() { return LevelManager::get_mutable_instance(); }
