@@ -29,6 +29,7 @@
 #include "World/Objects/Foreground.hpp"
 #include "World/Objects/Empty.hpp"
 #include "World/Objects/Sky.hpp"
+#include "World/Objects/Stars.hpp"
 
 boost::shared_ptr<Object> TypesManager::empty_parser(CL_DomElement* p, std::string& desc)
 {
@@ -61,6 +62,7 @@ TypesManager::TypesManager()
     registerParser("Foreground", Foreground::ParseForeground);
     registerParser("Level", Level::ParseLevel);
     registerParser("Sky", Sky::ParseSky);
+    registerParser("Stars", Stars::ParseStars);
 }
 
 

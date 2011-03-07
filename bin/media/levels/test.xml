@@ -10,7 +10,7 @@
             <!--<Sky enabled="true" />-->
             <!--<Moon enabled="true" />-->
             <Leaves enabled="false" limit="0.15" />
-            <Stars enabled="true" limit="6.0" />
+            <!--<Stars enabled="true" limit="6.0" />-->
             <Objects enabled="true" />
             <!-- actual_size is average real foreground image size refer to full window size -->
             <!-- If fixed is true, foreground wouldn't move with camera and level -->
@@ -20,6 +20,7 @@
 
         <Objects>
              <Object name="SkyObj" type="Sky" always_draw="true" z-index="-100" />
+             <Object name="StarsObj" type="Stars" maxStars="6.0" z-index="-99"  always_draw="true" />
              <Object name="MoonObj" type="Moon" always_draw="true" z-index="-4">
                  <Visual>
                     <Texture section="Moons" name="0" />
