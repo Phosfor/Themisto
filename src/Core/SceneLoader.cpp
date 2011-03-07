@@ -82,8 +82,8 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
     //deps["Rain"] = Environ_Rain;
     //deps["Clouds"] = Environ_Clouds;
     //deps["Foreground"] = Environ_Foreground;
-    deps["Lightnings"] = Environ_Lightnings;
-    deps["Sky"] = Environ_Sky;
+    //deps["Lightnings"] = Environ_Lightnings;
+    //deps["Sky"] = Environ_Sky;
     //deps["Moon"] = Environ_Moon;
     deps["Leaves"] = Environ_Leaves;
     deps["Stars"] = Environ_Stars;
@@ -94,10 +94,12 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
     for (int i=0; i < childList.get_length(); ++i)
     {
         CL_DomNode tag = childList.item(i);
+        std::cout << tag.get_node_name().c_str() << "\n";
         if (tag.get_node_name() == "Wind")
         {
             float pow = boost::lexical_cast<float>(tag.to_element().get_attribute("power").c_str());
             environManager().setWindPower(pow);
+            continue;
         }
 
         EnvironTypes type = deps[tag.get_node_name().c_str()];

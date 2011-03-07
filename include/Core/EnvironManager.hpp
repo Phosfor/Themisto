@@ -34,14 +34,14 @@
 
 #include <map>
 
-class Rain;
+//class Rain;
 //class Moon;
 class Stars;
-class Sky;
+//class Sky;
 class Leaves;
-class Clouds;
-class Birds;
-class Lightnings;
+//class Clouds;
+//class Birds;
+//class Lightnings;
 class EnvironObject;
 //class Foreground;
 class Objects;

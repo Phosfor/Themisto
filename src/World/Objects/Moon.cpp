@@ -188,4 +188,3 @@ void Moon::setVisual(std::string textureName, std::string textureSection, float 
 }
 
 bool Moon::checkCollision(CL_Pointf point) { return false; }
-

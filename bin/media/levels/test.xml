@@ -7,7 +7,7 @@
         <Environ>
             <!--<Rain enabled="false" limit="1.5" />-->
             <!--<Lightnings enabled="true" />-->
-            <Sky enabled="true" />
+            <!--<Sky enabled="true" />-->
             <!--<Moon enabled="true" />-->
             <Leaves enabled="false" limit="0.15" />
             <Stars enabled="true" limit="6.0" />
@@ -19,6 +19,7 @@
         </Environ>
 
         <Objects>
+             <Object name="SkyObj" type="Sky" always_draw="true" z-index="-100" />
              <Object name="MoonObj" type="Moon" always_draw="true" z-index="-4">
                  <Visual>
                     <Texture section="Moons" name="0" />
@@ -79,8 +80,8 @@
                 <Body>
                     <b2Body>
                         <Position>
-                            <x>300.0</x>
-                            <y>20.0</y>
+                            <x>400.0</x>
+                            <y>320.0</y>
                         </Position>
                         <Type>DynamicBody</Type>
                     </b2Body>
@@ -140,7 +141,7 @@
                 <Body>
                     <b2Body>
                         <Position>
-                            <x>800.0</x>
+                            <x>950.0</x>
                             <y>70.0</y>
                         </Position>
                         <Type>DynamicBody</Type>
@@ -178,7 +179,7 @@
              </Object>
              <Object type="Player" name="player" >
                 <Position>
-                    <x>700.0</x>
+                    <x>800.0</x>
                     <y>500.0</y>
                 </Position>
              </Object>
