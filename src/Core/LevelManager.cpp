@@ -11,7 +11,19 @@ LevelManager::LevelManager()
 
 void LevelManager::mousePressed(const CL_InputEvent &key, const CL_InputState &state)
 {
-    mDrawActions = false;
+    if (mDrawActions)
+    {
+        mDrawActions = false;
+        BOOST_FOREACH(CL_PushButton *button, mButtons)
+        {
+            if (button)
+                delete button;
+        }
+
+        mButtons.clear();
+        mActiveActions.clear();
+        mActiveObject.reset();
+    }
     if (key.id == CL_MOUSE_RIGHT)
     {
         CL_Point mousePos = key.mouse_pos;
@@ -31,6 +43,24 @@ void LevelManager::mousePressed(const CL_InputEvent &key, const CL_InputState &s
                     mActiveObject = it->second;
                     mClickedPos = mousePos;
                     mDrawActions = true;
+
+                    // Init GUI part
+                    CL_Rect clientArea = appManager().getGraphic().get_cliprect();
+
+                    BOOST_FOREACH(boost::shared_ptr<Action> &act, mActiveActions)
+                    {
+                        CL_PushButton *temp = new CL_PushButton(&guiManager().getWrapper());
+                        CL_Rectf newPos = mActiveObject->getRectangle();
+
+                        // We hide background image there
+                        temp->set_class_name("action-icon");
+
+                        std::vector<std::string> textureInfo = act->getTextureInfo();
+                        temp->set_icon(resourceManager().getImage(textureInfo[0], textureInfo[1]));
+                        //temp->set_visible(false);
+
+                        mButtons.push_back(temp);
+                    }
                 }
                 break;
             }
@@ -40,10 +70,12 @@ void LevelManager::mousePressed(const CL_InputEvent &key, const CL_InputState &s
 
 void LevelManager::drawActions()
 {
-    BOOST_FOREACH(boost::shared_ptr<Action> &act, mActiveActions)
+    uint16_t counter = 0;
+    BOOST_FOREACH(CL_PushButton *button, mButtons)
     {
         CL_Rectf newPos = mActiveObject->getRectangle();
-        act->getIcon().draw(appManager().getGraphic(), newPos.left-act->getIcon().get_width(), newPos.top);
+        button->set_geometry(CL_Rect(newPos.left - 50, newPos.top + counter, CL_Size(50, 50)));
+        counter += 52;
     }
 }
 
@@ -60,6 +92,9 @@ void LevelManager::initObjects()
 void LevelManager::init()
 {
     mMousePressedSlots = inputManager().getMouse().sig_key_down().connect(&levelManager(), &LevelManager::mousePressed);
+
+    // Yep, maybe we don't need this
+    guiManager().getHandle().set_css_document(utils().getMediaFolder() + "/local.css");
 
     boost::shared_ptr<Level> levelData = getObjectByType<Level>("Level");
     if (levelData->getType() != "Empty")

@@ -178,7 +178,7 @@
              </Object>
              <Object type="Player" name="player" >
                 <Position>
-                    <x>500.0</x>
+                    <x>700.0</x>
                     <y>500.0</y>
                 </Position>
              </Object>

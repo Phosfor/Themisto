@@ -6,3 +6,10 @@ label.info-label
     font-size: 22px;
     font-family: Ubuntu;
 }
+
+button.action-icon
+{
+    bg-image:;
+    max-width: 50px;
+    max-height: 50px;
+}

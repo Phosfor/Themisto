@@ -35,8 +35,10 @@
 
 #include "Core/ApplicationManager.hpp"
 #include "Core/InputManager.hpp"
+#include "Core/GuiManager.hpp"
 #include "Core/ResourceManager.hpp"
 #include "Core/Utils.hpp"
+
 #include "World/Objects/Object.hpp"
 #include "World/Objects/Foreground.hpp"
 #include "World/Objects/Level.hpp"
@@ -171,6 +173,7 @@ class LevelManager : public boost::serialization::singleton<LevelManager>
         CL_Point mClickedPos;
         boost::shared_ptr<Object> mActiveObject;
         std::vector< boost::shared_ptr<Action> > mActiveActions;
+        std::vector<CL_PushButton*> mButtons;
         bool mDrawActions;
         void drawActions();
 };
