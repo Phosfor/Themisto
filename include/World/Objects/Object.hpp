@@ -48,6 +48,8 @@ class Object : public boost::noncopyable
         virtual CL_Pointf getPosition() = 0;
         virtual CL_Rectf getRectangle() = 0;
 
+        virtual bool checkCollision(CL_Pointf point) = 0;
+
         virtual void init() = 0;
         virtual void update(float elapsed) = 0;
         virtual void updateVisual(float newX, float newY) = 0;

@@ -139,3 +139,5 @@ boost::shared_ptr<Object> Rain::ParseRain(CL_DomElement* element, std::string& d
     float area = Pixels2Meters(ScreenResolutionX) * Pixels2Meters(ScreenResolutionY);
     return boost::shared_ptr<Object>(new Rain(maxDrops * area));
 }
+
+bool Rain::checkCollision(CL_Pointf point) { return false; }

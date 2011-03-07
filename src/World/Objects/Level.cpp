@@ -154,3 +154,6 @@ boost::shared_ptr<Object> Level::ParseLevel(CL_DomElement* tag, std::string& des
 
     return boost::shared_ptr<Object>(result);
 }
+
+bool Level::checkCollision(CL_Pointf point) { return false; }
+

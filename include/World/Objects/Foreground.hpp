@@ -57,6 +57,7 @@ class Foreground: public Object
         std::vector<std::string> getTextureInfo();
 
         // --- Object implementation ---
+        bool checkCollision(CL_Pointf point);
         CL_Pointf getPosition();
         void setPosition(CL_Pointf newPos);
         CL_Rectf getRectangle();

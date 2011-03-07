@@ -151,6 +151,7 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
             levelManager().addObject(name, object);
         }
     }
+
     levelManager().setLevelName(name);
     levelManager().initObjects();
     levelManager().init();

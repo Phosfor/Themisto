@@ -48,6 +48,8 @@ class LightColumn: public Object
         // Visual
         // Main lightpost image
         CL_Sprite mImageHandle;
+        CL_CollisionOutline mCollision;
+
         // Lightings images
         std::vector<CL_Sprite> mLightings;
 
@@ -84,6 +86,7 @@ class LightColumn: public Object
         static boost::shared_ptr<Object> ParseLightColumn(CL_DomElement* node, std::string &desc);
 
         // --- Object implementation ---
+        bool checkCollision(CL_Pointf point);
         CL_Pointf getPosition();
         CL_Rectf getRectangle();
         void setPosition(CL_Pointf newPos);

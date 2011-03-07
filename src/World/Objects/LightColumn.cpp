@@ -46,6 +46,13 @@ void LightColumn::setVisual(std::string textureName, std::string textureSection,
         mImageHandle.set_rotation_hotspot(origin_top_left, 0, 0);
         mBoundingBox = CL_Rectf(mPos.x, mPos.y, mPos.x + mImageHandle.get_width() * koefX,
                 mPos.y + mImageHandle.get_height() * koefY);
+
+        mCollision = CL_CollisionOutline(resourceManager().getImagePath(textureSection, textureName), accuracy_poor);
+        //mCollision.set_translation(100, 100);
+        mCollision.set_inside_test(true);
+        mCollision.set_scale(koefX, koefY);
+        mCollision.set_rotation_hotspot(origin_top_left, 0, 0);
+        mCollision.optimize();
     }
 }
 
@@ -88,6 +95,9 @@ void LightColumn::updateVisual(float newX, float newY)
     {
         // Drawing postlight
         mImageHandle.draw(mGC, newX, newY);
+        mCollision.draw(0, 0, CL_Colorf::yellow, mGC);
+        mCollision.set_translation(newX, newY);
+        //std::cout << mCollision.get_translation() << "\n";
 
         // Drawing lightings
         for (uint16_t i=0; i < mLightings.size(); ++i)
@@ -272,3 +282,7 @@ boost::shared_ptr<Object> LightColumn::ParseLightColumn(CL_DomElement* tag, std:
     return boost::shared_ptr<Object>(result);
 }
 
+bool LightColumn::checkCollision(CL_Pointf point)
+{
+    return mCollision.point_inside(point);
+}

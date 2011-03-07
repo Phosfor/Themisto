@@ -461,3 +461,4 @@ boost::shared_ptr<Object> Player::ParsePlayer(CL_DomElement* tag, std::string& d
     return boost::shared_ptr<Object>(result);
 }
 
+bool Player::checkCollision(CL_Pointf point) { return false; }

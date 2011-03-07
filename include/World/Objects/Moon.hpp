@@ -63,6 +63,7 @@ class Moon : public Object
         static boost::shared_ptr<Object> ParseMoon(CL_DomElement *node, std::string &desc);
 
         // --- Object implementation ---
+        bool checkCollision(CL_Pointf point);
         void init();
         void updateVisual(float newX, float newY);
         void update(float elapsed);

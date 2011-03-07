@@ -34,6 +34,7 @@
 #include <boost/cstdint.hpp>
 
 #include "Core/ApplicationManager.hpp"
+#include "Core/InputManager.hpp"
 #include "Core/ResourceManager.hpp"
 #include "Core/Utils.hpp"
 #include "World/Objects/Object.hpp"
@@ -82,6 +83,8 @@ class LevelManager : public boost::serialization::singleton<LevelManager>
         // Draw bounding boxes of objects?
         bool mDrawDebugData;
 
+        CL_Slot mMousePressedSlots;
+
         // Objects stuff
         ObjectMapTypeAccess mObjects;
         ObjectMapTypeSorted mObjectsSorted;
@@ -105,6 +108,7 @@ class LevelManager : public boost::serialization::singleton<LevelManager>
         void setCameraSpeed(float speed);
 
         void setDrawDebugData(bool draw);
+        void mousePressed(const CL_InputEvent &key, const CL_InputState &state);
 
         void init();
         void initObjects();

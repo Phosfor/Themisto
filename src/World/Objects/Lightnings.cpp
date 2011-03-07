@@ -84,3 +84,6 @@ boost::shared_ptr<Object> Lightnings::ParseLightnings(CL_DomElement* element, st
 {
     return boost::shared_ptr<Object>(new Lightnings());
 }
+
+bool Lightnings::checkCollision(CL_Pointf point) { return false; }
+

@@ -56,6 +56,7 @@ class Birds : public Object
         void update(float elapsed);
         void init();
 
+        bool checkCollision(CL_Pointf point);
         void setPosition(CL_Pointf newPos);
         CL_Pointf getPosition();
         CL_Rectf getRectangle();

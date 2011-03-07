@@ -137,3 +137,5 @@ boost::shared_ptr<Object> Birds::ParseBirds(CL_DomElement* birdsElement, std::st
     }
     return boost::shared_ptr<Object>(new Birds(maxBirds));
 }
+
+bool Birds::checkCollision(CL_Pointf point) { return false; }

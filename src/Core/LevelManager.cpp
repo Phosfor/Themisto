@@ -8,6 +8,29 @@ LevelManager::LevelManager()
     mDrawDebugData = false;
 }
 
+void LevelManager::mousePressed(const CL_InputEvent &key, const CL_InputState &state)
+{
+    if (key.id == CL_MOUSE_RIGHT)
+    {
+        CL_Point mousePos = key.mouse_pos;
+
+        std::cout << "Mouse pos: " << mousePos << "\n";
+
+        // If right key pressed - check all objects collision with it
+        for (ObjectMapTypeSorted::const_iterator it=mObjectsSorted.begin();
+        it != mObjectsSorted.end(); ++it)
+        {
+            bool result = it->second->checkCollision(CL_Pointf(mousePos.x, mousePos.y));
+
+            // Collision is detected
+            if (result)
+            {
+                std::cout << "Draw menu here... Object collided: " << it->second->getName() << "\n";
+            }
+        }
+    }
+}
+
 void LevelManager::initObjects()
 {
     for (ObjectMapTypeSorted::const_iterator it=mObjectsSorted.begin();
@@ -20,6 +43,8 @@ void LevelManager::initObjects()
 
 void LevelManager::init()
 {
+    mMousePressedSlots = inputManager().getMouse().sig_key_down().connect(&levelManager(), &LevelManager::mousePressed);
+
     boost::shared_ptr<Level> levelData = getObjectByType<Level>("Level");
     if (levelData->getType() != "Empty")
     {

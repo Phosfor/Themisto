@@ -53,6 +53,7 @@ class Lightnings : public Object
     public:
         Lightnings();
 
+        bool checkCollision(CL_Pointf point);
         void setPosition(CL_Pointf newPos);
         CL_Pointf getPosition();
         CL_Rectf getRectangle();

@@ -120,3 +120,6 @@ boost::shared_ptr<Object> Foreground::ParseForeground(CL_DomElement *tag, std::s
 
     return boost::shared_ptr<Object>(result);
 }
+
+bool Foreground::checkCollision(CL_Pointf point) { return false; }
+

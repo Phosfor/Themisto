@@ -91,6 +91,7 @@ class Player: public Actor
         static boost::shared_ptr<Object> ParsePlayer(CL_DomElement* node, std::string &desc);
 
         // --- Object implementation ---
+        bool checkCollision(CL_Pointf point);
         CL_Pointf getPosition();
         CL_Rectf getRectangle();
         void setPosition(CL_Pointf newPos);

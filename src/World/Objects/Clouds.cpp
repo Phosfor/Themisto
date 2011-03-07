@@ -176,3 +176,6 @@ boost::shared_ptr<Object> Clouds::ParseClouds(CL_DomElement* cloudsElement, std:
     float area = Pixels2Meters(ScreenResolutionX) * Pixels2Meters(ScreenResolutionY);
     return boost::shared_ptr<Object>(new Clouds(maxClouds * area));
 }
+
+bool Clouds::checkCollision(CL_Pointf point) { return false; }
+

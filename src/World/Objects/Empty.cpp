@@ -17,3 +17,4 @@ void EmptyObject::update(float elapsed)
 CL_Pointf EmptyObject::getPosition() { return CL_Pointf(); }
 void EmptyObject::setPosition(CL_Pointf newPos) { }
 CL_Rectf EmptyObject::getRectangle() { return CL_Rectf(); }
+bool EmptyObject::checkCollision(CL_Pointf point) { return false; }

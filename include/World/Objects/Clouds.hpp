@@ -55,6 +55,7 @@ class Clouds : public Object
         explicit Clouds(uint16_t maxClouds);
         void setLimit(uint16_t limit);
 
+        bool checkCollision(CL_Pointf point);
         void setPosition(CL_Pointf newPos);
         CL_Pointf getPosition();
         CL_Rectf getRectangle();

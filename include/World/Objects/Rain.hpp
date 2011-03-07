@@ -55,6 +55,7 @@ class Rain : public Object
         static boost::shared_ptr<Object> ParseRain(CL_DomElement* element, std::string& desc);
 
         // --- Object implementation ---
+        bool checkCollision(CL_Pointf point);
         void init();
         void update(float elapsed);
         void updateVisual(float newX, float newY);

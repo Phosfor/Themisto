@@ -163,3 +163,5 @@ boost::shared_ptr<Object> PhysicObject::ParsePhysicObject(CL_DomElement* tag, st
     return boost::shared_ptr<Object>(result);
 }
 
+bool PhysicObject::checkCollision(CL_Pointf point) { return false; }
+

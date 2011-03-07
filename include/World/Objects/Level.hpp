@@ -48,6 +48,7 @@ class Level : public Object
         boost::shared_ptr<Body> getBody();
 
         // Object implementation
+        bool checkCollision(CL_Pointf point);
         CL_Pointf getPosition();
         void setPosition(CL_Pointf newPos);
         CL_Rectf getRectangle();

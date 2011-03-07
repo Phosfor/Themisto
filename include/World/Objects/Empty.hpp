@@ -30,6 +30,7 @@ class EmptyObject : public Object
         void updateVisual(float newX, float newY);
         void update(float elapsed);
 
+        bool checkCollision(CL_Pointf point);
         CL_Pointf getPosition();
         void setPosition(CL_Pointf newPos);
         CL_Rectf getRectangle();
