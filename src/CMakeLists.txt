@@ -46,6 +46,7 @@ set(Themisto_srcs
 
     # Actions
     #World/Actions/TakeAction.cpp
+    World/Actions/TestAction.cpp
 
     # States
     World/States/MenuState.cpp
