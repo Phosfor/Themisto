@@ -1,14 +1,13 @@
 #include "World/Objects/Stars.hpp"
 
-ImageStarsData::ImageStarsData(CL_GraphicContext gc, uint16_t width, uint16_t height)
+ImageStarsData::ImageStarsData(CL_GraphicContext gc, uint16_t mActualSize)
 {
-/*    uint16_t actualSize = 0;*/
-    //boost::shared_ptr<Foreground> temp = levelManager().getObjectByType<Foreground>("Foreground");
-    /*if (temp->getType() != "Empty") actualSize = temp->getActualSize();*/
+    int width = ScreenResolutionX;
+    int height = ScreenResolutionY;
 
     x = rand() % width;
-    //y = rand() % (height - (height * actualSize / 100));
-    y = rand() % height;
+    y = rand() % (height - (height * mActualSize / 100));
+    //y = rand() % height;
 
     brightness = static_cast<float>((rand() % 10 + 2))/10.0f;
 
@@ -40,8 +39,11 @@ Stars::Stars(uint16_t maxStars)
 
 void Stars::init()
 {
+    boost::shared_ptr<Foreground> temp = levelManager().getObjectByType<Foreground>("Foreground");
+    if (temp->getType() != "Empty") mActualSize = temp->getActualSize();
+
     for (uint16_t i=0; i < mMaxObjects; ++i)
-        mImageStars.push_back(ImageStarsData(mGC, ScreenResolutionX, ScreenResolutionY));
+        mImageStars.push_back(ImageStarsData(mGC, mActualSize));
 }
 
 void Stars::update(float elapsed)

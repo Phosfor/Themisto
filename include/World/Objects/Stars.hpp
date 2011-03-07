@@ -28,13 +28,15 @@
 #include "Core/LevelManager.hpp"
 #include "Core/EnvironManager.hpp"
 
+#include "World/Objects/Foreground.hpp"
+
 struct ImageStarsData
 {
     uint16_t x, y;
     float brightness;
     CL_Image imageHandle;
 
-    ImageStarsData(CL_GraphicContext gc, uint16_t width, uint16_t height);
+    ImageStarsData(CL_GraphicContext gc, uint16_t actualSize);
 };
 
 class Stars : public Object
@@ -48,6 +50,7 @@ class Stars : public Object
 
         CL_GraphicContext mGC;
         int mMaxObjects;
+        uint16_t mActualSize;
 
         // For galaxies
         CL_Image mBigGalaxy;
