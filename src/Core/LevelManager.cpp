@@ -14,8 +14,6 @@ void LevelManager::mousePressed(const CL_InputEvent &key, const CL_InputState &s
     {
         CL_Point mousePos = key.mouse_pos;
 
-        std::cout << "Mouse pos: " << mousePos << "\n";
-
         // If right key pressed - check all objects collision with it
         for (ObjectMapTypeSorted::const_iterator it=mObjectsSorted.begin();
         it != mObjectsSorted.end(); ++it)
@@ -78,6 +76,11 @@ CL_Rectf LevelManager::getCamViewport()
 void LevelManager::setDrawDebugData(bool draw)
 {
     mDrawDebugData = draw;
+}
+
+bool LevelManager::getDrawDebugData()
+{
+    return mDrawDebugData;
 }
 
 float LevelManager::getCameraSpeed()

@@ -57,7 +57,6 @@ void PhysicObject::setVisual(std::string textureName, std::string textureSection
         mCollision.set_inside_test(true);
         mCollision.set_scale(koefX, koefY);
         mCollision.set_rotation_hotspot(origin_top_left, 0, 0);
-        mCollision.optimize();
     }
 }
 
@@ -65,13 +64,15 @@ void PhysicObject::updateVisual(float newX, float newY)
 {
     if(!mImageHandle.is_null())
     {
-        mImageHandle.set_angle(CL_Angle::from_radians(mBody->getBody()->GetAngle()));
+        CL_Angle rotation = CL_Angle::from_radians(mBody->getBody()->GetAngle());
+        mImageHandle.set_angle(rotation);
         mImageHandle.draw(mGC, newX, newY);
 
-        mCollision.draw(0, 0, CL_Colorf::yellow, mGC);
+        mCollision.set_angle(rotation);
         mCollision.set_translation(newX, newY);
-        //std::cout << mCollision.get_translation() << "\n";
 
+        if (levelManager().getDrawDebugData())
+            mCollision.draw(0, 0, CL_Colorf::yellow, mGC);
     }
 }
 

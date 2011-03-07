@@ -28,7 +28,7 @@
 #include "Core/Utils.hpp"
 #include "Core/ResourceManager.hpp"
 #include "Core/ApplicationManager.hpp"
-#include "Core/InputManager.hpp"
+#include "Core/LevelManager.hpp"
 
 struct LightBug
 {

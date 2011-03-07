@@ -48,11 +48,9 @@ void LightColumn::setVisual(std::string textureName, std::string textureSection,
                 mPos.y + mImageHandle.get_height() * koefY);
 
         mCollision = CL_CollisionOutline(resourceManager().getImagePath(textureSection, textureName), accuracy_poor);
-        //mCollision.set_translation(100, 100);
         mCollision.set_inside_test(true);
         mCollision.set_scale(koefX, koefY);
         mCollision.set_rotation_hotspot(origin_top_left, 0, 0);
-        mCollision.optimize();
     }
 }
 
@@ -95,9 +93,10 @@ void LightColumn::updateVisual(float newX, float newY)
     {
         // Drawing postlight
         mImageHandle.draw(mGC, newX, newY);
-        mCollision.draw(0, 0, CL_Colorf::yellow, mGC);
         mCollision.set_translation(newX, newY);
-        //std::cout << mCollision.get_translation() << "\n";
+
+        if (levelManager().getDrawDebugData())
+            mCollision.draw(0, 0, CL_Colorf::yellow, mGC);
 
         // Drawing lightings
         for (uint16_t i=0; i < mLightings.size(); ++i)

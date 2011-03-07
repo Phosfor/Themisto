@@ -107,6 +107,7 @@ class LevelManager : public boost::serialization::singleton<LevelManager>
         float getCameraSpeed();
         void setCameraSpeed(float speed);
 
+        bool getDrawDebugData();
         void setDrawDebugData(bool draw);
         void mousePressed(const CL_InputEvent &key, const CL_InputState &state);
 
