@@ -65,6 +65,7 @@ struct Compare
 typedef std::map<std::string, boost::shared_ptr<Object> > ObjectMapTypeAccess;
 typedef std::map<std::string, boost::shared_ptr<Object>, Compare> ObjectMapTypeSorted;
 
+class Action;
 class LevelManager : public boost::serialization::singleton<LevelManager>
 {
     private:
@@ -166,6 +167,11 @@ class LevelManager : public boost::serialization::singleton<LevelManager>
 
         void updateVisual(float elapsed);
         void updateLogic(float elapsed);
+
+        CL_Point mClickedPos;
+        std::vector< boost::shared_ptr<Action> > mActiveActions;
+        bool mDrawActions;
+        void drawActions();
 };
 
 inline LevelManager &levelManager() { return LevelManager::get_mutable_instance(); }

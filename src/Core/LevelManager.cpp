@@ -1,15 +1,17 @@
 #include "Core/LevelManager.hpp"
+#include "World/Actions/Action.hpp"
 
 LevelManager::LevelManager()
 {
     mNumObjects = 0;
     mCameraSpeed = configManager().getValue<float>("application.camera_speed", 10.0f);
     mDebugDrawOnly = configManager().getValue<bool>("application.debug_draw_only", false);
-    mDrawDebugData = false;
+    mDrawDebugData = mDrawActions = false;
 }
 
 void LevelManager::mousePressed(const CL_InputEvent &key, const CL_InputState &state)
 {
+    mDrawActions = false;
     if (key.id == CL_MOUSE_RIGHT)
     {
         CL_Point mousePos = key.mouse_pos;
@@ -18,14 +20,28 @@ void LevelManager::mousePressed(const CL_InputEvent &key, const CL_InputState &s
         for (ObjectMapTypeSorted::const_iterator it=mObjectsSorted.begin();
         it != mObjectsSorted.end(); ++it)
         {
-            bool result = it->second->checkCollision(CL_Pointf(mousePos.x, mousePos.y));
-
             // Collision is detected
-            if (result)
+            if (it->second->checkCollision(CL_Pointf(mousePos.x, mousePos.y)))
             {
                 std::cout << "Draw menu here... Object collided: " << it->second->getName() << "\n";
+                std::vector< boost::shared_ptr<Action> > actions = it->second->getAvailableActions();
+                if (!actions.empty())
+                {
+                    mActiveActions = actions;
+                    mClickedPos = mousePos;
+                    mDrawActions = true;
+                }
+                break;
             }
         }
+    }
+}
+
+void LevelManager::drawActions()
+{
+    BOOST_FOREACH(boost::shared_ptr<Action> &act, mActiveActions)
+    {
+        act->getIcon().draw(appManager().getGraphic(), mClickedPos.x, mClickedPos.y);
     }
 }
 
@@ -197,6 +213,7 @@ void LevelManager::updateVisual(float elapsed)
                 CL_Pointf position = it->second->getPosition();
                 it->second->updateVisual(position.x - camPos.left, position.y - camPos.top);
             }
+            if (mDrawActions) drawActions();
         }
     }
 }
