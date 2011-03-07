@@ -9,7 +9,7 @@
             <!--<Lightnings enabled="true" />-->
             <!--<Sky enabled="true" />-->
             <!--<Moon enabled="true" />-->
-            <Leaves enabled="false" limit="0.15" />
+            <!--<Leaves enabled="false" limit="0.15" />-->
             <!--<Stars enabled="true" limit="6.0" />-->
             <Objects enabled="true" />
             <!-- actual_size is average real foreground image size refer to full window size -->
@@ -36,6 +36,7 @@
                  <Fixed value="true" />
                  <ActualSize value="40" />
              </Object>
+             <Object name="LeavesObj" type="Leaves" maxLeaves="0.15" always_draw="true" z-index="-1" />
              <Object name="LevelObj" type="Level" template="level_phys" z-index="1" />
              <Object name="BirdsObj" type="Birds" maxBirds="3"  always_draw="true"/>
              <Object name="RainObj" type="Rain" maxDrops="1.5"  always_draw="true"/>

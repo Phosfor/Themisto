@@ -21,7 +21,7 @@
 //#include "World/Environ/Moon.hpp"
 //#include "World/Environ/Stars.hpp"
 //#include "World/Environ/Sky.hpp"
-#include "World/Environ/Leaves.hpp"
+//#include "World/Environ/Leaves.hpp"
 //#include "World/Environ/Lightnings.hpp"
 //#include "World/Environ/Foreground.hpp"
 #include "World/Environ/Objects.hpp"
@@ -123,7 +123,7 @@ void EnvironManager::enableType(bool state, EnvironTypes type, float limit)
             //case Environ_Stars:  temp = new Stars();  break;
             //case Environ_Moon:   temp = new Moon();   break;
             //case Environ_Rain:   temp = new Rain();   break;
-            case Environ_Leaves: temp = new Leaves(); break;
+            //case Environ_Leaves: temp = new Leaves(); break;
             case Environ_Objects:  temp = new Objects();  break;
             //case Environ_Foreground:  temp = new Foreground();  break;
             //case Environ_Lightnings:  temp = new Lightnings();  break;

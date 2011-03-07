@@ -24,7 +24,7 @@ set(Themisto_srcs
     #World/Environ/Moon.cpp
     #World/Environ/Stars.cpp
     #World/Environ/Sky.cpp
-    World/Environ/Leaves.cpp
+    #World/Environ/Leaves.cpp
     #World/Environ/Lightnings.cpp
     #World/Environ/Foreground.cpp
     World/Environ/Objects.cpp
@@ -45,6 +45,7 @@ set(Themisto_srcs
     World/Objects/Empty.cpp
     World/Objects/Sky.cpp
     World/Objects/Stars.cpp
+    World/Objects/Leaves.cpp
 
     # Actions
     #World/Actions/TakeAction.cpp
