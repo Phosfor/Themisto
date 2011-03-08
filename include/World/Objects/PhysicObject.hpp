@@ -22,11 +22,12 @@
 #include <Box2D/Common/b2Math.h>
 #include <ClanLib/core.h>
 
-#include "World/WorldManager.hpp"
-#include "World/Objects/Object.hpp"
+#include "Core/WorldManager.hpp"
 #include "Core/Utils.hpp"
 #include "Core/ResourceManager.hpp"
 #include "Core/ApplicationManager.hpp"
+
+#include "World/Objects/Object.hpp"
 
 //#include "World/Actions/TakeAction.hpp"
 

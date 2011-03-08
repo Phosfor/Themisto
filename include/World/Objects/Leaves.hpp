@@ -24,7 +24,7 @@
 #include "Core/Utils.hpp"
 #include "Core/ApplicationManager.hpp"
 #include "Core/ResourceManager.hpp"
-#include "Core/EnvironManager.hpp"
+#include "Core/WorldManager.hpp"
 #include "World/Objects/Object.hpp"
 
 struct LeafData

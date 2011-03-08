@@ -62,7 +62,7 @@ void Moon::updateVisual(float newX, float newY)
 
 void Moon::update(float elapsed)
 {
-    float globalTime = environManager().getAbsTime();
+    float globalTime = worldManager().getAbsTime();
 
     // Set moon back
     if (!mRenderMoon && (globalTime == 0.0f || globalTime <= 0.3f ))

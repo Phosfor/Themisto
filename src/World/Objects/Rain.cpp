@@ -23,7 +23,7 @@ Data::Data()
 
 void Rain::init()
 {
-    float windPower = environManager().getWindPower();
+    float windPower = worldManager().getWindPower();
     for (uint16_t i=0; i < mMaxObjects; ++i)
     {
         mData.push_back(Data());
@@ -91,7 +91,7 @@ void Rain::updateVisual(float newX, float newY)
 
 void Rain::update(float elapsed)
 {
-    float _windPower = environManager().getWindPower();
+    float _windPower = worldManager().getWindPower();
     float newXSpeed = _windPower * elapsed;
     float newYSpeed = Gravity * elapsed * 0.7;
     for (uint16_t i=0; i < mMaxObjects; i++)

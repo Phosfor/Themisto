@@ -23,14 +23,15 @@
 #include <boost/lexical_cast.hpp>
 #include <ClanLib/core.h>
 
-#include "World/WorldManager.hpp"
-#include "World/Objects/Object.hpp"
+#include "Core/WorldManager.hpp"
 #include "Core/Utils.hpp"
 #include "Core/ResourceManager.hpp"
 #include "Core/ApplicationManager.hpp"
 #include "Core/PhysicManager.hpp"
 #include "Core/InputManager.hpp"
+
 #include "World/Objects/Actor.hpp"
+#include "World/Objects/Object.hpp"
 
 class Body;
 class Impact;

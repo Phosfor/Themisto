@@ -52,7 +52,7 @@ void EditorState::update()
 {
     mGC.clear();
 
-    environManager().update();
+    worldManager().update();
 
     if (mDrawDebug) physicManager().getWorld().DrawDebugData();
 }

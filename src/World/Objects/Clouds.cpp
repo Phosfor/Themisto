@@ -24,14 +24,14 @@ void Clouds::setLimit(uint16_t limit)
 
     if (limit > mMaxObjects)
       for (uint16_t i=0; i < limit - mMaxObjects; i++)
-          processClouds(mGC, environManager().getWindPower(), mClouds[mMaxObjects + i], false);
+          processClouds(mGC, worldManager().getWindPower(), mClouds[mMaxObjects + i], false);
 
    mMaxObjects = limit;
 }
 
 void Clouds::init()
 {
-    float windPower = environManager().getWindPower();
+    float windPower = worldManager().getWindPower();
     for (uint16_t i=0; i < mMaxObjects; i++)
     {
         mClouds.push_back(CloudData());
@@ -133,7 +133,7 @@ void Clouds::update(float elapsed)
 
 void Clouds::updateVisual(float newX, float newY)
 {
-    float windPower = environManager().getWindPower();
+    float windPower = worldManager().getWindPower();
     float elapsed = appManager().getElapsed() / 1000.0f;
     float newSpeed = windPower * elapsed * 0.5;
 

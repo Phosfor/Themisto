@@ -25,7 +25,7 @@
 
 #include "Core/Utils.hpp"
 #include "Core/ApplicationManager.hpp"
-#include "Core/EnvironManager.hpp"
+#include "Core/WorldManager.hpp"
 #include "World/Objects/Object.hpp"
 
 const float kTail = 0.025f;

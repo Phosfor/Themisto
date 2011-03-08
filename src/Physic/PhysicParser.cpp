@@ -20,12 +20,12 @@
 #include <ClanLib/core.h>
 #include <boost/lexical_cast.hpp>
 
-#include "World/WorldManager.hpp"
-#include "World/Objects/Object.hpp"
-#include "Physic/Impact.hpp"
-#include "Physic/Body.hpp"
+#include "Core/WorldManager.hpp"
 #include "Core/Utils.hpp"
 #include "Core/PhysicManager.hpp"
+#include "Physic/Impact.hpp"
+#include "Physic/Body.hpp"
+#include "World/Objects/Object.hpp"
 
 
 boost::shared_ptr<Body> ParsePhysicBody(CL_DomElement body, std::string& desc)

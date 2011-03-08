@@ -12,12 +12,10 @@ set(Themisto_srcs
     Core/Utils.cpp
     Core/PhysicManager.cpp
     Core/SceneLoader.cpp
-    Core/EnvironManager.cpp
     Core/InputManager.cpp
     Core/LevelManager.cpp
     Core/TemplatesProcessing.cpp
-
-    World/WorldManager.cpp
+    Core/WorldManager.cpp
 
     # Objects
     World/Objects/Grass.cpp

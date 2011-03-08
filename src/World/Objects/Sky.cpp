@@ -42,7 +42,7 @@ Sky::Sky()
 
 void Sky::update(float elapsed)
 {
-    float globalTime = environManager().getAbsTime();
+    float globalTime = worldManager().getAbsTime();
 
     // Make atmosphere scattering? [9; 11] globalTime
     if (globalTime <= 7.0f) {

@@ -26,7 +26,7 @@
 #include "Core/ResourceManager.hpp"
 #include "World/Objects/Object.hpp"
 #include "Core/LevelManager.hpp"
-#include "Core/EnvironManager.hpp"
+#include "Core/WorldManager.hpp"
 
 #include "World/Objects/Foreground.hpp"
 

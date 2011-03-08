@@ -21,9 +21,8 @@
 #include <Box2D/Box2D.h>
 
 #include "Core/PhysicManager.hpp"
-#include "Core/InputManager.hpp"
-#include "Core/EnvironManager.hpp"
 #include "Core/LevelManager.hpp"
+#include "Core/WorldManager.hpp"
 #include "Core/TemplatesProcessing.hpp"
 #include "World/Objects/TypesManager.hpp"
 

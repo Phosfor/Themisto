@@ -48,7 +48,7 @@ void Stars::init()
 
 void Stars::update(float elapsed)
 {
-    float globalTime = environManager().getAbsTime();
+    float globalTime = worldManager().getAbsTime();
     if (globalTime <= 10.0f) {
         t1 = 0.0f;
     } else if (globalTime >= 14.0f) {

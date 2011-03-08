@@ -20,7 +20,7 @@
 #include <ClanLib/core.h>
 #include <ClanLib/display.h>
 
-#include "Core/EnvironManager.hpp"
+#include "Core/WorldManager.hpp"
 #include "Core/Utils.hpp"
 #include "Core/ApplicationManager.hpp"
 #include "World/Objects/Object.hpp"

@@ -19,10 +19,12 @@
 
 #include <list>
 #include <map>
+
 #include <boost/shared_ptr.hpp>
-#include "World/WorldManager.hpp"
-#include "Physic/Impact.hpp"
 #include <Box2D/Box2D.h>
+
+#include "Core/WorldManager.hpp"
+#include "Physic/Impact.hpp"
 
 class Body
 {

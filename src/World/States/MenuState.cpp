@@ -66,12 +66,12 @@ void MenuState::update()
 {
     mGC.clear();
 
-    environManager().update();
+    worldManager().update();
 
     if (mDrawDebug) physicManager().getWorld().DrawDebugData();
     if (mDetailedOutput)
     {
-        int *time = environManager().getEnvironTime();
+        int *time = worldManager().getWorldTime();
         CL_Rectf camPos = levelManager().getAbsoluteCameraPos();
         std::string information;
 
@@ -80,7 +80,7 @@ void MenuState::update()
         information += cl_format("Camera abs pos: [(%1;%2), (%3;%4)]\n",
                 int(camPos.left), int(camPos.top), int(camPos.right), int(camPos.bottom)).c_str();
         information += cl_format("Level name: %1\n", levelManager().getLevelName()).c_str();
-        information += cl_format("Wind power: %1\n", int(environManager().getWindPower())).c_str();
+        information += cl_format("Wind power: %1\n", int(worldManager().getWindPower())).c_str();
 
         mInfoLabel->set_text(information);
 

@@ -15,9 +15,9 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "Core/EnvironManager.hpp"
+#include "Core/WorldManager.hpp"
 
-void EnvironManager::initEnviron()
+void WorldManager::initWorld()
 {
     mWindPower = 0.0f;
     memset(mEnvironTime, 0, sizeof(mEnvironTime));
@@ -25,43 +25,54 @@ void EnvironManager::initEnviron()
     mTotalSec = 0.0f;
 }
 
-EnvironManager::~EnvironManager()
+WorldManager::WorldManager()
 {
+    mEnvironTemperature = 20;
+    mUniqueIDCounter = 0;
 }
 
-void EnvironManager::setWindPower(float _power)
+
+std::string WorldManager::generateUniqueID()
+{
+    ++mUniqueIDCounter;
+    std::ostringstream out;
+    out << "#" << mUniqueIDCounter;
+    return out.str();
+}
+
+void WorldManager::setWindPower(float _power)
 {
     mWindPower = Meters2Pixels(_power);
 }
 
-float EnvironManager::getWindPower()
+float WorldManager::getWindPower()
 {
     return mWindPower;
 }
 
-int *EnvironManager::getEnvironTime()
+int *WorldManager::getWorldTime()
 {
     return mEnvironTime;
 }
 
-bool EnvironManager::isNight()
+bool WorldManager::isNight()
 {
     return mNight;
 }
 
-void EnvironManager::setEnvironTime(int _hours, int _minutes, int _seconds)
+void WorldManager::setWorldTime(int _hours, int _minutes, int _seconds)
 {
     mEnvironTime[0] = _hours;
     mEnvironTime[1] = _minutes;
     mEnvironTime[2] = _seconds;
 }
 
-float EnvironManager::getAbsTime()
+float WorldManager::getAbsTime()
 {
     return mTotalHours;
 }
 
-void EnvironManager::update()
+void WorldManager::update()
 {
     float elapsed = appManager().getElapsed();
     float gameSeconds = GameSeconds(elapsed);

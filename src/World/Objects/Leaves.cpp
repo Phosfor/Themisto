@@ -28,7 +28,7 @@ Leaves::Leaves(uint16_t maxLeaves) : mFirstTime(true)
 
 void Leaves::init()
 {
-    float windPower = environManager().getWindPower();
+    float windPower = worldManager().getWindPower();
     for (uint16_t i=0; i < mMaxObjects; ++i)
     {
         mLeaves.push_back(LeafData());
@@ -92,7 +92,7 @@ void Leaves::update(float elapsed)
 void Leaves::updateVisual(float newX, float newY)
 {
     float elapsed = appManager().getElapsed() / 1000.0f;
-    float windPower = environManager().getWindPower();
+    float windPower = worldManager().getWindPower();
     float newSpeed1 = windPower * elapsed * 0.4;
     float newSpeed2 = Gravity * elapsed;
     for (uint16_t i=0; i < mMaxObjects; i++)

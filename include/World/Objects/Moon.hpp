@@ -20,7 +20,7 @@
 #include "Core/ApplicationManager.hpp"
 #include "Core/ResourceManager.hpp"
 #include "World/Objects/Object.hpp"
-#include "Core/EnvironManager.hpp"
+#include "Core/WorldManager.hpp"
 
 #include <math.h>
 

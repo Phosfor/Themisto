@@ -49,7 +49,6 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
 
     CL_DomElement root = document->get_document_element();
     CL_DomElement world = root.get_elements_by_tag_name("World").item(0).to_element();
-    CL_DomElement environ = world.get_elements_by_tag_name("Environ").item(0).to_element();
     CL_DomElement objects = world.get_elements_by_tag_name("Objects").item(0).to_element();
 
     // Get level attributes
@@ -74,8 +73,8 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
 
     CL_Rectf camViewport(CL_Pointf(cameraPosX, cameraPosY), CL_Sizef(ScreenResolutionX, ScreenResolutionY));
 
-    environManager().initEnviron();
-    environManager().setWindPower(4);
+    worldManager().initWorld();
+    worldManager().setWindPower(4);
 
     // START OF OBJECTS PARSING -------------------------------------------
     {

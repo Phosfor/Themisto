@@ -26,9 +26,10 @@
 #include "Core/Utils.hpp"
 #include "Core/ApplicationManager.hpp"
 #include "Core/ResourceManager.hpp"
-#include "Core/EnvironManager.hpp"
-#include "World/Objects/Object.hpp"
+#include "Core/WorldManager.hpp"
 #include "Core/LevelManager.hpp"
+
+#include "World/Objects/Object.hpp"
 
 struct CloudData
 {

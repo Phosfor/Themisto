@@ -19,13 +19,34 @@
 
 #include <boost/serialization/singleton.hpp>
 #include <boost/shared_ptr.hpp>
-#include <sstream>
 
+#include <ClanLib/core.h>
+#include <ClanLib/display.h>
+
+#include "Core/Utils.hpp"
+#include "Core/ApplicationManager.hpp"
+#include "Core/PhysicManager.hpp"
+#include "Core/LevelManager.hpp"
+
+#include <vector>
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <math.h>
+#include <sstream>
+#include <map>
 
 class WorldManager : public boost::serialization::singleton<WorldManager>
 {
     private:
         int mUniqueIDCounter;
+
+        float mWindPower;
+
+        bool mNight;
+        int mEnvironTime[3]; // 0 - hours; 1 - minutes; 2 - seconds
+        float mTotalSec;
+        float mTotalHours;
 
     public:
         float mEnvironTemperature;
@@ -33,6 +54,18 @@ class WorldManager : public boost::serialization::singleton<WorldManager>
         void initWorld();
         WorldManager();
         std::string generateUniqueID();
+
+        bool isNight();
+
+        void setWindPower(float _power);
+        float getWindPower();
+
+        void setWorldTime(int _hours, int _minutes, int _seconds);
+        int *getWorldTime();
+
+        float getAbsTime();
+
+        void update();
 };
 
 inline WorldManager &worldManager() { return WorldManager::get_mutable_instance(); }
