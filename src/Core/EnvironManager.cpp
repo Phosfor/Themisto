@@ -17,18 +17,6 @@
 
 #include "Core/EnvironManager.hpp"
 
-//#include "World/Environ/Rain.hpp"
-//#include "World/Environ/Moon.hpp"
-//#include "World/Environ/Stars.hpp"
-//#include "World/Environ/Sky.hpp"
-//#include "World/Environ/Leaves.hpp"
-//#include "World/Environ/Lightnings.hpp"
-//#include "World/Environ/Foreground.hpp"
-#include "World/Environ/Objects.hpp"
-
-// Abstract base
-#include "World/Environ/Object.hpp"
-
 void EnvironManager::initEnviron()
 {
     mWindPower = 0.0f;
@@ -39,7 +27,6 @@ void EnvironManager::initEnviron()
 
 EnvironManager::~EnvironManager()
 {
-    mObjectsMap.clear();
 }
 
 void EnvironManager::setWindPower(float _power)
@@ -99,76 +86,6 @@ void EnvironManager::update()
         }
     }
 
-    // Update all environ objects
-    for (MapType::const_iterator it = mObjectsMap.begin(); it != mObjectsMap.end(); ++it)
-    {
-        it->second->update(elapsed);
-    }
-}
-
-void EnvironManager::enableType(bool state, EnvironTypes type, float limit)
-{
-    // If the type is already exists in map
-    if (mObjectsMap.find(type) != mObjectsMap.end())
-    {
-        mObjectsMap[type]->setEnabled(state);
-    }
-    else
-    {
-        EnvironObject *temp = NULL;
-        std::cout << "Type: " << type << "\n";
-        switch (type)
-        {
-            //case Environ_Sky:    temp = new Sky();    break;
-            //case Environ_Stars:  temp = new Stars();  break;
-            //case Environ_Moon:   temp = new Moon();   break;
-            //case Environ_Rain:   temp = new Rain();   break;
-            //case Environ_Leaves: temp = new Leaves(); break;
-            case Environ_Objects:  temp = new Objects();  break;
-            //case Environ_Foreground:  temp = new Foreground();  break;
-            //case Environ_Lightnings:  temp = new Lightnings();  break;
-            default: throw CL_Exception("Unknown environ type");
-        }
-        temp->setEnabled(state);
-        mObjectsMap.insert(MapType::value_type(type, temp));
-    }
-
-    if (limit != -1)
-    {
-        float area = Pixels2Meters(ScreenResolutionX) * Pixels2Meters(ScreenResolutionY);
-        mObjectsMap[type]->setLimit(limit * area);
-    }
-}
-
-EnvironObject *EnvironManager::getTypeHandle(EnvironTypes type)
-{
-    if (mObjectsMap.find(type) == mObjectsMap.end())
-    {
-        LOG("You was trying to get nonexistent object handle with type id: " + type);
-        return NULL;
-    }
-    else
-    {
-        return mObjectsMap[type];
-    }
-}
-
-void EnvironManager::setLimit(EnvironTypes type, int limit)
-{
-    mObjectsMap[type]->setLimit(limit);
-}
-
-int EnvironManager::getLimit(EnvironTypes type)
-{
-    return mObjectsMap[type]->getLimit();
-}
-
-bool EnvironManager::getTypeEnabled(EnvironTypes type)
-{
-    if (mObjectsMap.find(type) == mObjectsMap.end())
-        return false;
-    else
-        return mObjectsMap[type]->getEnabled();
-
-    return false;
+    physicManager().update(elapsed);
+    levelManager().updateVisual(elapsed);
 }

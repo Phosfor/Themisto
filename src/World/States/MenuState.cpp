@@ -66,7 +66,6 @@ void MenuState::update()
 {
     mGC.clear();
 
-
     environManager().update();
 
     if (mDrawDebug) physicManager().getWorld().DrawDebugData();
@@ -177,7 +176,6 @@ void MenuState::initGui()
     mDropSlider->set_position(150);
     mDropSlider->set_ranges(1, 1000, 50, 50);
     mDropSlider->set_geometry(CL_RectPS(clientArea.get_width() - 180 - 5, 5, 180, 30));
-    mDropSlider->func_value_changed().set(this, &MenuState::dropNumChanged);
 
     // Rain power label
     mDropLabel = new CL_Label(&guiManager().getWrapper());
@@ -195,7 +193,6 @@ void MenuState::initGui()
     mWindSlider->set_ranges(-10, 10, 2, 1);
     mWindSlider->set_position(2);
     mWindSlider->set_geometry(CL_RectPS(clientArea.get_width() - 180 - 5, 45, 180, 30));
-    mWindSlider->func_value_changed().set(this, &MenuState::windPowerChanged);
 
     // Wind power label
     mWindLabel = new CL_Label(&guiManager().getWrapper());
@@ -213,7 +210,6 @@ void MenuState::initGui()
     mLeavesSlider->set_ranges(1, 40, 2, 1);
     mLeavesSlider->set_position(8);
     mLeavesSlider->set_geometry(CL_RectPS(clientArea.get_width() - 180 - 5, 85, 180, 30));
-    mLeavesSlider->func_value_changed().set(this, &MenuState::leavesNumChanged);
 
     // Leaves count label
     mLeavesLabel = new CL_Label(&guiManager().getWrapper());
@@ -225,15 +221,12 @@ void MenuState::initGui()
 
 void MenuState::dropNumChanged()
 {
-    environManager().setLimit(Environ_Rain, mDropSlider->get_position());
 }
 
 void MenuState::windPowerChanged()
 {
-    environManager().setWindPower(mWindSlider->get_position());
 }
 
 void MenuState::leavesNumChanged()
 {
-    environManager().setLimit(Environ_Leaves, mLeavesSlider->get_position());
 }

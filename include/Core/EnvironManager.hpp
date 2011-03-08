@@ -21,7 +21,9 @@
 #include <ClanLib/display.h>
 
 #include "Core/Utils.hpp"
-#include "World/Environ/Types.hpp"
+#include "Core/ApplicationManager.hpp"
+#include "Core/PhysicManager.hpp"
+#include "Core/LevelManager.hpp"
 
 #include <boost/serialization/singleton.hpp>
 
@@ -33,22 +35,9 @@
 
 #include <map>
 
-//class Rain;
-//class Moon;
-class Stars;
-//class Sky;
-class Leaves;
-//class Clouds;
-//class Birds;
-//class Lightnings;
-class EnvironObject;
-//class Foreground;
-class Objects;
 class EnvironManager : public boost::serialization::singleton<EnvironManager>
 {
     private:
-        typedef std::map<EnvironTypes, EnvironObject*> MapType;
-        MapType mObjectsMap;
         float mWindPower;
 
         bool mNight;
@@ -64,14 +53,6 @@ class EnvironManager : public boost::serialization::singleton<EnvironManager>
 
         void setWindPower(float _power);
         float getWindPower();
-
-        void setLimit(EnvironTypes type, int limit);
-        int getLimit(EnvironTypes type);
-
-        void enableType(bool state, EnvironTypes type, float = -1);
-        EnvironObject *getTypeHandle(EnvironTypes type);
-
-        bool getTypeEnabled(EnvironTypes type);
 
         void setEnvironTime(int _hours, int _minutes, int _seconds);
         int *getEnvironTime();

@@ -17,17 +17,7 @@ set(Themisto_srcs
     Core/LevelManager.cpp
     Core/TemplatesProcessing.cpp
 
-    # Environ
     World/WorldManager.cpp
-    World/Environ/Object.cpp
-    #World/Environ/Rain.cpp
-    #World/Environ/Moon.cpp
-    #World/Environ/Stars.cpp
-    #World/Environ/Sky.cpp
-    #World/Environ/Leaves.cpp
-    #World/Environ/Lightnings.cpp
-    #World/Environ/Foreground.cpp
-    World/Environ/Objects.cpp
 
     # Objects
     World/Objects/Grass.cpp

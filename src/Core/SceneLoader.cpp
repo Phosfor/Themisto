@@ -74,45 +74,8 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
 
     CL_Rectf camViewport(CL_Pointf(cameraPosX, cameraPosY), CL_Sizef(ScreenResolutionX, ScreenResolutionY));
 
-    LOG_NOFORMAT("- Loading Environ objects\n");
     environManager().initEnviron();
-
-    // CHANGEABLE ENVIRON [For grepping, don't remove]
-    std::map<std::string, EnvironTypes> deps;
-    //deps["Rain"] = Environ_Rain;
-    //deps["Clouds"] = Environ_Clouds;
-    //deps["Foreground"] = Environ_Foreground;
-    //deps["Lightnings"] = Environ_Lightnings;
-    //deps["Sky"] = Environ_Sky;
-    //deps["Moon"] = Environ_Moon;
-    deps["Leaves"] = Environ_Leaves;
-    deps["Stars"] = Environ_Stars;
-    //deps["Birds"] = Environ_Birds;
-    deps["Objects"] = Environ_Objects;
-
-    CL_DomNodeList childList = environ.get_child_nodes();
-    for (int i=0; i < childList.get_length(); ++i)
-    {
-        CL_DomNode tag = childList.item(i);
-        std::cout << tag.get_node_name().c_str() << "\n";
-        if (tag.get_node_name() == "Wind")
-        {
-            float pow = boost::lexical_cast<float>(tag.to_element().get_attribute("power").c_str());
-            environManager().setWindPower(pow);
-            continue;
-        }
-
-        EnvironTypes type = deps[tag.get_node_name().c_str()];
-
-        bool enabled = tag.to_element().get_attribute("enabled") == "true";
-
-        float lim = -1;
-        CL_String s_lim = tag.to_element().get_attribute("limit");
-        if (s_lim != "") lim = boost::lexical_cast<float>(s_lim.c_str());
-
-        if (enabled) environManager().enableType(enabled, type, lim);
-    }
-    LOG_NOFORMAT("- All environ objects are loaded.\n");
+    environManager().setWindPower(4);
 
     // START OF OBJECTS PARSING -------------------------------------------
     {
