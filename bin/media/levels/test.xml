@@ -1,23 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <ThemistoLevel version="0.1" authors="Wincode team" name="First level">
-
-    <World image="levels/test.png" cameraPosX="0" cameraPosY="0">
-
-        <Environ>
-            <!--<Rain enabled="false" limit="1.5" />-->
-            <!--<Lightnings enabled="true" />-->
-            <!--<Sky enabled="true" />-->
-            <!--<Moon enabled="true" />-->
-            <!--<Leaves enabled="false" limit="0.15" />-->
-            <!--<Stars enabled="true" limit="6.0" />-->
-            <Objects enabled="true" />
-            <!-- actual_size is average real foreground image size refer to full window size -->
-            <!-- If fixed is true, foreground wouldn't move with camera and level -->
-            <!--<Foreground enabled="true" image="test" actual_size="40" fixed="false" />-->
-            <Wind enabled="true" power="-2" />
-        </Environ>
-
+    <World cameraPosX="0" cameraPosY="0">
         <Objects>
              <Object name="SkyObj" type="Sky" always_draw="true" z-index="-100" />
              <Object name="StarsObj" type="Stars" maxStars="6.0" z-index="-99"  always_draw="true" />
