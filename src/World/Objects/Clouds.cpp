@@ -71,7 +71,7 @@ void Clouds::processClouds(CL_GraphicContext &gc, float windPower, CloudData &cu
     //current.mColor = CL_Colorf(color, color, color, 1.2f);
     current.mColor = CL_Colorf(42/255.0f, 72/255.0f, 85/255.0f, 1.1f);
 
-    current.speed_koef = rand() % 15 + 25;
+    current.speed_koef = rand() % 15;
 }
 
 Clouds::Clouds(uint16_t maxClouds)
@@ -147,7 +147,7 @@ void Clouds::updateVisual(float newX, float newY)
         else
         {
             if (windPower > 0) {
-                if (current.x > mWindowWidth)
+                if (current.x > mWindowWidth + current.imageHandle.get_width())
                     processClouds(mGC, windPower, current);
             } else {
                 if (current.x < -current.imageHandle.get_width())

@@ -25,7 +25,7 @@
              <Object name="LeavesObj" type="Leaves" maxLeaves="0.15" always_draw="true" z-index="-1" />
              <Object name="LevelObj" type="Level" template="level_phys" z-index="1" />
              <Object name="BirdsObj" type="Birds" maxBirds="3"  always_draw="true"/>
-             <Object name="RainObj" type="Rain" maxDrops="1.5"  always_draw="true"/>
+             <Object name="RainObj" type="Rain" maxDrops="2.5"  always_draw="true"/>
 
              <Object name="Lamp" type="LightColumnObject">
                  <Visual>
