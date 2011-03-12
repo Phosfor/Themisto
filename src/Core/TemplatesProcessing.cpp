@@ -203,7 +203,7 @@ TemplatesProcessor::getSingleTemplate(const std::string& _spec,
     {
         boost::filesystem::path src = boost::filesystem::path(spec);
         std::string filePath = solveFileName(src.branch_path().string(), baseFile);
-        std::string templateName = src.leaf();
+        std::string templateName = src.leaf().c_str();
         DocumentPtr fileDocument = getFileDocument(filePath);
         result = getSingleTemplate(templateName, fileDocument, filePath);
         if(result)
