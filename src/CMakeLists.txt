@@ -78,6 +78,18 @@ target_link_libraries(Themisto
 )
 
 # ----------------------------------------------------
+# Shared library for script system
+# ----------------------------------------------------
+set(Script_srcs
+    Scripts/Core/LogManagerWrapper.cpp
+)
+ADD_LIBRARY(Script SHARED ${Script_srcs})
+TARGET_LINK_LIBRARIES(Script 
+    ${PYTHON_LIBRARIES}
+    ${Boost_LIBRARIES}
+)
+
+# ----------------------------------------------------
 # Executable for the DebugConsole
 # ----------------------------------------------------
 set(DebugConsole_srcs
