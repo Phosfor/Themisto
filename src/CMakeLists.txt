@@ -70,6 +70,7 @@ target_link_libraries(Themisto
     ${PNG_LIBRARIES}
     ${JPEG_LIBRARIES}
 
+    ${PYTHON_LIBRARIES}
     ${Boost_LIBRARIES}
     ${ClanLib_LIBRARIES}
     ${BOX2D_LIBRARY}
@@ -111,6 +112,7 @@ target_link_libraries(DebugConsole
     ${JPEG_LIBRARIES}
     ${ClanLib_LIBRARIES}
     ${READLINE_LIBRARIES}
+    ${PYTHON_LIBRARIES}
     ${Boost_LIBRARIES}
     readline
     history
