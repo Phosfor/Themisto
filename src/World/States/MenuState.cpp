@@ -42,6 +42,9 @@ void MenuState::init()
     physicManager().getWorld().SetDebugDraw(mDraw);
     mInputSlot = inputManager().getKeyboard().sig_key_down().connect(this, &MenuState::onKeyDown);
 
+    scriptsManager().runString("import LogManager");
+    scriptsManager().runString("LogManager.LOG('fucking test!')");
+
     initGui();
 }
 

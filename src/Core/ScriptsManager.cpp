@@ -35,6 +35,24 @@ ScriptsManager::ScriptsManager()
         LOG("Catched some exception at scripts initialization!");
         PyErr_Print();
     }
+
+    // Process python paths
+    runString("import sys\n"
+                 "sys.path.append('lib/')\n"
+                 "sys.path.append('lib/Core')\n");
+}
+
+void ScriptsManager::runString(const std::string &pyCode)
+{
+    try
+    {
+        bp::exec(pyCode.c_str(), mMainNamespace);
+    }
+    catch (...)
+    {
+        LOG(cl_format("Failed to run python script: ", pyCode));
+        PyErr_Print();
+    }
 }
 
 bp::object &ScriptsManager::getMainModule()

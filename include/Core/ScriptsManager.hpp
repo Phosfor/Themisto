@@ -17,6 +17,7 @@
 
 #pragma once
 
+#include <ClanLib/core.h>
 #include <boost/python.hpp>
 #include <boost/serialization/singleton.hpp>
 
@@ -35,6 +36,8 @@ class ScriptsManager : public boost::serialization::singleton<ScriptsManager>
 
         bp::object &getMainModule();
         bp::object &getMainNamespace();
+
+        void runString(const std::string &pyCode);
 };
 
 
