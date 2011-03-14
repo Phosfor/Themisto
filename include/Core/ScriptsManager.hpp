@@ -15,12 +15,27 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "Core/ScriptsManager.hpp"
+#pragma once
+
+#include <boost/python.hpp>
+#include <boost/serialization/singleton.hpp>
+
 #include "Core/LogManager.hpp"
 
-BOOST_PYTHON_MODULE(LogManager)
+namespace bp = boost::python;
+
+class ScriptsManager : public boost::serialization::singleton<ScriptsManager>
 {
-    bp::def("LOG", LOG);
-    bp::def("LOG_FILE", LOG_FILE);
-    bp::def("LOG_NO_FORMAT", LOG_NOFORMAT);
-}
+    private:
+        bp::object mMainModule, mMainNamespace;
+
+    public:
+        ScriptsManager();
+        ~ScriptsManager();
+
+        bp::object getMainModule();
+        bp::object getMainNamespace();
+};
+
+
+inline ScriptsManager &scriptsManager() { return ScriptsManager::get_mutable_instance(); }

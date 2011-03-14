@@ -16,6 +16,7 @@ set(Themisto_srcs
     Core/LevelManager.cpp
     Core/TemplatesProcessing.cpp
     Core/WorldManager.cpp
+    Core/ScriptsManager.cpp
 
     # Objects
     World/Objects/Grass.cpp

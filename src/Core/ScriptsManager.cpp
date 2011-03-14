@@ -16,11 +16,33 @@
 */
 
 #include "Core/ScriptsManager.hpp"
-#include "Core/LogManager.hpp"
 
-BOOST_PYTHON_MODULE(LogManager)
+ScriptsManager::~ScriptsManager()
 {
-    bp::def("LOG", LOG);
-    bp::def("LOG_FILE", LOG_FILE);
-    bp::def("LOG_NO_FORMAT", LOG_NOFORMAT);
+    Py_Finalize();
+}
+
+ScriptsManager::ScriptsManager()
+{
+    try
+    {
+        Py_Initialize();
+        mMainModule = bp::import("__main__");
+        mMainNamespace = mMainModule.attr("__dict__");
+    }
+    catch(...)
+    {
+        LOG("Catched some exception at scripts initialization!");
+        PyErr_Print();
+    }
+}
+
+bp::object ScriptsManager::getMainModule()
+{
+    return mMainModule;
+}
+
+bp::object ScriptsManager::getMainNamespace()
+{
+    return mMainNamespace;
 }

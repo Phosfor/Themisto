@@ -39,6 +39,7 @@
 #include "Core/GuiManager.hpp"
 #include "Core/Utils.hpp"
 #include "Core/InputManager.hpp"
+#include "Core/ScriptsManager.hpp"
 #include "World/Objects/TypesManager.hpp"
 
 #include "World/States/MenuState.hpp"
