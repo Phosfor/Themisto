@@ -18,22 +18,11 @@
 #include <boost/python.hpp>
 #include "Core/LogManager.hpp"
 
-using namespace boost::python;
-struct World
-{
-    World(std::string msg): msg(msg) {} // added constructor
-    void set(std::string msg) { this->msg = msg; }
-    std::string greet() { return msg; }
-    std::string msg;
-};
+namespace bp = boost::python;
 
-BOOST_PYTHON_MODULE(Script)
+BOOST_PYTHON_MODULE(LogManager)
 {
-    class_<World>("World", init<std::string>())
-        .def("greet", &World::greet)
-        .def("set", &World::set)
-    ;
-    /*class_< LogManager, boost::serialization::singleton<LogManager> >("LogManager", no_init)
-        .def("setDefaultLog", &LogManager::setDefaultLog)
-    ;*/
+    bp::def("LOG", LOG);
+    bp::def("LOG_FILE", LOG_FILE);
+    bp::def("LOG_NO_FORMAT", LOG_NOFORMAT);
 }
