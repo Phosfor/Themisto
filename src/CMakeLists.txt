@@ -82,13 +82,22 @@ target_link_libraries(Themisto
 # Shared library for script system
 # ----------------------------------------------------
 set(Script_srcs
-    Scripts/Core/LogManagerWrapper.cpp
+    Core/LogManager
 )
-ADD_LIBRARY(Script SHARED ${Script_srcs})
-TARGET_LINK_LIBRARIES(Script 
-    ${PYTHON_LIBRARIES}
-    ${Boost_LIBRARIES}
-)
+
+foreach(i ${Script_srcs})
+    # Takes only filename from given filepath
+    get_filename_component(fileName ${i} NAME_WE)
+    # Add library with dependencies
+    add_library( ${fileName} SHARED ${i}.cpp Scripts/${i}.cpp )
+    # Remove 'lib' preffix from the library name
+    set_target_properties(${fileName} PROPERTIES PREFIX "")
+    # Link need own libraries
+    target_link_libraries(${fileName}
+        ${PYTHON_LIBRARIES}
+        ${Boost_LIBRARIES}
+    )
+endforeach(i)
 
 # ----------------------------------------------------
 # Executable for the DebugConsole

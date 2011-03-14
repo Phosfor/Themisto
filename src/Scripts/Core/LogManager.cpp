@@ -16,7 +16,7 @@
 */
 
 #include <boost/python.hpp>
-//#include "Core/LogManager.hpp"
+#include "Core/LogManager.hpp"
 
 using namespace boost::python;
 struct World
@@ -27,7 +27,7 @@ struct World
     std::string msg;
 };
 
-BOOST_PYTHON_MODULE(script)
+BOOST_PYTHON_MODULE(Script)
 {
     class_<World>("World", init<std::string>())
         .def("greet", &World::greet)
