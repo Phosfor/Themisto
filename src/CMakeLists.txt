@@ -92,7 +92,7 @@ foreach(i ${Script_srcs})
     # Takes only filepath (without filename)
     get_filename_component(filePath ${i} PATH)
     # Add library with dependencies
-    add_library(${fileName} SHARED ${i}.cpp Scripts/${i}.cpp)
+    add_library(${fileName} SHARED Scripts/${i}.cpp)
     # Put library into need folder hierachy
     set(LIBRARY_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/bin/lib/${filePath})
     # Remove 'lib' preffix from the library name
