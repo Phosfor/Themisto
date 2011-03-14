@@ -29,17 +29,32 @@ ScriptsManager::ScriptsManager()
         Py_Initialize();
         mMainModule = bp::import("__main__");
         mMainNamespace = mMainModule.attr("__dict__");
+
+        processPaths();
     }
     catch(...)
     {
         LOG("Catched some exception at scripts initialization!");
         PyErr_Print();
     }
+}
+
+void ScriptsManager::processPaths()
+{
+    namespace bf = boost::filesystem;
+    if (!bf::exists("lib")) LOG("`lib` directory doesn't exists! Rebuild project.");
 
     // Process python paths
-    runString("import sys\n"
-                 "sys.path.append('lib/')\n"
-                 "sys.path.append('lib/Core')\n");
+    runString("import sys");
+
+    // We need this for sexy python modules
+    bf::directory_iterator endIt;
+    for ( boost::filesystem::recursive_directory_iterator end, dir("lib/"); 
+           dir != end; ++dir )
+    {
+        if (bf::is_directory(dir->path()))
+            runString(cl_format("sys.path.append('%1')", dir->path().c_str()).c_str());
+    }
 }
 
 void ScriptsManager::runString(const std::string &pyCode)
@@ -50,7 +65,20 @@ void ScriptsManager::runString(const std::string &pyCode)
     }
     catch (...)
     {
-        LOG(cl_format("Failed to run python script: ", pyCode));
+        LOG(cl_format("Failed to run python code: ", pyCode));
+        PyErr_Print();
+    }
+}
+
+void ScriptsManager::runFile(const std::string &fileName)
+{
+    try
+    {
+        bp::exec_file(fileName.c_str(), mMainNamespace);
+    }
+    catch (...)
+    {
+        LOG(cl_format("Failed to run python file script: ", fileName));
         PyErr_Print();
     }
 }

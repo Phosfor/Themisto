@@ -17,9 +17,13 @@
 
 #pragma once
 
+#include <fstream>
+#include <iostream>
+
 #include <ClanLib/core.h>
 #include <boost/python.hpp>
 #include <boost/serialization/singleton.hpp>
+#include <boost/filesystem.hpp>
 
 #include "Core/LogManager.hpp"
 
@@ -30,6 +34,8 @@ class ScriptsManager : public boost::serialization::singleton<ScriptsManager>
     private:
         bp::object mMainModule, mMainNamespace;
 
+        void processPaths();
+
     public:
         ScriptsManager();
         ~ScriptsManager();
@@ -38,6 +44,7 @@ class ScriptsManager : public boost::serialization::singleton<ScriptsManager>
         bp::object &getMainNamespace();
 
         void runString(const std::string &pyCode);
+        void runFile(const std::string &fileName);
 };
 
 
