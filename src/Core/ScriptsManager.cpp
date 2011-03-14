@@ -37,12 +37,12 @@ ScriptsManager::ScriptsManager()
     }
 }
 
-bp::object ScriptsManager::getMainModule()
+bp::object &ScriptsManager::getMainModule()
 {
     return mMainModule;
 }
 
-bp::object ScriptsManager::getMainNamespace()
+bp::object &ScriptsManager::getMainNamespace()
 {
     return mMainNamespace;
 }

@@ -33,8 +33,8 @@ class ScriptsManager : public boost::serialization::singleton<ScriptsManager>
         ScriptsManager();
         ~ScriptsManager();
 
-        bp::object getMainModule();
-        bp::object getMainNamespace();
+        bp::object &getMainModule();
+        bp::object &getMainNamespace();
 };
 
 
