@@ -44,3 +44,20 @@ class ConfigManager : public boost::serialization::singleton<ConfigManager>
 };
 
 inline ConfigManager &configManager() { return ConfigManager::get_mutable_instance(); }
+
+// For scripts system
+namespace ScriptsConfig
+{
+    inline std::string getConfigValue(const std::string &key)
+    {
+        return configManager().getValue<std::string>(key);
+    }
+    inline std::vector<std::string> getConfigListValue(const std::string &key)
+    {
+        return configManager().getListValue(key);
+    }
+    inline void setConfigPath(const std::string &path)
+    {
+        configManager().setPath(path);
+    }
+}

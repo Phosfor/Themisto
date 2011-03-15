@@ -84,6 +84,7 @@ target_link_libraries(Themisto
 # ----------------------------------------------------
 set(Script_srcs
     Core/LogManager
+    Core/ConfigManager
 )
 
 foreach(i ${Script_srcs})

@@ -48,13 +48,22 @@ class LogManager : public boost::serialization::singleton<LogManager>
 inline LogManager &logManager() { return LogManager::get_mutable_instance(); }
 
 // date : message
-inline void LOG(const std::string &message) { logManager().write(message, "", ""); }
+inline void LOG(const std::string &message)
+{
+    logManager().write(message, "", "");
+}
 
 // data : message (into passed file)
-inline void LOG_FILE(const std::string &message, const std::string &filename) { logManager().write(message, filename); }
+inline void LOG_FILE(const std::string &message, const std::string &filename)
+{
+    LogManager().write(message, filename);
+}
 
 // message
-inline void LOG_NOFORMAT(const std::string &message) { logManager().write(message, "", "", false); }
+inline void LOG_NOFORMAT(const std::string &message)
+{
+    logManager().write(message, "", "", false);
+}
 
 // date : function \n message
 #define LOG_META(message) logManager().write(message, "", __PRETTY_FUNCTION__)
