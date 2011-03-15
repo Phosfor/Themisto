@@ -46,6 +46,8 @@ void MenuState::init()
     scriptsManager().runString("Core.LogManager.LOG('fucking test!')");
 
     scriptsManager().runString("import Core.ConfigManager");
+    scriptsManager().runString("import Core.Utils");
+    scriptsManager().runString("print Core.Utils.Pi");
     scriptsManager().runString("print Core.ConfigManager.getListValue('application')");
 
     initGui();

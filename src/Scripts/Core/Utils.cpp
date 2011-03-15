@@ -17,8 +17,29 @@
 
 #include "Core/ScriptsManager.hpp"
 #include "Core/LogManager.hpp"
+#include "Core/Utils.hpp"
 
 BOOST_PYTHON_MODULE(Utils)
 {
-    
+    bp::def("Meters2Pixels", Meters2Pixels);
+    bp::def("Pixels2Meters", Pixels2Meters);
+
+    bp::def("LOCATION", LOCATION);
+    bp::def("Randf", Randf);
+
+    bp::def("Rad2Deg", Rad2Deg);
+    bp::def("Deg2Rad", Deg2Rad);
+
+    bp::def("GameMicroseconds", GameMicroseconds);
+    bp::def("GameSeconds", GameSeconds);
+    bp::def("GameMinutes", GameMinutes);
+    bp::def("GameHours", GameHours);
+
+    bp::scope().attr("Pi") = Pi;
+    bp::scope().attr("Gravity") = Gravity;
+    bp::scope().attr("TimeKoef") = TimeKoef;
+    bp::scope().attr("PixelsPerMeter") = PixelsPerMeter;
+    bp::scope().attr("GAME_VERSION") = GAME_VERSION;
+    bp::scope().attr("ScreenResolutionX") = ScreenResolutionX;
+    bp::scope().attr("ScreenResolutionY") = ScreenResolutionY;
 }

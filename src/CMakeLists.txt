@@ -86,6 +86,7 @@ set(Script_srcs
     Core/LogManager
     Core/ConfigManager
     Core/TypesConverters
+    Core/Utils
 )
 
 foreach(i ${Script_srcs})
