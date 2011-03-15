@@ -16,12 +16,19 @@
 */
 
 #include "Core/ScriptsManager.hpp"
-#include "Core/ConfigManager.hpp"
-#include "Core/Utils.hpp"
+#include "Core/LogManager.hpp"
+#include "Core/TypesConverters.hpp"
 
-BOOST_PYTHON_MODULE(ConfigManager)
+BOOST_PYTHON_MODULE(TypesConverters)
 {
-    bp::def("getValue", ScriptsConfig::getConfigValue);
-    bp::def("setPath", ScriptsConfig::setConfigPath);
-    bp::def("getListValue", ScriptsConfig::getConfigListValue);
+    using namespace ScriptTypesConverters;
+
+    // std::vector
+    bp::to_python_converter<std::vector<std::string>, VecToList<std::string> >();
+    bp::to_python_converter< std::vector<int>, VecToList<int> >();
+    bp::to_python_converter< std::vector<float>, VecToList<float> >();
+
+    // std::pair
+    bp::to_python_converter< std::pair<int, int>, PairToTuple<int, int> >();
+    bp::to_python_converter< std::pair<std::string, std::string>, PairToTuple<std::string, std::string> >();
 }

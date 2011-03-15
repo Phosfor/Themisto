@@ -133,21 +133,6 @@ inline float Minutes2Seconds(float realMinutes) { return Seconds2Seconds(realMin
 // Get number of game seconds to achive passed real hours
 inline float Hours2Seconds(float realHours) { return Minutes2Seconds(realHours * 60.0f); }
 
-///////////////////////////////////////////////////////////////////////////
-///////////////////////////// SCRIPTS SYSTEM ///////////////////////////////
-template<class T>
-struct VecToList
-{
-    static PyObject* convert(const std::vector<T>& vec)
-    {
-        boost::python::list* l = new boost::python::list();
-        for(size_t i = 0; i < vec.size(); i++)
-            (*l).append(vec[i]);
-
-        return l->ptr();
-    }
-};
-
 /*TODO: Replace this defines with inline functions */
 
 #define IntToStr(p) (utils().intToStr(p))

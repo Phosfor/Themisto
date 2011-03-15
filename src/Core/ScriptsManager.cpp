@@ -31,6 +31,7 @@ ScriptsManager::ScriptsManager()
         mMainNamespace = mMainModule.attr("__dict__");
 
         processPaths();
+        registerTypesConverters();
     }
     catch(...)
     {
@@ -101,4 +102,9 @@ bp::object &ScriptsManager::getMainModule()
 bp::object &ScriptsManager::getMainNamespace()
 {
     return mMainNamespace;
+}
+
+void ScriptsManager::registerTypesConverters()
+{
+    runString("from Core.TypesConverters import *");
 }

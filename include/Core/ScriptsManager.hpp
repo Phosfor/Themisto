@@ -26,6 +26,7 @@
 #include <boost/filesystem.hpp>
 
 #include "Core/LogManager.hpp"
+#include "Core/TypesConverters.hpp"
 
 namespace bp = boost::python;
 
@@ -35,6 +36,7 @@ class ScriptsManager : public boost::serialization::singleton<ScriptsManager>
         bp::object mMainModule, mMainNamespace;
 
         void processPaths();
+        void registerTypesConverters();
 
     public:
         ScriptsManager();
