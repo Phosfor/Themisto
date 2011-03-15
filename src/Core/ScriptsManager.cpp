@@ -46,6 +46,10 @@ void ScriptsManager::processPaths()
 
     // Process python paths
     runString("import sys");
+    runString("sys.path.append('lib')");
+
+    std::ofstream init("lib/__init__.py");
+    init.close();
 
     // We need this for sexy python modules
     bf::directory_iterator endIt;
@@ -53,7 +57,13 @@ void ScriptsManager::processPaths()
            dir != end; ++dir )
     {
         if (bf::is_directory(dir->path()))
-            runString(cl_format("sys.path.append('%1')", dir->path().c_str()).c_str());
+        {
+            if (!bf::exists(cl_format("%1/__init__.py", dir->path().c_str()).c_str()))
+            {
+                std::ofstream init(cl_format("%1/__init__.py", dir->path().c_str()).c_str());
+                init.close();
+            }
+        }
     }
 }
 
