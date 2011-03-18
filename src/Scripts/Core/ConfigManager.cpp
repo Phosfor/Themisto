@@ -19,9 +19,18 @@
 #include "Core/ConfigManager.hpp"
 #include "Core/Utils.hpp"
 
+BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(getValueIntOverloads, ConfigManager::getValue<int>, 1, 2);
+BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(getValueStringOverloads, ConfigManager::getValue<std::string>, 1, 2);
+BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(getValueFloatOverloads, ConfigManager::getValue<float>, 1, 2);
+
 BOOST_PYTHON_MODULE(ConfigManager)
 {
-    bp::def("getValue", ScriptsConfig::getConfigValue);
-    bp::def("setPath", ScriptsConfig::setConfigPath);
-    bp::def("getListValue", ScriptsConfig::getConfigListValue);
+    bp::class_<ConfigManager, boost::noncopyable>("ConfigManager", bp::no_init)
+        .def("SetPath", &ConfigManager::setPath)
+        .def("GetListValue", &ConfigManager::getListValue)
+        .def("GetValue_i", &ConfigManager::getValue<int>, getValueIntOverloads())
+        .def("GetValue_s", &ConfigManager::getValue<std::string>, getValueStringOverloads())
+        .def("GetValue_f", &ConfigManager::getValue<float>, getValueFloatOverloads());
+
+    bp::def("getInstance", &configManager, PYPOLICY_REFERENCE_EXISTING);
 }
