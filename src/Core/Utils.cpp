@@ -17,6 +17,9 @@
 
 #include "Core/Utils.hpp"
 
+std::string Utils::mMediaFolder = "media";
+boost::posix_time::ptime Utils::mTimeStamp = boost::posix_time::ptime();
+
 void Utils::setMediaFolder(const std::string &path)
 {
     mMediaFolder = path;
@@ -74,7 +77,7 @@ std::string Utils::getMediaFolder()
     return mMediaFolder;
 }
 
-boost::posix_time::ptime Utils::getCurrentTime() const
+boost::posix_time::ptime Utils::getCurrentTime()
 {
     return boost::posix_time::microsec_clock::local_time();
 }

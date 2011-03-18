@@ -100,7 +100,7 @@ foreach(i ${Script_srcs})
     set(LIBRARY_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/bin/lib/${filePath})
     # Remove 'lib' preffix from the library name
     set_target_properties(${fileName} PROPERTIES PREFIX "")
-    # Link need own libraries
+    # Linker needs in own libraries
     target_link_libraries(${fileName}
         ${PYTHON_LIBRARIES}
         ${Boost_LIBRARIES}

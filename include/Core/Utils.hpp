@@ -32,20 +32,20 @@
 class Utils : public boost::serialization::singleton<Utils>
 {
     protected:
-        boost::posix_time::ptime mTimeStamp;
-        std::string mMediaFolder;
+        static boost::posix_time::ptime mTimeStamp;
+        static std::string mMediaFolder;
 
     public:
-        std::string checkLocation(const std::string &path);
+        static std::string checkLocation(const std::string &path);
 
-        void setMediaFolder(const std::string &path);
-        std::string getMediaFolder();
-        std::string getTemplateFolder();
-        std::string getCommonTemplateFile();
+        static void setMediaFolder(const std::string &path);
+        static std::string getMediaFolder();
+        static std::string getTemplateFolder();
+        static std::string getCommonTemplateFile();
 
         // For time measuring
-        boost::posix_time::ptime getCurrentTime() const;
-        void writeTimestamp();
+        static boost::posix_time::ptime getCurrentTime();
+        static void writeTimestamp();
         std::string getTimeDifference();
         std::string intToStr(int p);
         std::string hexToStr(int p);

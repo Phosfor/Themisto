@@ -42,4 +42,14 @@ BOOST_PYTHON_MODULE(Utils)
     bp::scope().attr("GAME_VERSION") = GAME_VERSION;
     bp::scope().attr("ScreenResolutionX") = ScreenResolutionX;
     bp::scope().attr("ScreenResolutionY") = ScreenResolutionY;
+
+    // Export Utils singleton
+    bp::def("CheckLocation", Utils::checkLocation);
+    bp::def("SetMediaFolder", Utils::setMediaFolder);
+    bp::def("GetMediaFolder", Utils::getMediaFolder);
+    bp::def("GetTemplateFolder", Utils::getTemplateFolder);
+    bp::def("GetCommonTemplateFile", Utils::getTemplateFolder);
+    bp::def("GetCurrentTime", Utils::getCurrentTime);
+    //bp::def("WriteTamestamp", Utils::writeTimestamp);
+    bp::def("GetTimeDifference", Utils::getTemplateFolder);
 }

@@ -76,7 +76,7 @@ void ScriptsManager::runString(const std::string &pyCode)
     }
     catch (...)
     {
-        LOG(cl_format("Failed to run python code: ", pyCode));
+        LOG(cl_format("Failed to run python code:\n------------------\n%1\n------------------", pyCode));
         PyErr_Print();
     }
 }
@@ -89,7 +89,7 @@ void ScriptsManager::runFile(const std::string &fileName)
     }
     catch (...)
     {
-        LOG(cl_format("Failed to run python file script: ", fileName));
+        LOG(cl_format("Failed to run python file script: %1", fileName));
         PyErr_Print();
     }
 }
