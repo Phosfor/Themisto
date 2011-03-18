@@ -43,13 +43,15 @@ BOOST_PYTHON_MODULE(Utils)
     bp::scope().attr("ScreenResolutionX") = ScreenResolutionX;
     bp::scope().attr("ScreenResolutionY") = ScreenResolutionY;
 
-    // Export Utils singleton
-    bp::def("CheckLocation", Utils::checkLocation);
-    bp::def("SetMediaFolder", Utils::setMediaFolder);
-    bp::def("GetMediaFolder", Utils::getMediaFolder);
-    bp::def("GetTemplateFolder", Utils::getTemplateFolder);
-    bp::def("GetCommonTemplateFile", Utils::getTemplateFolder);
-    bp::def("GetCurrentTime", Utils::getCurrentTime);
-    //bp::def("WriteTamestamp", Utils::writeTimestamp);
-    bp::def("GetTimeDifference", Utils::getTemplateFolder);
+    // Exporting Utils singleeton
+    bp::class_<Utils, boost::noncopyable>("Utils", bp::no_init)
+        .def("CheckLocation", &Utils::checkLocation)
+        .def("SetMediaFolder", &Utils::setMediaFolder)
+        .def("GetMediaFolder", &Utils::getMediaFolder)
+        .def("GetTemplateFolder", &Utils::getTemplateFolder)
+        .def("GetCommonTemplateFile", &Utils::getCommonTemplateFile)
+        .def("GetCurrentTime", &Utils::getCurrentTime)
+        .def("GetTimeDifference", &Utils::getTimeDifference);
+
+    bp::def("getInstance", &utils, PYPOLICY_REFERENCE_EXISTING);
 }
