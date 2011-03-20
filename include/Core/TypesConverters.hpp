@@ -17,6 +17,9 @@
 
 #pragma once
 
+#include <ClanLib/display.h>
+#include <ClanLib/core.h>
+
 namespace bp = boost::python;
 namespace ScriptTypesConverters
 {
@@ -42,4 +45,7 @@ namespace ScriptTypesConverters
         return bp::incref(bp::make_tuple(pair.first, pair.second).ptr());
       }
     };
+
+    // Default functions arguments stuff ------------------------------
+    BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(GetMinimumSizeOverloads, CL_DisplayWindow::get_minimum_size, 0, 1);
 }

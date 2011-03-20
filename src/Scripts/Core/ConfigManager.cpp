@@ -17,7 +17,6 @@
 
 #include "Core/ScriptsManager.hpp"
 #include "Core/ConfigManager.hpp"
-#include "Core/Utils.hpp"
 
 BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(getValueIntOverloads, ConfigManager::getValue<int>, 1, 2);
 BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(getValueStringOverloads, ConfigManager::getValue<std::string>, 1, 2);
