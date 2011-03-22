@@ -90,6 +90,7 @@ set(Script_srcs
     Core/ApplicationManager
     Core/GuiManager
     Core/InputManager
+    Core/ResourceManager
 )
 
 foreach(i ${Script_srcs})
