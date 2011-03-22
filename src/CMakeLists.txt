@@ -91,6 +91,8 @@ set(Script_srcs
     Core/GuiManager
     Core/InputManager
     Core/ResourceManager
+
+    World/Objects/Object
 )
 
 foreach(i ${Script_srcs})
