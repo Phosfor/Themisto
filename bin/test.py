@@ -2,6 +2,7 @@ import Core.LogManager
 import Core.ConfigManager
 import Core.ApplicationManager
 import Core.Utils
+import Core.GuiManager
 
 Core.LogManager.LOG('fucking test!')
 

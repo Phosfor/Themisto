@@ -28,7 +28,9 @@ BOOST_PYTHON_MODULE(TypesConverters)
 {
     using namespace ScriptTypesConverters;
 
+    /////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////// TYPES CONVERTERS /////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////
     // std::vector
     bp::to_python_converter<std::vector<std::string>, VecToList<std::string> >();
     bp::to_python_converter< std::vector<int>, VecToList<int> >();
@@ -39,8 +41,11 @@ BOOST_PYTHON_MODULE(TypesConverters)
     bp::to_python_converter< std::pair<std::string, std::string>, PairToTuple<std::string, std::string> >();
 
 
-    ////////////////////////////// EXPORTING CLASSES ///////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////// EXPORTING CLASSES ////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////
 
+    /////////////////////////////////// CL_POINT ////////////////////////////////////////
     // CL_Point [integer] -------------------------------------------------------------
     bp::class_<CL_Point>("CL_Point", bp::init<int, int>())
         .def(bp::init< CL_Vec2<int> >());
@@ -66,6 +71,7 @@ BOOST_PYTHON_MODULE(TypesConverters)
         .def(bp::self < CL_Angle()) .def(bp::self > CL_Angle())
         .def(bp::self <= CL_Angle()) .def(bp::self >= CL_Angle());
 
+    /////////////////////////////////// CL_VECTOR /////////////////////////////////////
     // CL_Vec2 [integer] --------------------------------------------------------------
     bp::class_< CL_Vec2<int> >("CL_Vec2i", bp::init<int, int>())
         .def("Length", &CL_Vec2<int>::length)
@@ -85,6 +91,26 @@ BOOST_PYTHON_MODULE(TypesConverters)
         .def(bp::self < CL_Vec2<int>()) .def(bp::self > CL_Vec2<int>())
         .def(bp::self <= CL_Vec2<int>()) .def(bp::self >= CL_Vec2<int>());
 
+    // CL_Vec2 [float] ----------------------------------------------------------------
+    bp::class_< CL_Vec2<float> >("CL_Vec2f", bp::init<float, float>())
+    .def("Length", &CL_Vec2<float>::length)
+    .def("Dot", Vec2iDot)
+    .def("Normalize", Vec2iNorm, bp::return_value_policy<bp::copy_non_const_reference>())
+    .def("Angle", &CL_Vec2<float>::angle)
+    .def("Distance", &CL_Vec2<float>::distance)
+    .def("Round", Vec2iRound, bp::return_value_policy<bp::copy_non_const_reference>())
+    .def(bp::self_ns::str(bp::self_ns::self))  // Export __str__
+
+    // Export overriden operators
+    .def(bp::self += CL_Vec2<float>()).def(bp::self -= CL_Vec2<float>())
+    .def(bp::self + CL_Vec2<float>()) .def(bp::self - CL_Vec2<float>())
+    .def(bp::self *= CL_Vec2<float>()).def(bp::self /= CL_Vec2<float>())
+    .def(bp::self * CL_Vec2<float>()) .def(bp::self / CL_Vec2<float>())
+    .def(bp::self == CL_Vec2<float>()).def(bp::self != CL_Vec2<float>())
+    .def(bp::self < CL_Vec2<float>()) .def(bp::self > CL_Vec2<float>())
+    .def(bp::self <= CL_Vec2<float>()) .def(bp::self >= CL_Vec2<float>());
+
+    /////////////////////////////////// CL_SIZE ////////////////////////////////////////
     // CL_Size [integer] --------------------------------------------------------------
     bp::class_<CL_Size>("CL_Size", bp::init<int, int>())
         .def(bp::init< CL_Sizex<int> >())
@@ -119,6 +145,7 @@ BOOST_PYTHON_MODULE(TypesConverters)
         .def(bp::self * float()) .def(bp::self / float())
         .def(bp::self == CL_Sizef()).def(bp::self != CL_Sizef());
 
+    /////////////////////////////////// CL_RECT ////////////////////////////////////////
     // CL_Rect [integer] ---------------------------------------------------------------
     bp::class_<CL_Rect>("CL_Rect", bp::init<int, int, int, int>())
         .def(bp::init< CL_Rectx<int> >())

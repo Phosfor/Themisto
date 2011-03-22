@@ -88,6 +88,7 @@ set(Script_srcs
     Core/TypesConverters
     Core/Utils
     Core/ApplicationManager
+    Core/GuiManager
 )
 
 foreach(i ${Script_srcs})
