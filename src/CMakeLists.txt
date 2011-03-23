@@ -73,6 +73,7 @@ target_link_libraries(Themisto
     ${Boost_LIBRARIES}
     ${ClanLib_LIBRARIES}
     ${BOX2D_LIBRARY}
+    ${PYTHON_LIBRARIES}
     fontconfig
     pthread
 )
@@ -112,6 +113,7 @@ target_link_libraries(DebugConsole
     ${ClanLib_LIBRARIES}
     ${READLINE_LIBRARIES}
     ${Boost_LIBRARIES}
+    ${PYTHON_LIBRARIES}
     readline
     history
     ncurses
@@ -145,6 +147,7 @@ target_link_libraries(DebugVisualisator
     ${JPEG_LIBRARIES}
     ${ClanLib_LIBRARIES}
     ${READLINE_LIBRARIES}
+    ${PYTHON_LIBRARIES}
     fontconfig
     pthread
 )
