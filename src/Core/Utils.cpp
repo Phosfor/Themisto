@@ -74,7 +74,7 @@ std::string Utils::getMediaFolder()
     return mMediaFolder;
 }
 
-boost::posix_time::ptime Utils::getCurrentTime() const
+boost::posix_time::ptime Utils::getCurrentTime()
 {
     return boost::posix_time::microsec_clock::local_time();
 }

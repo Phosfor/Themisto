@@ -19,6 +19,7 @@
 
 #include <boost/serialization/singleton.hpp>
 #include <boost/format.hpp>
+#include <boost/python.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/date_time/posix_time/posix_time_types.hpp>
 #include <boost/algorithm/string.hpp>
@@ -43,7 +44,7 @@ class Utils : public boost::serialization::singleton<Utils>
         std::string getCommonTemplateFile();
 
         // For time measuring
-        boost::posix_time::ptime getCurrentTime() const;
+        boost::posix_time::ptime getCurrentTime();
         void writeTimestamp();
         std::string getTimeDifference();
         std::string intToStr(int p);

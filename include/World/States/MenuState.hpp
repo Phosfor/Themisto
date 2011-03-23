@@ -28,6 +28,7 @@
 #include "Core/PhysicManager.hpp"
 #include "Core/LevelManager.hpp"
 #include "Core/WorldManager.hpp"
+#include "Core/ScriptsManager.hpp"
 
 class DebugDragAndDrop;
 class DebugDraw;

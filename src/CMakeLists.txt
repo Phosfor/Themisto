@@ -16,6 +16,7 @@ set(Themisto_srcs
     Core/LevelManager.cpp
     Core/TemplatesProcessing.cpp
     Core/WorldManager.cpp
+    Core/ScriptsManager.cpp
 
     # Objects
     World/Objects/Grass.cpp
@@ -70,6 +71,7 @@ target_link_libraries(Themisto
     ${PNG_LIBRARIES}
     ${JPEG_LIBRARIES}
 
+    ${PYTHON_LIBRARIES}
     ${Boost_LIBRARIES}
     ${ClanLib_LIBRARIES}
     ${BOX2D_LIBRARY}
@@ -82,13 +84,35 @@ target_link_libraries(Themisto
 # Shared library for script system
 # ----------------------------------------------------
 set(Script_srcs
-    Scripts/Core/LogManagerWrapper.cpp
+    Core/LogManager
+    Core/ConfigManager
+    Core/TypesConverters
+    Core/Utils
+    Core/ApplicationManager
+    Core/GuiManager
+    Core/InputManager
+    Core/ResourceManager
+
+    World/Objects/Object
 )
-ADD_LIBRARY(Script SHARED ${Script_srcs})
-TARGET_LINK_LIBRARIES(Script 
-    ${PYTHON_LIBRARIES}
-    ${Boost_LIBRARIES}
-)
+
+foreach(i ${Script_srcs})
+    # Takes only filename from given filepath
+    get_filename_component(fileName ${i} NAME_WE)
+    # Takes only filepath (without filename)
+    get_filename_component(filePath ${i} PATH)
+    # Add library with dependencies
+    add_library(${fileName} SHARED Scripts/${i}.cpp)
+    # Put library into need folder hierachy
+    set(LIBRARY_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/bin/lib/${filePath})
+    # Remove 'lib' preffix from the library name
+    set_target_properties(${fileName} PROPERTIES PREFIX "")
+    # Linker needs in own libraries
+    target_link_libraries(${fileName}
+        ${PYTHON_LIBRARIES}
+        ${Boost_LIBRARIES}
+    )
+endforeach(i)
 
 # ----------------------------------------------------
 # Executable for the DebugConsole
@@ -112,6 +136,7 @@ target_link_libraries(DebugConsole
     ${JPEG_LIBRARIES}
     ${ClanLib_LIBRARIES}
     ${READLINE_LIBRARIES}
+    ${PYTHON_LIBRARIES}
     ${Boost_LIBRARIES}
     ${PYTHON_LIBRARIES}
     readline

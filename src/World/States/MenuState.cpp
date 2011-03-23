@@ -42,6 +42,17 @@ void MenuState::init()
     physicManager().getWorld().SetDebugDraw(mDraw);
     mInputSlot = inputManager().getKeyboard().sig_key_down().connect(this, &MenuState::onKeyDown);
 
+    scriptsManager().runFile("test.py");
+    /*scriptsManager().runString("import Core.LogManager");
+    scriptsManager().runString("Core.LogManager.LOG('fucking test!')");
+
+    scriptsManager().runString("import Core.ConfigManager");
+    scriptsManager().runString("import Core.Utils");
+    scriptsManager().runString("print Core.Utils.Pi");
+    scriptsManager().runString("print dir(Core.Utils.CUtils)");
+    scriptsManager().runString("print dir(handle)");
+    scriptsManager().runString("print Core.ConfigManager.getListValue('application')");*/
+
     initGui();
 }
 

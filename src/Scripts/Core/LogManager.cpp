@@ -15,25 +15,12 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <boost/python.hpp>
-//#include "Core/LogManager.hpp"
+#include "Core/ScriptsManager.hpp"
+#include "Core/LogManager.hpp"
 
-using namespace boost::python;
-struct World
+BOOST_PYTHON_MODULE(LogManager)
 {
-    World(std::string msg): msg(msg) {} // added constructor
-    void set(std::string msg) { this->msg = msg; }
-    std::string greet() { return msg; }
-    std::string msg;
-};
-
-BOOST_PYTHON_MODULE(script)
-{
-    class_<World>("World", init<std::string>())
-        .def("greet", &World::greet)
-        .def("set", &World::set)
-    ;
-    /*class_< LogManager, boost::serialization::singleton<LogManager> >("LogManager", no_init)
-        .def("setDefaultLog", &LogManager::setDefaultLog)
-    ;*/
+    bp::def("LOG", LOG);
+    bp::def("LOG_FILE", LOG_FILE);
+    bp::def("LOG_NO_FORMAT", LOG_NOFORMAT);
 }

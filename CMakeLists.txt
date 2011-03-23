@@ -26,7 +26,7 @@ add_definitions(-Wall -g -msse2 -fPIC)
 set(CMAKE_BUILD_TYPE "Debug")
 #set(CMAKE_EXE_LINKER_FLAGS "-pg")
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/bin)
-set(LIBRARY_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/lib)
+set(LIBRARY_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/bin/lib)
 
 include_directories(
 	"${CMAKE_SOURCE_DIR}/include/"
