@@ -93,6 +93,7 @@ set(Script_srcs
     Core/ResourceManager
 
     World/Objects/Object
+    World/Objects/TypesManager
 )
 
 foreach(i ${Script_srcs})

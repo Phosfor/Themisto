@@ -52,7 +52,7 @@ BOOST_PYTHON_MODULE(TypesConverters)
 
     // CL_Point [float] -------------------------------------------------------------
     bp::class_<CL_Pointf>("CL_Pointf", bp::init<float, float>())
-    .def(bp::init< CL_Vec2<float> >());
+        .def(bp::init< CL_Vec2<float> >());
 
     // CL_Angle ----------------------------------------------------------------------
     bp::class_<CL_Angle>("CL_Angle")
@@ -159,6 +159,21 @@ BOOST_PYTHON_MODULE(TypesConverters)
 
         .def(bp::self_ns::str(bp::self_ns::self));  // Export __str__
 
+    // CL_Rectf [float] ---------------------------------------------------------------
+    bp::class_<CL_Rect>("CL_Rect", bp::init<float, float, float, float>())
+        .def(bp::init< CL_Rectx<float> >())
+        .def(bp::init< CL_Rectx<float> >())
+        .def(bp::init< CL_Sizex<float> >())
+
+        .def_readonly("left", &CL_Rect::left)
+        .def_readonly("top", &CL_Rect::top)
+        .def_readonly("right", &CL_Rect::right)
+        .def_readonly("bottom", &CL_Rect::bottom)
+
+        .def(bp::self_ns::str(bp::self_ns::self));  // Export __str__
+
     bp::class_<CL_DisplayWindow>("CL_DisplayWindow")
         .def("GetMinimumSize", &CL_DisplayWindow::get_minimum_size, GetMinimumSizeOverloads());
+
+    bp::class_<CL_DomElement>("CL_DomElement");
 }
