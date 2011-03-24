@@ -125,7 +125,7 @@ void LevelManager::drawActions()
 void LevelManager::menuItemClicked(boost::shared_ptr<Action> clickedAction)
 {
     std::cout << "Clicked\n";
-
+    mActiveActor->executeAction(clickedAction);
     clearMenu();
 }
 

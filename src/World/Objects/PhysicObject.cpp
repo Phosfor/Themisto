@@ -16,6 +16,7 @@
 */
 
 #include "World/Objects/PhysicObject.hpp"
+#include "World/Actions/TakeAction.hpp"
 #include "World/Actions/TestAction.hpp"
 #include "Physic/Body.hpp"
 #include "Physic/Impact.hpp"
@@ -169,7 +170,8 @@ boost::shared_ptr<Object> PhysicObject::ParsePhysicObject(CL_DomElement* tag, st
             result->mBody = physic;
             std::vector< boost::shared_ptr<Body> > bodies;
             bodies.push_back(physic);
-            result->mActions.push_back(boost::shared_ptr<Action>(new TestAction()));
+            result->mActions.push_back(boost::shared_ptr<Action>(new TakeAction(bodies)));
+            //result->mActions.push_back(boost::shared_ptr<Action>(new TestAction()));
         }
     }
 

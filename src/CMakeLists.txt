@@ -37,7 +37,7 @@ set(Themisto_srcs
     World/Objects/Leaves.cpp
 
     # Actions
-    #World/Actions/TakeAction.cpp
+    World/Actions/TakeAction.cpp
     World/Actions/TestAction.cpp
 
     # States

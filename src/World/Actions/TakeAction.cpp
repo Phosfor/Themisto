@@ -29,23 +29,39 @@ TakeAction::TakeAction(std::vector< boost::shared_ptr<Body> > bodies)
     mHandJoint = NULL;
     mActor = NULL;
     // Read take points
-    for(unsigned int i = 0; i<bodies.size(); ++i)
+    for(unsigned int b = 0; b<bodies.size(); ++b)
     {
-        boost::shared_ptr<Body> body = bodies[i];
+        boost::shared_ptr<Body> body = bodies[b];
         std::string points = body->getProperty("TakePoints");
+        std::cout << points << std::endl;
         if(points != "")
         {
             std::vector<std::string> splitResult;
             boost::split(splitResult, points, boost::is_any_of("()"));
+            std::cout << "splitResult.size() " << splitResult.size() << std::endl;
             for(unsigned int s = 0; s < splitResult.size(); ++s)
             {
-                std::vector<std::string> xy;
-                boost::split(xy, splitResult[i], boost::is_any_of(","));
-                b2Vec2 point(boost::lexical_cast<float>(xy[0]), boost::lexical_cast<float>(xy[1]));
-                point = body->getBody()->GetWorldPoint(point);
-                std::pair<b2Vec2, b2Body*> item(point, body->getBody());
-                std::map<b2Vec2, b2Body*> mTakePoints2;
-                mTakePoints2.insert(std::make_pair(point, body->getBody()));
+                std::cout << splitResult[s] << "?" << std::endl;
+                boost::trim(splitResult[s]);
+                if(splitResult[s] != "")
+                {
+                    std::vector<std::string> xy;
+                    boost::split(xy, splitResult[s], boost::is_any_of(","));
+                    std::cout << xy.size() << " xy.size()" << std::endl;
+                    if(xy.size() == 2)
+                    {
+                        std::cout << xy[0] << ',' << xy[1] << std::endl;
+                        b2Vec2 point(boost::lexical_cast<float>(xy[0]), boost::lexical_cast<float>(xy[1]));
+                        point.x = Pixels2Meters(point.x);
+                        point.y = Pixels2Meters(point.y);
+                        std::pair<b2Vec2, b2Body*> item(point, body->getBody());
+                        mTakePoints.insert(item);
+                    }
+                    else
+                    {
+                        throw CL_Exception("Invalid TakePoints attribute format.");
+                    }
+                }
             }
         }
     }
@@ -80,22 +96,31 @@ std::vector<std::string> TakeAction::getTextureInfo()
     res.push_back("take");
     return res;
 }
-std::pair<b2Vec2, b2Body*> _getNearestPoint(std::map<b2Vec2, b2Body*> points, b2Vec2 anchor)
+std::pair<b2Vec2, b2Body*> _getNearestPoint(std::map<b2Vec2, b2Body*> points, b2Vec2 anchor, float* dist)
 {
-    std::map<b2Vec2, b2Body*>::iterator it;
+    std::cout << "points.size() "<<  points.size() << std::endl;
     if(points.size() > 0)
     {
-        float minDistance = b2Distance(points.begin()->first, anchor);
+        std::cout << "anchor: " << anchor.x << "," << anchor.y << std::endl;
         std::pair<b2Vec2, b2Body*> result = *(points.begin());
+        std::cout << "first point: " << result.first.x << ',' << result.first.y << std::endl;
+        b2Vec2 wFirstPoint = result.second->GetWorldPoint(result.first);
+        std::cout << "wfirst point: " << wFirstPoint.x << ',' << wFirstPoint.y << std::endl;
+        float minDistance = b2Distance(wFirstPoint, anchor);
+        std::map<b2Vec2, b2Body*>::iterator it;
         for(it = ++(points.begin()); it != points.end(); ++it)
         {
-            float distance = b2Distance(it->first, anchor);
+            std::cout << "next point: " << it->first.x << ',' << it->first.y << std::endl;
+            b2Vec2 wPoint = it->second->GetWorldPoint(it->first);
+            std::cout << "wnext point: " << wPoint.x << ',' << wPoint.y << std::endl;
+            float distance = b2Distance(wPoint, anchor);
             if(distance < minDistance)
             {
                 minDistance = distance;
                 result = *it;
             }
         }
+        *dist = minDistance;
         return result;
     }
     else
@@ -127,16 +152,19 @@ float _calculateCriticalAngle(b2RevoluteJoint* trunkJoint, b2Vec2 takePoint)
 
 void TakeAction::beginExecution(Actor* actor)
 {
+
     if(canExecute(actor))
     {
+        std::cout << "TakeAction is to begin executing." << std::endl;
         mExecutionBegun.invoke(this);
         mActor = actor;
         b2Vec2 shoulderPoint = actor->getShoulder()->getBody()->GetWorldCenter();
-        mNearestTakePoint = _getNearestPoint(mTakePoints, shoulderPoint);
+        float distance = 0;
+        mNearestTakePoint = _getNearestPoint(mTakePoints, shoulderPoint, &distance);
         float handLength = actor->getHandLength();
         // Make distance between shoulder and takePoint nearest to
         // handLength value by rotating trunk of actor (rotate only to minimize distance, not enlarge)
-        if( b2Distance(mNearestTakePoint.first, shoulderPoint) > handLength)
+        if( distance  > handLength)
         {
             mState = RotatingTrunk;
             b2RevoluteJoint* trunkJoint = actor->getTrunkJoint();
@@ -165,6 +193,7 @@ void TakeAction::beginExecution(Actor* actor)
     }
     else
     {
+        std::cout << "Can't execute TakeAction: object too far." << std::endl;
         // Caller, you are stupid, call canExecute first
     }
 }
@@ -180,9 +209,15 @@ void TakeAction::stopExecution()
 bool TakeAction::canExecute(Actor* actor)
 {
     b2Vec2 shoulderPoint = actor->getShoulder()->getBody()->GetWorldCenter();
-    std::pair<b2Vec2, b2Body*> nearestTakePoint = _getNearestPoint(mTakePoints, shoulderPoint);
+    float distance = 0;
+    std::pair<b2Vec2, b2Body*> nearestTakePoint = _getNearestPoint(mTakePoints, shoulderPoint, &distance);
+
     float trunkLength = b2Distance(shoulderPoint, actor->getTrunkJoint()->GetAnchorA());
-    return b2Distance(nearestTakePoint.first, shoulderPoint) <= (actor->getHandLength() + trunkLength);
+    //float distance = b2Distance(nearestTakePoint.second->GetWorldPoint(nearestTakePoint.first), shoulderPoint);
+    std::cout << "Distance: " << distance << std::endl;
+    std::cout << "trunk: " << trunkLength << " hand: "<< actor->getHandLength() << std::endl;
+    return  distance <= (actor->getHandLength() + trunkLength);
+    return false;
 }
 void TakeAction::update(float step)
 {

@@ -54,14 +54,14 @@ void ScriptsManager::processPaths()
 
     // We need this for sexy python modules
     bf::directory_iterator endIt;
-    for ( boost::filesystem::recursive_directory_iterator end, dir("lib/"); 
+    for ( boost::filesystem::recursive_directory_iterator end, dir("lib/");
            dir != end; ++dir )
     {
         if (bf::is_directory(dir->path()))
         {
-            if (!bf::exists(cl_format("%1/__init__.py", dir->path().c_str()).c_str()))
+            if (!bf::exists(cl_format("%1/__init__.py", dir->path().string()).c_str()))
             {
-                std::ofstream init(cl_format("%1/__init__.py", dir->path().c_str()).c_str());
+                std::ofstream init(cl_format("%1/__init__.py", dir->path().string()).c_str());
                 init.close();
             }
         }
