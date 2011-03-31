@@ -67,6 +67,16 @@ TypesManager::TypesManager()
     registerParser("Leaves", Leaves::ParseLeaves);
 }
 
+void TypesManager::dumpParsers()
+{
+    std::cout << "List of parsers:\n";
+
+    std::map<std::string, Parser>::const_iterator it = ObjectsParser.begin();
+    for (it; it != ObjectsParser.end(); ++it)
+    {
+        std::cout << "\t" << it->first << "\n";
+    }
+}
 
 boost::shared_ptr<Object> TypesManager::parseObject(CL_DomElement* objectTag, const std::string &type, std::string &desc)
 {

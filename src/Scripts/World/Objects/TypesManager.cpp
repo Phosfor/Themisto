@@ -18,8 +18,33 @@
 #include "Core/ScriptsManager.hpp"
 #include "World/Objects/TypesManager.hpp"
 
+struct ParserProxy
+{
+    bp::object callable;
+
+    ParserProxy(bp::object callable)
+    : callable(callable)
+    { }
+
+    boost::shared_ptr<Object> operator()(CL_DomElement* elem, std::string& desc)
+    {
+        bp::object obj = callable(elem, desc);
+        return bp::extract<boost::shared_ptr<Object> >(obj);
+    }
+};
+
+void registerParserByProxy(std::string type, bp::object callable)
+{
+    typesManager().registerParser(type, ParserProxy(callable));
+}
+
+void dumpParsersLocal()
+{
+    typesManager().dumpParsers();
+}
+
 BOOST_PYTHON_MODULE(TypesManager)
 {
-    bp::def("RegisterParser", &TypesManager::registerParser);
-    //bp::def("ParseObject", &TypesManager::parseObject);
+    bp::def("DumpParsers", dumpParsersLocal);
+    bp::def("RegisterParser", registerParserByProxy);
 }

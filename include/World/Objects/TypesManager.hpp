@@ -42,6 +42,7 @@ class TypesManager : public boost::serialization::singleton<TypesManager>
         TypesManager();
         boost::shared_ptr<Object> parseObject(CL_DomElement* objectTag, const std::string &type, std::string &desc);
         void registerParser(std::string type, Parser p);
+        void dumpParsers();
 };
 
 inline TypesManager &typesManager() { return TypesManager::get_mutable_instance(); }

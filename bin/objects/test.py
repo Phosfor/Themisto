@@ -33,4 +33,6 @@ class TestObj(Object):
     def ParseTestObj(node, desc):
         pass
 
+print 'registering parser here....'
 World.Objects.TypesManager.RegisterParser("test_obj", TestObj.ParseTestObj)
+World.Objects.TypesManager.DumpParsers();
