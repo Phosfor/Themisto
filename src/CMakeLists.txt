@@ -104,7 +104,7 @@ foreach(i ${Script_srcs})
     # Add library with dependencies
     add_library(${fileName} SHARED Scripts/${i}.cpp)
     # Put library into need folder hierachy
-    set(LIBRARY_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/bin/lib/${filePath})
+    set_target_properties(${fileName} PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin/lib/${filePath})
     # Remove 'lib' preffix from the library name
     set_target_properties(${fileName} PROPERTIES PREFIX "")
     # Linker needs in own libraries
