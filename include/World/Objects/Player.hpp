@@ -87,7 +87,7 @@ class Player: public Actor
         void step(float32 elapsed); // Physic
 
         // Parsing object
-        static boost::shared_ptr<Object> ParsePlayer(CL_DomElement* node, std::string &desc);
+        static boost::shared_ptr<Object> ParsePlayer(CL_DomElement node);
 
         // --- Object implementation ---
         bool checkCollision(CL_Pointf point);

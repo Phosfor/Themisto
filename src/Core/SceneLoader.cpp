@@ -18,6 +18,9 @@
 #include "Core/SceneLoader.hpp"
 #include "World/Objects/Object.hpp"
 
+// Remove this
+#include "Core/ScriptsManager.hpp"
+
 void SceneLoader::loadScene(const std::string &sceneName)
 {
     //mThread.start<SceneLoader, const std::string&>(this, &SceneLoader::_threadWrapper, sceneName);
@@ -76,6 +79,7 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
     worldManager().initWorld();
     worldManager().setWindPower(4);
 
+    scriptsManager().runFile("objects/test.py");
     // START OF OBJECTS PARSING -------------------------------------------
     {
         CL_DomNodeList childList = objects.get_child_nodes();
@@ -97,11 +101,10 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
             if (tag.has_attribute("always_draw"))
                 always_draw = tag.get_attribute("always_draw") == "true";
 
-            std::string desc = "";
             boost::shared_ptr<Object> object;
             try
             {
-                object = typesManager().parseObject(&tag, type, desc);
+                object = typesManager().parseObject(tag, type);
             }
             catch(CL_Exception& e)
             {
@@ -109,6 +112,12 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
                 LOG("Level parsing stopped.");
                 return;
             }
+            catch(boost::python::error_already_set &e)
+            {
+                LOG("Something bad has been happened with script system and object parsing...");
+                PyErr_Print();
+            }
+
             object->setIndex(z_index);
             object->setType(type);
             object->setAlwaysDraw(always_draw);

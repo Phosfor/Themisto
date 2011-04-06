@@ -83,7 +83,7 @@ class LightColumn: public Object
         void updateVisual();
 
         // Parsing object
-        static boost::shared_ptr<Object> ParseLightColumn(CL_DomElement* node, std::string &desc);
+        static boost::shared_ptr<Object> ParseLightColumn(CL_DomElement node);
 
         // --- Object implementation ---
         bool checkCollision(CL_Pointf point);

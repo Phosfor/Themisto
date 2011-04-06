@@ -58,7 +58,7 @@ class PhysicObject: public Object
         void step(float32 elapsed); // Physic
 
         // Parsing object
-        static boost::shared_ptr<Object> ParsePhysicObject(CL_DomElement* node, std::string &desc);
+        static boost::shared_ptr<Object> ParsePhysicObject(CL_DomElement node);
 
         // --- Object implementation ---
         bool checkCollision(CL_Pointf point);

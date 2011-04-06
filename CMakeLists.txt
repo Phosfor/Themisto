@@ -8,6 +8,9 @@ set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREADED ON)
 set(Boost_USE_STATIC_RUNTIME OFF)
 
+#set(CMAKE_C_COMPILER clang)
+#set(CMAKE_CXX_COMPILER clang++)
+
 find_package(X11 REQUIRED)
 find_package(Freetype REQUIRED)
 find_package(Clanlib 2.2 REQUIRED)
@@ -35,5 +38,7 @@ include_directories(
 	${ClanLib_INCLUDE_DIRS}
 	${BOX2D_INCLUDE_DIR}
 )
+
+message(${CMAKE_CXX_COMPILER_ID})
 
 add_subdirectory("${CMAKE_SOURCE_DIR}/src/")

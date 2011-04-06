@@ -53,7 +53,7 @@ class Leaves : public Object
     public:
         explicit Leaves(uint16_t maxLeaves = 5);
 
-        static boost::shared_ptr<Object> ParseLeaves(CL_DomElement* tag, std::string &desc);
+        static boost::shared_ptr<Object> ParseLeaves(CL_DomElement tag);
 
         // --- Object implementation ---
         bool checkCollision(CL_Pointf point);

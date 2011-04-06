@@ -57,7 +57,7 @@ class Sky : public Object
     public:
         Sky();
 
-        static boost::shared_ptr<Object> ParseSky(CL_DomElement *tag, std::string &desc);
+        static boost::shared_ptr<Object> ParseSky(CL_DomElement tag);
 
         // --- Object implementation ---
         bool checkCollision(CL_Pointf point);

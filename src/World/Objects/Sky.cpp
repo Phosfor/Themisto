@@ -125,7 +125,7 @@ void Sky::updateVisual(float newX, float newY)
     CL_Draw::gradient_fill(mGC, quad2, CL_Gradient(mColorMiddle, mColorBottom));
 }
 
-boost::shared_ptr<Object> Sky::ParseSky(CL_DomElement *tag, std::string &desc)
+boost::shared_ptr<Object> Sky::ParseSky(CL_DomElement tag)
 {
     // TODO: Parse sky colors here
     return boost::shared_ptr<Object>(new Sky);

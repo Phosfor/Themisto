@@ -59,7 +59,7 @@ class Moon : public Object
         void setVisual(std::string textureName, std::string textureSection);
 
         // Parser
-        static boost::shared_ptr<Object> ParseMoon(CL_DomElement *node, std::string &desc);
+        static boost::shared_ptr<Object> ParseMoon(CL_DomElement node);
 
         // --- Object implementation ---
         bool checkCollision(CL_Pointf point);

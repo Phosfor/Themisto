@@ -5,6 +5,7 @@
         <Wind power="2" />
         <Camera startPosX="0" startPosY="0" mode="free" />
         <Objects>
+             <Object name="TEST" type="testobj" />
              <Object name="SkyObj" type="Sky" always_draw="true" z-index="-100" />
              <Object name="StarsObj" type="Stars" maxStars="6.0" z-index="-99"  always_draw="true" />
              <Object name="MoonObj" type="Moon" always_draw="true" z-index="-4">

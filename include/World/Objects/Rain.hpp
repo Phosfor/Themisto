@@ -51,7 +51,7 @@ class Rain : public Object
     public:
         explicit Rain(uint16_t maxDrops);
 
-        static boost::shared_ptr<Object> ParseRain(CL_DomElement* element, std::string& desc);
+        static boost::shared_ptr<Object> ParseRain(CL_DomElement element);
 
         // --- Object implementation ---
         bool checkCollision(CL_Pointf point);

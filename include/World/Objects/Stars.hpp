@@ -60,7 +60,7 @@ class Stars : public Object
     public:
         explicit Stars(uint16_t maxStars = 200);
 
-        static boost::shared_ptr<Object> ParseStars(CL_DomElement* tag, std::string &desc);
+        static boost::shared_ptr<Object> ParseStars(CL_DomElement tag);
 
         // --- Object implementation ---
         bool checkCollision(CL_Pointf point);

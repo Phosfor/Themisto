@@ -64,7 +64,7 @@ class Clouds : public Object
         void update(float elapsed);
         void updateVisual(float newX, float newY);
 
-        static boost::shared_ptr<Object> ParseClouds(CL_DomElement* cloudsElement, std::string& desc);
+        static boost::shared_ptr<Object> ParseClouds(CL_DomElement cloudsElement);
 
         // For the lightning
         CL_Pointf getCloudPos();

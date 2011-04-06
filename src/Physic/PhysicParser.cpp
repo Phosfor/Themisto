@@ -28,7 +28,7 @@
 #include "World/Objects/Object.hpp"
 
 
-boost::shared_ptr<Body> ParsePhysicBody(CL_DomElement body, std::string& desc)
+boost::shared_ptr<Body> ParsePhysicBody(CL_DomElement body)
 {
     using namespace boost;
 

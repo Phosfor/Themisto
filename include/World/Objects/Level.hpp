@@ -41,7 +41,7 @@ class Level : public Object
         void setVisual(std::string textureName, std::string textureSection, float width, float height);
         void setVisual(std::string textureName, std::string textureSection);
 
-        static boost::shared_ptr<Object> ParseLevel(CL_DomElement *tag, std::string &desc);
+        static boost::shared_ptr<Object> ParseLevel(CL_DomElement tag);
 
         std::vector<std::string> getTextureInfo();
         boost::shared_ptr<Body> getBody();

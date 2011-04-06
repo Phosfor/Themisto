@@ -164,12 +164,12 @@ void Clouds::updateVisual(float newX, float newY)
 }
 
 
-boost::shared_ptr<Object> Clouds::ParseClouds(CL_DomElement* cloudsElement, std::string& desc)
+boost::shared_ptr<Object> Clouds::ParseClouds(CL_DomElement cloudsElement)
 {
     float maxClouds = 0;
-    if(cloudsElement->has_attribute("maxClouds"))
+    if(cloudsElement.has_attribute("maxClouds"))
     {
-        std::string maxCloudsStr = cloudsElement->get_attribute("maxClouds").c_str();
+        std::string maxCloudsStr = cloudsElement.get_attribute("maxClouds").c_str();
         maxClouds = boost::lexical_cast<float>(maxCloudsStr);
     }
 

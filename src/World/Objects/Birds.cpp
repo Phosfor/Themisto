@@ -127,12 +127,12 @@ CL_Rectf Birds::getRectangle()
     return levelManager().getCamViewport();
 }
 
-boost::shared_ptr<Object> Birds::ParseBirds(CL_DomElement* birdsElement, std::string& desc)
+boost::shared_ptr<Object> Birds::ParseBirds(CL_DomElement birdsElement)
 {
     float maxBirds = 0;
-    if(birdsElement->has_attribute("maxBirds"))
+    if(birdsElement.has_attribute("maxBirds"))
     {
-        std::string maxBirdsStr = birdsElement->get_attribute("maxBirds").c_str();
+        std::string maxBirdsStr = birdsElement.get_attribute("maxBirds").c_str();
         maxBirds = boost::lexical_cast<float>(maxBirdsStr);
     }
     return boost::shared_ptr<Object>(new Birds(maxBirds));

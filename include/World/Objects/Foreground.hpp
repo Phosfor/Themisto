@@ -45,7 +45,7 @@ class Foreground: public Object
         void setVisual(std::string textureName, std::string textureSection);
 
         // Parsing object
-        static boost::shared_ptr<Object> ParseForeground(CL_DomElement* tag, std::string &desc);
+        static boost::shared_ptr<Object> ParseForeground(CL_DomElement tag);
 
         void setFixed(bool state);
         bool getFixed();

@@ -127,12 +127,12 @@ CL_Rectf Rain::getRectangle()
     return CL_Rectf(0, 0, 0, 0);
 }
 
-boost::shared_ptr<Object> Rain::ParseRain(CL_DomElement* element, std::string& desc)
+boost::shared_ptr<Object> Rain::ParseRain(CL_DomElement element)
 {
     float maxDrops = 0;
-    if(element->has_attribute("maxDrops"))
+    if(element.has_attribute("maxDrops"))
     {
-        std::string maxStr = element->get_attribute("maxDrops").c_str();
+        std::string maxStr = element.get_attribute("maxDrops").c_str();
         maxDrops = boost::lexical_cast<float>(maxStr);
     }
 

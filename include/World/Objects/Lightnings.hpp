@@ -60,5 +60,5 @@ class Lightnings : public Object
         void update(float elapsed);
         void updateVisual(float newX, float newY);
 
-        static boost::shared_ptr<Object> ParseLightnings(CL_DomElement* element, std::string& desc);
+        static boost::shared_ptr<Object> ParseLightnings(CL_DomElement element);
 };

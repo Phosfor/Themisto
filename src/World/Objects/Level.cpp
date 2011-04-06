@@ -101,14 +101,14 @@ boost::shared_ptr<Body> Level::getBody()
     return mBody;
 }
 
-boost::shared_ptr<Body> ParsePhysicBody(CL_DomElement body, std::string& desc);
-boost::shared_ptr<Object> Level::ParseLevel(CL_DomElement* tag, std::string& desc)
+boost::shared_ptr<Body> ParsePhysicBody(CL_DomElement body);
+boost::shared_ptr<Object> Level::ParseLevel(CL_DomElement tag)
 {
     Level* result = new Level(); // Smart pointer will be created at the end
 
     // Parsing visuals
     {
-        CL_DomNodeList VisualTags = tag->get_elements_by_tag_name("Visual");
+        CL_DomNodeList VisualTags = tag.get_elements_by_tag_name("Visual");
         if (VisualTags.get_length() == 1)
         {
             std::string textureName;
@@ -141,11 +141,11 @@ boost::shared_ptr<Object> Level::ParseLevel(CL_DomElement* tag, std::string& des
     }
     // Parsing physic
     {
-        CL_DomNodeList bodyTags = tag->get_elements_by_tag_name("Body");
+        CL_DomNodeList bodyTags = tag.get_elements_by_tag_name("Body");
         if (bodyTags.get_length() == 1)
         {
             CL_DomElement bodyTag = bodyTags.item(0).to_element();
-            boost::shared_ptr<Body> physic = ParsePhysicBody(bodyTag, desc);
+            boost::shared_ptr<Body> physic = ParsePhysicBody(bodyTag);
             result->mBody = physic;
             std::vector< boost::shared_ptr<Body> > bodies;
             bodies.push_back(physic);

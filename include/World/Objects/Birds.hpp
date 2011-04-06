@@ -60,5 +60,5 @@ class Birds : public Object
         CL_Pointf getPosition();
         CL_Rectf getRectangle();
 
-        static boost::shared_ptr<Object> ParseBirds(CL_DomElement* birdsElement, std::string& desc);
+        static boost::shared_ptr<Object> ParseBirds(CL_DomElement birdsElement);
 };

@@ -80,7 +80,7 @@ CL_Rectf Lightnings::getRectangle()
     return levelManager().getCamViewport();
 }
 
-boost::shared_ptr<Object> Lightnings::ParseLightnings(CL_DomElement* element, std::string& desc)
+boost::shared_ptr<Object> Lightnings::ParseLightnings(CL_DomElement element)
 {
     return boost::shared_ptr<Object>(new Lightnings());
 }

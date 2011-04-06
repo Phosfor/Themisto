@@ -42,7 +42,7 @@ void MenuState::init()
     physicManager().getWorld().SetDebugDraw(mDraw);
     mInputSlot = inputManager().getKeyboard().sig_key_down().connect(this, &MenuState::onKeyDown);
 
-    scriptsManager().runFile("objects/test.py");
+    //scriptsManager().runFile("objects/test.py");
     /*scriptsManager().runString("import Core.LogManager");
     scriptsManager().runString("Core.LogManager.LOG('fucking test!')");
 

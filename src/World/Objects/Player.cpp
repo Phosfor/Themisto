@@ -223,14 +223,14 @@ void Player::goToNormalState()
     }
 }
 
-boost::shared_ptr<Object> Player::ParsePlayer(CL_DomElement* tag, std::string& desc)
+boost::shared_ptr<Object> Player::ParsePlayer(CL_DomElement tag)
 {
     Player* result = new Player(); // Smart pointer will be created at the end
 
     float x = 0, y = 0;
     // Parsing position
     {
-        CL_DomNodeList positionTags = tag->get_elements_by_tag_name("Position");
+        CL_DomNodeList positionTags = tag.get_elements_by_tag_name("Position");
         if (positionTags.get_length() == 1)
         {
             CL_DomNodeList position = positionTags.item(0).to_element().get_child_nodes();

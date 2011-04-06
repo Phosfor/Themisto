@@ -122,11 +122,11 @@ void Moon::setPosition(CL_Pointf newPos)
 {
 }
 
-boost::shared_ptr<Object> Moon::ParseMoon(CL_DomElement *tag, std::string &desc)
+boost::shared_ptr<Object> Moon::ParseMoon(CL_DomElement tag)
 {
     Moon *result = new Moon();
 
-    CL_DomNodeList VisualTags = tag->get_elements_by_tag_name("Visual");
+    CL_DomNodeList VisualTags = tag.get_elements_by_tag_name("Visual");
     std::string textureName;
     std::string textureSection;
     float width = -1;
@@ -152,11 +152,11 @@ boost::shared_ptr<Object> Moon::ParseMoon(CL_DomElement *tag, std::string &desc)
     float radius = Meters2Pixels(7);
     float angle = Deg2Rad(-90);
 
-    CL_DomElement radiusElement = tag->get_elements_by_tag_name("Radius").item(0).to_element();
+    CL_DomElement radiusElement = tag.get_elements_by_tag_name("Radius").item(0).to_element();
     if (radiusElement.has_attribute("value"))
         radius = Meters2Pixels(boost::lexical_cast<float>(radiusElement.get_attribute("value").c_str()));
 
-    CL_DomElement angleElement = tag->get_elements_by_tag_name("StartAngle").item(0).to_element();
+    CL_DomElement angleElement = tag.get_elements_by_tag_name("StartAngle").item(0).to_element();
     if (angleElement.has_attribute("value"))
         angle = Deg2Rad(boost::lexical_cast<float>(angleElement.get_attribute("value").c_str()));
 

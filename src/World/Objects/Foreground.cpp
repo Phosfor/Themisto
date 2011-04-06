@@ -94,11 +94,11 @@ void Foreground::setVisual(std::string textureName, std::string textureSection, 
     }
 }
 
-boost::shared_ptr<Object> Foreground::ParseForeground(CL_DomElement *tag, std::string &desc)
+boost::shared_ptr<Object> Foreground::ParseForeground(CL_DomElement tag)
 {
     Foreground *result = new Foreground();
 
-    CL_DomNodeList VisualTags = tag->get_elements_by_tag_name("Visual");
+    CL_DomNodeList VisualTags = tag.get_elements_by_tag_name("Visual");
     std::string textureName;
     std::string textureSection;
     float width = -1;
@@ -124,11 +124,11 @@ boost::shared_ptr<Object> Foreground::ParseForeground(CL_DomElement *tag, std::s
     uint16_t actualSize = 0; // In percents
     bool fixed = true;
 
-    CL_DomElement actualElement = tag->get_elements_by_tag_name("ActualSize").item(0).to_element();
+    CL_DomElement actualElement = tag.get_elements_by_tag_name("ActualSize").item(0).to_element();
     if (actualElement.has_attribute("value"))
         actualSize = boost::lexical_cast<uint16_t>(actualElement.get_attribute("value").c_str());
 
-    CL_DomElement fixedElement = tag->get_elements_by_tag_name("Fixed").item(0).to_element();
+    CL_DomElement fixedElement = tag.get_elements_by_tag_name("Fixed").item(0).to_element();
     if (fixedElement.has_attribute("value"))
         fixed = (fixedElement.get_attribute("value") == "true");
 

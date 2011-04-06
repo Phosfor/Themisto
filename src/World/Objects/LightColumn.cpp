@@ -135,13 +135,13 @@ void LightColumn::update(float elapsed)
     }
 }
 
-boost::shared_ptr<Object> LightColumn::ParseLightColumn(CL_DomElement* tag, std::string& desc)
+boost::shared_ptr<Object> LightColumn::ParseLightColumn(CL_DomElement tag)
 {
     LightColumn* result = new LightColumn(); // Smart pointer will be created at the end
 
     // Parsing visuals
     {
-        CL_DomNodeList VisualTags = tag->get_elements_by_tag_name("Visual");
+        CL_DomNodeList VisualTags = tag.get_elements_by_tag_name("Visual");
         if (VisualTags.get_length() == 1)
         {
             std::string textureName;
@@ -180,7 +180,7 @@ boost::shared_ptr<Object> LightColumn::ParseLightColumn(CL_DomElement* tag, std:
         }
 
         // Parsing lightings images
-        CL_DomNodeList lightingNodes = tag->get_elements_by_tag_name("Lighting");
+        CL_DomNodeList lightingNodes = tag.get_elements_by_tag_name("Lighting");
         for (int i=0; i < lightingNodes.get_length(); ++i)
         {
             CL_DomElement lightHandle = lightingNodes.item(i).to_element();
@@ -217,7 +217,7 @@ boost::shared_ptr<Object> LightColumn::ParseLightColumn(CL_DomElement* tag, std:
         }
 
         // Parsing bugs images
-        CL_DomNodeList bugNodes = tag->get_elements_by_tag_name("Bug");
+        CL_DomNodeList bugNodes = tag.get_elements_by_tag_name("Bug");
         for (int i=0; i < bugNodes.get_length(); ++i)
         {
             CL_DomElement bugHandle = bugNodes.item(i).to_element();

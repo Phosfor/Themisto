@@ -30,9 +30,9 @@ class TestObj(Object):
         return False
 
     @staticmethod
-    def ParseTestObj(node, desc):
-        pass
+    def ParseTestObj(node):
+        print 'Parser is called!!!!!!!'
 
 print 'registering parser here....'
-World.Objects.TypesManager.RegisterParser("test_obj", TestObj.ParseTestObj)
+World.Objects.TypesManager.RegisterParser("testobj", TestObj.ParseTestObj)
 World.Objects.TypesManager.DumpParsers();

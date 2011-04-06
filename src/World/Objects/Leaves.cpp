@@ -152,12 +152,12 @@ void Leaves::updateVisual(float newX, float newY)
     }
 }
 
-boost::shared_ptr<Object> Leaves::ParseLeaves(CL_DomElement *tag, std::string &desc)
+boost::shared_ptr<Object> Leaves::ParseLeaves(CL_DomElement tag)
 {
     float max = 0;
-    if(tag->has_attribute("maxLeaves"))
+    if(tag.has_attribute("maxLeaves"))
     {
-        std::string maxStr = tag->get_attribute("maxLeaves").c_str();
+        std::string maxStr = tag.get_attribute("maxLeaves").c_str();
         max = boost::lexical_cast<float>(maxStr);
     }
 

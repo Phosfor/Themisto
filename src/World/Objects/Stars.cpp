@@ -130,12 +130,12 @@ void Stars::updateVisual(float newX, float newY)
     }
 }
 
-boost::shared_ptr<Object> Stars::ParseStars(CL_DomElement *tag, std::string &desc)
+boost::shared_ptr<Object> Stars::ParseStars(CL_DomElement tag)
 {
     float max = 0;
-    if(tag->has_attribute("maxStars"))
+    if(tag.has_attribute("maxStars"))
     {
-        std::string maxStr = tag->get_attribute("maxStars").c_str();
+        std::string maxStr = tag.get_attribute("maxStars").c_str();
         max = boost::lexical_cast<float>(maxStr);
     }
 

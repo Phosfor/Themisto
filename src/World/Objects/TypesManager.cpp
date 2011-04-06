@@ -32,9 +32,8 @@
 #include "World/Objects/Stars.hpp"
 #include "World/Objects/Leaves.hpp"
 
-boost::shared_ptr<Object> TypesManager::empty_parser(CL_DomElement* p, std::string& desc)
+boost::shared_ptr<Object> TypesManager::empty_parser(CL_DomElement p)
 {
-    desc += "Error: object type not registered.";
     LOG("Error: object type not registered\n");
     return boost::shared_ptr<Object>();
 }
@@ -72,15 +71,15 @@ void TypesManager::dumpParsers()
     std::cout << "List of parsers:\n";
 
     std::map<std::string, Parser>::const_iterator it = ObjectsParser.begin();
-    for (it; it != ObjectsParser.end(); ++it)
+    for (; it != ObjectsParser.end(); ++it)
     {
         std::cout << "\t" << it->first << "\n";
     }
 }
 
-boost::shared_ptr<Object> TypesManager::parseObject(CL_DomElement* objectTag, const std::string &type, std::string &desc)
+boost::shared_ptr<Object> TypesManager::parseObject(CL_DomElement objectTag, const std::string &type)
 {
-    return (getParser(type))(objectTag, desc);
+    return (getParser(type))(objectTag);
 }
 
 void TypesManager::registerParser(std::string type, Parser p)

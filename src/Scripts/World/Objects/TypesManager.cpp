@@ -26,9 +26,10 @@ struct ParserProxy
     : callable(callable)
     { }
 
-    boost::shared_ptr<Object> operator()(CL_DomElement* elem, std::string& desc)
+    boost::shared_ptr<Object> operator()(CL_DomElement elem)
     {
-        bp::object obj = callable(elem, desc);
+        bp::object obj = callable(elem);
+
         return bp::extract<boost::shared_ptr<Object> >(obj);
     }
 };
