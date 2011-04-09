@@ -18,7 +18,7 @@
 #include "World/Objects/TypesManager.hpp"
 
 #include "World/Objects/Object.hpp"
-#include "World/Objects/PhysicObject.hpp"
+/*#include "World/Objects/PhysicObject.hpp"
 #include "World/Objects/Level.hpp"
 #include "World/Objects/LightColumn.hpp"
 #include "World/Objects/Moon.hpp"
@@ -30,12 +30,12 @@
 #include "World/Objects/Empty.hpp"
 #include "World/Objects/Sky.hpp"
 #include "World/Objects/Stars.hpp"
-#include "World/Objects/Leaves.hpp"
+#include "World/Objects/Leaves.hpp"*/
 
-boost::shared_ptr<Object> TypesManager::empty_parser(CL_DomElement p)
+boost::python::object TypesManager::empty_parser(CL_DomElement p)
 {
     LOG("Error: object type not registered\n");
-    return boost::shared_ptr<Object>();
+    //return boost::shared_ptr<Object>();
 }
 
 Parser TypesManager::getParser(std::string type)
@@ -52,7 +52,7 @@ Parser TypesManager::getParser(std::string type)
 
 TypesManager::TypesManager()
 {
-    registerParser("PhysicBodyObject", PhysicObject::ParsePhysicObject);
+    /*registerParser("PhysicBodyObject", PhysicObject::ParsePhysicObject);
     registerParser("LightColumnObject", LightColumn::ParseLightColumn);
     registerParser("Moon", Moon::ParseMoon);
     registerParser("Player", Player::ParsePlayer);
@@ -63,7 +63,7 @@ TypesManager::TypesManager()
     registerParser("Level", Level::ParseLevel);
     registerParser("Sky", Sky::ParseSky);
     registerParser("Stars", Stars::ParseStars);
-    registerParser("Leaves", Leaves::ParseLeaves);
+    registerParser("Leaves", Leaves::ParseLeaves);*/
 }
 
 void TypesManager::dumpParsers()
@@ -73,11 +73,11 @@ void TypesManager::dumpParsers()
     std::map<std::string, Parser>::const_iterator it = ObjectsParser.begin();
     for (; it != ObjectsParser.end(); ++it)
     {
-        std::cout << "\t" << it->first << "\n";
+        //std::cout << "\t" << it->first << "\n";
     }
 }
 
-boost::shared_ptr<Object> TypesManager::parseObject(CL_DomElement objectTag, const std::string &type)
+boost::python::object TypesManager::parseObject(CL_DomElement objectTag, const std::string &type)
 {
     return (getParser(type))(objectTag);
 }

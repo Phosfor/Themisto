@@ -24,23 +24,21 @@
 #include <ClanLib/core.h>
 #include <boost/serialization/singleton.hpp>
 #include <boost/function.hpp>
+#include <boost/python.hpp>
 
 #include "Core/LogManager.hpp"
 
-class Object;
-class PhysicObject;
-
-typedef boost::function<boost::shared_ptr<Object> (CL_DomElement)> Parser;
+typedef boost::function<boost::python::object (CL_DomElement)> Parser;
 class TypesManager : public boost::serialization::singleton<TypesManager>
 {
     private:
         std::map<std::string, Parser> ObjectsParser;
-        static boost::shared_ptr<Object> empty_parser(CL_DomElement p);
+        static boost::python::object empty_parser(CL_DomElement p);
         Parser getParser(std::string type);
 
     public:
         TypesManager();
-        boost::shared_ptr<Object> parseObject(CL_DomElement objectTag, const std::string &type);
+        boost::python::object parseObject(CL_DomElement objectTag, const std::string &type);
         void registerParser(std::string type, Parser p);
         void dumpParsers();
 };

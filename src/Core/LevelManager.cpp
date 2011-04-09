@@ -31,7 +31,7 @@ void LevelManager::mousePressed(const CL_InputEvent &key, const CL_InputState &s
     // Check if menu is already drawn, maybe we have to hide it?
     if (mDrawActions)
     {
-        CL_Rectf objRect = mActiveObject->getRectangle();
+        /*CL_Rectf objRect = mActiveObject->getRectangle();
         CL_Rectf camPos = getAbsoluteCameraPos();
         objRect.expand(50, 50, 0, 0); // left, top, right, bottom
 
@@ -41,12 +41,12 @@ void LevelManager::mousePressed(const CL_InputEvent &key, const CL_InputState &s
         {
             clearMenu();
             return;
-        }
+        }*/
     }
 
     if (key.id == CL_MOUSE_RIGHT && !mDrawActions)
     {
-        CL_Point mousePos = key.mouse_pos;
+        /*CL_Point mousePos = key.mouse_pos;
 
         // If right key pressed - check all objects collision with it
         for (ObjectMapTypeSorted::const_iterator it=mObjectsSorted.begin();
@@ -86,13 +86,13 @@ void LevelManager::mousePressed(const CL_InputEvent &key, const CL_InputState &s
                 }
                 break;
             }
-        }
+        }*/
     }
 }
 
 void LevelManager::clearMenu()
 {
-    if (mDrawActions)
+    /*if (mDrawActions)
     {
         BOOST_FOREACH(CL_PushButton *button, mButtons)
         {
@@ -107,26 +107,26 @@ void LevelManager::clearMenu()
         mActiveActions.clear();
         mActiveObject.reset();
         mDrawActions = false;
-    }
+    }*/
 }
 
 void LevelManager::drawActions()
 {
-    uint16_t counter = 0;
+    /*uint16_t counter = 0;
     CL_Rectf camPos = getAbsoluteCameraPos();
     BOOST_FOREACH(CL_PushButton *button, mButtons)
     {
         CL_Rectf newPos = mActiveObject->getRectangle();
         button->set_geometry(CL_Rect(newPos.left - 25 - camPos.left, newPos.top + counter - camPos.top, CL_Size(50, 50)));
         counter += 51;
-    }
+    }*/
 }
 
 void LevelManager::menuItemClicked(boost::shared_ptr<Action> clickedAction)
 {
     std::cout << "Clicked\n";
 
-    clearMenu();
+    //clearMenu();
 }
 
 void LevelManager::initObjects()
@@ -134,9 +134,9 @@ void LevelManager::initObjects()
     for (ObjectMapTypeSorted::const_iterator it=mObjectsSorted.begin();
             it != mObjectsSorted.end(); ++it)
     {
-        it->second->init();
+        //it->second->init();
     }
-    mActiveActor = getObjectByType<Player>("Player");
+    //mActiveActor = getObjectByType<Player>("Player");
 }
 
 void LevelManager::init()
@@ -146,7 +146,7 @@ void LevelManager::init()
     // Yep, maybe we don't need this
     guiManager().getHandle().set_css_document(utils().getMediaFolder() + "/local.css");
 
-    boost::shared_ptr<Level> levelData = getObjectByType<Level>("Level");
+    /*boost::python::object levelData = getObjectByType<Level>("Level");
     if (levelData->getType() != "Empty")
     {
         std::vector<std::string> info = levelData->getTextureInfo();
@@ -155,7 +155,7 @@ void LevelManager::init()
     else
     {
         mTextureSize = CL_Size(ScreenResolutionX, ScreenResolutionY);
-    }
+    }*/
 }
 
 void LevelManager::setCamViewport(const CL_Rectf  &viewport)
@@ -239,12 +239,13 @@ std::string LevelManager::getLevelName()
     return mLevelName;
 }
 
-void LevelManager::addObject(const std::string &name, boost::shared_ptr<Object> obj)
+void LevelManager::addObject(const std::string &name, boost::python::object obj)
 {
-    if (mObjects.find(name) == mObjects.end())
+    int checksum = getCRC32(name);
+    if (mPointAccess.find(checsum) == mPointAccess.end())
     {
         mObjects.insert(std::make_pair(name, obj));
-        mObjectsSorted.insert(std::make_pair(IntToStr(obj->getIndex()) + "_" + name, obj));
+        //mObjectsSorted.insert(std::make_pair(IntToStr(obj->getIndex()) + "_" + name, obj));
         mNumObjects++;
     }
     else
@@ -258,7 +259,7 @@ void LevelManager::updateLogic(float elapsed)
     for (ObjectMapTypeSorted::const_iterator it=mObjectsSorted.begin();
             it != mObjectsSorted.end(); ++it)
     {
-        it->second->update(elapsed);
+        //it->second->update(elapsed);
     }
 }
 
@@ -271,7 +272,7 @@ void LevelManager::updateVisual(float elapsed)
     {
         if(!mDebugDrawOnly)
         {
-            if (!it->second->getAlwaysDraw())
+            /*if (!it->second->getAlwaysDraw())
             {
                 CL_Rectf objRect = it->second->getRectangle();
 
@@ -300,7 +301,7 @@ void LevelManager::updateVisual(float elapsed)
                 CL_Pointf position = it->second->getPosition();
                 it->second->updateVisual(position.x - camPos.left, position.y - camPos.top);
             }
-            if (mDrawActions) drawActions();
+            if (mDrawActions) drawActions();*/
         }
     }
 }

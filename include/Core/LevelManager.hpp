@@ -20,6 +20,7 @@
 #include <map>
 #include <utility>
 #include <string>
+#include <set>
 
 #include <ClanLib/display.h>
 #include <ClanLib/core.h>
@@ -63,8 +64,8 @@ struct Compare
 };
 
 //class Object;
-typedef std::map<std::string, boost::shared_ptr<Object> > ObjectMapTypeAccess;
-typedef std::map<std::string, boost::shared_ptr<Object>, Compare> ObjectMapTypeSorted;
+typedef std::map<std::string, boost::python::object> ObjectMapTypeAccess;
+typedef std::map<std::string, boost::python::object> ObjectMapTypeSorted;
 
 class Action;
 class LevelManager : public boost::serialization::singleton<LevelManager>
@@ -92,6 +93,15 @@ class LevelManager : public boost::serialization::singleton<LevelManager>
         ObjectMapTypeSorted mObjectsSorted;
         uint16_t mNumObjects;
 
+        std::vector<boost::python::object> mPythonObjects;
+        std::vector< boost::shared_ptr<Object> > mCppObjects;
+
+        // ZIndex → Object
+        std::map<int, boost::shared_ptr<Object> > mRenderObjects;
+
+        // Name hash → index in std::set
+        std::map<int, int> mPointAccess;
+
     public:
         LevelManager();
 
@@ -117,60 +127,55 @@ class LevelManager : public boost::serialization::singleton<LevelManager>
         void initObjects();
 
         // Objects stuff
-        void addObject(const std::string &name, boost::shared_ptr<Object> obj);
+        void addObject(const std::string &name, boost::python::object obj);
 
         // Get object by name
-        template<class T>
-        boost::shared_ptr<T> getObject(const std::string &name)
+        boost::python::object getObject(const std::string &name)
         {
             if (mObjects.find(name) == mObjects.end())
             {
                 LOG(cl_format("Failed to get object `%1`, it doesn't exist!", name));
-                boost::shared_ptr<T> temp(new T);
-                temp->setType("Empty");
-                return temp;
+                //boost::shared_ptr<T> temp(new T);
+                //temp->setType("Empty");
+                //return temp;
             }
             else
             {
-                return boost::static_pointer_cast<T>(mObjects[name]);
+                //return boost::static_pointer_cast<T>(mObjects[name]);
+                return mObjects[name];
             }
         }
 
         // Returns list of all objects by given type
-        template<class T>
-        std::vector< boost::shared_ptr<T> > getObjectsByType(const std::string &type)
+        std::vector<boost::python::object> getObjectsByType(const std::string &type)
         {
-            std::vector< boost::shared_ptr<T> > res;
+            std::vector<boost::python::object> res;
             BOOST_FOREACH(ObjectMapTypeAccess::value_type &pair, mObjects)
             {
-                if (pair.second->getType() == type)
-                    res.push_back(boost::static_pointer_cast<T>(mObjects[pair.first]));
+                /*if (pair.second->getType() == type)
+                    res.push_back(mObjects[pair.first]);*/
             }
 
             return res;
         }
 
         // Returns first object by given type
-        template<class T>
-        boost::shared_ptr<T> getObjectByType(const std::string &type)
+        boost::python::object getObjectByType(const std::string &type)
         {
-            BOOST_FOREACH(ObjectMapTypeAccess::value_type &pair, mObjects)
+            /*BOOST_FOREACH(ObjectMapTypeAccess::value_type &pair, mObjects)
             {
                 if (pair.second->getType() == type)
-                    return boost::static_pointer_cast<T>(mObjects[pair.first]);
-            }
+                    return mObjects[pair.first];
+            }*/
 
             LOG(cl_format("No one object with `%1` type!", type));
-            boost::shared_ptr<T> temp(new T);
-            temp->setType("Empty");
-            return temp;
         }
 
         void updateVisual(float elapsed);
         void updateLogic(float elapsed);
 
         CL_Point mClickedPos;
-        boost::shared_ptr<Object> mActiveObject;
+        boost::python::object mActiveObject;
         std::vector< boost::shared_ptr<Action> > mActiveActions;
         std::vector<CL_PushButton*> mButtons;
         bool mDrawActions;

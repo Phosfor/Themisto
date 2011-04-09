@@ -101,7 +101,7 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
             if (tag.has_attribute("always_draw"))
                 always_draw = tag.get_attribute("always_draw") == "true";
 
-            boost::shared_ptr<Object> object;
+            boost::python::object object;
             try
             {
                 object = typesManager().parseObject(tag, type);
@@ -118,9 +118,9 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
                 PyErr_Print();
             }
 
-            object->setIndex(z_index);
-            object->setType(type);
-            object->setAlwaysDraw(always_draw);
+            /*object.setIndex(z_index);
+            object.setType(type);
+            object.setAlwaysDraw(always_draw);*/
             levelManager().addObject(name, object);
         }
     }

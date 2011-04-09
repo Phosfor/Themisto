@@ -19,22 +19,22 @@ set(Themisto_srcs
     Core/ScriptsManager.cpp
 
     # Objects
-    World/Objects/Grass.cpp
-    World/Objects/LightColumn.cpp
     World/Objects/TypesManager.cpp
-    World/Objects/PhysicObject.cpp
-    World/Objects/Level.cpp
-    World/Objects/Player.cpp
-    World/Objects/Actor.cpp
-    World/Objects/Moon.cpp
-    World/Objects/Birds.cpp
-    World/Objects/Clouds.cpp
-    World/Objects/Rain.cpp
-    World/Objects/Foreground.cpp
-    World/Objects/Empty.cpp
-    World/Objects/Sky.cpp
-    World/Objects/Stars.cpp
-    World/Objects/Leaves.cpp
+    #World/Objects/Grass.cpp
+    #World/Objects/LightColumn.cpp
+    #World/Objects/PhysicObject.cpp
+    #World/Objects/Level.cpp
+    #World/Objects/Player.cpp
+    #World/Objects/Actor.cpp
+    #World/Objects/Moon.cpp
+    #World/Objects/Birds.cpp
+    #World/Objects/Clouds.cpp
+    #World/Objects/Rain.cpp
+    #World/Objects/Foreground.cpp
+    #World/Objects/Empty.cpp
+    #World/Objects/Sky.cpp
+    #World/Objects/Stars.cpp
+    #World/Objects/Leaves.cpp
 
     # Actions
     #World/Actions/TakeAction.cpp

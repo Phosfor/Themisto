@@ -38,7 +38,7 @@ void MenuState::init()
     mDrawDebug = false;
     mDetailedOutput = false;
 
-    sceneLoader().loadScene("test.xml");
+    sceneLoader().loadScene("NewObjects.xml");
     physicManager().getWorld().SetDebugDraw(mDraw);
     mInputSlot = inputManager().getKeyboard().sig_key_down().connect(this, &MenuState::onKeyDown);
 

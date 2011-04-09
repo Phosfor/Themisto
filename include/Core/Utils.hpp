@@ -20,6 +20,7 @@
 #include <boost/serialization/singleton.hpp>
 #include <boost/format.hpp>
 #include <boost/python.hpp>
+#include <boost/crc.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/date_time/posix_time/posix_time_types.hpp>
 #include <boost/algorithm/string.hpp>
@@ -132,6 +133,14 @@ inline float Minutes2Seconds(float realMinutes) { return Seconds2Seconds(realMin
 
 // Get number of game seconds to achive passed real hours
 inline float Hours2Seconds(float realHours) { return Minutes2Seconds(realHours * 60.0f); }
+
+// Get CRC checsum from string
+inline int GetCRC32(const std::string &s)
+{
+    boost::crc_32_type result;
+    result.process_bytes(s.data(), s.length());
+    return result.checksum();
+}
 
 /*TODO: Replace this defines with inline functions */
 
