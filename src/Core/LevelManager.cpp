@@ -27,6 +27,18 @@ LevelManager::LevelManager() :
     mDrawDebugData = mDrawActions = false;
 }
 
+void LevelManager::processScriptObjects()
+{
+    namespace bf = boost::filesystem;
+    bf::directory_iterator endIt;
+    for ( bf::recursive_directory_iterator end, dir(utils().getMediaFolder() + "/objects/");
+           dir != end; ++dir )
+    {
+        if (!bf::is_directory(dir->path()) && bf::extension(dir->path()) == ".py")
+                scriptsManager().runFile(dir->path().c_str());
+    }
+}
+
 void LevelManager::mousePressed(const CL_InputEvent &key, const CL_InputState &state)
 {
     // Check if menu is already drawn, maybe we have to hide it?
@@ -132,7 +144,6 @@ void LevelManager::menuItemClicked(boost::shared_ptr<Action> clickedAction)
 
 void LevelManager::initObjects()
 {
-    std::cout << "Before initing\n";
     BOOST_FOREACH(boost::shared_ptr<Object> it, mObjectsSet)
     {
         // TODO: !!!!
@@ -273,11 +284,9 @@ void LevelManager::addObject(const std::string &name, boost::python::object obj)
 
 void LevelManager::updateLogic(float elapsed)
 {
-    for (ObjectMapTypeSorted::const_iterator it=mObjectsSorted.begin();
-            it != mObjectsSorted.end(); ++it)
-    {
-        //it->second->update(elapsed);
-    }
+
+    BOOST_FOREACH(boost::shared_ptr<Object> it, mObjectsByIndexViewer)
+        it->update(elapsed);
 }
 
 void LevelManager::updateVisual(float elapsed)
@@ -287,11 +296,9 @@ void LevelManager::updateVisual(float elapsed)
 
     BOOST_FOREACH(boost::shared_ptr<Object> it, mObjectsByIndexViewer)
     {
-        it->updateVisual(0, 0);
-
-        /*if (!it->second->getAlwaysDraw())
+        if (!it->getAlwaysDraw())
         {
-            CL_Rectf objRect = it->second->getRectangle();
+            CL_Rectf objRect = it->getRectangle();
 
             if (mDrawDebugData) CL_Draw::box(appManager().getGraphic(),
                     objRect.right - camPos.left, objRect.top - camPos.top,
@@ -300,24 +307,24 @@ void LevelManager::updateVisual(float elapsed)
 
             // Check whether object is in camera space
             if ( !(
-                   objRect.right - camPos.left < 0                     || // <-
-                   objRect.left  - camPos.left > ScreenResolutionX     || //  ->
-                   objRect.bottom - camPos.top  < 0                    || // up
-                   objRect.top - camPos.top > ScreenResolutionY           // down
+                   objRect.right  - camPos.left < 0                     || // <-
+                   objRect.left   - camPos.left > ScreenResolutionX     || //  ->
+                   objRect.bottom - camPos.top  < 0                     || // up
+                   objRect.top    - camPos.top  > ScreenResolutionY        // down
                   )
                 )
             {
-                CL_Pointf position = it->second->getPosition();
-                it->second->updateVisual(position.x - camPos.left, position.y - camPos.top);
+                CL_Pointf position = it->getPosition();
+                it->updateVisual(position.x - camPos.left, position.y - camPos.top);
             }
         }
         else
         {
-            CL_Rectf objRect = it->second->getRectangle();
+            CL_Rectf objRect = it->getRectangle();
             if (mDrawDebugData) CL_Draw::box(appManager().getGraphic(), objRect, CL_Colorf::red);
-            CL_Pointf position = it->second->getPosition();
-            it->second->updateVisual(position.x - camPos.left, position.y - camPos.top);
+            CL_Pointf position = it->getPosition();
+            it->updateVisual(position.x - camPos.left, position.y - camPos.top);
         }
-        if (mDrawActions) drawActions();*/
+        //if (mDrawActions) drawActions();
     }
 }

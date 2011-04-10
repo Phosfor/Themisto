@@ -32,9 +32,6 @@ class TestObj(Object):
 
     @staticmethod
     def ParseTestObj(node):
-        print 'Parser is called!!!!!!!'
         return TestObj()
 
-print 'registering parser here....'
 World.Objects.TypesManager.RegisterParser("testobj", TestObj.ParseTestObj)
-World.Objects.TypesManager.DumpParsers();

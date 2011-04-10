@@ -40,6 +40,7 @@
 
 #include "Core/ApplicationManager.hpp"
 #include "Core/InputManager.hpp"
+#include "Core/ScriptsManager.hpp"
 #include "Core/GuiManager.hpp"
 #include "Core/ResourceManager.hpp"
 #include "Core/Utils.hpp"
@@ -186,6 +187,9 @@ class LevelManager : public boost::serialization::singleton<LevelManager>
 
         void updateVisual(float elapsed);
         void updateLogic(float elapsed);
+
+        // This function registers all available python-objects
+        void processScriptObjects();
 
         CL_Point mClickedPos;
         boost::python::object mActiveObject;

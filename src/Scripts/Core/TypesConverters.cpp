@@ -160,15 +160,15 @@ BOOST_PYTHON_MODULE(TypesConverters)
         .def(bp::self_ns::str(bp::self_ns::self));  // Export __str__
 
     // CL_Rectf [float] ---------------------------------------------------------------
-    bp::class_<CL_Rect>("CL_Rectf", bp::init<float, float, float, float>())
+    bp::class_<CL_Rectf>("CL_Rectf", bp::init<float, float, float, float>())
         .def(bp::init< CL_Rectx<float> >())
         .def(bp::init< CL_Rectx<float> >())
         .def(bp::init< CL_Sizex<float> >())
 
-        .def_readonly("left", &CL_Rect::left)
-        .def_readonly("top", &CL_Rect::top)
-        .def_readonly("right", &CL_Rect::right)
-        .def_readonly("bottom", &CL_Rect::bottom)
+        .def_readonly("left", &CL_Rectf::left)
+        .def_readonly("top", &CL_Rectf::top)
+        .def_readonly("right", &CL_Rectf::right)
+        .def_readonly("bottom", &CL_Rectf::bottom)
 
         .def(bp::self_ns::str(bp::self_ns::self));  // Export __str__
 

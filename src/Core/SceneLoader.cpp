@@ -79,8 +79,9 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
     worldManager().initWorld();
     worldManager().setWindPower(4);
 
-    scriptsManager().runFile("objects/test.py");
     // START OF OBJECTS PARSING -------------------------------------------
+    levelManager().processScriptObjects();
+
     {
         CL_DomNodeList childList = objects.get_child_nodes();
         for (int i=0; i < childList.get_length(); ++i)
@@ -105,6 +106,10 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
             try
             {
                 object = typesManager().parseObject(tag, type);
+
+                object.attr("SetIndex")(z_index);
+                object.attr("SetType")(type);
+                object.attr("SetAlwaysDraw")(always_draw);
             }
             catch(CL_Exception& e)
             {
@@ -118,9 +123,6 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
                 PyErr_Print();
             }
 
-            object.attr("SetIndex")(z_index);
-            object.attr("SetType")(type);
-            object.attr("SetAlwaysDraw")(always_draw);
             levelManager().addObject(name, object);
         }
     }
