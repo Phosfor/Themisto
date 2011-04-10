@@ -6,6 +6,7 @@ import Core.Utils
 class TestObj(Object):
     def __init__(self):
         print 'Initing of test object...'
+        super(TestObj, self).__init__()
 
     def init(self):
         print 'init function of Test'
@@ -14,7 +15,7 @@ class TestObj(Object):
         print 'update with elapsed'
 
     def updateVisual(self, newX, newY):
-        print 'Update visual with newX, newY'
+        print 'Updating object with ZIndex: ' + str(self.GetIndex())
 
     def getPosition(self):
         print 'returning position'

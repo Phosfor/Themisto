@@ -18,7 +18,8 @@
 #include "Core/LevelManager.hpp"
 #include "World/Actions/Action.hpp"
 
-LevelManager::LevelManager()
+LevelManager::LevelManager() :
+    mObjectsByIndexViewer(mObjectsSet.get<0>())
 {
     mNumObjects = 0;
     mCameraSpeed = configManager().getValue<float>("application.camera_speed", 10.0f);
@@ -131,10 +132,14 @@ void LevelManager::menuItemClicked(boost::shared_ptr<Action> clickedAction)
 
 void LevelManager::initObjects()
 {
-    for (ObjectMapTypeSorted::const_iterator it=mObjectsSorted.begin();
-            it != mObjectsSorted.end(); ++it)
+    std::cout << "Before initing\n";
+    BOOST_FOREACH(boost::shared_ptr<Object> it, mObjectsSet)
     {
-        //it->second->init();
+        // TODO: !!!!
+        // This is called only for objects which are created from level-file
+        // When we add object dynamically in game process, this function won't be called!
+        // Insert some flag, and if game already runs, init object in addObject function
+        it->init();
     }
     //mActiveActor = getObjectByType<Player>("Player");
 }
@@ -241,7 +246,19 @@ std::string LevelManager::getLevelName()
 
 void LevelManager::addObject(const std::string &name, boost::python::object obj)
 {
-    int checksum = getCRC32(name);
+    try
+    {
+        //Object *temp = boost::python::extract<Object*>(obj) BOOST_EXTRACT_WORKAROUND;
+        boost::shared_ptr<Object> temp = boost::python::extract< boost::shared_ptr<Object> >(obj);
+        mObjectsSet.insert(temp);
+    }
+    catch(boost::python::error_already_set &e)
+    {
+        LOG("Something bad has been happened with script system when adding object...");
+        PyErr_Print();
+    }
+
+    /*int checksum = getCRC32(name);
     if (mPointAccess.find(checsum) == mPointAccess.end())
     {
         mObjects.insert(std::make_pair(name, obj));
@@ -251,7 +268,7 @@ void LevelManager::addObject(const std::string &name, boost::python::object obj)
     else
     {
         LOG(cl_format("Object with name `%1` already exists!", name));
-    }
+    }*/
 }
 
 void LevelManager::updateLogic(float elapsed)
@@ -265,43 +282,42 @@ void LevelManager::updateLogic(float elapsed)
 
 void LevelManager::updateVisual(float elapsed)
 {
+    if (mDebugDrawOnly) return;
     CL_Rectf camPos = getAbsoluteCameraPos();
 
-    for (ObjectMapTypeSorted::const_iterator it=mObjectsSorted.begin();
-            it != mObjectsSorted.end(); ++it)
+    BOOST_FOREACH(boost::shared_ptr<Object> it, mObjectsByIndexViewer)
     {
-        if(!mDebugDrawOnly)
+        it->updateVisual(0, 0);
+
+        /*if (!it->second->getAlwaysDraw())
         {
-            /*if (!it->second->getAlwaysDraw())
-            {
-                CL_Rectf objRect = it->second->getRectangle();
+            CL_Rectf objRect = it->second->getRectangle();
 
-                if (mDrawDebugData) CL_Draw::box(appManager().getGraphic(),
-                        objRect.right - camPos.left, objRect.top - camPos.top,
-                        objRect.left - camPos.left, objRect.bottom - camPos.top,
-                        CL_Colorf::red);
+            if (mDrawDebugData) CL_Draw::box(appManager().getGraphic(),
+                    objRect.right - camPos.left, objRect.top - camPos.top,
+                    objRect.left - camPos.left, objRect.bottom - camPos.top,
+                    CL_Colorf::red);
 
-                // Check whether object is in camera space
-                if ( !(
-                       objRect.right - camPos.left < 0                     || // <-
-                       objRect.left  - camPos.left > ScreenResolutionX     || //  ->
-                       objRect.bottom - camPos.top  < 0                    || // up
-                       objRect.top - camPos.top > ScreenResolutionY           // down
-                      )
-                    )
-                {
-                    CL_Pointf position = it->second->getPosition();
-                    it->second->updateVisual(position.x - camPos.left, position.y - camPos.top);
-                }
-            }
-            else
+            // Check whether object is in camera space
+            if ( !(
+                   objRect.right - camPos.left < 0                     || // <-
+                   objRect.left  - camPos.left > ScreenResolutionX     || //  ->
+                   objRect.bottom - camPos.top  < 0                    || // up
+                   objRect.top - camPos.top > ScreenResolutionY           // down
+                  )
+                )
             {
-                CL_Rectf objRect = it->second->getRectangle();
-                if (mDrawDebugData) CL_Draw::box(appManager().getGraphic(), objRect, CL_Colorf::red);
                 CL_Pointf position = it->second->getPosition();
                 it->second->updateVisual(position.x - camPos.left, position.y - camPos.top);
             }
-            if (mDrawActions) drawActions();*/
         }
+        else
+        {
+            CL_Rectf objRect = it->second->getRectangle();
+            if (mDrawDebugData) CL_Draw::box(appManager().getGraphic(), objRect, CL_Colorf::red);
+            CL_Pointf position = it->second->getPosition();
+            it->second->updateVisual(position.x - camPos.left, position.y - camPos.top);
+        }
+        if (mDrawActions) drawActions();*/
     }
 }

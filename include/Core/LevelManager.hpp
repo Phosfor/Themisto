@@ -28,6 +28,11 @@
 #include <ClanLib/application.h>
 #include <ClanLib/gui.h>
 
+#include <boost/multi_index_container.hpp>
+#include <boost/multi_index/mem_fun.hpp>
+#include <boost/multi_index/ordered_index.hpp>
+#include <boost/multi_index/sequenced_index.hpp>
+
 #include <boost/serialization/singleton.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/cstdint.hpp>
@@ -67,6 +72,15 @@ struct Compare
 typedef std::map<std::string, boost::python::object> ObjectMapTypeAccess;
 typedef std::map<std::string, boost::python::object> ObjectMapTypeSorted;
 
+namespace bmi = boost::multi_index;
+typedef boost::multi_index_container<boost::shared_ptr<Object>,
+            bmi::indexed_by<
+                bmi:: ordered_non_unique<
+                    bmi::mem_fun<Object, int, &Object::getIndex>
+                >
+            >
+        > ObjectWrapperSet;
+
 class Action;
 class LevelManager : public boost::serialization::singleton<LevelManager>
 {
@@ -96,11 +110,10 @@ class LevelManager : public boost::serialization::singleton<LevelManager>
         std::vector<boost::python::object> mPythonObjects;
         std::vector< boost::shared_ptr<Object> > mCppObjects;
 
-        // ZIndex → Object
-        std::map<int, boost::shared_ptr<Object> > mRenderObjects;
-
-        // Name hash → index in std::set
-        std::map<int, int> mPointAccess;
+        // Stores boost::shared_ptr<Object>
+        ObjectWrapperSet mObjectsSet;
+        // Order by ZIndex
+        ObjectWrapperSet::nth_index<0>::type &mObjectsByIndexViewer;
 
     public:
         LevelManager();

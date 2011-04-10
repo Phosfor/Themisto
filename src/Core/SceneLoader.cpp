@@ -118,9 +118,9 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
                 PyErr_Print();
             }
 
-            /*object.setIndex(z_index);
-            object.setType(type);
-            object.setAlwaysDraw(always_draw);*/
+            object.attr("SetIndex")(z_index);
+            object.attr("SetType")(type);
+            object.attr("SetAlwaysDraw")(always_draw);
             levelManager().addObject(name, object);
         }
     }

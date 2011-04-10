@@ -108,3 +108,33 @@ void ScriptsManager::registerTypesConverters()
 {
     runString("from Core.TypesConverters import *");
 }
+
+bp::object getAttr(const bp::object &obj, const std::string &attrName)
+{
+    try
+    {
+        return obj.attr(boost::python::str(attrName));
+
+    }
+    catch(const bp::error_already_set &err)
+    {
+        /* We need to fetch the error indicators *before*
+         * importing anything, as apparently importing
+         * using boost python clears the error flags.
+         */
+
+        PyObject *e, *v, *t;
+        PyErr_Fetch(&e, &v, &t);
+
+        boost::python::object AttributeError = boost::python::import("exceptions").attr("AttributeError");
+
+        /* Squash the exception only if it's an AttributeError, otherwise
+         * let the exception propagate.
+         */
+        if (PyErr_GivenExceptionMatches(AttributeError.ptr(), e))
+            return boost::python::object(); // None
+
+        else
+            throw;
+    }
+}

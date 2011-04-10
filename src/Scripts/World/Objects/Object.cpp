@@ -134,7 +134,7 @@ struct ObjectWrap : Object, bp::wrapper<Object>
 
 BOOST_PYTHON_MODULE(Object)
 {
-    bp::class_<ObjectWrap, boost::noncopyable>("Object", bp::no_init)
+    bp::class_<ObjectWrap, boost::noncopyable>("Object"/*, bp::no_init*/)
         .def("GetName", &Object::getName, &ObjectWrap::default_getName)
         .def("SetName", &Object::setName, &ObjectWrap::default_setName)
 

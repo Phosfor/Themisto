@@ -51,6 +51,7 @@ class ScriptsManager : public boost::serialization::singleton<ScriptsManager>
 
         void runString(const std::string &pyCode);
         void runFile(const std::string &fileName);
+        bp::object getAttr(const bp::object &obj, const std::string &attrName);
 };
 
 
