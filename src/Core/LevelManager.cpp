@@ -261,7 +261,7 @@ std::string LevelManager::getLevelName()
     return mLevelName;
 }
 
-void LevelManager::addObject(const std::string &name, const std::string &type, boost::python::object obj)
+void LevelManager::addObject(const std::string &name, boost::python::object obj)
 {
     try
     {
@@ -274,6 +274,7 @@ void LevelManager::addObject(const std::string &name, const std::string &type, b
         // Save native c++ pointer to the base Object class first
         boost::shared_ptr<Object> cpp = boost::python::extract< boost::shared_ptr<Object> >(obj);
         int zIndex = cpp->getIndex();
+        std::string type = cpp->getType();
 
         // And save bp::object, don't forget to increment pointer counter!
         //bp::incref(obj);

@@ -43,11 +43,6 @@
 
 #include "World/Objects/Object.hpp"
 #include "World/Objects/Actor.hpp"
-/*
-#include "World/Objects/Foreground.hpp"
-#include "World/Objects/Level.hpp"
-#include "World/Objects/Empty.hpp"
-#include "World/Objects/Player.hpp"*/
 
 namespace bmi = boost::multi_index;
 
@@ -162,7 +157,7 @@ class LevelManager : public boost::serialization::singleton<LevelManager>
         void initObjects();
 
         // Objects stuff
-        void addObject(const std::string &name, const std::string &type, boost::python::object obj);
+        void addObject(const std::string &name, boost::python::object obj);
 
         // Get object by name [python]
         boost::python::object getPyObject(const std::string &name)
