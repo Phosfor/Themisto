@@ -123,7 +123,7 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
                 PyErr_Print();
             }
 
-            levelManager().addObject(name, object);
+            levelManager().addObject(name, type, object);
         }
     }
 

@@ -19,7 +19,9 @@
 #include "World/Actions/Action.hpp"
 
 LevelManager::LevelManager() :
-    mObjectsByIndexViewer(mObjectsSet.get<0>())
+    mObjectsByIndexViewer(mObjectsSet.get<tag_zindex>()),
+    mObjectsByNameViewer(mObjectsSet.get<tag_name>()),
+    mObjectsByTypeViewer(mObjectsSet.get<tag_type>())
 {
     mNumObjects = 0;
     mCameraSpeed = configManager().getValue<float>("application.camera_speed", 10.0f);
@@ -27,9 +29,13 @@ LevelManager::LevelManager() :
     mDrawDebugData = mDrawActions = false;
 }
 
+// This function walk through all py-files which should consist of
+// game objects types. When we run the file, new class registers in
+// our script namespace
 void LevelManager::processScriptObjects()
 {
     namespace bf = boost::filesystem;
+
     bf::directory_iterator endIt;
     for ( bf::recursive_directory_iterator end, dir(utils().getMediaFolder() + "/objects/");
            dir != end; ++dir )
@@ -144,13 +150,13 @@ void LevelManager::menuItemClicked(boost::shared_ptr<Action> clickedAction)
 
 void LevelManager::initObjects()
 {
-    BOOST_FOREACH(boost::shared_ptr<Object> it, mObjectsSet)
+    BOOST_FOREACH(const ObjectStorage &it, mObjectsByIndexViewer)
     {
         // TODO: !!!!
         // This is called only for objects which are created from level-file
         // When we add object dynamically in game process, this function won't be called!
         // Insert some flag, and if game already runs, init object in addObject function
-        it->init();
+        it.getCppObject()->init();
     }
     //mActiveActor = getObjectByType<Player>("Player");
 }
@@ -255,38 +261,40 @@ std::string LevelManager::getLevelName()
     return mLevelName;
 }
 
-void LevelManager::addObject(const std::string &name, boost::python::object obj)
+void LevelManager::addObject(const std::string &name, const std::string &type, boost::python::object obj)
 {
     try
     {
-        //Object *temp = boost::python::extract<Object*>(obj) BOOST_EXTRACT_WORKAROUND;
-        boost::shared_ptr<Object> temp = boost::python::extract< boost::shared_ptr<Object> >(obj);
-        mObjectsSet.insert(temp);
+        if (mObjectsByNameViewer.find(name) != mObjectsByNameViewer.end())
+        {
+            LOG(cl_format("Object with name `%1` already exists!", name).c_str());
+            return;
+        }
+
+        // Save native c++ pointer to the base Object class first
+        boost::shared_ptr<Object> cpp = boost::python::extract< boost::shared_ptr<Object> >(obj);
+        int zIndex = cpp->getIndex();
+
+        // And save bp::object, don't forget to increment pointer counter!
+        //bp::incref(obj);
+
+        ObjectStorage storage(name, type, zIndex, cpp, obj);
+        mObjectsSet.insert(storage);
+
+        mNumObjects++;
     }
     catch(boost::python::error_already_set &e)
     {
         LOG("Something bad has been happened with script system when adding object...");
         PyErr_Print();
     }
-
-    /*int checksum = getCRC32(name);
-    if (mPointAccess.find(checsum) == mPointAccess.end())
-    {
-        mObjects.insert(std::make_pair(name, obj));
-        //mObjectsSorted.insert(std::make_pair(IntToStr(obj->getIndex()) + "_" + name, obj));
-        mNumObjects++;
-    }
-    else
-    {
-        LOG(cl_format("Object with name `%1` already exists!", name));
-    }*/
 }
 
 void LevelManager::updateLogic(float elapsed)
 {
 
-    BOOST_FOREACH(boost::shared_ptr<Object> it, mObjectsByIndexViewer)
-        it->update(elapsed);
+    BOOST_FOREACH(const ObjectStorage &it, mObjectsByIndexViewer)
+        it.getCppObject()->update(elapsed);
 }
 
 void LevelManager::updateVisual(float elapsed)
@@ -294,8 +302,9 @@ void LevelManager::updateVisual(float elapsed)
     if (mDebugDrawOnly) return;
     CL_Rectf camPos = getAbsoluteCameraPos();
 
-    BOOST_FOREACH(boost::shared_ptr<Object> it, mObjectsByIndexViewer)
+    BOOST_FOREACH(const ObjectStorage &storage, mObjectsByIndexViewer)
     {
+        boost::shared_ptr<Object> it = storage.getCppObject();
         if (!it->getAlwaysDraw())
         {
             CL_Rectf objRect = it->getRectangle();
@@ -308,7 +317,7 @@ void LevelManager::updateVisual(float elapsed)
             // Check whether object is in camera space
             if ( !(
                    objRect.right  - camPos.left < 0                     || // <-
-                   objRect.left   - camPos.left > ScreenResolutionX     || //  ->
+                   objRect.left   - camPos.left > ScreenResolutionX     || // ->
                    objRect.bottom - camPos.top  < 0                     || // up
                    objRect.top    - camPos.top  > ScreenResolutionY        // down
                   )
@@ -325,6 +334,6 @@ void LevelManager::updateVisual(float elapsed)
             CL_Pointf position = it->getPosition();
             it->updateVisual(position.x - camPos.left, position.y - camPos.top);
         }
-        //if (mDrawActions) drawActions();
+        if (mDrawActions) drawActions();
     }
 }

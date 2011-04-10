@@ -17,10 +17,7 @@
 
 #pragma once
 
-#include <map>
-#include <utility>
 #include <string>
-#include <set>
 
 #include <ClanLib/display.h>
 #include <ClanLib/core.h>
@@ -36,7 +33,6 @@
 #include <boost/serialization/singleton.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/cstdint.hpp>
-#include <boost/cstdint.hpp>
 
 #include "Core/ApplicationManager.hpp"
 #include "Core/InputManager.hpp"
@@ -46,38 +42,66 @@
 #include "Core/Utils.hpp"
 
 #include "World/Objects/Object.hpp"
+#include "World/Objects/Actor.hpp"
+/*
 #include "World/Objects/Foreground.hpp"
 #include "World/Objects/Level.hpp"
 #include "World/Objects/Empty.hpp"
-#include "World/Objects/Player.hpp"
-#include "World/Objects/Actor.hpp"
-
-// Used for objects map to achive z-index
-struct Compare
-{
-    bool operator()(const std::string &a, const std::string &b) const
-    {
-        unsigned int index1 = a.find_first_of('_');
-        std::string num1 = a.substr(0, index1);
-        int num_1 = atoi(num1.c_str());
-
-        unsigned int index2 = b.find_first_of('_');
-        std::string num2 = b.substr(0, index2);
-        int num_2 = atoi(num2.c_str());
-
-        return num_1 <= num_2;
-    }
-};
-
-//class Object;
-typedef std::map<std::string, boost::python::object> ObjectMapTypeAccess;
-typedef std::map<std::string, boost::python::object> ObjectMapTypeSorted;
+#include "World/Objects/Player.hpp"*/
 
 namespace bmi = boost::multi_index;
-typedef boost::multi_index_container<boost::shared_ptr<Object>,
+
+// Object storage interface
+// Used for multi_index array and single access interface
+class ObjectStorage
+{
+    private:
+        std::string objName, type;
+        int zIndex;
+
+        // Reference for the Object interface
+        boost::shared_ptr<Object> mCppObject;
+
+        // Reference for the Python interface
+        boost::python::object mPythonObject;
+
+    public:
+        ObjectStorage(const std::string &name, const std::string &type_,
+                      int zIndex_, boost::shared_ptr<Object> cpp, boost::python::object python)
+            : objName(name), type(type_), zIndex(zIndex_),
+              mCppObject(cpp), mPythonObject(python) {}
+
+        std::string getName() const { return objName; };
+        std::string getType() const { return type; };
+        int getZIndex() const { return zIndex; }
+
+        boost::shared_ptr<Object> getCppObject() const { return mCppObject; }
+        boost::python::object getPythonObject() const { return mPythonObject; }
+};
+
+// Tagging for multi_index container
+struct tag_zindex {};
+struct tag_name {};
+struct tag_type {};
+
+typedef boost::multi_index_container<ObjectStorage,
             bmi::indexed_by<
-                bmi:: ordered_non_unique<
-                    bmi::mem_fun<Object, int, &Object::getIndex>
+                // ZIndex
+                bmi::ordered_non_unique<
+                    bmi::tag<tag_zindex>,
+                    bmi::const_mem_fun<ObjectStorage, int, &ObjectStorage::getZIndex>
+                >,
+
+                // Name
+                bmi::ordered_unique<
+                    bmi::tag<tag_name>,
+                    bmi::const_mem_fun<ObjectStorage, std::string, &ObjectStorage::getName>
+                >,
+
+                // Type
+                bmi::ordered_non_unique<
+                    bmi::tag<tag_type>,
+                    bmi::const_mem_fun<ObjectStorage, std::string, &ObjectStorage::getType>
                 >
             >
         > ObjectWrapperSet;
@@ -104,17 +128,14 @@ class LevelManager : public boost::serialization::singleton<LevelManager>
         CL_Slot mMousePressedSlots;
 
         // Objects stuff
-        ObjectMapTypeAccess mObjects;
-        ObjectMapTypeSorted mObjectsSorted;
         uint16_t mNumObjects;
-
-        std::vector<boost::python::object> mPythonObjects;
-        std::vector< boost::shared_ptr<Object> > mCppObjects;
 
         // Stores boost::shared_ptr<Object>
         ObjectWrapperSet mObjectsSet;
         // Order by ZIndex
-        ObjectWrapperSet::nth_index<0>::type &mObjectsByIndexViewer;
+        ObjectWrapperSet::index<tag_zindex>::type &mObjectsByIndexViewer;
+        ObjectWrapperSet::index<tag_name>::type &mObjectsByNameViewer;
+        ObjectWrapperSet::index<tag_type>::type &mObjectsByTypeViewer;
 
     public:
         LevelManager();
@@ -141,47 +162,75 @@ class LevelManager : public boost::serialization::singleton<LevelManager>
         void initObjects();
 
         // Objects stuff
-        void addObject(const std::string &name, boost::python::object obj);
+        void addObject(const std::string &name, const std::string &type, boost::python::object obj);
 
-        // Get object by name
-        boost::python::object getObject(const std::string &name)
+        // Get object by name [python]
+        boost::python::object getPyObject(const std::string &name)
         {
-            if (mObjects.find(name) == mObjects.end())
+            if (mObjectsByNameViewer.find(name) == mObjectsByNameViewer.end())
             {
-                LOG(cl_format("Failed to get object `%1`, it doesn't exist!", name));
-                //boost::shared_ptr<T> temp(new T);
-                //temp->setType("Empty");
-                //return temp;
+                LOG(cl_format("Failed to get python object `%1`, it doesn't exist!", name));
+                return boost::python::object();
             }
             else
             {
-                //return boost::static_pointer_cast<T>(mObjects[name]);
-                return mObjects[name];
+                return mObjectsByNameViewer.find(name)->getPythonObject();
             }
         }
 
-        // Returns list of all objects by given type
-        std::vector<boost::python::object> getObjectsByType(const std::string &type)
+        // Get object by name [cpp]
+        boost::shared_ptr<Object> getCppObject(const std::string &name)
+        {
+            if (mObjectsByNameViewer.find(name) == mObjectsByNameViewer.end())
+            {
+                LOG(cl_format("Failed to get cpp object `%1`, it doesn't exist!", name));
+                return boost::shared_ptr<Object>();
+            }
+            else
+            {
+                return mObjectsByNameViewer.find(name)->getCppObject();
+            }
+        }
+
+        // Returns list of all objects by given type [python]
+        std::vector<boost::python::object> getPyObjectsByType(const std::string &type)
         {
             std::vector<boost::python::object> res;
-            BOOST_FOREACH(ObjectMapTypeAccess::value_type &pair, mObjects)
-            {
-                /*if (pair.second->getType() == type)
-                    res.push_back(mObjects[pair.first]);*/
-            }
+
+            typedef ObjectWrapperSet::index<tag_type>::type::const_iterator ByTypeIt;
+            std::pair<ByTypeIt, ByTypeIt> n_it = mObjectsByTypeViewer.equal_range(type);
+
+            for (; n_it.first != n_it.second; ++n_it.first)
+                res.push_back(n_it.first->getPythonObject());
 
             return res;
         }
 
-        // Returns first object by given type
-        boost::python::object getObjectByType(const std::string &type)
+        // Returns list of all objects by given type [cpp]
+        std::vector< boost::shared_ptr<Object> > getCppObjectsByType(const std::string &type)
         {
-            /*BOOST_FOREACH(ObjectMapTypeAccess::value_type &pair, mObjects)
-            {
-                if (pair.second->getType() == type)
-                    return mObjects[pair.first];
-            }*/
+            std::vector< boost::shared_ptr<Object> > res;
 
+            typedef ObjectWrapperSet::index<tag_type>::type::const_iterator ByTypeIt;
+            std::pair<ByTypeIt, ByTypeIt> n_it = mObjectsByTypeViewer.equal_range(type);
+
+            for (; n_it.first != n_it.second; ++n_it.first)
+                res.push_back(n_it.first->getCppObject());
+
+            return res;
+        }
+
+        // Returns first object by given type [python]
+        boost::python::object getPyObjectByType(const std::string &type)
+        {
+            return mObjectsByTypeViewer.find(type)->getPythonObject();
+            LOG(cl_format("No one object with `%1` type!", type));
+        }
+
+        // Returns first object by given type [cpp]
+        boost::shared_ptr<Object> getCppObjectByType(const std::string &type)
+        {
+            return mObjectsByTypeViewer.find(type)->getCppObject();
             LOG(cl_format("No one object with `%1` type!", type));
         }
 
