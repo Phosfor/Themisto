@@ -147,7 +147,7 @@ BOOST_PYTHON_MODULE(TypesConverters)
 
     /////////////////////////////////// CL_RECT ////////////////////////////////////////
     // CL_Rect [integer] ---------------------------------------------------------------
-    bp::class_<CL_Rect>("CL_Rect", bp::init<int, int, int, int>())
+    bp::class_<CL_Rect>("CL_Recti", bp::init<int, int, int, int>())
         .def(bp::init< CL_Rectx<int> >())
         .def(bp::init< CL_Rectx<float> >())
         .def(bp::init< CL_Sizex<int> >())
@@ -160,7 +160,7 @@ BOOST_PYTHON_MODULE(TypesConverters)
         .def(bp::self_ns::str(bp::self_ns::self));  // Export __str__
 
     // CL_Rectf [float] ---------------------------------------------------------------
-    bp::class_<CL_Rect>("CL_Rect", bp::init<float, float, float, float>())
+    bp::class_<CL_Rect>("CL_Rectf", bp::init<float, float, float, float>())
         .def(bp::init< CL_Rectx<float> >())
         .def(bp::init< CL_Rectx<float> >())
         .def(bp::init< CL_Sizex<float> >())
