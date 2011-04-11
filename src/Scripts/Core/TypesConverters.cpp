@@ -19,10 +19,27 @@
 #include "Core/LogManager.hpp"
 #include "Core/TypesConverters.hpp"
 
-// Overloaded functions in CL_Vec2 class... (There are also static variants of these)
+#include <boost/function.hpp>
+
+// Pointer to functions for processing overloaded functions
+
+// CL_VEC2
+// INT
 CL_Vec2<int> &(CL_Vec2<int>::*Vec2iNorm)() = &CL_Vec2<int>::normalize;
 int (CL_Vec2<int>::*Vec2iDot)(const CL_Vec2<int>&) const = &CL_Vec2<int>::dot;
 CL_Vec2<int> &(CL_Vec2<int>::*Vec2iRound)() = &CL_Vec2<int>::round;
+// FLOAT
+CL_Vec2<float> &(CL_Vec2<float>::*Vec2fNorm)() = &CL_Vec2<float>::normalize;
+float (CL_Vec2<float>::*Vec2fDot)(const CL_Vec2<float>&) const = &CL_Vec2<float>::dot;
+CL_Vec2<float> &(CL_Vec2<float>::*Vec2fRound)() = &CL_Vec2<float>::round;
+
+// CL_Draw::gradient_fill
+void (*GradientFill_1)(CL_GraphicContext&,
+        float, float, float, float, const CL_Gradient&) = CL_Draw::gradient_fill;
+void (*GradientFill_2)(CL_GraphicContext&,
+        const CL_Pointf&, const CL_Pointf&, const CL_Gradient&) = CL_Draw::gradient_fill;
+void (*GradientFill_3)(CL_GraphicContext&,
+        const CL_Rectf&, const CL_Gradient&) = CL_Draw::gradient_fill;
 
 BOOST_PYTHON_MODULE(TypesConverters)
 {
@@ -50,9 +67,22 @@ BOOST_PYTHON_MODULE(TypesConverters)
     bp::class_<CL_Point>("CL_Point", bp::init<int, int>())
         .def(bp::init< CL_Vec2<int> >());
 
-    // CL_Point [float] -------------------------------------------------------------
+    // CL_Point [float] ---------------------------------------------------------------
     bp::class_<CL_Pointf>("CL_Pointf", bp::init<float, float>())
         .def(bp::init< CL_Vec2<float> >());
+
+    // CL_Colorf [float] --------------------------------------------------------------
+    bp::class_<CL_Colorf>("CL_Colorf", bp::init<float, float, float, float>())
+        .def_readonly("r", &CL_Colorf::r)
+        .def_readonly("g", &CL_Colorf::g)
+        .def_readonly("b", &CL_Colorf::b)
+        .def_readonly("a", &CL_Colorf::a);
+
+    // CL_Draw -----------------------------------------------------------------------
+    bp::class_<CL_Draw>("CL_Draw")
+        .def("GradientFill", GradientFill_1).staticmethod("GradientFill")
+        .def("GradientFill", GradientFill_2).staticmethod("GradientFill")
+        .def("GradientFill", GradientFill_3).staticmethod("GradientFill");
 
     // CL_Angle ----------------------------------------------------------------------
     bp::class_<CL_Angle>("CL_Angle")
@@ -94,11 +124,11 @@ BOOST_PYTHON_MODULE(TypesConverters)
     // CL_Vec2 [float] ----------------------------------------------------------------
     bp::class_< CL_Vec2<float> >("CL_Vec2f", bp::init<float, float>())
     .def("Length", &CL_Vec2<float>::length)
-    .def("Dot", Vec2iDot)
-    .def("Normalize", Vec2iNorm, bp::return_value_policy<bp::copy_non_const_reference>())
+    .def("Dot", Vec2fDot)
+    .def("Normalize", Vec2fNorm, bp::return_value_policy<bp::copy_non_const_reference>())
     .def("Angle", &CL_Vec2<float>::angle)
     .def("Distance", &CL_Vec2<float>::distance)
-    .def("Round", Vec2iRound, bp::return_value_policy<bp::copy_non_const_reference>())
+    .def("Round", Vec2fRound, bp::return_value_policy<bp::copy_non_const_reference>())
     .def(bp::self_ns::str(bp::self_ns::self))  // Export __str__
 
     // Export overriden operators
