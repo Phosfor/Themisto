@@ -5,10 +5,11 @@
         <Wind power="2" />
         <Camera startPosX="0" startPosY="0" mode="free" />
         <Objects>
-            <Object name="Test" type="testobj" z-index="1" />
-            <Object name="Test2" type="testobj" z-index="0" />
+            <Object name="Test" type="testobj" z-index="5" />
+            <!--<Object name="Sky" type="SkyObject" z-index="-100" />-->
+            <!--<Object name="Test2" type="testobj" z-index="0" />
             <Object name="Test3" type="testobj" z-index="5" />
-            <Object name="Test4" type="testobj" z-index="-3" />
+            <Object name="Test4" type="testobj" z-index="-3" />-->
         </Objects>
     </World>
     <Templates>

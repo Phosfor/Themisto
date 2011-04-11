@@ -31,6 +31,8 @@ class Object : public boost::noncopyable
         bool mAlwaysDraw;
 
     public:
+        virtual ~Object() {};
+
         virtual std::string getName() { return mName; }
         virtual void setName(const std::string &name) { mName = name; }
 
