@@ -78,6 +78,11 @@ BOOST_PYTHON_MODULE(TypesConverters)
         .def_readonly("b", &CL_Colorf::b)
         .def_readonly("a", &CL_Colorf::a);
 
+    // CL_Gradient -------------------------------------------------------------------
+    bp::class_<CL_Gradient>("CL_Gradient", bp::init<const CL_Colorf&, const CL_Colorf&,
+            const CL_Colorf&, const CL_Colorf&>())
+        .def(bp::init<const CL_Colorf&, const CL_Colorf&>());
+
     // CL_Draw -----------------------------------------------------------------------
     bp::class_<CL_Draw>("CL_Draw")
         .def("GradientFill", GradientFill_1).staticmethod("GradientFill")
