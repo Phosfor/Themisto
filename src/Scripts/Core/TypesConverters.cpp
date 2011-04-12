@@ -85,9 +85,10 @@ BOOST_PYTHON_MODULE(TypesConverters)
 
     // CL_Draw -----------------------------------------------------------------------
     bp::class_<CL_Draw>("CL_Draw")
-        .def("GradientFill", GradientFill_1).staticmethod("GradientFill")
-        .def("GradientFill", GradientFill_2).staticmethod("GradientFill")
-        .def("GradientFill", GradientFill_3).staticmethod("GradientFill");
+        .def("GradientFill", GradientFill_1)
+        .def("GradientFill", GradientFill_2)
+        .def("GradientFill", GradientFill_3)
+        .staticmethod("GradientFill");
 
     // CL_Angle ----------------------------------------------------------------------
     bp::class_<CL_Angle>("CL_Angle")

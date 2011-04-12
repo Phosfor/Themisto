@@ -35,15 +35,11 @@
 boost::python::object TypesManager::empty_parser(CL_DomElement p)
 {
     LOG("Error: object type not registered\n");
-    //return boost::shared_ptr<Object>();
+    return boost::python::object();
 }
 
 Parser TypesManager::getParser(std::string type)
 {
-    // Check whether some object should have common type but it should be marked
-    if (type.find_first_of("_") != std::string::npos)
-        type = type.substr(0, type.find_first_of("_"));
-
     if (ObjectsParser.find(type) != ObjectsParser.end())
         return ObjectsParser[type];
     else
@@ -73,12 +69,14 @@ void TypesManager::dumpParsers()
     std::map<std::string, Parser>::const_iterator it = ObjectsParser.begin();
     for (; it != ObjectsParser.end(); ++it)
     {
-        //std::cout << "\t" << it->first << "\n";
+        std::cout << "\t" << it->first << "\n";
     }
 }
 
 boost::python::object TypesManager::parseObject(CL_DomElement objectTag, const std::string &type)
 {
+    std::cout << "parseObjcet with type: " << type << std::endl;
+    dumpParsers();
     return (getParser(type))(objectTag);
 }
 

@@ -293,7 +293,6 @@ void LevelManager::addObject(const std::string &name, boost::python::object obj)
 
 void LevelManager::updateLogic(float elapsed)
 {
-
     BOOST_FOREACH(const ObjectStorage &it, mObjectsByIndexViewer)
         it.getCppObject()->update(elapsed);
 }
