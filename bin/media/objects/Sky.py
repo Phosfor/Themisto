@@ -1,5 +1,6 @@
 import Core.LogManager
 import Core.WorldManager
+import Core.ApplicationManager
 import World.Objects.TypesManager
 from World.Objects.Object import *
 from Core.Utils import *

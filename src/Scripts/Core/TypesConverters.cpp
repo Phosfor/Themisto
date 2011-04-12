@@ -211,5 +211,7 @@ BOOST_PYTHON_MODULE(TypesConverters)
     bp::class_<CL_DisplayWindow>("CL_DisplayWindow")
         .def("GetMinimumSize", &CL_DisplayWindow::get_minimum_size, GetMinimumSizeOverloads());
 
+    bp::class_<CL_GraphicContext>("CL_GraphicContext");
+
     bp::class_<CL_DomElement>("CL_DomElement");
 }

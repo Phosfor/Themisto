@@ -12,10 +12,12 @@ class TestObj(Object):
         print 'init function of Test'
 
     def update(self, elapsed):
-        print 'update with elapsed'
+        pass
+        #print 'update with elapsed'
 
     def updateVisual(self, newX, newY):
-        print 'Updating object with ZIndex: ' + str(self.GetIndex())
+        pass
+        #print 'Updating object with ZIndex: ' + str(self.GetIndex())
 
     def getPosition(self):
         print 'returning position'
