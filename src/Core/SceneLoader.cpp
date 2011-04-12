@@ -81,6 +81,7 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
 
     // START OF OBJECTS PARSING -------------------------------------------
     levelManager().processScriptObjects();
+    typesManager().dumpParsers();
 
     {
         CL_DomNodeList childList = objects.get_child_nodes();

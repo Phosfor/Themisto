@@ -28,7 +28,6 @@
 #include "World/Objects/Rain.hpp"
 #include "World/Objects/Foreground.hpp"
 #include "World/Objects/Empty.hpp"
-#include "World/Objects/Sky.hpp"
 #include "World/Objects/Stars.hpp"
 #include "World/Objects/Leaves.hpp"*/
 
@@ -46,25 +45,11 @@ Parser TypesManager::getParser(std::string type)
         return TypesManager::empty_parser;
 }
 
-TypesManager::TypesManager()
-{
-    /*registerParser("PhysicBodyObject", PhysicObject::ParsePhysicObject);
-    registerParser("LightColumnObject", LightColumn::ParseLightColumn);
-    registerParser("Moon", Moon::ParseMoon);
-    registerParser("Player", Player::ParsePlayer);
-    registerParser("Birds", Birds::ParseBirds);
-    registerParser("Clouds", Clouds::ParseClouds);
-    registerParser("Rain", Rain::ParseRain);
-    registerParser("Foreground", Foreground::ParseForeground);
-    registerParser("Level", Level::ParseLevel);
-    registerParser("Sky", Sky::ParseSky);
-    registerParser("Stars", Stars::ParseStars);
-    registerParser("Leaves", Leaves::ParseLeaves);*/
-}
+TypesManager::TypesManager() { }
 
 void TypesManager::dumpParsers()
 {
-    std::cout << "List of parsers:\n";
+    std::cout << "List of registered parsers:\n";
 
     std::map<std::string, Parser>::const_iterator it = ObjectsParser.begin();
     for (; it != ObjectsParser.end(); ++it)
@@ -75,8 +60,6 @@ void TypesManager::dumpParsers()
 
 boost::python::object TypesManager::parseObject(CL_DomElement objectTag, const std::string &type)
 {
-    std::cout << "parseObjcet with type: " << type << std::endl;
-    dumpParsers();
     return (getParser(type))(objectTag);
 }
 

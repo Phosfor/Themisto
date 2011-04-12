@@ -41,6 +41,12 @@ void (*GradientFill_2)(CL_GraphicContext&,
 void (*GradientFill_3)(CL_GraphicContext&,
         const CL_Rectf&, const CL_Gradient&) = CL_Draw::gradient_fill;
 
+// CL_Draw::line
+void (*DrawLine_1)(CL_GraphicContext&,
+        float, float, float, float, const CL_Colorf&) = CL_Draw::line;
+void (*DrawLine_2)(CL_GraphicContext&,
+        const CL_Pointf&, const CL_Pointf&, const CL_Colorf&) = CL_Draw::line;
+
 BOOST_PYTHON_MODULE(TypesConverters)
 {
     using namespace ScriptTypesConverters;
@@ -88,7 +94,10 @@ BOOST_PYTHON_MODULE(TypesConverters)
         .def("GradientFill", GradientFill_1)
         .def("GradientFill", GradientFill_2)
         .def("GradientFill", GradientFill_3)
-        .staticmethod("GradientFill");
+        .staticmethod("GradientFill")
+        .def("Line", DrawLine_1)
+        .def("Line", DrawLine_2)
+        .staticmethod("Line");
 
     // CL_Angle ----------------------------------------------------------------------
     bp::class_<CL_Angle>("CL_Angle")
