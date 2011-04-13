@@ -47,6 +47,10 @@ void (*DrawLine_1)(CL_GraphicContext&,
 void (*DrawLine_2)(CL_GraphicContext&,
         const CL_Pointf&, const CL_Pointf&, const CL_Colorf&) = CL_Draw::line;
 
+// CL_DomElement: has_attribute, get_attribute
+bool (CL_DomElement::*HasAttribute)(const CL_DomString&) const = &CL_DomElement::has_attribute;
+CL_DomString (CL_DomElement::*GetAttribute)(const CL_DomString&) const = &CL_DomElement::get_attribute;
+
 BOOST_PYTHON_MODULE(TypesConverters)
 {
     using namespace ScriptTypesConverters;
@@ -222,5 +226,10 @@ BOOST_PYTHON_MODULE(TypesConverters)
 
     bp::class_<CL_GraphicContext>("CL_GraphicContext");
 
-    bp::class_<CL_DomElement>("CL_DomElement");
+    bp::class_<CL_DomElement>("CL_DomElement")
+        .def("HasAttribute", HasAttribute)
+        .def("GetAttribute", GetAttribute);
+
+    bp::class_<CL_StringRef8>("CL_DomString", bp::init<const std::string&>())
+        .def("CStr", &CL_StringRef8::c_str);
 }

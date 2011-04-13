@@ -150,13 +150,22 @@ void LevelManager::menuItemClicked(boost::shared_ptr<Action> clickedAction)
 
 void LevelManager::initObjects()
 {
-    BOOST_FOREACH(const ObjectStorage &it, mObjectsByIndexViewer)
+    try
     {
-        // TODO: !!!!
-        // This is called only for objects which are created from level-file
-        // When we add object dynamically in game process, this function won't be called!
-        // Insert some flag, and if game already runs, init object in addObject function
-        it.getCppObject()->init();
+        BOOST_FOREACH(const ObjectStorage &it, mObjectsByIndexViewer)
+        {
+            // TODO: !!!!
+            // This is called only for objects which are created from level-file
+            // When we add object dynamically in game process, this function won't be called!
+            // Insert some flag, and if game already runs, init object in addObject function
+            it.getCppObject()->init();
+            //it.getPyObject().attr("init")();
+        }
+    }
+    catch(boost::python::error_already_set &e)
+    {
+        LOG("Something bad has been happened with script system when initing objects...");
+        PyErr_Print();
     }
     //mActiveActor = getObjectByType<Player>("Player");
 }
@@ -273,11 +282,12 @@ void LevelManager::addObject(const std::string &name, boost::python::object obj)
 
         // Save native c++ pointer to the base Object class first
         boost::shared_ptr<Object> cpp = boost::python::extract< boost::shared_ptr<Object> >(obj);
-        int zIndex = cpp->getIndex();
-        std::string type = cpp->getType();
+        //int zIndex = cpp->getIndex();
+        int zIndex = bp::extract<int>(obj.attr("GetIndex")());
+        //std::string type = cpp->getType();
+        std::string type = bp::extract<std::string>(obj.attr("GetType")());
 
         // And save bp::object, don't forget to increment pointer counter!
-        //bp::incref(obj);
 
         ObjectStorage storage(name, type, zIndex, cpp, obj);
         mObjectsSet.insert(storage);
@@ -293,8 +303,16 @@ void LevelManager::addObject(const std::string &name, boost::python::object obj)
 
 void LevelManager::updateLogic(float elapsed)
 {
+    try
+    {
     BOOST_FOREACH(const ObjectStorage &it, mObjectsByIndexViewer)
         it.getCppObject()->update(elapsed);
+    }
+    catch(boost::python::error_already_set &e)
+    {
+        LOG("Something bad has been happened with script system when updating LOGIC object...");
+        PyErr_Print();
+    }
 }
 
 void LevelManager::updateVisual(float elapsed)
@@ -302,6 +320,8 @@ void LevelManager::updateVisual(float elapsed)
     if (mDebugDrawOnly) return;
     CL_Rectf camPos = getAbsoluteCameraPos();
 
+    try
+    {
     BOOST_FOREACH(const ObjectStorage &storage, mObjectsByIndexViewer)
     {
         boost::shared_ptr<Object> it = storage.getCppObject();
@@ -335,5 +355,11 @@ void LevelManager::updateVisual(float elapsed)
             it->updateVisual(position.x - camPos.left, position.y - camPos.top);
         }
         if (mDrawActions) drawActions();
+    }
+    }
+    catch(boost::python::error_already_set &e)
+    {
+        LOG("Something bad has been happened with script system when updating VISUAL object...");
+        PyErr_Print();
     }
 }
