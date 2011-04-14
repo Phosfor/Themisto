@@ -21,8 +21,14 @@
 CL_Sprite (ResourceManager::*getSprite1)(const std::string &, const std::vector<std::string> &) = &ResourceManager::getSprite;
 CL_Sprite (ResourceManager::*getSprite2)(const std::string &, const std::string &) = &ResourceManager::getSprite;
 
+int sectionNumChildren(const std::string &section)
+{
+    return resourceManager().sectionHandle(section).get_child_nodes().get_length();
+}
+
 BOOST_PYTHON_MODULE(ResourceManager)
 {
+    bp::def("SectionNumChildren", &sectionNumChildren);
     bp::class_<ResourceManager, boost::noncopyable>("ResourceManager", bp::no_init)
         .def("GetImagePath", &ResourceManager::getImagePath)
         .def("GetImage", &ResourceManager::getImage)

@@ -5,7 +5,8 @@
         <Wind power="2" />
         <Camera startPosX="0" startPosY="0" mode="free" />
         <Objects>
-            <Object name="Sky" type="SkyObject" z-index="-100" />
+            <Object name="Sky" type="SkyObject" z-index="-100"/>
+            <Object name="Stars" type="StarsObject" maxStars="6.0" z-index="-99"  always_draw="true" />
             <Object name="Rain" type="RainObject" maxDrops="2.5" />
             <!--<Object name="Test" type="testobj" z-index="5" />-->
             <!--<Object name="Test2" type="testobj" z-index="0" />

@@ -51,6 +51,9 @@ void (*DrawLine_2)(CL_GraphicContext&,
 bool (CL_DomElement::*HasAttribute)(const CL_DomString&) const = &CL_DomElement::has_attribute;
 CL_DomString (CL_DomElement::*GetAttribute)(const CL_DomString&) const = &CL_DomElement::get_attribute;
 
+// CL_Image::draw
+void (CL_Image::*ImageDraw_1)(CL_GraphicContext&, float, float) const = &CL_Image::draw;
+
 BOOST_PYTHON_MODULE(TypesConverters)
 {
     using namespace ScriptTypesConverters;
@@ -102,6 +105,12 @@ BOOST_PYTHON_MODULE(TypesConverters)
         .def("Line", DrawLine_1)
         .def("Line", DrawLine_2)
         .staticmethod("Line");
+
+    // CL_Image ----------------------------------------------------------------------
+    bp::class_<CL_Image>("CL_Image")
+        .def("SetScale", &CL_Image::set_scale)
+        .def("SetAlpha", &CL_Image::set_alpha)
+        .def("Draw", ImageDraw_1);
 
     // CL_Angle ----------------------------------------------------------------------
     bp::class_<CL_Angle>("CL_Angle")
