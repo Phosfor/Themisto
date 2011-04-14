@@ -51,8 +51,9 @@ void (*DrawLine_2)(CL_GraphicContext&,
 bool (CL_DomElement::*HasAttribute)(const CL_DomString&) const = &CL_DomElement::has_attribute;
 CL_DomString (CL_DomElement::*GetAttribute)(const CL_DomString&) const = &CL_DomElement::get_attribute;
 
-// CL_Image::draw
+// CL_Image
 void (CL_Image::*ImageDraw_1)(CL_GraphicContext&, float, float) const = &CL_Image::draw;
+void (CL_Image::*SetColor)(const CL_Colorf&) = &CL_Image::set_color;
 
 BOOST_PYTHON_MODULE(TypesConverters)
 {
@@ -110,7 +111,25 @@ BOOST_PYTHON_MODULE(TypesConverters)
     bp::class_<CL_Image>("CL_Image")
         .def("SetScale", &CL_Image::set_scale)
         .def("SetAlpha", &CL_Image::set_alpha)
-        .def("Draw", ImageDraw_1);
+        .def("Draw", ImageDraw_1)
+        .def("GetColor", &CL_Image::get_color)
+        .def("SetColor", SetColor)
+        .def("GetWidth", &CL_Image::get_width)
+        .def("GetHeight", &CL_Image::get_height);
+
+    bp::enum_<CL_Origin>("CL_Origin")
+        .value("origin_top_center", origin_top_center)
+        .value("origin_top_right", origin_top_right)
+        .value("origin_top_left", origin_top_left)
+
+        .value("origin_center_left", origin_center_left)
+        .value("origin_center_right", origin_center_right)
+        .value("origin_center", origin_center)
+
+        .value("origin_bottom_left", origin_bottom_left)
+        .value("origin_bottom_right", origin_bottom_right)
+        .value("origin_bottom_center", origin_bottom_center)
+        .export_values();
 
     // CL_Angle ----------------------------------------------------------------------
     bp::class_<CL_Angle>("CL_Angle")
