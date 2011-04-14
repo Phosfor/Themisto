@@ -30,31 +30,26 @@ class Rain(Object):
         self.mGC = Core.ApplicationManager.getInstance().GetGraphic()
         self.mWorldManagerHandle = Core.WorldManager.getInstance()
 
-    def processDrops(self, windPower, curObject, firstTime = False):
+    def processDrops(self, windPower, curObject):
         left = right = 0
         x1 = int(self.mKoef1 * windPower)
 
         # Look at wind direction
         if windPower < 0:
             left = 0
-            right = Core.Urils.ScreenResolutionX - x1
+            right = Core.Utils.ScreenResolutionX - x1
         else:
             left = -x1
             right = Core.Utils.ScreenResolutionX
 
         # Start drop position
-        curObject.x = random.randint(left*3, right-left)
+        curObject.x = random.randint(left, right)
+        curObject.y = 0
 
         curObject.x_speed = windPower
         curObject.y_speed = Core.Utils.Gravity * 0.7
 
-        # First and further initializations are different
-        if firstTime:
-            curObject.timeout = 0
-            curObject.y = random.randint(0, Core.Utils.ScreenResolutionY)
-        else:
-            curObject.timeout = random.randint(0, 130)
-            curObject.y = 0
+        curObject.timeout = random.randint(0, 130)
 
     def init(self):
         windPower = self.mWorldManagerHandle.GetWindPower()
@@ -62,7 +57,7 @@ class Rain(Object):
         # Init first rain drops
         for i in xrange(self.mMaxDrops-1):
             self.mDropData.append(DropData())
-            self.processDrops(windPower, self.mDropData[i], True)
+            self.processDrops(windPower, self.mDropData[i])
 
     def update(self, elapsed):
         windPower = self.mWorldManagerHandle.GetWindPower()
@@ -74,11 +69,13 @@ class Rain(Object):
             if current.timeout > 0:
                 current.timeout -= 1
             else:
+                # Maybe current drop is out of the screen?
                 if current.y > Core.Utils.ScreenResolutionY or \
-                   current.x > Core.Utils.ScreenResolutionX or \
-                   current.x < 0:
+                   (windPower > 0 and current.x > Core.Utils.ScreenResolutionX) or \
+                   (windPower < 0 and current.x < Core.Utils.ScreenResolutionX):
                        self.processDrops(windPower, current)
 
+                # If not, change it's position and speed
                 current.x += current.x_speed * elapsed
                 current.y += current.y_speed * elapsed
 
@@ -88,12 +85,11 @@ class Rain(Object):
     def updateVisual(self, newX, newY):
         for i in xrange(self.mMaxDrops-1):
             current = self.mDropData[i]
-
-            # Draw the drop
-            CL_Draw.Line(self.mGC, current.x, current.y,
-                current.x - current.x_speed * self.kTail,
-                current.y - current.y_speed * self.kTail,
-                self.mDropColor)
+            if current.timeout <= 0:
+                CL_Draw.Line(self.mGC, current.x, current.y,
+                    current.x - current.x_speed * self.kTail,
+                    current.y - current.y_speed * self.kTail,
+                    self.mDropColor)
 
     def getPosition(self):
         return CL_Pointf(0, 0)
@@ -109,15 +105,14 @@ class Rain(Object):
 
     @staticmethod
     def ParseRain(node):
-#        maxDrops = 0
-#
-#        if node.HasAttribute(CL_DomString("maxDrops")):
-#            maxDrops = float(node.GetAttribute(CL_DomString("maxDrops")))
-#
-#        area = Core.Utils.Pixels2Meters(Core.Utils.ScreenResolutionX) * \
-#               Core.Utils.Pixels2Meters(Core.Utils.ScreenResolutionY)
-#
-#        return Rain(area * maxDrops)
-         return Rain(300)
+        maxDrops = 0
+
+        if node.HasAttribute(CL_DomString("maxDrops")):
+            maxDrops = float(node.GetAttribute(CL_DomString("maxDrops")).CStr())
+
+        area = Core.Utils.Pixels2Meters(Core.Utils.ScreenResolutionX) * \
+              Core.Utils.Pixels2Meters(Core.Utils.ScreenResolutionY)
+
+        return Rain(area * maxDrops)
 
 World.Objects.TypesManager.RegisterParser("RainObject", Rain.ParseRain)
