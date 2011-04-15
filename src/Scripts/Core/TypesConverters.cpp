@@ -19,8 +19,6 @@
 #include "Core/LogManager.hpp"
 #include "Core/TypesConverters.hpp"
 
-#include <boost/function.hpp>
-
 // Pointer to functions for processing overloaded functions
 
 // CL_VEC2
@@ -111,12 +109,14 @@ BOOST_PYTHON_MODULE(TypesConverters)
     bp::class_<CL_Image>("CL_Image")
         .def("SetScale", &CL_Image::set_scale)
         .def("SetAlpha", &CL_Image::set_alpha)
+        .def("SetAlignment", &CL_Image::set_alignment, SetAlignmentOverloads())
         .def("Draw", ImageDraw_1)
         .def("GetColor", &CL_Image::get_color)
         .def("SetColor", SetColor)
         .def("GetWidth", &CL_Image::get_width)
         .def("GetHeight", &CL_Image::get_height);
 
+    // CL_Origin ---------------------------------------------------------------------
     bp::enum_<CL_Origin>("CL_Origin")
         .value("origin_top_center", origin_top_center)
         .value("origin_top_right", origin_top_right)
@@ -254,9 +254,19 @@ BOOST_PYTHON_MODULE(TypesConverters)
 
     bp::class_<CL_GraphicContext>("CL_GraphicContext");
 
+    bp::class_<CL_DomNodeList>("CL_DomNodeList")
+        .def("Item", &CL_DomNodeList::item)
+        .def("GetLength", &CL_DomNodeList::get_length);
+
+    bp::class_<CL_DomNode>("CL_DomNode")
+        .def("GetChildNodes", &CL_DomNode::get_child_nodes)
+        .def("ToElement", &CL_DomNode::to_element);
+
     bp::class_<CL_DomElement>("CL_DomElement")
         .def("HasAttribute", HasAttribute)
-        .def("GetAttribute", GetAttribute);
+        .def("GetAttribute", GetAttribute)
+        .def("GetElementsByTagName", &CL_DomElement::get_elements_by_tag_name)
+        .def("GetNodeName", &CL_DomElement::get_node_name);
 
     bp::class_<CL_StringRef8>("CL_DomString", bp::init<const std::string&>())
         .def("CStr", &CL_StringRef8::c_str);
