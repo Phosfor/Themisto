@@ -20,7 +20,7 @@ class Rain(Object):
 
         # We store drop objects here
         self.mDropData = []
-        self.mDropColor = CL_Colorf(0, 0, 0, random.uniform(0.3, 0.8))
+        self.mDropColor = CL_Colorf(150.0/255.0, 150.0/255.0, 150.0/255.0, random.uniform(0.6, 0.9))
 
         # Precalculated value
         self.mKoef1 = ScreenResolutionY / Core.Utils.Gravity
