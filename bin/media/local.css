@@ -13,3 +13,21 @@ button.action-icon
     max-width: 50px;
     max-height: 50px;
 }
+
+label.console-label
+{
+    padding-top: 30;
+    padding-left: 25;
+    text-color: white;
+    font-size: 16;
+    bg-image: Console;
+    bg-image-sizing: stretch;
+}
+
+lineedit.console-edit
+{
+    font-family: Ubuntu;
+    text-color: white;
+    font-size: 20;
+    bg-image:;
+}

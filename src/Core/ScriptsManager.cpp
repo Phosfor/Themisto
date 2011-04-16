@@ -72,6 +72,7 @@ void ScriptsManager::runString(const std::string &pyCode)
 {
     try
     {
+        // Run command
         bp::exec(pyCode.c_str(), mMainNamespace);
     }
     catch (...)

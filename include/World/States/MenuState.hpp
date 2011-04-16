@@ -58,6 +58,14 @@ class MenuState : public State
         CL_Label *mLeavesLabel;
         CL_Slider *mLeavesSlider;
 
+        std::vector<std::string> mHistory;
+        int mHistoryIndex;
+        bool mShowConsole;
+        CL_LineEdit *mConsole;
+        CL_Label *mConsoleLabel;
+        void consoleProcess();
+        bool consoleKeyPressed(const CL_InputEvent &event);
+
         void initGui();
 
         void dropNumChanged();

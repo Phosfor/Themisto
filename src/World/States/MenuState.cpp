@@ -37,6 +37,7 @@ void MenuState::init()
     mGC = appManager().getGraphic();
     mDrawDebug = false;
     mDetailedOutput = false;
+    mShowConsole = false;
 
     sceneLoader().loadScene("NewObjects.xml");
     physicManager().getWorld().SetDebugDraw(mDraw);
@@ -54,6 +55,9 @@ void MenuState::init()
     scriptsManager().runString("print Core.ConfigManager.getListValue('application')");*/
 
     initGui();
+    mConsole->func_enter_pressed().set(this, &MenuState::consoleProcess);
+    mConsole->func_input_released().set(this, &MenuState::consoleKeyPressed);
+    mHistoryIndex = 0;
 }
 
 void MenuState::shutdown()
@@ -124,6 +128,36 @@ std::string MenuState::type()
     return "MenuState";
 }
 
+bool MenuState::consoleKeyPressed(const CL_InputEvent &key)
+{
+    if (mHistory.empty()) return false;
+
+    if (key.id == CL_KEY_UP)
+    {
+        if ((int)mHistory.size()-mHistoryIndex-1 < 0) return false;
+        std::string command = mHistory[mHistory.size()-mHistoryIndex-1];
+        mConsole->set_text(command);
+        mHistoryIndex++;
+    }
+    else if (key.id == CL_KEY_DOWN)
+    {
+        std::cout << mHistoryIndex << "\n";
+        if ((int)mHistory.size()-mHistoryIndex-1 >= 0) return false;
+        std::string command = mHistory[mHistory.size()-mHistoryIndex+1];
+        mConsole->set_text(command);
+        mHistoryIndex--;
+    }
+
+    return true;
+}
+
+void MenuState::consoleProcess()
+{
+    scriptsManager().runString(mConsole->get_text());
+    mHistory.push_back(mConsole->get_text());
+    // Clear console text
+    mConsole->set_text("");
+}
 
 void MenuState::onKeyDown(const CL_InputEvent &key, const CL_InputState &state)
 {
@@ -134,6 +168,25 @@ void MenuState::onKeyDown(const CL_InputEvent &key, const CL_InputState &state)
             mDrawDebug = !mDrawDebug;
 
             levelManager().setDrawDebugData(mDrawDebug);
+        }
+    }
+
+    // '~'
+    if (key.id == 96)
+    {
+        mShowConsole = !mShowConsole;
+        if (mShowConsole)
+        {
+            mConsoleLabel->set_visible(true);
+            mConsole->set_visible(true);
+            mConsole->set_focus(true);
+        }
+        else
+        {
+            mConsoleLabel->set_visible(false);
+            mConsole->set_visible(false);
+            mConsole->set_focus(false);
+            mConsole->set_text("");
         }
     }
 
@@ -178,6 +231,18 @@ void MenuState::initGui()
     mInfoLabel->set_class_name("info-label");
     mInfoLabel->set_text("Press 'Ctrl+P' to view some debug information!");
 
+    // -----------------------------------------
+    // Init console
+    mConsoleLabel = new CL_Label(&guiManager().getWrapper());
+    mConsoleLabel->set_geometry(CL_RectPS(0, clientArea.get_height()-55, clientArea.get_width(), 55));
+    mConsoleLabel->set_class_name("console-label");
+    mConsoleLabel->set_text(">");
+    mConsoleLabel->set_visible(false);
+
+    mConsole = new CL_LineEdit(&guiManager().getWrapper());
+    mConsole->set_geometry(CL_RectPS(30, clientArea.get_height()-30, clientArea.get_width(), 30));
+    mConsole->set_visible(false);
+    mConsole->set_class_name("console-edit");
     // -----------------------------------------
 
     // Init raining slider

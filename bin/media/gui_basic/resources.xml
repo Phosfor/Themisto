@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
 <resources>
+  <image name="Console"><image file="Images\Console.png" /></image>
+
   <image name="WindowActive"><image file="Images\WindowActive.png" /></image>
   <image name="WindowBackdrop"><image file="Images\WindowBackdrop.png" /></image>
   <image name="WindowFrameLeftActive"><image file="Images\WindowFrameLeftActive.png" /></image>
