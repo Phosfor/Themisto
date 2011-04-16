@@ -31,16 +31,16 @@ class Moon(Object):
         self.t = 0
         self.mG = self.mB = 1
 
-    def init(self):
+    def Init(self):
         pass
 
-    def setOrbitRadius(self, radius):
+    def SetOrbitRadius(self, radius):
         self.mRadius = radius
 
-    def setMoonAngle(self, angle):
+    def SetMoonAngle(self, angle):
         self.mAngle = angle
 
-    def setVisual(self, texture, section, width, height):
+    def SetVisual(self, texture, section, width, height):
         self.mMoon = Core.ResourceManager.getInstance().GetImage(section, texture)
         self.mMoonColor = self.mMoon.GetColor()
         self.mMoon.SetAlignment(origin_center_right)
@@ -53,7 +53,7 @@ class Moon(Object):
 
         self.mMoon.SetScale(koefX, koefY)
 
-    def update(self, elapsed):
+    def Update(self, elapsed):
        globalTime = self.mWorldManagerHandle.GetAbsTime()
 
        if not self.mRenderMoon and (globalTime == 0 or globalTime <= 0.3):
@@ -87,24 +87,24 @@ class Moon(Object):
            self.mRenderMoon = False
            pass
 
-    def updateVisual(self, newX, newY):
+    def UpdateVisual(self, newX, newY):
         if not self.mRenderMoon:
             return
 
         self.mMoon.Draw(self.mGC, self.mPosX, self.mPosY)
 
-    def getPosition(self):
+    def GetPosition(self):
         return CL_Pointf(self.mPosX, self.mPosY)
 
-    def setPosition(self):
+    def SetPosition(self):
         print 'Setting position'
 
-    def getRectangle(self):
+    def GetRectangle(self):
         return CL_Rectf(self.mPosX - self.mMoon.GetWidth(),  \
                         self.mPosY - self.mMoon.GetHeight(), \
                         self.mPosX, self.mPosY + self.mMoon.GetHeight()/2.0)
 
-    def checkCollision(self):
+    def CheckCollision(self):
         return False
 
     @staticmethod
@@ -126,7 +126,7 @@ class Moon(Object):
                 section = str(tag2.GetAttribute(CL_DomString("section")).CStr())
                 name = str(tag2.GetAttribute(CL_DomString("name")).CStr())
 
-        moonHandle.setVisual(name, section, width, height)
+        moonHandle.SetVisual(name, section, width, height)
 
         # Parse common settings
         radius = Core.Utils.Meters2Pixels(7)
@@ -140,8 +140,8 @@ class Moon(Object):
         if angleElement.HasAttribute(CL_DomString("value")):
             angle = Core.Utils.Deg2Rad(float(angleElement.GetAttribute(CL_DomString("value")).CStr()))
 
-        moonHandle.setOrbitRadius(radius)
-        moonHandle.setMoonAngle(angle)
+        moonHandle.SetOrbitRadius(radius)
+        moonHandle.SetMoonAngle(angle)
 
         return moonHandle
 

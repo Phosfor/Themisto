@@ -83,11 +83,13 @@ BOOST_PYTHON_MODULE(TypesConverters)
     /////////////////////////////////// CL_POINT ////////////////////////////////////////
     // CL_Point [integer] -------------------------------------------------------------
     bp::class_<CL_Point>("CL_Point", bp::init<int, int>())
-        .def(bp::init< CL_Vec2<int> >());
+        .def(bp::init< CL_Vec2<int> >())
+        .def(bp::self_ns::str(bp::self_ns::self));  // Export __str__
 
     // CL_Point [float] ---------------------------------------------------------------
     bp::class_<CL_Pointf>("CL_Pointf", bp::init<float, float>())
-        .def(bp::init< CL_Vec2<float> >());
+        .def(bp::init< CL_Vec2<float> >())
+        .def(bp::self_ns::str(bp::self_ns::self));  // Export __str__
 
     // CL_Colorf [float] --------------------------------------------------------------
     bp::class_<CL_Colorf>("CL_Colorf", bp::init<float, float, float, float>())

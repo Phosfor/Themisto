@@ -159,7 +159,6 @@ void LevelManager::initObjects()
             // When we add object dynamically in game process, this function won't be called!
             // Insert some flag, and if game already runs, init object in addObject function
             it.getCppObject()->init();
-            //it.getPyObject().attr("init")();
         }
     }
     catch(boost::python::error_already_set &e)
@@ -282,10 +281,8 @@ void LevelManager::addObject(const std::string &name, boost::python::object obj)
 
         // Save native c++ pointer to the base Object class first
         boost::shared_ptr<Object> cpp = boost::python::extract< boost::shared_ptr<Object> >(bp::incref(obj.ptr()));
-        //int zIndex = cpp->getIndex();
-        int zIndex = bp::extract<int>(obj.attr("GetIndex")());
-        //std::string type = cpp->getType();
-        std::string type = bp::extract<std::string>(obj.attr("GetType")());
+        int zIndex = cpp->getIndex();
+        std::string type = cpp->getType();
 
         ObjectStorage storage(name, type, zIndex, cpp, obj);
         mObjectsSet.insert(storage);

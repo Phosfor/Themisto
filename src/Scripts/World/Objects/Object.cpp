@@ -25,7 +25,7 @@ struct ObjectWrap : Object, bp::wrapper<Object>
     // getName wrapper
     std::string getName()
     {
-        if (bp::override getName = this->get_override("getName")) return getName();
+        if (bp::override getName = this->get_override("GetName")) return getName();
         return Object::getName();
     }
     std::string default_getName() { return this->Object::getName(); }
@@ -33,7 +33,7 @@ struct ObjectWrap : Object, bp::wrapper<Object>
     // setName wrapper
     void setName(const std::string &name)
     {
-        if (bp::override setName = this->get_override("setName")) setName(name);
+        if (bp::override setName = this->get_override("SetName")) setName(name);
         Object::setName(name);
     }
     void default_setName(const std::string &name) { this->Object::setName(name); }
@@ -41,7 +41,7 @@ struct ObjectWrap : Object, bp::wrapper<Object>
     // getIndex wrapper
     int getIndex()
     {
-        if (bp::override getIndex = this->get_override("getIndex")) return getIndex();
+        if (bp::override getIndex = this->get_override("GetIndex")) return getIndex();
         return Object::getIndex();
     }
     int default_getIndex() { return this->Object::getIndex(); }
@@ -49,7 +49,7 @@ struct ObjectWrap : Object, bp::wrapper<Object>
     // setIndex wrapper
     void setIndex(int zIndex)
     {
-        if (bp::override setIndex = this->get_override("setIndex")) setIndex(zIndex);
+        if (bp::override setIndex = this->get_override("SetIndex")) setIndex(zIndex);
         return Object::setIndex(zIndex);
     }
     void default_setIndex(int zIndex) { return this->Object::setIndex(zIndex); }
@@ -57,7 +57,7 @@ struct ObjectWrap : Object, bp::wrapper<Object>
     // getAlwaysDraw wrapper
     bool getAlwaysDraw()
     {
-        if (bp::override getAlwaysDraw = this->get_override("getAlwaysDraw")) return getAlwaysDraw();
+        if (bp::override getAlwaysDraw = this->get_override("GetAlwaysDraw")) return getAlwaysDraw();
         return Object::getAlwaysDraw();
     }
     bool default_getAlwaysDraw() { return this->Object::getAlwaysDraw(); }
@@ -65,7 +65,7 @@ struct ObjectWrap : Object, bp::wrapper<Object>
     // setAlwaysDraw wrapper
     void setAlwaysDraw(bool alwaysDraw)
     {
-        if (bp::override setAlwaysDraw = this->get_override("setAlwaysDraw")) setAlwaysDraw(alwaysDraw);
+        if (bp::override setAlwaysDraw = this->get_override("SetAlwaysDraw")) setAlwaysDraw(alwaysDraw);
         return Object::setAlwaysDraw(alwaysDraw);
     }
     void default_setAlwaysDraw(bool alwaysDraw) { return this->Object::setAlwaysDraw(alwaysDraw); }
@@ -73,7 +73,7 @@ struct ObjectWrap : Object, bp::wrapper<Object>
     // getType wrapper
     std::string getType()
     {
-        if (bp::override getType = this->get_override("getType")) return getType();
+        if (bp::override getType = this->get_override("GetType")) return getType();
         return Object::getType();
     }
     std::string default_getType() { return this->Object::getType(); }
@@ -81,7 +81,7 @@ struct ObjectWrap : Object, bp::wrapper<Object>
     // setType wrapper
     void setType(const std::string &type)
     {
-        if (bp::override setType = this->get_override("setType")) setType(type);
+        if (bp::override setType = this->get_override("SetType")) setType(type);
         return Object::setType(type);
     }
     void default_setType(const std::string &type) { return this->Object::setType(type); }
@@ -90,7 +90,7 @@ struct ObjectWrap : Object, bp::wrapper<Object>
     // getAvailableActions wrapper
     std::vector< boost::shared_ptr<Action> > getAvailableActions()
     {
-        if (bp::override getType = this->get_override("getAvailableActions")) return getType();
+        if (bp::override getType = this->get_override("GetAvailableActions")) return getType();
         return Object::getAvailableActions();
     }
     std::vector< boost::shared_ptr<Action> > default_getAvailableActions() { return this->Object::getAvailableActions(); }
@@ -98,37 +98,37 @@ struct ObjectWrap : Object, bp::wrapper<Object>
     // PURE VIRTUAL FUNCTIONS ------------------------------------------------------
     void setPosition(CL_Pointf newPos)
     {
-        this->get_override("setPosition")(newPos);
+        this->get_override("SetPosition")(newPos);
     }
 
     CL_Pointf getPosition()
     {
-        return this->get_override("getPosition")();
+        return this->get_override("GetPosition")();
     }
 
     CL_Rectf getRectangle()
     {
-        return this->get_override("getRectangle")();
+        return this->get_override("GetRectangle")();
     }
 
     bool checkCollision(CL_Pointf point)
     {
-        return this->get_override("checkCollision")(point);
+        return this->get_override("CheckCollision")(point);
     }
 
     void init()
     {
-        this->get_override("init")();
+        this->get_override("Init")();
     }
 
     void update(float elapsed)
     {
-        this->get_override("update")(elapsed);
+        this->get_override("Update")(elapsed);
     }
 
     void updateVisual(float newX, float newY)
     {
-        this->get_override("updateVisual")(newX, newY);
+        this->get_override("UpdateVisual")(newX, newY);
     }
 };
 

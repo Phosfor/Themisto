@@ -39,12 +39,12 @@ class Stars(Object):
         self.mGC = Core.ApplicationManager.getInstance().GetGraphic()
         self.mWorldManagerHandle = Core.WorldManager.getInstance()
 
-    def init(self):
+    def Init(self):
         # TODO: Read actual size here...
         for i in xrange(self.mMaxObjects-1):
             self.mStarData.append(StarData())
 
-    def update(self, elapsed):
+    def Update(self, elapsed):
        globalTime = self.mWorldManagerHandle.GetAbsTime()
        if globalTime <= 10.0:
            self.t1 = 0
@@ -76,7 +76,7 @@ class Stars(Object):
        else:
            self.mBloomSize -= 0.001
 
-    def updateVisual(self, newX, newY):
+    def UpdateVisual(self, newX, newY):
         if not self.mDrawStars:
             return
 
@@ -91,16 +91,16 @@ class Stars(Object):
 
             current.imageHandle.Draw(self.mGC, current.x, current.y)
 
-    def getPosition(self):
+    def GetPosition(self):
         return CL_Pointf(0, 0)
 
-    def setPosition(self):
+    def SetPosition(self):
         print 'Setting position'
 
-    def getRectangle(self):
+    def GetRectangle(self):
         return CL_Rectf(0, 0, Core.Utils.ScreenResolutionX, Core.Utils.ScreenResolutionY)
 
-    def checkCollision(self):
+    def CheckCollision(self):
         return False
 
     @staticmethod

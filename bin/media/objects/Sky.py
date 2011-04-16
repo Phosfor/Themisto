@@ -41,11 +41,11 @@ class Sky(Object):
         # Instance of world manager
         self.worldManagerHandle = Core.WorldManager.getInstance()
 
-    def init(self):
+    def Init(self):
         # Nothing to do here for the sky...
         pass
 
-    def update(self, elapsed):
+    def Update(self, elapsed):
         globalTime = self.worldManagerHandle.GetAbsTime()
 
         #  First transaction part [day] -----------------------------------------------------
@@ -117,20 +117,20 @@ class Sky(Object):
 
                 self.mColorMiddle = CL_Colorf(r, g, b, 1.0);
 
-    def updateVisual(self, newX, newY):
+    def UpdateVisual(self, newX, newY):
         CL_Draw.GradientFill(self.mGC, self.quad1, CL_Gradient(self.mColorTop, self.mColorMiddle))
         CL_Draw.GradientFill(self.mGC, self.quad2, CL_Gradient(self.mColorMiddle, self.mColorBottom))
 
-    def getPosition(self):
+    def GetPosition(self):
         return CL_Pointf(0, 0)
 
-    def setPosition(self):
+    def SetPosition(self):
         print 'Setting position of the Sky object...'
 
-    def getRectangle(self):
+    def GetRectangle(self):
         return CL_Rectf(0, 0, Core.Utils.ScreenResolutionX, Core.Utils.ScreenResolutionY)
 
-    def checkCollision(self):
+    def CheckCollision(self):
         # Sky can't collide with mouse
         return False
 

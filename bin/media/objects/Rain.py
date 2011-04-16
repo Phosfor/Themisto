@@ -51,7 +51,7 @@ class Rain(Object):
 
         curObject.timeout = random.randint(0, 130)
 
-    def init(self):
+    def Init(self):
         windPower = self.mWorldManagerHandle.GetWindPower()
 
         # Init first rain drops
@@ -59,7 +59,7 @@ class Rain(Object):
             self.mDropData.append(DropData())
             self.processDrops(windPower, self.mDropData[i])
 
-    def update(self, elapsed):
+    def Update(self, elapsed):
         windPower = self.mWorldManagerHandle.GetWindPower()
         newXSpeed = windPower * elapsed
         newYSpeed = Core.Utils.Gravity * elapsed * 0.7
@@ -82,7 +82,7 @@ class Rain(Object):
                 current.x_speed += newXSpeed
                 current.y_speed += newYSpeed
 
-    def updateVisual(self, newX, newY):
+    def UpdateVisual(self, newX, newY):
         for i in xrange(self.mMaxDrops-1):
             current = self.mDropData[i]
             if current.timeout <= 0:
@@ -91,16 +91,16 @@ class Rain(Object):
                     current.y - current.y_speed * self.kTail,
                     self.mDropColor)
 
-    def getPosition(self):
+    def GetPosition(self):
         return CL_Pointf(0, 0)
 
-    def setPosition(self):
+    def SetPosition(self):
         print 'Setting position'
 
-    def getRectangle(self):
+    def GetRectangle(self):
         return CL_Rectf(0, 0, Core.Utils.ScreenResolutionX, Core.Utils.ScreenResolutionY)
 
-    def checkCollision(self):
+    def CheckCollision(self):
         return False
 
     @staticmethod
