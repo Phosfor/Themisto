@@ -92,6 +92,7 @@ set(Script_srcs
     Core/InputManager
     Core/ResourceManager
     Core/WorldManager
+    Core/LevelManager
 
     World/Objects/Object
     World/Objects/TypesManager
