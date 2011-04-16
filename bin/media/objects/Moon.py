@@ -64,8 +64,8 @@ class Moon(Object):
        if not self.mRenderMoon:
            return
 
-       self.mPosX = (self.mRadius + math.cos(self.mAngle)) * 1.3 + self.mCenterX
-       self.mPosY = (self.mRadius + math.sin(self.mAngle)) * 1.1 + self.mCenterY
+       self.mPosX = (self.mRadius * math.cos(self.mAngle)) * 1.3 + self.mCenterX
+       self.mPosY = (self.mRadius * math.sin(self.mAngle)) * 1.1 + self.mCenterY
 
        # Work with moon color
        if globalTime <= 10.0:
@@ -85,13 +85,13 @@ class Moon(Object):
            self.mAngle += mRadIncrease
        else:
            self.mRenderMoon = False
+           pass
 
     def updateVisual(self, newX, newY):
         if not self.mRenderMoon:
             return
 
         self.mMoon.Draw(self.mGC, self.mPosX, self.mPosY)
-        #print str(self.mPosX) + ';' + str(self.mPosY)
 
     def getPosition(self):
         return CL_Pointf(self.mPosX, self.mPosY)

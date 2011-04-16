@@ -45,6 +45,12 @@ void (*DrawLine_1)(CL_GraphicContext&,
 void (*DrawLine_2)(CL_GraphicContext&,
         const CL_Pointf&, const CL_Pointf&, const CL_Colorf&) = CL_Draw::line;
 
+// CL_Draw::point
+void (*DrawPoint_1)(CL_GraphicContext&, float, float, const CL_Colorf&) = CL_Draw::point;
+
+// CL_Draw::circle
+void (*DrawCircle_1)(CL_GraphicContext&, float, float, float, const CL_Colorf&) = CL_Draw::circle;
+
 // CL_DomElement: has_attribute, get_attribute
 bool (CL_DomElement::*HasAttribute)(const CL_DomString&) const = &CL_DomElement::has_attribute;
 CL_DomString (CL_DomElement::*GetAttribute)(const CL_DomString&) const = &CL_DomElement::get_attribute;
@@ -103,7 +109,11 @@ BOOST_PYTHON_MODULE(TypesConverters)
         .staticmethod("GradientFill")
         .def("Line", DrawLine_1)
         .def("Line", DrawLine_2)
-        .staticmethod("Line");
+        .staticmethod("Line")
+        .def("Point", DrawPoint_1)
+        .staticmethod("Point")
+        .def("Circle", DrawCircle_1)
+        .staticmethod("Circle");
 
     // CL_Image ----------------------------------------------------------------------
     bp::class_<CL_Image>("CL_Image")
