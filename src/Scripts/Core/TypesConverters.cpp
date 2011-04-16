@@ -59,9 +59,15 @@ CL_DomString (CL_DomElement::*GetAttribute)(const CL_DomString&) const = &CL_Dom
 void (CL_Image::*ImageDraw_1)(CL_GraphicContext&, float, float) const = &CL_Image::draw;
 void (CL_Image::*SetColor)(const CL_Colorf&) = &CL_Image::set_color;
 
+CL_Colorf ColorRGB(float r, float g, float b)
+{
+    return CL_Colorf(r/255.0f, g/255.0f, b/255.0f);
+}
+
 BOOST_PYTHON_MODULE(TypesConverters)
 {
     using namespace ScriptTypesConverters;
+    bp::def("ColorRGB", &ColorRGB);
 
     /////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////// TYPES CONVERTERS /////////////////////////////////////
@@ -93,10 +99,12 @@ BOOST_PYTHON_MODULE(TypesConverters)
 
     // CL_Colorf [float] --------------------------------------------------------------
     bp::class_<CL_Colorf>("CL_Colorf", bp::init<float, float, float, float>())
+        .def(bp::init<float, float, float>())
         .def_readonly("r", &CL_Colorf::r)
         .def_readonly("g", &CL_Colorf::g)
         .def_readonly("b", &CL_Colorf::b)
-        .def_readonly("a", &CL_Colorf::a);
+        .def_readonly("a", &CL_Colorf::a)
+        .def("SetAlpha", &CL_Colorf::set_alpha);
 
     // CL_Gradient -------------------------------------------------------------------
     bp::class_<CL_Gradient>("CL_Gradient", bp::init<const CL_Colorf&, const CL_Colorf&,

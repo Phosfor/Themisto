@@ -20,15 +20,34 @@ class Rain(Object):
 
         # We store drop objects here
         self.mDropData = []
-        self.mDropColor = CL_Colorf(150.0/255.0, 150.0/255.0, 150.0/255.0, random.uniform(0.6, 0.9))
+        self.mDropColorAlpha = 0.8
+        self.mDropColor = CL_Colorf(150.0/255.0, 150.0/255.0, 150.0/255.0)
+        self.mDropColor.SetAlpha(self.mDropColorAlpha)
 
         # Precalculated value
         self.mKoef1 = ScreenResolutionY / Core.Utils.Gravity
         self.mMaxDrops = int(maxDrops)
         self.kTail = 0.015
+        self.kYSpeed = 0.7
 
         self.mGC = Core.ApplicationManager.getInstance().GetGraphic()
         self.mWorldManagerHandle = Core.WorldManager.getInstance()
+
+    # Control rain interface
+    def SetDropAlpha(self, value):
+        self.mDropColorAlpha = value
+        self.mDropColor.SetAlpha(value)
+
+    def SetDropColor(self, color):
+        self.mDropColor = color
+        self.mDropColor.SetAlpha(self.mDropColorAlpha)
+
+    def SetTail(value):
+        self.kTail = value
+
+    def SetYSpeedKoef(value):
+        self.kYSpeed = value
+    # ----------------------
 
     def processDrops(self, windPower, curObject):
         left = right = 0
@@ -47,7 +66,7 @@ class Rain(Object):
         curObject.y = 0
 
         curObject.x_speed = windPower
-        curObject.y_speed = Core.Utils.Gravity * 0.7
+        curObject.y_speed = Core.Utils.Gravity * self.kYSpeed
 
         curObject.timeout = random.randint(0, 130)
 
@@ -62,7 +81,7 @@ class Rain(Object):
     def Update(self, elapsed):
         windPower = self.mWorldManagerHandle.GetWindPower()
         newXSpeed = windPower * elapsed
-        newYSpeed = Core.Utils.Gravity * elapsed * 0.7
+        newYSpeed = Core.Utils.Gravity * elapsed * self.kYSpeed
 
         for i in xrange(self.mMaxDrops-1):
             current = self.mDropData[i]

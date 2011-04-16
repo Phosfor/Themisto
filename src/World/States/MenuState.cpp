@@ -139,7 +139,7 @@ bool MenuState::consoleKeyPressed(const CL_InputEvent &key)
         mConsole->set_text(command);
         mHistoryIndex++;
     }
-    else if (key.id == CL_KEY_DOWN)
+    /*else if (key.id == CL_KEY_DOWN)
     {
         if ((int)mHistory.size()-mHistoryIndex-1 >= 0)
         {
@@ -149,7 +149,7 @@ bool MenuState::consoleKeyPressed(const CL_InputEvent &key)
         std::string command = mHistory[mHistory.size()-mHistoryIndex+1];
         mConsole->set_text(command);
         mHistoryIndex--;
-    }
+    }*/
 
     return true;
 }
