@@ -106,6 +106,10 @@ BOOST_PYTHON_MODULE(TypesConverters)
         .def_readonly("a", &CL_Colorf::a)
         .def("SetAlpha", &CL_Colorf::set_alpha);
 
+    // CL_Pen -----------------------------------------------------------------------
+    bp::class_<CL_Pen>("CL_Pen")
+        .def("EnableLineAntialiasing", &CL_Pen::enable_line_antialiasing);
+
     // CL_Gradient -------------------------------------------------------------------
     bp::class_<CL_Gradient>("CL_Gradient", bp::init<const CL_Colorf&, const CL_Colorf&,
             const CL_Colorf&, const CL_Colorf&>())
@@ -272,7 +276,9 @@ BOOST_PYTHON_MODULE(TypesConverters)
     bp::class_<CL_DisplayWindow>("CL_DisplayWindow")
         .def("GetMinimumSize", &CL_DisplayWindow::get_minimum_size, GetMinimumSizeOverloads());
 
-    bp::class_<CL_GraphicContext>("CL_GraphicContext");
+    bp::class_<CL_GraphicContext>("CL_GraphicContext")
+        .def("SetPen", &CL_GraphicContext::set_pen)
+        .def("ResetPen", &CL_GraphicContext::reset_pen);
 
     bp::class_<CL_DomNodeList>("CL_DomNodeList")
         .def("Item", &CL_DomNodeList::item)

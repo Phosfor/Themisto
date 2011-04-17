@@ -20,8 +20,8 @@ class Rain(Object):
 
         # We store drop objects here
         self.mDropData = []
-        self.mDropColorAlpha = 0.8
-        self.mDropColor = CL_Colorf(150.0/255.0, 150.0/255.0, 150.0/255.0)
+        self.mDropColorAlpha = 0.7
+        self.mDropColor = ColorRGB(150, 150, 150)
         self.mDropColor.SetAlpha(self.mDropColorAlpha)
 
         # Precalculated value
@@ -32,6 +32,10 @@ class Rain(Object):
 
         self.mGC = Core.ApplicationManager.getInstance().GetGraphic()
         self.mWorldManagerHandle = Core.WorldManager.getInstance()
+
+        penAntialiased = CL_Pen()
+        penAntialiased.EnableLineAntialiasing(True)
+        self.mGC.SetPen(penAntialiased)
 
     # Control rain interface
     def SetDropAlpha(self, value):
