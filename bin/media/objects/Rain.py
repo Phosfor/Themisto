@@ -20,15 +20,15 @@ class Rain(Object):
 
         # We store drop objects here
         self.mDropData = []
-        self.mDropColorAlpha = 0.7
+        self.mDropColorAlpha = 0.6
         self.mDropColor = ColorRGB(150, 150, 150)
         self.mDropColor.SetAlpha(self.mDropColorAlpha)
 
         # Precalculated value
         self.mKoef1 = ScreenResolutionY / Core.Utils.Gravity
         self.mMaxDrops = int(maxDrops)
-        self.kTail = 0.015
-        self.kYSpeed = 0.7
+        self.kTail = 0.025
+        self.kYSpeed = 0.6
 
         self.mGC = Core.ApplicationManager.getInstance().GetGraphic()
         self.mWorldManagerHandle = Core.WorldManager.getInstance()
@@ -46,10 +46,10 @@ class Rain(Object):
         self.mDropColor = color
         self.mDropColor.SetAlpha(self.mDropColorAlpha)
 
-    def SetTail(value):
+    def SetTail(self, value):
         self.kTail = value
 
-    def SetYSpeedKoef(value):
+    def SetYSpeedKoef(self, value):
         self.kYSpeed = value
     # ----------------------
 
