@@ -17,7 +17,8 @@
 
 #include "Core/ScriptsManager.hpp"
 #include "Core/LogManager.hpp"
-#include "Core/TypesConverters.hpp"
+
+#include "Scripts/Core/TypesConverters.hpp"
 
 // Pointer to functions for processing overloaded functions
 

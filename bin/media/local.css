@@ -16,8 +16,8 @@ button.action-icon
 
 label.console-label
 {
-    padding-top: 30;
-    padding-left: 21;
+    padding-top: 32;
+    padding-left: 25;
     text-color: white;
     font-size: 16;
     bg-image: Console;
@@ -28,6 +28,6 @@ lineedit.console-edit
 {
     font-family: Ubuntu;
     text-color: white;
-    font-size: 25;
+    font-size: 21;
     bg-image:;
 }

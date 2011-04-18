@@ -29,8 +29,6 @@ struct ParserProxy
     bp::object operator()(CL_DomElement elem)
     {
         return callable(elem);
-
-        //return bp::extract<boost::shared_ptr<Object> >(obj);
     }
 };
 

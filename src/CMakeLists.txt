@@ -96,6 +96,8 @@ set(Script_srcs
 
     World/Objects/Object
     World/Objects/TypesManager
+
+    Physic/Physic
 )
 
 foreach(i ${Script_srcs})

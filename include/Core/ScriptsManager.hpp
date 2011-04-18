@@ -26,7 +26,7 @@
 #include <boost/filesystem.hpp>
 
 #include "Core/LogManager.hpp"
-#include "Core/TypesConverters.hpp"
+#include "Scripts/Core/TypesConverters.hpp"
 
 namespace bp = boost::python;
 
@@ -53,6 +53,5 @@ class ScriptsManager : public boost::serialization::singleton<ScriptsManager>
         void runFile(const std::string &fileName);
         bp::object getAttr(const bp::object &obj, const std::string &attrName);
 };
-
 
 inline ScriptsManager &scriptsManager() { return ScriptsManager::get_mutable_instance(); }
