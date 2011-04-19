@@ -134,12 +134,23 @@ BOOST_PYTHON_MODULE(TypesConverters)
     bp::class_<CL_Image>("CL_Image")
         .def("SetScale", &CL_Image::set_scale)
         .def("SetAlpha", &CL_Image::set_alpha)
-        .def("SetAlignment", &CL_Image::set_alignment, SetAlignmentOverloads())
+        .def("SetAlignment", &CL_Image::set_alignment, SetAlignmentImageOverloads())
         .def("Draw", ImageDraw_1)
         .def("GetColor", &CL_Image::get_color)
         .def("SetColor", SetColor)
         .def("GetWidth", &CL_Image::get_width)
         .def("GetHeight", &CL_Image::get_height);
+
+    // CL_Sprite ---------------------------------------------------------------------
+    bp::class_<CL_Sprite>("CL_Sprite")
+        .def("SetScale", &CL_Sprite::set_scale)
+        .def("SetAlpha", &CL_Sprite::set_alpha)
+        .def("SetAlignment", &CL_Sprite::set_alignment, SetAlignmentSpriteOverloads())
+        .def("Draw", ImageDraw_1)
+        .def("GetColor", &CL_Sprite::get_color)
+        .def("SetColor", SetColor)
+        .def("GetWidth", &CL_Sprite::get_width)
+        .def("GetHeight", &CL_Sprite::get_height);
 
     // CL_Origin ---------------------------------------------------------------------
     bp::enum_<CL_Origin>("CL_Origin")

@@ -48,5 +48,6 @@ namespace ScriptTypesConverters
 
     // Default functions arguments stuff ------------------------------
     BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(GetMinimumSizeOverloads, CL_DisplayWindow::get_minimum_size, 0, 1);
-    BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(SetAlignmentOverloads, CL_Image::set_alignment, 1, 3);
+    BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(SetAlignmentImageOverloads, CL_Image::set_alignment, 1, 3);
+    BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(SetAlignmentSpriteOverloads, CL_Sprite::set_alignment, 1, 3);
 }

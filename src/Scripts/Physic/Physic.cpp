@@ -42,11 +42,16 @@ BOOST_PYTHON_MODULE(Physic)
 {
     // Our wrapper
     bp::class_<Body, boost::noncopyable>("Body")
-        .def("GetBody", &Body::getBody, PYPOLICY_RETURN_THIS)
+        .def("GetBody", &Body::getBody, PYPOLICY_REFERENCE_EXISTING)
         .def("SetBody", &Body::setBody);
 
     // DOM parser
     bp::def("ParsePhysicBody", &ParsePhysicBody);
+
+    bp::class_<b2AABB>("b2AABB")
+        .add_property("LowerBound", &b2AABB::lowerBound)
+        .add_property("UpperBound", &b2AABB::upperBound)
+        .def("Combine", &b2AABB::Combine);
 
     wrap_body_type();
     wrap_joint_type();
