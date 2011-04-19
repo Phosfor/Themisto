@@ -1,5 +1,3 @@
-#include "Scripts/Physic/Operator.hpp"
-
 #include <boost/python.hpp>
 #include <Box2D/Dynamics/b2Body.h>
 #include <Box2D/Dynamics/Joints/b2DistanceJoint.h>
@@ -13,9 +11,12 @@
 #include <Box2D/Dynamics/Joints/b2RevoluteJoint.h>
 #include <Box2D/Dynamics/Joints/b2WeldJoint.h>
 
+#include "Scripts/Physic/Operator.hpp"
+#include "Scripts/Physic/b2Joint.hpp"
+
 void wrap_joint_type()
 {
-    enum_<b2JointType>("b2JointType")
+    boost::python::enum_<b2JointType>("b2JointType")
         .value("UNKNOWN_JOINT", e_unknownJoint)
         .value("REVOLUTE_JOINT", e_revoluteJoint)
         .value("PRISMATIC_JOINT", e_prismaticJoint)
@@ -32,22 +33,22 @@ void wrap_joint_type()
 
 void wrap_joint()
 {
-    bp::class_<b2Joint, boost::noncopyable>("b2Joint", bp::no_init)
+    boost::python::class_<b2Joint, boost::noncopyable>("b2Joint", boost::python::no_init)
         .def("__eq__", &eq_ptr<b2Joint>)
         .def("__ne__", &ne_ptr<b2Joint>)
         .def("__hash__", &hash_ptr<b2Joint>)
 
         .add_property("Type", &b2Joint::GetType)
-        .add_property("BodyA", make_function(&b2Joint::GetBodyA, return_internal_reference<>()))
-        .add_property("BodyB", make_function(&b2Joint::GetBodyB, return_internal_reference<>()))
-        .add_property("UserData", &b2Joint::GetUserData, &b2Joint::SetUserData)
+        .add_property("BodyA", make_function(&b2Joint::GetBodyA, boost::python::return_internal_reference<>()))
+        .add_property("BodyB", make_function(&b2Joint::GetBodyB, boost::python::return_internal_reference<>()))
+        //.add_property("UserData", &b2Joint::GetUserData, &b2Joint::SetUserData)
         .add_property("Active", &b2Joint::IsActive)
     ;
 }
 
 void wrap_revolute_joint()
 {
-    bp::class_<b2RevoluteJoint, bp::bases<b2Joint> >("b2RevoluteJoint", bp::no_init)
+    boost::python::class_<b2RevoluteJoint, boost::python::bases<b2Joint> >("b2RevoluteJoint", boost::python::no_init)
         .add_property("AnchorA", &b2RevoluteJoint::GetAnchorA)
         .add_property("AnchorB", &b2RevoluteJoint::GetAnchorB)
         .add_property("ReactionForce", &b2RevoluteJoint::GetReactionForce)
@@ -60,7 +61,7 @@ void wrap_revolute_joint()
         .add_property("MotorEnabled", &b2RevoluteJoint::IsMotorEnabled, &b2RevoluteJoint::EnableMotor)
         .add_property("MotorSpeed", &b2RevoluteJoint::GetMotorSpeed, &b2RevoluteJoint::SetMotorSpeed)
         .add_property("MotorTorque", &b2RevoluteJoint::GetMotorTorque)
-        .add_property("MaxMotorTorque", object(), &b2RevoluteJoint::SetMaxMotorTorque)
+        .add_property("MaxMotorTorque", boost::python::object(), &b2RevoluteJoint::SetMaxMotorTorque)
 
         .def("SetLimits", &b2RevoluteJoint::SetLimits)
     ;
@@ -68,7 +69,7 @@ void wrap_revolute_joint()
 
 void wrap_prismatic_joint()
 {
-    bp::class_<b2PrismaticJoint, bp::bases<b2Joint> >("b2PrismaticJoint", bp::no_init)
+    boost::python::class_<b2PrismaticJoint, boost::python::bases<b2Joint> >("b2PrismaticJoint", boost::python::no_init)
         .add_property("AnchorA", &b2PrismaticJoint::GetAnchorA)
         .add_property("AnchorB", &b2PrismaticJoint::GetAnchorB)
         .add_property("ReactionForce", &b2PrismaticJoint::GetReactionForce)
@@ -81,7 +82,7 @@ void wrap_prismatic_joint()
         .add_property("MotorEnabled", &b2PrismaticJoint::IsMotorEnabled, &b2PrismaticJoint::EnableMotor)
         .add_property("MotorSpeed", &b2PrismaticJoint::GetMotorSpeed, &b2PrismaticJoint::SetMotorSpeed)
         .add_property("MotorForce", &b2PrismaticJoint::GetMotorForce)
-        .add_property("MaxMotorForce", object(), &b2PrismaticJoint::SetMaxMotorForce)
+        .add_property("MaxMotorForce", boost::python::object(), &b2PrismaticJoint::SetMaxMotorForce)
 
         .def("SetLimits", &b2PrismaticJoint::SetLimits)
     ;
@@ -89,7 +90,7 @@ void wrap_prismatic_joint()
 
 void wrap_distance_joint()
 {
-    bp::class_<b2DistanceJoint, bp::bases<b2Joint> >("b2DistanceJoint", bp::no_init)
+    boost::python::class_<b2DistanceJoint, boost::python::bases<b2Joint> >("b2DistanceJoint", boost::python::no_init)
         .add_property("AnchorA", &b2DistanceJoint::GetAnchorA)
         .add_property("AnchorB", &b2DistanceJoint::GetAnchorB)
         .add_property("ReactionForce", &b2PrismaticJoint::GetReactionForce)
@@ -102,7 +103,7 @@ void wrap_distance_joint()
 
 void wrap_pulley_joint()
 {
-    bp::class_<b2PulleyJoint, bp::bases<b2Joint> >("b2PulleyJoint", bp::no_init)
+    boost::python::class_<b2PulleyJoint, boost::python::bases<b2Joint> >("b2PulleyJoint", boost::python::no_init)
         .add_property("AnchorA", &b2PulleyJoint::GetAnchorA)
         .add_property("AnchorB", &b2PulleyJoint::GetAnchorB)
         .add_property("ReactionForce", &b2PrismaticJoint::GetReactionForce)
@@ -117,12 +118,12 @@ void wrap_pulley_joint()
 
 void wrap_mouse_joint()
 {
-    bp::class_<b2MouseJoint, bp::bases<b2Joint> >("b2MouseJoint", bp::no_init)
+    boost::python::class_<b2MouseJoint, boost::python::bases<b2Joint> >("b2MouseJoint", boost::python::no_init)
         .add_property("AnchorA", &b2MouseJoint::GetAnchorA)
         .add_property("AnchorB", &b2MouseJoint::GetAnchorB)
         .add_property("ReactionForce", &b2MouseJoint::GetReactionForce)
         .add_property("ReactionTorque", &b2MouseJoint::GetReactionTorque)
-        .add_property("Target", make_function(&b2MouseJoint::GetTarget, return_value_policy<copy_const_reference>()), &b2MouseJoint::SetTarget)
+        .add_property("Target", make_function(&b2MouseJoint::GetTarget, boost::python::return_value_policy<boost::python::copy_const_reference>()), &b2MouseJoint::SetTarget)
         .add_property("MaxForce", &b2MouseJoint::GetMaxForce, &b2MouseJoint::SetMaxForce)
         .add_property("Frequency", &b2MouseJoint::GetFrequency, &b2MouseJoint::SetFrequency)
         .add_property("DampingRatio", &b2MouseJoint::GetDampingRatio, &b2MouseJoint::SetDampingRatio)
@@ -131,7 +132,7 @@ void wrap_mouse_joint()
 
 void wrap_gear_joint()
 {
-    bp::class_<b2GearJoint, bp::bases<b2Joint> >("b2GearJoint", bp::no_init)
+    boost::python::class_<b2GearJoint, boost::python::bases<b2Joint> >("b2GearJoint", boost::python::no_init)
         .add_property("AnchorA", &b2GearJoint::GetAnchorA)
         .add_property("AnchorB", &b2GearJoint::GetAnchorB)
         .add_property("ReactionForce", &b2GearJoint::GetReactionForce)
@@ -142,7 +143,7 @@ void wrap_gear_joint()
 
 void wrap_line_joint()
 {
-    bp::class_<b2LineJoint, bp::bases<b2Joint> >("b2LineJoint", bp::no_init)
+    boost::python::class_<b2LineJoint, boost::python::bases<b2Joint> >("b2LineJoint", boost::python::no_init)
         .add_property("AnchorA", &b2LineJoint::GetAnchorA)
         .add_property("AnchorB", &b2LineJoint::GetAnchorB)
         .add_property("ReactionForce", &b2LineJoint::GetReactionForce)
@@ -155,7 +156,7 @@ void wrap_line_joint()
         .add_property("MotorEnabled", &b2LineJoint::IsMotorEnabled, &b2LineJoint::EnableMotor)
         .add_property("MotorSpeed", &b2LineJoint::GetMotorSpeed, &b2LineJoint::SetMotorSpeed)
         .add_property("MotorForce", &b2LineJoint::GetMotorForce)
-        .add_property("MaxMotorForce", object(), &b2LineJoint::SetMaxMotorForce)
+        .add_property("MaxMotorForce", boost::python::object(), &b2LineJoint::SetMaxMotorForce)
 
         .def("set_limits", &b2LineJoint::SetLimits)
     ;
@@ -163,7 +164,7 @@ void wrap_line_joint()
 
 void wrap_weld_joint()
 {
-    bp::class_<b2WeldJoint, bp::bases<b2Joint> >("b2WeldJoint", bp::no_init)
+    boost::python::class_<b2WeldJoint, boost::python::bases<b2Joint> >("b2WeldJoint", boost::python::no_init)
         .add_property("AnchorA", &b2WeldJoint::GetAnchorA)
         .add_property("AnchorB", &b2WeldJoint::GetAnchorB)
         .add_property("ReactionForce", &b2WeldJoint::GetReactionForce)
@@ -173,7 +174,7 @@ void wrap_weld_joint()
 
 void wrap_friction_joint()
 {
-    bp::class_<b2FrictionJoint, bp::bases<b2Joint> >("b2FrictionJoint", bp::no_init)
+    boost::python::class_<b2FrictionJoint, boost::python::bases<b2Joint> >("b2FrictionJoint", boost::python::no_init)
         .add_property("AnchorA", &b2FrictionJoint::GetAnchorA)
         .add_property("AnchorB", &b2FrictionJoint::GetAnchorB)
         .add_property("ReactionForce", &b2FrictionJoint::GetReactionForce)

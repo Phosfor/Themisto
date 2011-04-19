@@ -100,13 +100,32 @@ set(Script_srcs
     Physic/Physic
 )
 
+# Additional deps for physic module
+set(Physic_srcs
+    Scripts/Physic/b2Body.cpp
+    Scripts/Physic/b2Fixture.cpp
+    Scripts/Physic/b2Joint.cpp
+    Scripts/Physic/b2Shape.cpp
+    Scripts/Physic/b2Vec2.cpp
+    Scripts/Physic/b2Vertex.cpp
+    Scripts/Physic/b2World.cpp
+
+    Scripts/Physic/Physic.cpp
+)
+
 foreach(i ${Script_srcs})
     # Takes only filename from given filepath
     get_filename_component(fileName ${i} NAME_WE)
     # Takes only filepath (without filename)
     get_filename_component(filePath ${i} PATH)
+
     # Add library with dependencies
-    add_library(${fileName} SHARED Scripts/${i}.cpp)
+    if (${fileName} STREQUAL "Physic")
+        add_library(${fileName} SHARED ${Physic_srcs})
+    else()
+        add_library(${fileName} SHARED Scripts/${i}.cpp)
+    endif()
+
     # Put library into need folder hierachy
     set_target_properties(${fileName} PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin/lib/${filePath})
     # Remove 'lib' preffix from the library name

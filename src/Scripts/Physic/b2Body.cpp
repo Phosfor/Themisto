@@ -1,11 +1,12 @@
 #include <Box2D/Common/b2Math.h>
 #include <Box2D/Common/b2Settings.h>
+#include <Box2D/Dynamics/b2Body.h>
 
 #include "Scripts/Physic/b2Body.hpp"
 #include <Core/ScriptsManager.hpp>
-#include "Physic/Operator.hpp"
-#include "Physic/Convert.hpp"
-#include "Physic/PhysicUtils.hpp"
+#include "Scripts/Physic/Operator.hpp"
+#include "Scripts/Physic/Convert.hpp"
+#include "Scripts/Physic/PhysicUtils.hpp"
 
 void wrap_body_type()
 {

@@ -77,16 +77,6 @@ b2Fixture *create_circle_fixture(b2Body *body,
     return body->CreateFixture(&fixture_def);
 }
 
-void set_polygon_shape_vertices(b2PolygonShape *polygon_shape, bp::list vertices)
-{
-    b2Vec2 arr[b2_maxPolygonVertices];
-    long n = len(vertices);
-    for (long i = 0; i != n; ++i) {
-        arr[i] = bp::extract<b2Vec2>(vertices[i]);
-    }
-    polygon_shape->Set(arr, n);
-}
-
 b2Fixture *create_polygon_fixture(b2Body *body, bp::list vertices,
                                   void *user_data,
                                   float32 friction, float32 restitution, float32 density,
@@ -95,7 +85,12 @@ b2Fixture *create_polygon_fixture(b2Body *body, bp::list vertices,
 {
     b2PolygonShape polygon_shape;
     if (len(vertices)) {
-        set_polygon_shape_vertices(&polygon_shape, vertices);
+        b2Vec2 arr[b2_maxPolygonVertices];
+        long n = bp::len(vertices);
+        for (long i = 0; i != n; ++i) {
+            arr[i] = bp::extract<b2Vec2>(vertices[i]);
+        }
+        polygon_shape.Set(arr, n);
     } else {
         polygon_shape.SetAsBox(0.5f, 0.5f);
     }

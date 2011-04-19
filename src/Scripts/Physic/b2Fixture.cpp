@@ -46,26 +46,26 @@ void wrap_fixture()
     b2Body *(b2Fixture::*get_body)() = &b2Fixture::GetBody;
     b2Fixture *(b2Fixture::*get_next)() = &b2Fixture::GetNext;
 
-    bp::class_<b2Fixture, boost::noncopyable>("b2Fixture", bp::no_init)
+    boost::python::class_<b2Fixture, boost::noncopyable>("b2Fixture", boost::python::no_init)
         .def("__eq__", &eq_ptr<b2Fixture>)
         .def("__ne__", &ne_ptr<b2Fixture>)
         .def("__hash__", &hash_ptr<b2Fixture>)
 
         .add_property("Type", &b2Fixture::GetType)
-        .add_property("Shape", make_function(get_shape, bp::return_internal_reference<>()))
+        .add_property("Shape", make_function(get_shape, boost::python::return_internal_reference<>()))
         .add_property("Sensor", &b2Fixture::IsSensor, &b2Fixture::SetSensor)
         .add_property("CategoryBits", &get_fixture_category_bits, &set_fixture_category_bits)
         .add_property("MaskBits", &get_fixture_mask_bits, &set_fixture_mask_bits)
         .add_property("GroupIndex", &get_fixture_group_index, &set_fixture_group_index)
-        .add_property("Body", make_function(get_body, bp::return_internal_reference<>()))
-        .add_property("Next", make_function(get_next, bp::return_internal_reference<>()))
-        .add_property("UserData", &b2Fixture::GetUserData, &b2Fixture::SetUserData)
+        .add_property("Body", make_function(get_body, boost::python::return_internal_reference<>()))
+        .add_property("Next", make_function(get_next, boost::python::return_internal_reference<>()))
+        //.add_property("UserData", &b2Fixture::GetUserData, &b2Fixture::SetUserData)
         .def("TestPoint", &b2Fixture::TestPoint)
         .def("RayCast", &b2Fixture::RayCast)
         .def("GetMassData", &b2Fixture::GetMassData)
         .add_property("Density", &b2Fixture::GetDensity, &b2Fixture::SetDensity)
         .add_property("Friction", &b2Fixture::GetFriction, &b2Fixture::SetFriction)
         .add_property("Restitution", &b2Fixture::GetRestitution, &b2Fixture::SetRestitution)
-        .def("GetAABB", make_function(&b2Fixture::GetAABB, bp::return_value_policy<bp::copy_const_reference>()))
+        .def("GetAABB", make_function(&b2Fixture::GetAABB, boost::python::return_value_policy<boost::python::copy_const_reference>()))
     ;
 }

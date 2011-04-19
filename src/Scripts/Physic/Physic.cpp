@@ -29,7 +29,6 @@
 #include "Scripts/Physic/b2Vertex.hpp"
 #include "Scripts/Physic/Convert.hpp"
 #include "Scripts/Physic/Operator.hpp"
-#include "Scripts/Physic/PhysicUtils.hpp"
 #include "Scripts/Physic/SharedArrayRange.hpp"
 #include "Scripts/Physic/b2Body.hpp"
 #include "Scripts/Physic/b2Vec2.hpp"
@@ -58,7 +57,6 @@ BOOST_PYTHON_MODULE(Physic)
 
     wrap_shape();
     wrap_circle_shape();
-    wrap_edge_shape();
     wrap_polygon_shape();
 
     wrap_world();

@@ -16,9 +16,9 @@
 #include "Scripts/Physic/Convert.hpp"
 #include "Scripts/Physic/b2World.hpp"
 
-bp::list get_bodies(b2World *world) {
-    bp::list bodies;
-    for (b2Body *body = world->GetBodybp::list();
+boost::python::list get_bodies(b2World *world) {
+    boost::python::list bodies;
+    for (b2Body *body = world->GetBodyList();
          body;
          body = body->GetNext())
     {
@@ -27,9 +27,9 @@ bp::list get_bodies(b2World *world) {
     return bodies;
 }
 
-bp::list get_joints(b2World *world) {
-    bp::list joints;
-    for (b2Joint *joint = world->GetJointbp::list();
+boost::python::list get_joints(b2World *world) {
+    boost::python::list joints;
+    for (b2Joint *joint = world->GetJointList();
          joint;
          joint = joint->GetNext())
     {
@@ -51,7 +51,6 @@ b2Body *create_body_1(b2World *world,
                       bool fixed_rotation,
                       bool bullet,
                       bool active,
-                      b2UserData user_data,
                       float32 inertia_scale)
 {
     b2BodyDef body_def;
@@ -67,7 +66,7 @@ b2Body *create_body_1(b2World *world,
     body_def.fixedRotation = fixed_rotation;
     body_def.bullet = bullet;
     body_def.active = active;
-    body_def.userData = user_data;
+    //body_def.userData = user_data;
     body_def.inertiaScale = inertia_scale;
     return world->CreateBody(&body_def);
 }
@@ -85,7 +84,6 @@ b2Body *create_body_2(b2World *world,
                       bool fixed_rotation,
                       bool bullet,
                       bool active,
-                      b2UserData user_data,
                       float32 inertia_scale)
 {
     b2BodyDef body_def;
@@ -101,7 +99,7 @@ b2Body *create_body_2(b2World *world,
     body_def.fixedRotation = fixed_rotation;
     body_def.bullet = bullet;
     body_def.active = active;
-    body_def.userData = user_data;
+    //body_def.userData = user_data;
     body_def.inertiaScale = inertia_scale;
     return world->CreateBody(&body_def);
 }
@@ -116,7 +114,6 @@ b2Joint *create_revolute_joint(b2World *world,
                                bool motor_enabled,
                                float32 motor_speed,
                                float32 max_motor_torque,
-                               b2UserData user_data,
                                bool collide_connected)
 {
     b2RevoluteJointDef revolute_joint_def;
@@ -127,7 +124,7 @@ b2Joint *create_revolute_joint(b2World *world,
     revolute_joint_def.enableMotor = motor_enabled;
     revolute_joint_def.motorSpeed = motor_speed;
     revolute_joint_def.maxMotorTorque = max_motor_torque;
-    revolute_joint_def.userData = user_data;
+    //revolute_joint_def.userData = user_data;
     revolute_joint_def.collideConnected = collide_connected;
     return world->CreateJoint(&revolute_joint_def);
 }
@@ -143,7 +140,6 @@ b2Joint *create_prismatic_joint(b2World *world,
                                 bool motor_enabled,
                                 float32 max_motor_force,
                                 float32 motor_speed,
-                                b2UserData user_data,
                                 bool collide_connected)
 {
     b2PrismaticJointDef prismatic_joint_def;
@@ -154,7 +150,7 @@ b2Joint *create_prismatic_joint(b2World *world,
     prismatic_joint_def.enableMotor = motor_enabled;
     prismatic_joint_def.maxMotorForce = max_motor_force;
     prismatic_joint_def.motorSpeed = motor_speed;
-    prismatic_joint_def.userData = user_data;
+    //prismatic_joint_def.userData = user_data;
     prismatic_joint_def.collideConnected = collide_connected;
     return world->CreateJoint(&prismatic_joint_def);
 }
@@ -166,14 +162,13 @@ b2Joint *create_distance_joint(b2World *world,
                                b2Vec2 anchor_b,
                                float32 frequency,
                                float32 damping_ratio,
-                               b2UserData user_data,
                                bool collide_connected)
 {
     b2DistanceJointDef distance_joint_def;
     distance_joint_def.Initialize(body_a, body_b, anchor_a, anchor_b);
     distance_joint_def.frequencyHz = frequency;
     distance_joint_def.dampingRatio = damping_ratio;
-    distance_joint_def.userData = user_data;
+    //distance_joint_def.userData = user_data;
     distance_joint_def.collideConnected = collide_connected;
     return world->CreateJoint(&distance_joint_def);
 }
@@ -186,14 +181,13 @@ b2Joint *create_pulley_joint(b2World *world,
                              b2Vec2 anchor_a,
                              b2Vec2 anchor_b,
                              float32 ratio,
-                             b2UserData user_data,
                              bool collide_connected)
 {
     b2PulleyJointDef pulley_joint_def;
     pulley_joint_def.Initialize(body_a, body_b, ground_anchor_a,
                                 ground_anchor_b, anchor_a, anchor_b,
                                 ratio);
-    pulley_joint_def.userData = user_data;
+    //pulley_joint_def.userData = user_data;
     pulley_joint_def.collideConnected = collide_connected;
     return world->CreateJoint(&pulley_joint_def);
 }
@@ -204,7 +198,6 @@ b2Joint *create_mouse_joint(b2World *world,
                             float32 max_force,
                             float32 frequency,
                             float32 damping_ratio,
-                            b2UserData user_data,
                             bool collide_connected)
 {
     b2MouseJointDef mouse_joint_def;
@@ -213,7 +206,7 @@ b2Joint *create_mouse_joint(b2World *world,
     mouse_joint_def.maxForce = max_force;
     mouse_joint_def.frequencyHz = frequency;
     mouse_joint_def.dampingRatio = damping_ratio;
-    mouse_joint_def.userData = user_data;
+    //mouse_joint_def.userData = user_data;
     mouse_joint_def.collideConnected = collide_connected;
     return world->CreateJoint(&mouse_joint_def);
 }
@@ -222,14 +215,13 @@ b2Joint *create_gear_joint(b2World *world,
                            b2Joint *joint_a,
                            b2Joint *joint_b,
                            float32 ratio,
-                           b2UserData user_data,
                            bool collide_connected)
 {
     b2GearJointDef gear_joint_def;
     gear_joint_def.joint1 = joint_a;
     gear_joint_def.joint2 = joint_b;
     gear_joint_def.ratio = ratio;
-    gear_joint_def.userData = user_data;
+    //gear_joint_def.userData = user_data;
     gear_joint_def.collideConnected = collide_connected;
     return world->CreateJoint(&gear_joint_def);
 }
@@ -245,7 +237,6 @@ b2Joint *create_line_joint(b2World *world,
                            bool motor_enabled,
                            float32 max_motor_force,
                            float32 motor_speed,
-                           b2UserData user_data,
                            bool collide_connected)
 {
     b2LineJointDef line_joint_def;
@@ -256,7 +247,7 @@ b2Joint *create_line_joint(b2World *world,
     line_joint_def.enableMotor = motor_enabled;
     line_joint_def.maxMotorForce = max_motor_force;
     line_joint_def.motorSpeed = motor_speed;
-    line_joint_def.userData = user_data;
+    //line_joint_def.userData = user_data;
     line_joint_def.collideConnected = collide_connected;
     return world->CreateJoint(&line_joint_def);
 }
@@ -265,12 +256,11 @@ b2Joint *create_weld_joint(b2World *world,
                            b2Body *body_a,
                            b2Body *body_b,
                            b2Vec2 anchor,
-                           b2UserData user_data,
                            bool collide_connected)
 {
     b2WeldJointDef weld_joint_def;
     weld_joint_def.Initialize(body_a, body_b, anchor);
-    weld_joint_def.userData = user_data;
+    //weld_joint_def.userData = user_data;
     weld_joint_def.collideConnected = collide_connected;
     return world->CreateJoint(&weld_joint_def);
 }
@@ -281,22 +271,21 @@ b2Joint *create_friction_joint(b2World *world,
                                b2Vec2 anchor,
                                float32 max_force,
                                float32 max_torque,
-                               b2UserData user_data,
                                bool collide_connected)
 {
     b2FrictionJointDef friction_joint_def;
     friction_joint_def.Initialize(body_a, body_b, anchor);
     friction_joint_def.maxForce = max_force;
     friction_joint_def.maxTorque = max_torque;
-    friction_joint_def.userData = user_data;
+    //friction_joint_def.userData = user_data;
     friction_joint_def.collideConnected = collide_connected;
     return world->CreateJoint(&friction_joint_def);
 }
 
 struct QueryCallbackWrapper1 : b2QueryCallback {
-    object callback_;
+    boost::python::object callback_;
 
-    explicit QueryCallbackWrapper1(object callback)
+    explicit QueryCallbackWrapper1(boost::python::object callback)
     : callback_(callback)
     { }
 
@@ -306,7 +295,7 @@ struct QueryCallbackWrapper1 : b2QueryCallback {
 };
 
 void query_aabb_1(b2World *world,
-                  object callback,
+                  boost::python::object callback,
                   b2Vec2 lower_bound,
                   b2Vec2 upper_bound)
 {
@@ -318,7 +307,7 @@ void query_aabb_1(b2World *world,
 }
 
 struct QueryCallbackWrapper2 : b2QueryCallback {
-    bp::list result_;
+    boost::python::list result_;
 
     bool ReportFixture(b2Fixture *fixture) {
         result_.append(convert_ptr(fixture));
@@ -326,7 +315,7 @@ struct QueryCallbackWrapper2 : b2QueryCallback {
     }
 };
 
-bp::list query_aabb_2(b2World *world,
+boost::python::list query_aabb_2(b2World *world,
                   b2Vec2 lower_bound,
                   b2Vec2 upper_bound)
 {
@@ -339,17 +328,16 @@ bp::list query_aabb_2(b2World *world,
 }
 
 void wrap_world() {
-    class_<b2World>("b2World", init<b2Vec2, bool>())
-        .add_property("DestructionBp::Listener", object(), &b2World::SetDestructionbp::listener)
-        .add_property("ContactFilter", object(), &b2World::SetContactFilter)
-        .add_property("ContactBp::Listener", object(), &b2World::SetContactbp::listener)
-        .add_property("DebugDraw", object(), &b2World::SetDebugDraw)
+    boost::python::class_<b2World>("b2World", boost::python::init<b2Vec2, bool>())
+        .add_property("Destructionboost::python::Listener", boost::python::object(), &b2World::SetDestructionListener)
+        .add_property("ContactFilter", boost::python::object(), &b2World::SetContactFilter)
+        .add_property("Contactboost::python::Listener", boost::python::object(), &b2World::SetContactListener)
+        .add_property("DebugDraw", boost::python::object(), &b2World::SetDebugDraw)
         .add_property("Bodies", &get_bodies)
         .add_property("Joints", &get_joints)
-        .add_property("ContactBp::List", make_function(&b2World::GetContactbp::list, bp::return_internal_reference<>()))
-        .add_property("WarmStarting", object(), &b2World::SetWarmStarting)
-        .add_property("ContinuousPhysics", object(), &b2World::SetContinuousPhysics)
-        .add_property("SubStepping", object(), &b2World::SetSubStepping)
+        .add_property("Contactboost::python::List", make_function(&b2World::GetContactList, boost::python::return_internal_reference<>()))
+        .add_property("WarmStarting", boost::python::object(), &b2World::SetWarmStarting)
+        .add_property("ContinuousPhysics", boost::python::object(), &b2World::SetContinuousPhysics)
         .add_property("ProxyCount", &b2World::GetProxyCount)
         .add_property("BodyCount", &b2World::GetBodyCount)
         .add_property("JointCount", &b2World::GetJointCount)
@@ -357,164 +345,150 @@ void wrap_world() {
         .add_property("Gravity", &b2World::GetGravity, &b2World::SetGravity)
         .add_property("Locked", &b2World::IsLocked)
         .add_property("AutoClearForces", &b2World::GetAutoClearForces, &b2World::SetAutoClearForces)
-        .add_property("ContactManager", make_function(&b2World::GetContactManager, bp::return_internal_reference<>()))
 
-        .def("CreateBody", &create_body_1, bp::return_internal_reference<>(),
-             (arg("self"),
-              arg("type"),
-              arg("position")=b2Vec2(0.0f, 0.0f),
-              arg("angle")=0.0f,
-              arg("linear_velocity")=b2Vec2(0.0f, 0.0f),
-              arg("angular_velocity")=0.0f,
-              arg("linear_damping")=0.0f,
-              arg("angular_damping")=0.0f,
-              arg("allow_sleep")=true,
-              arg("awake")=true,
-              arg("fixed_rotation")=false,
-              arg("bullet")=false,
-              arg("active")=true,
-              arg("user_data")=object(),
-              arg("inertia_scale")=1.0f))
-        .def("CreateStaticBody", &create_body_2<b2_staticBody>, bp::return_internal_reference<>(),
-             (arg("self"),
-              arg("position")=b2Vec2(0.0f, 0.0f),
-              arg("angle")=0.0f,
-              arg("linear_velocity")=b2Vec2(0.0f, 0.0f),
-              arg("angular_velocity")=0.0f,
-              arg("linear_damping")=0.0f,
-              arg("angular_damping")=0.0f,
-              arg("allow_sleep")=true,
-              arg("awake")=true,
-              arg("fixed_rotation")=false,
-              arg("bullet")=false,
-              arg("active")=true,
-              arg("user_data")=object(),
-              arg("inertia_scale")=1.0f))
-        .def("CreateKinematicBody", &create_body_2<b2_kinematicBody>, bp::return_internal_reference<>(),
-             (arg("self"),
-              arg("position")=b2Vec2(0.0f, 0.0f),
-              arg("angle")=0.0f,
-              arg("linear_velocity")=b2Vec2(0.0f, 0.0f),
-              arg("angular_velocity")=0.0f,
-              arg("linear_damping")=0.0f,
-              arg("angular_damping")=0.0f,
-              arg("allow_sleep")=true,
-              arg("awake")=true,
-              arg("fixed_rotation")=false,
-              arg("bullet")=false,
-              arg("active")=true,
-              arg("user_data")=object(),
-              arg("inertia_scale")=1.0f))
-        .def("CreateDynamicBody", &create_body_2<b2_dynamicBody>, bp::return_internal_reference<>(),
-             (arg("self"),
-              arg("position")=b2Vec2(0.0f, 0.0f),
-              arg("angle")=0.0f,
-              arg("linear_velocity")=b2Vec2(0.0f, 0.0f),
-              arg("angular_velocity")=0.0f,
-              arg("linear_damping")=0.0f,
-              arg("angular_damping")=0.0f,
-              arg("allow_sleep")=true,
-              arg("awake")=true,
-              arg("fixed_rotation")=false,
-              arg("bullet")=false,
-              arg("active")=true,
-              arg("user_data")=object(),
-              arg("inertia_scale")=1.0f))
+        .def("CreateBody", &create_body_1, boost::python::return_internal_reference<>(),
+             (boost::python::arg("self"),
+              boost::python::arg("type"),
+              boost::python::arg("position")=b2Vec2(0.0f, 0.0f),
+              boost::python::arg("angle")=0.0f,
+              boost::python::arg("linear_velocity")=b2Vec2(0.0f, 0.0f),
+              boost::python::arg("angular_velocity")=0.0f,
+              boost::python::arg("linear_damping")=0.0f,
+              boost::python::arg("angular_damping")=0.0f,
+              boost::python::arg("allow_sleep")=true,
+              boost::python::arg("awake")=true,
+              boost::python::arg("fixed_rotation")=false,
+              boost::python::arg("bullet")=false,
+              boost::python::arg("active")=true,
+              boost::python::arg("inertia_scale")=1.0f))
+        .def("CreateStaticBody", &create_body_2<b2_staticBody>, boost::python::return_internal_reference<>(),
+             (boost::python::arg("self"),
+              boost::python::arg("position")=b2Vec2(0.0f, 0.0f),
+              boost::python::arg("angle")=0.0f,
+              boost::python::arg("linear_velocity")=b2Vec2(0.0f, 0.0f),
+              boost::python::arg("angular_velocity")=0.0f,
+              boost::python::arg("linear_damping")=0.0f,
+              boost::python::arg("angular_damping")=0.0f,
+              boost::python::arg("allow_sleep")=true,
+              boost::python::arg("awake")=true,
+              boost::python::arg("fixed_rotation")=false,
+              boost::python::arg("bullet")=false,
+              boost::python::arg("active")=true,
+              boost::python::arg("inertia_scale")=1.0f))
+        .def("CreateKinematicBody", &create_body_2<b2_kinematicBody>, boost::python::return_internal_reference<>(),
+             (boost::python::arg("self"),
+              boost::python::arg("position")=b2Vec2(0.0f, 0.0f),
+              boost::python::arg("angle")=0.0f,
+              boost::python::arg("linear_velocity")=b2Vec2(0.0f, 0.0f),
+              boost::python::arg("angular_velocity")=0.0f,
+              boost::python::arg("linear_damping")=0.0f,
+              boost::python::arg("angular_damping")=0.0f,
+              boost::python::arg("allow_sleep")=true,
+              boost::python::arg("awake")=true,
+              boost::python::arg("fixed_rotation")=false,
+              boost::python::arg("bullet")=false,
+              boost::python::arg("active")=true,
+              boost::python::arg("inertia_scale")=1.0f))
+        .def("CreateDynamicBody", &create_body_2<b2_dynamicBody>, boost::python::return_internal_reference<>(),
+             (boost::python::arg("self"),
+              boost::python::arg("position")=b2Vec2(0.0f, 0.0f),
+              boost::python::arg("angle")=0.0f,
+              boost::python::arg("linear_velocity")=b2Vec2(0.0f, 0.0f),
+              boost::python::arg("angular_velocity")=0.0f,
+              boost::python::arg("linear_damping")=0.0f,
+              boost::python::arg("angular_damping")=0.0f,
+              boost::python::arg("allow_sleep")=true,
+              boost::python::arg("awake")=true,
+              boost::python::arg("fixed_rotation")=false,
+              boost::python::arg("bullet")=false,
+              boost::python::arg("active")=true,
+              boost::python::arg("inertia_scale")=1.0f))
         .def("DestroyBody", &b2World::DestroyBody)
-        .def("ReateRevoluteJoint", &create_revolute_joint, bp::return_internal_reference<>(),
-             (arg("self"),
-              arg("body_a"),
-              arg("body_b"),
-              arg("anchor"),
-              arg("limit_enabled")=false,
-              arg("lower_angle")=0.0f,
-              arg("upper_angle")=0.0f,
-              arg("motor_enabled")=false,
-              arg("motor_speed")=0.0f,
-              arg("max_motor_torque")=0.0f,
-              arg("user_data")=object(),
-              arg("collide_connected")=false))
-        .def("CreatePrismaticJoint", &create_prismatic_joint, bp::return_internal_reference<>(),
-             (arg("self"),
-              arg("body_a"),
-              arg("body_b"),
-              arg("anchor"),
-              arg("axis"),
-              arg("limit_enabled")=false,
-              arg("lower_translation")=0.0f,
-              arg("upper_translation")=0.0f,
-              arg("motor_enabled")=false,
-              arg("max_motor_force")=0.0f,
-              arg("motor_speed")=0.0f,
-              arg("user_data")=object(),
-              arg("collide_connected")=false))
-        .def("CreateDistanceJoint", &create_distance_joint, bp::return_internal_reference<>(),
-             (arg("self"),
-              arg("body_a"),
-              arg("body_b"),
-              arg("anchor_a"),
-              arg("anchor_b"),
-              arg("frequency")=0.0f,
-              arg("damping_ratio")=0.0f,
-              arg("user_data")=object(),
-              arg("collide_connected")=false))
-        .def("CreatePulleyJoint", &create_pulley_joint, bp::return_internal_reference<>(),
-             (arg("self"),
-              arg("body_a"),
-              arg("body_b"),
-              arg("ground_anchor_a"),
-              arg("ground_anchor_b"),
-              arg("anchor_a"),
-              arg("anchor_b"),
-              arg("ratio")=0.0f,
-              arg("user_data")=object(),
-              arg("collide_connected")=false))
-        .def("CreateMouseJoint", &create_mouse_joint, bp::return_internal_reference<>(),
-             (arg("self"),
-              arg("body"),
-              arg("target"),
-              arg("max_force")=0.0f,
-              arg("frequency")=5.0f,
-              arg("damping_ratio")=0.7f,
-              arg("user_data")=object(),
-              arg("collide_connected")=false))
-        .def("CreateGearJoint", &create_gear_joint, bp::return_internal_reference<>(),
-             (arg("self"),
-              arg("joint_a"),
-              arg("joint_b"),
-              arg("ratio"),
-              arg("user_data")=object(),
-              arg("collide_connected")=false))
-        .def("CreateLineJoint", &create_line_joint, bp::return_internal_reference<>(),
-             (arg("self"),
-              arg("body_a"),
-              arg("body_b"),
-              arg("anchor"),
-              arg("axis"),
-              arg("limit_enabled")=false,
-              arg("lower_translation")=0.0f,
-              arg("upper_translation")=0.0f,
-              arg("motor_enabled")=false,
-              arg("max_motor_force")=0.0f,
-              arg("motor_speed")=0.0f,
-              arg("user_data")=object(),
-              arg("collide_connected")=false))
-        .def("CreateWeldJoint", &create_weld_joint, bp::return_internal_reference<>(),
-             (arg("self"),
-              arg("body_a"),
-              arg("body_b"),
-              arg("anchor"),
-              arg("user_data")=object(),
-              arg("collide_connected")=false))
-        .def("CreateFrictionJoint", &create_friction_joint, bp::return_internal_reference<>(),
-             (arg("self"),
-              arg("body_a"),
-              arg("body_b"),
-              arg("anchor"),
-              arg("max_force")=0.0f,
-              arg("max_force")=0.0f,
-              arg("user_data")=object(),
-              arg("collide_connected")=false))
+        .def("ReateRevoluteJoint", &create_revolute_joint, boost::python::return_internal_reference<>(),
+             (boost::python::arg("self"),
+              boost::python::arg("body_a"),
+              boost::python::arg("body_b"),
+              boost::python::arg("anchor"),
+              boost::python::arg("limit_enabled")=false,
+              boost::python::arg("lower_angle")=0.0f,
+              boost::python::arg("upper_angle")=0.0f,
+              boost::python::arg("motor_enabled")=false,
+              boost::python::arg("motor_speed")=0.0f,
+              boost::python::arg("max_motor_torque")=0.0f,
+              boost::python::arg("collide_connected")=false))
+        .def("CreatePrismaticJoint", &create_prismatic_joint, boost::python::return_internal_reference<>(),
+             (boost::python::arg("self"),
+              boost::python::arg("body_a"),
+              boost::python::arg("body_b"),
+              boost::python::arg("anchor"),
+              boost::python::arg("axis"),
+              boost::python::arg("limit_enabled")=false,
+              boost::python::arg("lower_translation")=0.0f,
+              boost::python::arg("upper_translation")=0.0f,
+              boost::python::arg("motor_enabled")=false,
+              boost::python::arg("max_motor_force")=0.0f,
+              boost::python::arg("motor_speed")=0.0f,
+              boost::python::arg("collide_connected")=false))
+        .def("CreateDistanceJoint", &create_distance_joint, boost::python::return_internal_reference<>(),
+             (boost::python::arg("self"),
+              boost::python::arg("body_a"),
+              boost::python::arg("body_b"),
+              boost::python::arg("anchor_a"),
+              boost::python::arg("anchor_b"),
+              boost::python::arg("frequency")=0.0f,
+              boost::python::arg("damping_ratio")=0.0f,
+              boost::python::arg("collide_connected")=false))
+        .def("CreatePulleyJoint", &create_pulley_joint, boost::python::return_internal_reference<>(),
+             (boost::python::arg("self"),
+              boost::python::arg("body_a"),
+              boost::python::arg("body_b"),
+              boost::python::arg("ground_anchor_a"),
+              boost::python::arg("ground_anchor_b"),
+              boost::python::arg("anchor_a"),
+              boost::python::arg("anchor_b"),
+              boost::python::arg("ratio")=0.0f,
+              boost::python::arg("collide_connected")=false))
+        .def("CreateMouseJoint", &create_mouse_joint, boost::python::return_internal_reference<>(),
+             (boost::python::arg("self"),
+              boost::python::arg("body"),
+              boost::python::arg("tboost::python::arget"),
+              boost::python::arg("max_force")=0.0f,
+              boost::python::arg("frequency")=5.0f,
+              boost::python::arg("damping_ratio")=0.7f,
+              boost::python::arg("collide_connected")=false))
+        .def("CreateGearJoint", &create_gear_joint, boost::python::return_internal_reference<>(),
+             (boost::python::arg("self"),
+              boost::python::arg("joint_a"),
+              boost::python::arg("joint_b"),
+              boost::python::arg("ratio"),
+              boost::python::arg("collide_connected")=false))
+        .def("CreateLineJoint", &create_line_joint, boost::python::return_internal_reference<>(),
+             (boost::python::arg("self"),
+              boost::python::arg("body_a"),
+              boost::python::arg("body_b"),
+              boost::python::arg("anchor"),
+              boost::python::arg("axis"),
+              boost::python::arg("limit_enabled")=false,
+              boost::python::arg("lower_translation")=0.0f,
+              boost::python::arg("upper_translation")=0.0f,
+              boost::python::arg("motor_enabled")=false,
+              boost::python::arg("max_motor_force")=0.0f,
+              boost::python::arg("motor_speed")=0.0f,
+              boost::python::arg("collide_connected")=false))
+        .def("CreateWeldJoint", &create_weld_joint, boost::python::return_internal_reference<>(),
+             (boost::python::arg("self"),
+              boost::python::arg("body_a"),
+              boost::python::arg("body_b"),
+              boost::python::arg("anchor"),
+              boost::python::arg("collide_connected")=false))
+        .def("CreateFrictionJoint", &create_friction_joint, boost::python::return_internal_reference<>(),
+             (boost::python::arg("self"),
+              boost::python::arg("body_a"),
+              boost::python::arg("body_b"),
+              boost::python::arg("anchor"),
+              boost::python::arg("max_force")=0.0f,
+              boost::python::arg("max_force")=0.0f,
+              boost::python::arg("collide_connected")=false))
         .def("DestroyJoint", &b2World::DestroyJoint)
         .def("Step", &b2World::Step)
         .def("ClearForces", &b2World::ClearForces)
