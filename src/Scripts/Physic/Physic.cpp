@@ -37,11 +37,11 @@
 #include "Scripts/Physic/b2Fixture.hpp"
 #include "Scripts/Physic/b2World.hpp"
 
-boost::shared_ptr<Body> ParsePhysicBody(CL_DomElement body);
+Body ParsePhysicBody(CL_DomElement body);
 BOOST_PYTHON_MODULE(Physic)
 {
     // Our wrapper
-    bp::class_<Body, boost::noncopyable>("Body")
+    bp::class_<Body>("Body")
         .def("GetBody", &Body::getBody, PYPOLICY_REFERENCE_EXISTING)
         .def("SetBody", &Body::setBody);
 

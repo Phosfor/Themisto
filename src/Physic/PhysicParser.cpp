@@ -28,11 +28,11 @@
 #include "World/Objects/Object.hpp"
 
 
-boost::shared_ptr<Body> ParsePhysicBody(CL_DomElement body)
+Body ParsePhysicBody(CL_DomElement body)
 {
     using namespace boost;
 
-    boost::shared_ptr<Body> bodyHandle = boost::shared_ptr<Body>(new Body());;
+    Body bodyHandle;
     b2Body *b2body = NULL;
 
     if(body.get_node_name() != "Body")
@@ -157,7 +157,7 @@ boost::shared_ptr<Body> ParsePhysicBody(CL_DomElement body)
     }
 
     b2body = physicManager().getWorld().CreateBody(&bdef);
-    bodyHandle->setBody(b2body);
+    bodyHandle.setBody(b2body);
 
     // Parse b2Fixture
     CL_DomNodeList b2FixtureTags = body.get_elements_by_tag_name("b2Fixture");
@@ -356,7 +356,7 @@ boost::shared_ptr<Body> ParsePhysicBody(CL_DomElement body)
             if(properties.item(i).is_element())
             {
                 CL_DomElement property = properties.item(i).to_element();
-                bodyHandle->setProperty(property.get_node_name().c_str(), property.get_text().c_str());
+                bodyHandle.setProperty(property.get_node_name().c_str(), property.get_text().c_str());
             }
         }
     }

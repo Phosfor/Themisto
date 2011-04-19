@@ -60,6 +60,9 @@ CL_DomString (CL_DomElement::*GetAttribute)(const CL_DomString&) const = &CL_Dom
 void (CL_Image::*ImageDraw_1)(CL_GraphicContext&, float, float) const = &CL_Image::draw;
 void (CL_Image::*SetColor)(const CL_Colorf&) = &CL_Image::set_color;
 
+void (CL_Sprite::*SpriteDraw_1)(CL_GraphicContext&, float, float) = &CL_Sprite::draw;
+void (CL_Sprite::*SetColorSprite)(const CL_Colorf&) = &CL_Sprite::set_color;
+
 CL_Colorf ColorRGB(float r, float g, float b)
 {
     return CL_Colorf(r/255.0f, g/255.0f, b/255.0f);
@@ -145,10 +148,13 @@ BOOST_PYTHON_MODULE(TypesConverters)
     bp::class_<CL_Sprite>("CL_Sprite")
         .def("SetScale", &CL_Sprite::set_scale)
         .def("SetAlpha", &CL_Sprite::set_alpha)
+        .def("SetAngle", &CL_Sprite::set_angle)
         .def("SetAlignment", &CL_Sprite::set_alignment, SetAlignmentSpriteOverloads())
-        .def("Draw", ImageDraw_1)
+        .def("SetLinearFilter", &CL_Sprite::set_linear_filter)
+        .def("SetRotationHotspot", &CL_Sprite::set_rotation_hotspot)
+        .def("Draw", SpriteDraw_1)
         .def("GetColor", &CL_Sprite::get_color)
-        .def("SetColor", SetColor)
+        .def("SetColor", SetColorSprite)
         .def("GetWidth", &CL_Sprite::get_width)
         .def("GetHeight", &CL_Sprite::get_height);
 

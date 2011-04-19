@@ -16,6 +16,35 @@
             </Object>
 
             <Object name="Rain" type="RainObject" maxDrops="2.5" />
+
+             <Object name="Stone" type="PhysicObject">
+                <Visual>
+                    <Size width="90" height="90" />
+                    <Texture section="Stuff" name="stone" />
+                </Visual>
+                <Body>
+                    <b2Body>
+                        <Position>
+                            <x>400.0</x>
+                            <y>320.0</y>
+                        </Position>
+                        <Type>DynamicBody</Type>
+                    </b2Body>
+                    <b2Fixture>
+                        <Friction>0.3</Friction>
+                        <Restitution>0.3</Restitution>
+                        <Density>0.3</Density>
+                        <Shape>
+                            <Type>e_circle</Type>
+                            <Radius>45.0</Radius>
+                            <Center>
+                                <x>45</x>
+                                <y>45</y>
+                            </Center>
+                        </Shape>
+                    </b2Fixture>
+                  </Body>
+             </Object>
             <!--<Object name="Test" type="testobj" z-index="5" />-->
             <!--<Object name="Test2" type="testobj" z-index="0" />
             <Object name="Test3" type="testobj" z-index="5" />
