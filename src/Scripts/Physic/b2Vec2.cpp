@@ -60,7 +60,7 @@ void wrap_vec_2()
 {
     Vec2FromTuple();
 
-    bp::class_<b2Vec2>("Vec2", bp::init<float32, float32>())
+    bp::class_<b2Vec2>("b2Vec2", bp::init<float32, float32>())
         .def("__init__", bp:make_constructor(&construct))
 
         .def(bp::self += bp::self)

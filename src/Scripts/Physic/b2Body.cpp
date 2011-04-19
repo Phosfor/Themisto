@@ -9,7 +9,7 @@
 
 void wrap_body_type()
 {
-    bp::enum_<b2BodyType>("BodyType")
+    bp::enum_<b2BodyType>("b2BodyType")
         .value("STATIC_BODY", b2_staticBody)
         .value("KINEMATIC_BODY", b2_kinematicBody)
         .value("DYNAMIC_BODY", b2_dynamicBody)

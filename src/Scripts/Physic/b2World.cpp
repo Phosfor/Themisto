@@ -339,27 +339,27 @@ bp::list query_aabb_2(b2World *world,
 }
 
 void wrap_world() {
-    class_<b2World>("World", init<b2Vec2, bool>())
-        .add_property("destruction_bp::listener", object(), &b2World::SetDestructionbp::listener)
-        .add_property("contact_filter", object(), &b2World::SetContactFilter)
-        .add_property("contact_bp::listener", object(), &b2World::SetContactbp::listener)
-        .add_property("debug_draw", object(), &b2World::SetDebugDraw)
-        .add_property("bodies", &get_bodies)
-        .add_property("joints", &get_joints)
-        .add_property("contact_bp::list", make_function(&b2World::GetContactbp::list, bp::return_internal_reference<>()))
-        .add_property("warm_starting", object(), &b2World::SetWarmStarting)
-        .add_property("continuous_physics", object(), &b2World::SetContinuousPhysics)
-        .add_property("sub_stepping", object(), &b2World::SetSubStepping)
-        .add_property("proxy_count", &b2World::GetProxyCount)
-        .add_property("body_count", &b2World::GetBodyCount)
-        .add_property("joint_count", &b2World::GetJointCount)
-        .add_property("contact_count", &b2World::GetContactCount)
-        .add_property("gravity", &b2World::GetGravity, &b2World::SetGravity)
-        .add_property("locked", &b2World::IsLocked)
-        .add_property("auto_clear_forces", &b2World::GetAutoClearForces, &b2World::SetAutoClearForces)
-        .add_property("contact_manager", make_function(&b2World::GetContactManager, bp::return_internal_reference<>()))
+    class_<b2World>("b2World", init<b2Vec2, bool>())
+        .add_property("DestructionBp::Listener", object(), &b2World::SetDestructionbp::listener)
+        .add_property("ContactFilter", object(), &b2World::SetContactFilter)
+        .add_property("ContactBp::Listener", object(), &b2World::SetContactbp::listener)
+        .add_property("DebugDraw", object(), &b2World::SetDebugDraw)
+        .add_property("Bodies", &get_bodies)
+        .add_property("Joints", &get_joints)
+        .add_property("ContactBp::List", make_function(&b2World::GetContactbp::list, bp::return_internal_reference<>()))
+        .add_property("WarmStarting", object(), &b2World::SetWarmStarting)
+        .add_property("ContinuousPhysics", object(), &b2World::SetContinuousPhysics)
+        .add_property("SubStepping", object(), &b2World::SetSubStepping)
+        .add_property("ProxyCount", &b2World::GetProxyCount)
+        .add_property("BodyCount", &b2World::GetBodyCount)
+        .add_property("JointCount", &b2World::GetJointCount)
+        .add_property("ContactCount", &b2World::GetContactCount)
+        .add_property("Gravity", &b2World::GetGravity, &b2World::SetGravity)
+        .add_property("Locked", &b2World::IsLocked)
+        .add_property("AutoClearForces", &b2World::GetAutoClearForces, &b2World::SetAutoClearForces)
+        .add_property("ContactManager", make_function(&b2World::GetContactManager, bp::return_internal_reference<>()))
 
-        .def("create_body", &create_body_1, bp::return_internal_reference<>(),
+        .def("CreateBody", &create_body_1, bp::return_internal_reference<>(),
              (arg("self"),
               arg("type"),
               arg("position")=b2Vec2(0.0f, 0.0f),
@@ -375,7 +375,7 @@ void wrap_world() {
               arg("active")=true,
               arg("user_data")=object(),
               arg("inertia_scale")=1.0f))
-        .def("create_static_body", &create_body_2<b2_staticBody>, bp::return_internal_reference<>(),
+        .def("CreateStaticBody", &create_body_2<b2_staticBody>, bp::return_internal_reference<>(),
              (arg("self"),
               arg("position")=b2Vec2(0.0f, 0.0f),
               arg("angle")=0.0f,
@@ -390,7 +390,7 @@ void wrap_world() {
               arg("active")=true,
               arg("user_data")=object(),
               arg("inertia_scale")=1.0f))
-        .def("create_kinematic_body", &create_body_2<b2_kinematicBody>, bp::return_internal_reference<>(),
+        .def("CreateKinematicBody", &create_body_2<b2_kinematicBody>, bp::return_internal_reference<>(),
              (arg("self"),
               arg("position")=b2Vec2(0.0f, 0.0f),
               arg("angle")=0.0f,
@@ -405,7 +405,7 @@ void wrap_world() {
               arg("active")=true,
               arg("user_data")=object(),
               arg("inertia_scale")=1.0f))
-        .def("create_dynamic_body", &create_body_2<b2_dynamicBody>, bp::return_internal_reference<>(),
+        .def("CreateDynamicBody", &create_body_2<b2_dynamicBody>, bp::return_internal_reference<>(),
              (arg("self"),
               arg("position")=b2Vec2(0.0f, 0.0f),
               arg("angle")=0.0f,
@@ -420,8 +420,8 @@ void wrap_world() {
               arg("active")=true,
               arg("user_data")=object(),
               arg("inertia_scale")=1.0f))
-        .def("destroy_body", &b2World::DestroyBody)
-        .def("create_revolute_joint", &create_revolute_joint, bp::return_internal_reference<>(),
+        .def("DestroyBody", &b2World::DestroyBody)
+        .def("ReateRevoluteJoint", &create_revolute_joint, bp::return_internal_reference<>(),
              (arg("self"),
               arg("body_a"),
               arg("body_b"),
@@ -434,7 +434,7 @@ void wrap_world() {
               arg("max_motor_torque")=0.0f,
               arg("user_data")=object(),
               arg("collide_connected")=false))
-        .def("create_prismatic_joint", &create_prismatic_joint, bp::return_internal_reference<>(),
+        .def("CreatePrismaticJoint", &create_prismatic_joint, bp::return_internal_reference<>(),
              (arg("self"),
               arg("body_a"),
               arg("body_b"),
@@ -448,7 +448,7 @@ void wrap_world() {
               arg("motor_speed")=0.0f,
               arg("user_data")=object(),
               arg("collide_connected")=false))
-        .def("create_distance_joint", &create_distance_joint, bp::return_internal_reference<>(),
+        .def("CreateDistanceJoint", &create_distance_joint, bp::return_internal_reference<>(),
              (arg("self"),
               arg("body_a"),
               arg("body_b"),
@@ -458,7 +458,7 @@ void wrap_world() {
               arg("damping_ratio")=0.0f,
               arg("user_data")=object(),
               arg("collide_connected")=false))
-        .def("create_pulley_joint", &create_pulley_joint, bp::return_internal_reference<>(),
+        .def("CreatePulleyJoint", &create_pulley_joint, bp::return_internal_reference<>(),
              (arg("self"),
               arg("body_a"),
               arg("body_b"),
@@ -469,7 +469,7 @@ void wrap_world() {
               arg("ratio")=0.0f,
               arg("user_data")=object(),
               arg("collide_connected")=false))
-        .def("create_mouse_joint", &create_mouse_joint, bp::return_internal_reference<>(),
+        .def("CreateMouseJoint", &create_mouse_joint, bp::return_internal_reference<>(),
              (arg("self"),
               arg("body"),
               arg("target"),
@@ -478,14 +478,14 @@ void wrap_world() {
               arg("damping_ratio")=0.7f,
               arg("user_data")=object(),
               arg("collide_connected")=false))
-        .def("create_gear_joint", &create_gear_joint, bp::return_internal_reference<>(),
+        .def("CreateGearJoint", &create_gear_joint, bp::return_internal_reference<>(),
              (arg("self"),
               arg("joint_a"),
               arg("joint_b"),
               arg("ratio"),
               arg("user_data")=object(),
               arg("collide_connected")=false))
-        .def("create_line_joint", &create_line_joint, bp::return_internal_reference<>(),
+        .def("CreateLineJoint", &create_line_joint, bp::return_internal_reference<>(),
              (arg("self"),
               arg("body_a"),
               arg("body_b"),
@@ -499,14 +499,14 @@ void wrap_world() {
               arg("motor_speed")=0.0f,
               arg("user_data")=object(),
               arg("collide_connected")=false))
-        .def("create_weld_joint", &create_weld_joint, bp::return_internal_reference<>(),
+        .def("CreateWeldJoint", &create_weld_joint, bp::return_internal_reference<>(),
              (arg("self"),
               arg("body_a"),
               arg("body_b"),
               arg("anchor"),
               arg("user_data")=object(),
               arg("collide_connected")=false))
-        .def("create_friction_joint", &create_friction_joint, bp::return_internal_reference<>(),
+        .def("CreateFrictionJoint", &create_friction_joint, bp::return_internal_reference<>(),
              (arg("self"),
               arg("body_a"),
               arg("body_b"),
@@ -515,12 +515,12 @@ void wrap_world() {
               arg("max_force")=0.0f,
               arg("user_data")=object(),
               arg("collide_connected")=false))
-        .def("destroy_joint", &b2World::DestroyJoint)
-        .def("step", &b2World::Step)
-        .def("clear_forces", &b2World::ClearForces)
-        .def("draw_debug_data", &b2World::DrawDebugData)
-        .def("query_aabb", &query_aabb_1)
-        .def("query_aabb", &query_aabb_2)
-        .def("ray_cast", &b2World::RayCast)
+        .def("DestroyJoint", &b2World::DestroyJoint)
+        .def("Step", &b2World::Step)
+        .def("ClearForces", &b2World::ClearForces)
+        .def("DrawDebugData", &b2World::DrawDebugData)
+        .def("QueryAABB", &query_aabb_1)
+        .def("QueryAABB", &query_aabb_2)
+        .def("RayCast", &b2World::RayCast)
     ;
 }

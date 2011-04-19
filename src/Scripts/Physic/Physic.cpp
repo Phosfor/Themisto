@@ -26,7 +26,6 @@
 #include "Physic/Body.hpp"
 
 // Wrappers
-//#include "Scripts/Physic/b2Exception.hpp"
 #include "Scripts/Physic/b2Vertex.hpp"
 #include "Scripts/Physic/Convert.hpp"
 #include "Scripts/Physic/Operator.hpp"
