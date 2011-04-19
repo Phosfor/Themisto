@@ -100,9 +100,10 @@ class Moon(Object):
         print 'Setting position'
 
     def GetRectangle(self):
-        return CL_Rectf(self.mPosX - self.mMoon.GetWidth(),  \
-                        self.mPosY - self.mMoon.GetHeight(), \
-                        self.mPosX, self.mPosY + self.mMoon.GetHeight()/2.0)
+        return CL_Rectf(self.mPosX - self.mMoon.GetWidth(),      \
+                        self.mPosY - self.mMoon.GetHeight()/2.0, \
+                        self.mPosX,                              \
+                        self.mPosY + self.mMoon.GetHeight()/2.0)
 
     def CheckCollision(self):
         return False

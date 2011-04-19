@@ -45,10 +45,6 @@
                     </b2Fixture>
                   </Body>
              </Object>
-            <!--<Object name="Test" type="testobj" z-index="5" />-->
-            <!--<Object name="Test2" type="testobj" z-index="0" />
-            <Object name="Test3" type="testobj" z-index="5" />
-            <Object name="Test4" type="testobj" z-index="-3" />-->
         </Objects>
     </World>
     <Templates>

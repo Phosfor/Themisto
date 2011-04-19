@@ -25,6 +25,8 @@ class Physic(Object):
 
     def SetVisual(self, texture, section, width, height):
         self.mImage = Core.ResourceManager.getInstance().GetSprite(section, texture)
+        if self.mImage.IsNull():
+            print 'Failed to retreive image: ' + str(texture)
 
         koefX = koefY = 1
         if width > 0:
@@ -45,6 +47,7 @@ class Physic(Object):
         rotation = CL_Angle.FromRadians(self.mBody.GetBody().Angle)
         self.mImage.SetAngle(rotation)
         self.mImage.Draw(self.mGC, newX, newY)
+        print 'Drawing at: (x; y): ' + str(newX) + '; ' + str(newY)
 
         # TODO: Set rotation for collision
 
@@ -56,8 +59,8 @@ class Physic(Object):
         print 'Can`t set position for body after it`s creating.'
 
     def GetRectangle(self):
-        rect = b2AABB()
         bodyFixtures = self.mBody.GetBody().Fixtures
+        rect = bodyFixtures[0].GetAABB()
 
         for i in xrange(len(bodyFixtures)):
             rect.Combine(rect, bodyFixtures[i].GetAABB())
