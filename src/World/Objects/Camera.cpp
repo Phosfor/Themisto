@@ -75,7 +75,6 @@ void Camera::setSpeed(float speed)
 
 void Camera::translate(float x, float y)
 {
-    std::cout << "Translating (x; y): " << x << "; " << y << "\n";
     // Check X-moving
     if (mCameraViewport.left + x > 0 ||
         abs(mCameraViewport.left) - x + ScreenResolutionX > mTextureSize.width)

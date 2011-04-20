@@ -131,8 +131,8 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
     }
 
     levelManager().setLevelName(name);
-    levelManager().initObjects();
     levelManager().init();
+    levelManager().initObjects();
     levelManager().getCamera().setViewport(camViewport);
     // END OF OBJECTS PARSING -------------------------------------------
 
