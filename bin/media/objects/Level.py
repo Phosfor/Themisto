@@ -28,7 +28,7 @@ class Level(Object):
         if self.mImage.IsNull():
             print 'Failed to retreive image: ' + str(texture)
 
-        koefX = koefY = 1
+        koefX = koefY = 1.0
         if width > 0:
             koefX = width / self.mImage.GetWidth()
         if height > 0:
@@ -76,14 +76,14 @@ class Level(Object):
         VisualTags = node.GetElementsByTagName(CL_DomString("Visual"))
         if VisualTags.GetLength() == 1:
             section = name = None
-            width = height = -1
+            width = height = -1.0
 
             childList = VisualTags.Item(0).GetChildNodes()
             for i in xrange(childList.GetLength()):
                 tag2 = childList.Item(i).ToElement()
                 if tag2.GetNodeName().CStr() == "Size":
-                    width = int(tag2.GetAttribute(CL_DomString("width")).CStr())
-                    height = int(tag2.GetAttribute(CL_DomString("height")).CStr())
+                    width = float(tag2.GetAttribute(CL_DomString("width")).CStr())
+                    height = float(tag2.GetAttribute(CL_DomString("height")).CStr())
                 elif tag2.GetNodeName().CStr() == "Texture":
                     section = str(tag2.GetAttribute(CL_DomString("section")).CStr())
                     name = str(tag2.GetAttribute(CL_DomString("name")).CStr())
