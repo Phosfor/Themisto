@@ -37,14 +37,14 @@ class Camera
     public:
         Camera(CL_Size levelSize);
 
-        void setCamViewport(const CL_Rectf &viewport);
-        CL_Rectf getCamViewport() const;
+        void setViewport(const CL_Rectf &viewport);
+        CL_Rectf getViewport() const;
 
-        void translateCamera(float x, float y);
-        CL_Rectf getAbsoluteCameraPos() const;
+        void translate(float x, float y);
+        CL_Rectf getAbsolutePos() const;
 
-        float getCameraSpeed() const;
-        void setCameraSpeed(float speed);
+        float getSpeed() const;
+        void setSpeed(float speed);
 
         bool getDrawDebugData() const;
         void setDrawDebugData(bool draw);

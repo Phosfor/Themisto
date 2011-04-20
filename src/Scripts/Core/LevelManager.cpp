@@ -21,20 +21,10 @@
 BOOST_PYTHON_MODULE(LevelManager)
 {
     bp::class_<LevelManager, boost::noncopyable>("LevelManager", bp::no_init)
-        /*.def("SetCamViewport", &LevelManager::setCamViewport)
-        .def("GetCamViewport", &LevelManager::getCamViewport)
-
-        .def("TranslateCamera", &LevelManager::translateCamera)
-        .def("GetAbsoluteCameraPos", &LevelManager::getAbsoluteCameraPos)
-
-        .def("GetCameraSpeed", &LevelManager::getCamViewport)
-        .def("SetCameraSpeed", &LevelManager::setCamViewport)
-
-        .def("GetDrawDebugData", &LevelManager::getDrawDebugData)
-        .def("SetDrawDebugData", &LevelManager::setDrawDebugData)*/
-
         .def("Init", &LevelManager::init)
         .def("initObjects", &LevelManager::initObjects)
+
+        .def("GetCamera", &LevelManager::getCamera, PYPOLICY_REFERENCE_EXISTING)
 
         .def("AddObject", &LevelManager::addObject)
         .def("GetObject", &LevelManager::getPyObject)

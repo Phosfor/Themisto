@@ -133,7 +133,7 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
     levelManager().setLevelName(name);
     levelManager().initObjects();
     levelManager().init();
-    levelManager().getCamera().setCamViewport(camViewport);
+    levelManager().getCamera().setViewport(camViewport);
     // END OF OBJECTS PARSING -------------------------------------------
 
     //mMutex.unlock();

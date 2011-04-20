@@ -20,6 +20,10 @@
 #include <ClanLib/display.h>
 #include <ClanLib/core.h>
 
+#include "Core/ScriptsManager.hpp"
+#include "Core/LevelManager.hpp"
+#include "Core/LogManager.hpp"
+
 namespace bp = boost::python;
 namespace ScriptTypesConverters
 {

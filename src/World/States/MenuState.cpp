@@ -76,7 +76,7 @@ void MenuState::update()
     if (mDetailedOutput)
     {
         int *time = worldManager().getWorldTime();
-        CL_Rectf camPos = levelManager().getCamera().getAbsoluteCameraPos();
+        CL_Rectf camPos = levelManager().getCamera().getAbsolutePos();
         std::string information;
 
         information += cl_format("Elapsed: %1\n", boost::lexical_cast<std::string>(appManager().getElapsed())).c_str();
@@ -192,24 +192,24 @@ void MenuState::onKeyDown(const CL_InputEvent &key, const CL_InputState &state)
         }
     }
 
-    float camSpeed = levelManager().getCamera().getCameraSpeed();
+    float camSpeed = levelManager().getCamera().getSpeed();
     if (!inputManager().keyPressed(CL_KEY_CONTROL))
     {
         if (key.id == CL_KEY_RIGHT)
         {
-            levelManager().getCamera().translateCamera(-camSpeed, 0);
+            levelManager().getCamera().translate(-camSpeed, 0);
         }
         else if (key.id == CL_KEY_LEFT)
         {
-            levelManager().getCamera().translateCamera(+camSpeed, 0);
+            levelManager().getCamera().translate(+camSpeed, 0);
         }
         else if (key.id == CL_KEY_UP)
         {
-            levelManager().getCamera().translateCamera(0, +camSpeed);
+            levelManager().getCamera().translate(0, +camSpeed);
         }
         else if (key.id == CL_KEY_DOWN)
         {
-            levelManager().getCamera().translateCamera(0, -camSpeed);
+            levelManager().getCamera().translate(0, -camSpeed);
         }
     }
 }

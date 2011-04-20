@@ -15,9 +15,6 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "Core/ScriptsManager.hpp"
-#include "Core/LogManager.hpp"
-
 #include "Scripts/Core/TypesConverters.hpp"
 
 // Pointer to functions for processing overloaded functions
@@ -316,4 +313,17 @@ BOOST_PYTHON_MODULE(TypesConverters)
 
     bp::class_<CL_StringRef8>("CL_DomString", bp::init<const std::string&>())
         .def("CStr", &CL_StringRef8::c_str);
+
+    bp::class_<Camera>("Camera", bp::init<CL_Size>())
+        .def("SetViewport", &Camera::setViewport)
+        .def("GetViewport", &Camera::getViewport)
+
+        .def("Translate", &Camera::translate)
+        .def("GetAbsolutePos", &Camera::getAbsolutePos)
+
+        .def("GetSpeed", &Camera::getViewport)
+        .def("SetSpeed", &Camera::setViewport)
+
+        .def("GetDrawDebugData", &Camera::getDrawDebugData)
+        .def("SetDrawDebugData", &Camera::setDrawDebugData);
 }

@@ -25,7 +25,7 @@ Camera::Camera(CL_Size levelSize) :
     mDrawDebugData = false;
 }
 
-void Camera::setCamViewport(const CL_Rectf  &viewport)
+void Camera::setViewport(const CL_Rectf  &viewport)
 {
     mCameraViewport = viewport;
 
@@ -38,7 +38,7 @@ void Camera::setCamViewport(const CL_Rectf  &viewport)
         mForegroundDelta = -1;
 }
 
-CL_Rectf Camera::getCamViewport() const
+CL_Rectf Camera::getViewport() const
 {
     return mCameraViewport;
 }
@@ -63,18 +63,19 @@ bool Camera::getDrawDebugOnly() const
     return mDrawDebugOnly;
 }
 
-float Camera::getCameraSpeed() const
+float Camera::getSpeed() const
 {
     return mCameraSpeed;
 }
 
-void Camera::setCameraSpeed(float speed)
+void Camera::setSpeed(float speed)
 {
     mCameraSpeed = speed;
 }
 
-void Camera::translateCamera(float x, float y)
+void Camera::translate(float x, float y)
 {
+    std::cout << "Translating (x; y): " << x << "; " << y << "\n";
     // Check X-moving
     if (mCameraViewport.left + x > 0 ||
         abs(mCameraViewport.left) - x + ScreenResolutionX > mTextureSize.width)
@@ -97,7 +98,7 @@ void Camera::translateCamera(float x, float y)
     mCameraViewport.translate(x, y);
 }
 
-CL_Rectf Camera::getAbsoluteCameraPos() const
+CL_Rectf Camera::getAbsolutePos() const
 {
     return CL_Rectf(abs(mCameraViewport.left),
                     abs(mCameraViewport.top),

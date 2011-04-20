@@ -256,7 +256,7 @@ void LevelManager::updateLogic(float elapsed)
 void LevelManager::updateVisual(float elapsed)
 {
     if (mCamera->getDrawDebugOnly()) return;
-    CL_Rectf camPos = mCamera->getAbsoluteCameraPos();
+    CL_Rectf camPos = mCamera->getAbsolutePos();
 
     try
     {

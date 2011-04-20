@@ -60,7 +60,7 @@ void DebugDragAndDrop::mouseDown(const CL_InputEvent &ev, const CL_InputState &s
 {
     if(ev.id == CL_MOUSE_LEFT)
     {
-        CL_Rectf camPos = levelManager().getCamera().getAbsoluteCameraPos();
+        CL_Rectf camPos = levelManager().getCamera().getAbsolutePos();
         if(mMouseJoint == NULL)
         {
             mMousePos->Set(static_cast<float>(Pixels2Meters(ev.mouse_pos.x + camPos.left)),
@@ -76,7 +76,7 @@ void DebugDragAndDrop::mouseDown(const CL_InputEvent &ev, const CL_InputState &s
 
 void DebugDragAndDrop::mouseMove(const CL_InputEvent &ev, const CL_InputState &state)
 {
-   CL_Rectf camPos = levelManager().getCamera().getAbsoluteCameraPos();
+   CL_Rectf camPos = levelManager().getCamera().getAbsolutePos();
    if(mMouseJoint != NULL)
    {
        mMousePos->Set(static_cast<float>(Pixels2Meters(ev.mouse_pos.x + camPos.left)),
