@@ -51,6 +51,16 @@ class Rain(Object):
 
     def SetYSpeedKoef(self, value):
         self.kYSpeed = value
+
+    def TranslateDropNumber(self, value):
+        self.mMaxDrops += value
+        self.mDropData = []
+
+        windPower = self.mWorldManagerHandle.GetWindPower()
+        # Init them again
+        for i in xrange(self.mMaxDrops-1):
+            self.mDropData.append(DropData())
+            self.processDrops(windPower, self.mDropData[i])
     # ----------------------
 
     def processDrops(self, windPower, curObject):
