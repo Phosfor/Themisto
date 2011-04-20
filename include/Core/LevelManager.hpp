@@ -112,7 +112,7 @@ class LevelManager : public boost::serialization::singleton<LevelManager>
         CL_Size mTextureSize;
         //boost::shared_ptr<Actor> mActiveActor;
 
-        Camera mCamera;
+        Camera *mCamera;
 
         CL_Slot mMousePressedSlots;
 
@@ -128,6 +128,7 @@ class LevelManager : public boost::serialization::singleton<LevelManager>
 
     public:
         LevelManager();
+        ~LevelManager();
 
         Camera &getCamera();
 

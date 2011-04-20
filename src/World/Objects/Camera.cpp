@@ -17,7 +17,8 @@
 
 #include "World/Objects/Camera.hpp"
 
-Camera::Camera()
+Camera::Camera(CL_Size levelSize) :
+    mTextureSize(levelSize)
 {
     mCameraSpeed = configManager().getValue<float>("application.camera_speed", 10.0f);
     mDrawDebugOnly = configManager().getValue<bool>("application.debug_draw_only", false);
@@ -30,11 +31,11 @@ void Camera::setCamViewport(const CL_Rectf  &viewport)
 
     // If level texture height is smaller then window resolution, draw texture
     // At the bottom of the screen
-    /*mForegroundDelta = mTextureSize.height - ScreenResolutionY;
+    mForegroundDelta = mTextureSize.height - ScreenResolutionY;
     if (mForegroundDelta < 0)
         mCameraViewport.top += abs(mForegroundDelta);
     else
-        mForegroundDelta = -1;*/
+        mForegroundDelta = -1;
 }
 
 CL_Rectf Camera::getCamViewport() const
@@ -74,7 +75,6 @@ void Camera::setCameraSpeed(float speed)
 
 void Camera::translateCamera(float x, float y)
 {
-/*
     // Check X-moving
     if (mCameraViewport.left + x > 0 ||
         abs(mCameraViewport.left) - x + ScreenResolutionX > mTextureSize.width)
@@ -92,7 +92,7 @@ void Camera::translateCamera(float x, float y)
         if (mCameraViewport.top + y > 0 ||
             abs(mCameraViewport.top) - y + ScreenResolutionY > mTextureSize.height)
             return;
-    }*/
+    }
 
     mCameraViewport.translate(x, y);
 }

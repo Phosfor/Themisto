@@ -26,13 +26,16 @@
 class Camera
 {
     private:
-        float mCameraSpeed;
+        float mCameraSpeed, mForegroundDelta;
         CL_Rectf mCameraViewport;
 
         bool mDrawDebugData, mDrawDebugOnly;
 
+        // Level image
+        CL_Size mTextureSize;
+
     public:
-        Camera();
+        Camera(CL_Size levelSize);
 
         void setCamViewport(const CL_Rectf &viewport);
         CL_Rectf getCamViewport() const;

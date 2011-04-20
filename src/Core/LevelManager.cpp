@@ -27,6 +27,11 @@ LevelManager::LevelManager() :
     mDrawActions = false;
 }
 
+LevelManager::~LevelManager()
+{
+    delete mCamera;
+}
+
 // This function walk through all py-files which should consist of
 // game objects types. When we run the file, new class registers in
 // our script namespace
@@ -43,9 +48,9 @@ void LevelManager::processScriptObjects()
     }
 }
 
-Camera &LevelManager::getCamera() 
+Camera &LevelManager::getCamera()
 {
-    return mCamera;
+    return *mCamera;
 }
 
 void LevelManager::mousePressed(const CL_InputEvent &key, const CL_InputState &state)
@@ -179,16 +184,22 @@ void LevelManager::init()
     // Yep, maybe we don't need this
     guiManager().getHandle().set_css_document(utils().getMediaFolder() + "/local.css");
 
-    /*boost::python::object levelData = getObjectByType<Level>("Level");
-    if (levelData->getType() != "Empty")
+    try
     {
-        std::vector<std::string> info = levelData->getTextureInfo();
-        mTextureSize = resourceManager().getImage(info[0], info[1]).get_size();
+        bp::object level = getPyObjectByType("LevelObject");
+        bp::list textureInfo = bp::extract<bp::list>(level.attr("GetTextureInfo")());
+
+        std::string section = bp::extract<std::string>(textureInfo[0]);
+        std::string texture = bp::extract<std::string>(textureInfo[1]);
+
+        CL_Size levelSize = resourceManager().getImage(section, texture).get_size();
+        mCamera = new Camera(levelSize);
     }
-    else
+    catch(boost::python::error_already_set &e)
     {
-        mTextureSize = CL_Size(ScreenResolutionX, ScreenResolutionY);
-    }*/
+        LOG("Something bad has been happened when initing LevelManager (camera)...");
+        PyErr_Print();
+    }
 }
 
 void LevelManager::setLevelName(const std::string &name)
@@ -244,8 +255,8 @@ void LevelManager::updateLogic(float elapsed)
 
 void LevelManager::updateVisual(float elapsed)
 {
-    if (mCamera.getDrawDebugOnly()) return;
-    CL_Rectf camPos = mCamera.getAbsoluteCameraPos();
+    if (mCamera->getDrawDebugOnly()) return;
+    CL_Rectf camPos = mCamera->getAbsoluteCameraPos();
 
     try
     {
@@ -256,29 +267,29 @@ void LevelManager::updateVisual(float elapsed)
             {
                 CL_Rectf objRect = it->getRectangle();
 
-                if (mCamera.getDrawDebugData()) CL_Draw::box(appManager().getGraphic(),
+                if (mCamera->getDrawDebugData()) CL_Draw::box(appManager().getGraphic(),
                         objRect.right - camPos.left, objRect.top - camPos.top,
                         objRect.left - camPos.left, objRect.bottom - camPos.top,
                         CL_Colorf::red);
 
                 // TODO: Maybe there is method for checking in ClanLib?
                 // Check whether object is in camera space
-    /*            if ( !(*/
-                       //objRect.right  - camPos.left < 0                     || // <-
-                       //objRect.left   - camPos.left > ScreenResolutionX     || // ->
-                       //objRect.bottom - camPos.top  < 0                     || // up
-                       //objRect.top    - camPos.top  > ScreenResolutionY        // down
-                      //)
-                    //)
-                /*{*/
+                if ( !(
+                       objRect.right  - camPos.left < 0                     || // <-
+                       objRect.left   - camPos.left > ScreenResolutionX     || // ->
+                       objRect.bottom - camPos.top  < 0                     || // up
+                       objRect.top    - camPos.top  > ScreenResolutionY        // down
+                      )
+                    )
+                {
                     CL_Pointf position = it->getPosition();
                     it->updateVisual(position.x - camPos.left, position.y - camPos.top);
-                //}
+                }
             }
             else
             {
                 CL_Rectf objRect = it->getRectangle();
-                if (mCamera.getDrawDebugData()) CL_Draw::box(appManager().getGraphic(), objRect, CL_Colorf::red);
+                if (mCamera->getDrawDebugData()) CL_Draw::box(appManager().getGraphic(), objRect, CL_Colorf::red);
                 CL_Pointf position = it->getPosition();
                 it->updateVisual(position.x - camPos.left, position.y - camPos.top);
             }

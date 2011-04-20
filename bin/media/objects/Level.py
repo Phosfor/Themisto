@@ -23,7 +23,13 @@ class Level(Object):
     def GetBody(self):
         return self.mBody
 
+    def GetTextureInfo(self):
+        return [self.mSection, self.mTexture]
+
     def SetVisual(self, texture, section, width, height):
+        self.mTexture = texture
+        self.mSection = section
+
         self.mImage = Core.ResourceManager.getInstance().GetSprite(section, texture)
         if self.mImage.IsNull():
             print 'Failed to retreive image: ' + str(texture)

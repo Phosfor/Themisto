@@ -5,7 +5,7 @@
         <Wind power="2" />
         <Camera startPosX="0" startPosY="0" mode="free" />
         <Objects>
-            <Object name="Sky" type="SkyObject" z-index="-100"/>
+            <Object name="Sky" type="SkyObject" z-index="-100" always_draw="true" />
             <Object name="Stars" type="StarsObject" maxStars="6.0" z-index="-99"  always_draw="true" />
             <Object name="Moon" type="MoonObject" always_draw="true" z-index="-4">
                  <Visual>
@@ -14,37 +14,36 @@
                  <Radius value="7" />
                  <StartAngle value="-90" />
             </Object>
-
             <Object name="Rain" type="RainObject" maxDrops="2.5" />
             <Object name="Level" type="LevelObject" template="level_phys" z-index="1" />
-             <Object name="Stone" type="PhysicObject">
-                <Visual>
-                    <Size width="90" height="90" />
-                    <Texture section="Stuff" name="stone" />
-                </Visual>
-                <Body>
-                    <b2Body>
-                        <Position>
-                            <x>400.0</x>
-                            <y>320.0</y>
-                        </Position>
-                        <Type>DynamicBody</Type>
-                    </b2Body>
-                    <b2Fixture>
-                        <Friction>0.3</Friction>
-                        <Restitution>0.3</Restitution>
-                        <Density>0.3</Density>
-                        <Shape>
-                            <Type>e_circle</Type>
-                            <Radius>45.0</Radius>
-                            <Center>
-                                <x>45</x>
-                                <y>45</y>
-                            </Center>
-                        </Shape>
-                    </b2Fixture>
-                  </Body>
-             </Object>
+            <Object name="Stone" type="PhysicObject">
+               <Visual>
+                   <Size width="90" height="90" />
+                   <Texture section="Stuff" name="stone" />
+               </Visual>
+               <Body>
+                   <b2Body>
+                       <Position>
+                           <x>400.0</x>
+                           <y>320.0</y>
+                       </Position>
+                       <Type>DynamicBody</Type>
+                   </b2Body>
+                   <b2Fixture>
+                       <Friction>0.3</Friction>
+                       <Restitution>0.3</Restitution>
+                       <Density>0.3</Density>
+                       <Shape>
+                           <Type>e_circle</Type>
+                           <Radius>45.0</Radius>
+                           <Center>
+                               <x>45</x>
+                               <y>45</y>
+                           </Center>
+                       </Shape>
+                   </b2Fixture>
+                 </Body>
+            </Object>
         </Objects>
     </World>
     <Templates>
