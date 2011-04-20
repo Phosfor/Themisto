@@ -43,8 +43,7 @@ class Level(Object):
         pass
 
     def UpdateVisual(self, newX, newY):
-        self.mImage.Draw(self.mGC, 0, 0)
-        print 'LEVEL: Drawing at: (x; y): ' + str(newX) + '; ' + str(newY)
+        self.mImage.Draw(self.mGC, newX, newY)
 
         # TODO: Set rotation for collision
 

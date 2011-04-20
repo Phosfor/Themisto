@@ -47,7 +47,6 @@ class Physic(Object):
         rotation = CL_Angle.FromRadians(self.mBody.GetBody().Angle)
         self.mImage.SetAngle(rotation)
         self.mImage.Draw(self.mGC, newX, newY)
-        print 'OBJECT: Drawing at: (x; y): ' + str(newX) + '; ' + str(newY)
 
         # TODO: Set rotation for collision
 

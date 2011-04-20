@@ -17,7 +17,7 @@
 
             <Object name="Rain" type="RainObject" maxDrops="2.5" />
             <Object name="Level" type="LevelObject" template="level_phys" z-index="1" />
-             <!--<Object name="Stone" type="PhysicObject">
+             <Object name="Stone" type="PhysicObject">
                 <Visual>
                     <Size width="90" height="90" />
                     <Texture section="Stuff" name="stone" />
@@ -44,7 +44,7 @@
                         </Shape>
                     </b2Fixture>
                   </Body>
-             </Object>-->
+             </Object>
         </Objects>
     </World>
     <Templates>
