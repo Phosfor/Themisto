@@ -42,7 +42,7 @@
 #include "Core/Utils.hpp"
 
 #include "World/Objects/Object.hpp"
-#include "World/Objects/Actor.hpp"
+#include "World/Objects/Camera.hpp"
 
 namespace bmi = boost::multi_index;
 
@@ -110,15 +110,9 @@ class LevelManager : public boost::serialization::singleton<LevelManager>
         std::string mForegroundTexture;
         int mForegroundDelta;  // If level texture is < then window height
         CL_Size mTextureSize;
-        bool mDebugDrawOnly;
-        boost::shared_ptr<Actor> mActiveActor;
+        //boost::shared_ptr<Actor> mActiveActor;
 
-        // Camera stuff
-        float mCameraSpeed;
-        CL_Rectf mCameraViewport;
-
-        // Draw bounding boxes of objects?
-        bool mDrawDebugData;
+        Camera mCamera;
 
         CL_Slot mMousePressedSlots;
 
@@ -135,22 +129,12 @@ class LevelManager : public boost::serialization::singleton<LevelManager>
     public:
         LevelManager();
 
+        Camera &getCamera();
+
         // Level stuff
         std::string getLevelName();
         void setLevelName(const std::string &name);
 
-        // Camera stuff
-        void setCamViewport(const CL_Rectf &viewport);
-        CL_Rectf getCamViewport();
-
-        void translateCamera(float x, float y);
-        CL_Rectf getAbsoluteCameraPos();
-
-        float getCameraSpeed();
-        void setCameraSpeed(float speed);
-
-        bool getDrawDebugData();
-        void setDrawDebugData(bool draw);
         void mousePressed(const CL_InputEvent &key, const CL_InputState &state);
 
         void init();

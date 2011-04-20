@@ -9,9 +9,9 @@ from Physic.Physic import *
 import Core.Utils
 import random, math
 
-class Physic(Object):
+class Level(Object):
     def __init__(self):
-        super(Physic, self).__init__()
+        super(Level, self).__init__()
 
         # Precalculated value
         self.mGC = Core.ApplicationManager.getInstance().GetGraphic()
@@ -36,7 +36,6 @@ class Physic(Object):
 
         self.mImage.SetScale(koefX, koefY)
         self.mImage.SetLinearFilter(True)
-        self.mImage.SetRotationHotspot(origin_top_left, 0, 0)
 
         # TODO: Generate collision outline here...
 
@@ -44,10 +43,8 @@ class Physic(Object):
         pass
 
     def UpdateVisual(self, newX, newY):
-        rotation = CL_Angle.FromRadians(self.mBody.GetBody().Angle)
-        self.mImage.SetAngle(rotation)
-        self.mImage.Draw(self.mGC, newX, newY)
-        print 'Drawing at: (x; y): ' + str(newX) + '; ' + str(newY)
+        self.mImage.Draw(self.mGC, 0, 0)
+        print 'LEVEL: Drawing at: (x; y): ' + str(newX) + '; ' + str(newY)
 
         # TODO: Set rotation for collision
 
@@ -74,8 +71,8 @@ class Physic(Object):
         return False
 
     @staticmethod
-    def ParsePhysic(node):
-        obj = Physic()
+    def ParseLevel(node):
+        obj = Level()
         # Parse visuals -----------------------------------
         VisualTags = node.GetElementsByTagName(CL_DomString("Visual"))
         if VisualTags.GetLength() == 1:
@@ -104,4 +101,4 @@ class Physic(Object):
 
         return obj
 
-World.Objects.TypesManager.RegisterParser("PhysicObject", Physic.ParsePhysic)
+World.Objects.TypesManager.RegisterParser("LevelObject", Level.ParseLevel)

@@ -43,7 +43,7 @@
 #include "World/Objects/TypesManager.hpp"
 
 #include "World/States/MenuState.hpp"
-#include "World/States/EditorState.hpp"
+//#include "World/States/EditorState.hpp"
 
 // This is wrapper to make the Main function crossplatform
 class Application

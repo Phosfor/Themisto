@@ -25,7 +25,7 @@ DebugDraw::DebugDraw()
 
 void DebugDraw::DrawPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color)
 {
-    CL_Rectf camPos = levelManager().getAbsoluteCameraPos();
+    CL_Rectf camPos = levelManager().getCamera().getAbsoluteCameraPos();
     CL_Colorf cl_color(color.r, color.g, color.b);
     for (uint16_t i=0; i < vertexCount - 1; ++i)
         CL_Draw::line(mGC,
@@ -36,7 +36,7 @@ void DebugDraw::DrawPolygon(const b2Vec2* vertices, int32 vertexCount, const b2C
 
 void DebugDraw::DrawSolidPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color)
 {
-    CL_Rectf camPos = levelManager().getAbsoluteCameraPos();
+    CL_Rectf camPos = levelManager().getCamera().getAbsoluteCameraPos();
     CL_Colorf cl_color(color.r, color.g, color.b, 0.4f);
 
     for (uint16_t i=0; i < vertexCount - 1; ++i)
@@ -64,7 +64,7 @@ void DebugDraw::DrawSolidPolygon(const b2Vec2* vertices, int32 vertexCount, cons
 
 void DebugDraw::DrawCircle(const b2Vec2& center, float32 radius, const b2Color& color)
 {
-    CL_Rectf camPos = levelManager().getAbsoluteCameraPos();
+    CL_Rectf camPos = levelManager().getCamera().getAbsoluteCameraPos();
     CL_Colorf cl_color(color.r, color.g, color.b);
 
     uint16_t k_segments = 70.0f;
@@ -81,7 +81,7 @@ void DebugDraw::DrawCircle(const b2Vec2& center, float32 radius, const b2Color& 
 
 void DebugDraw::DrawSolidCircle(const b2Vec2& center, float32 radius, const b2Vec2& axis, const b2Color& color)
 {
-    CL_Rectf camPos = levelManager().getAbsoluteCameraPos();
+    CL_Rectf camPos = levelManager().getCamera().getAbsoluteCameraPos();
     CL_Colorf cl_color(color.r, color.g, color.b);
     CL_Colorf color2 = CL_Colorf(cl_color.r * 0.5f, cl_color.g * 0.5f, cl_color.b * 0.5f, 0.5);
 
@@ -112,7 +112,7 @@ void DebugDraw::DrawSolidCircle(const b2Vec2& center, float32 radius, const b2Ve
 
 void DebugDraw::DrawSegment(const b2Vec2& p1, const b2Vec2& p2, const b2Color& color)
 {
-    CL_Rectf camPos = levelManager().getAbsoluteCameraPos();
+    CL_Rectf camPos = levelManager().getCamera().getAbsoluteCameraPos();
     CL_Colorf cl_color(color.r, color.g, color.b);
     CL_Draw::line(mGC, Meters2Pixels(p1.x) - camPos.left,
             Meters2Pixels(p1.y) - camPos.top,
@@ -123,7 +123,7 @@ void DebugDraw::DrawSegment(const b2Vec2& p1, const b2Vec2& p2, const b2Color& c
 
 void DebugDraw::DrawTransform(const b2Transform& xf)
 {
-    CL_Rectf camPos = levelManager().getAbsoluteCameraPos();
+    CL_Rectf camPos = levelManager().getCamera().getAbsoluteCameraPos();
     b2Vec2 p1 = xf.position, p2;
     const float32 k_axisScale = 0.4f;
 
@@ -146,7 +146,7 @@ void DebugDraw::DrawTransform(const b2Transform& xf)
 
 void DebugDraw::DrawPoint(const b2Vec2& p, float32 size, const b2Color& color)
 {
-    CL_Rectf camPos = levelManager().getAbsoluteCameraPos();
+    CL_Rectf camPos = levelManager().getCamera().getAbsoluteCameraPos();
     CL_Colorf cl_color(color.r, color.g, color.b);
 
     CL_Draw::point(mGC, Meters2Pixels(p.x) - camPos.left, Meters2Pixels(p.y) - camPos.top, cl_color);
@@ -154,7 +154,7 @@ void DebugDraw::DrawPoint(const b2Vec2& p, float32 size, const b2Color& color)
 
 void DebugDraw::DrawAABB(b2AABB* aabb, const b2Color& color)
 {
-    CL_Rectf camPos = levelManager().getAbsoluteCameraPos();
+    CL_Rectf camPos = levelManager().getCamera().getAbsoluteCameraPos();
     CL_Colorf cl_color(color.r, color.g, color.b);
 
     CL_Draw::line(mGC,

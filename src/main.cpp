@@ -74,9 +74,9 @@ int Application::main(const std::vector<CL_String> &args)
            if (args[i] == "editor") editor = true;
         }
 
-        if (editor)
-           stateManager().push(new EditorState);
-        else
+        //if (editor)
+           //stateManager().push(new EditorState);
+        //else
            stateManager().push(new MenuState);
 
         while (appManager().getRunning())

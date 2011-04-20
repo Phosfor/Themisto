@@ -43,17 +43,6 @@ void MenuState::init()
     physicManager().getWorld().SetDebugDraw(mDraw);
     mInputSlot = inputManager().getKeyboard().sig_key_down().connect(this, &MenuState::onKeyDown);
 
-    //scriptsManager().runFile("objects/test.py");
-    /*scriptsManager().runString("import Core.LogManager");
-    scriptsManager().runString("Core.LogManager.LOG('fucking test!')");
-
-    scriptsManager().runString("import Core.ConfigManager");
-    scriptsManager().runString("import Core.Utils");
-    scriptsManager().runString("print Core.Utils.Pi");
-    scriptsManager().runString("print dir(Core.Utils.CUtils)");
-    scriptsManager().runString("print dir(handle)");
-    scriptsManager().runString("print Core.ConfigManager.getListValue('application')");*/
-
     initGui();
     mConsole->func_enter_pressed().set(this, &MenuState::consoleProcess);
     mConsole->func_input_released().set(this, &MenuState::consoleKeyPressed);
@@ -87,7 +76,7 @@ void MenuState::update()
     if (mDetailedOutput)
     {
         int *time = worldManager().getWorldTime();
-        CL_Rectf camPos = levelManager().getAbsoluteCameraPos();
+        CL_Rectf camPos = levelManager().getCamera().getAbsoluteCameraPos();
         std::string information;
 
         information += cl_format("Elapsed: %1\n", boost::lexical_cast<std::string>(appManager().getElapsed())).c_str();
@@ -172,7 +161,7 @@ void MenuState::onKeyDown(const CL_InputEvent &key, const CL_InputState &state)
         {
             mDrawDebug = !mDrawDebug;
 
-            levelManager().setDrawDebugData(mDrawDebug);
+            levelManager().getCamera().setDrawDebugData(mDrawDebug);
         }
     }
 
@@ -203,24 +192,24 @@ void MenuState::onKeyDown(const CL_InputEvent &key, const CL_InputState &state)
         }
     }
 
-    float camSpeed = levelManager().getCameraSpeed();
+    float camSpeed = levelManager().getCamera().getCameraSpeed();
     if (!inputManager().keyPressed(CL_KEY_CONTROL))
     {
         if (key.id == CL_KEY_RIGHT)
         {
-            levelManager().translateCamera(-camSpeed, 0);
+            levelManager().getCamera().translateCamera(-camSpeed, 0);
         }
         else if (key.id == CL_KEY_LEFT)
         {
-            levelManager().translateCamera(+camSpeed, 0);
+            levelManager().getCamera().translateCamera(+camSpeed, 0);
         }
         else if (key.id == CL_KEY_UP)
         {
-            levelManager().translateCamera(0, +camSpeed);
+            levelManager().getCamera().translateCamera(0, +camSpeed);
         }
         else if (key.id == CL_KEY_DOWN)
         {
-            levelManager().translateCamera(0, -camSpeed);
+            levelManager().getCamera().translateCamera(0, -camSpeed);
         }
     }
 }

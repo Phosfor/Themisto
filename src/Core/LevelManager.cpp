@@ -24,9 +24,7 @@ LevelManager::LevelManager() :
     mObjectsByTypeViewer(mObjectsSet.get<tag_type>())
 {
     mNumObjects = 0;
-    mCameraSpeed = configManager().getValue<float>("application.camera_speed", 10.0f);
-    mDebugDrawOnly = configManager().getValue<bool>("application.debug_draw_only", false);
-    mDrawDebugData = mDrawActions = false;
+    mDrawActions = false;
 }
 
 // This function walk through all py-files which should consist of
@@ -43,6 +41,11 @@ void LevelManager::processScriptObjects()
         if (!bf::is_directory(dir->path()) && bf::extension(dir->path()) == ".py")
                 scriptsManager().runFile(dir->path().c_str());
     }
+}
+
+Camera &LevelManager::getCamera() 
+{
+    return mCamera;
 }
 
 void LevelManager::mousePressed(const CL_InputEvent &key, const CL_InputState &state)
@@ -188,77 +191,6 @@ void LevelManager::init()
     }*/
 }
 
-void LevelManager::setCamViewport(const CL_Rectf  &viewport)
-{
-    mCameraViewport = viewport;
-
-    // If level texture height is smaller then window resolution, draw texture
-    // At the bottom of the screen
-    mForegroundDelta = mTextureSize.height - ScreenResolutionY;
-    if (mForegroundDelta < 0)
-        mCameraViewport.top += abs(mForegroundDelta);
-    else
-        mForegroundDelta = -1;
-}
-
-CL_Rectf LevelManager::getCamViewport()
-{
-    return mCameraViewport;
-}
-
-void LevelManager::setDrawDebugData(bool draw)
-{
-    mDrawDebugData = draw;
-}
-
-bool LevelManager::getDrawDebugData()
-{
-    return mDrawDebugData;
-}
-
-float LevelManager::getCameraSpeed()
-{
-    return mCameraSpeed;
-}
-
-void LevelManager::setCameraSpeed(float speed)
-{
-    mCameraSpeed = speed;
-}
-
-void LevelManager::translateCamera(float x, float y)
-{
-
-    // Check X-moving
-    if (mCameraViewport.left + x > 0 ||
-        abs(mCameraViewport.left) - x + ScreenResolutionX > mTextureSize.width)
-        return;
-
-    // Check Y-moving
-    // If the texture is smaller then window height
-    if (mForegroundDelta != -1)
-    {
-        // If it's smaller, we don't need in any Y axis moving
-        y = 0;
-    }
-    else
-    {
-        if (mCameraViewport.top + y > 0 ||
-            abs(mCameraViewport.top) - y + ScreenResolutionY > mTextureSize.height)
-            return;
-    }
-
-    mCameraViewport.translate(x, y);
-}
-
-CL_Rectf LevelManager::getAbsoluteCameraPos()
-{
-    return CL_Rectf(abs(mCameraViewport.left),
-                    abs(mCameraViewport.top),
-                    abs(mCameraViewport.left) + ScreenResolutionX,
-                    abs(mCameraViewport.top) + ScreenResolutionY);
-}
-
 void LevelManager::setLevelName(const std::string &name)
 {
     mLevelName = name;
@@ -300,8 +232,8 @@ void LevelManager::updateLogic(float elapsed)
 {
     try
     {
-    BOOST_FOREACH(const ObjectStorage &it, mObjectsByIndexViewer)
-        it.getCppObject()->update(elapsed);
+        BOOST_FOREACH(const ObjectStorage &it, mObjectsByIndexViewer)
+            it.getCppObject()->update(elapsed);
     }
     catch(boost::python::error_already_set &e)
     {
@@ -312,45 +244,46 @@ void LevelManager::updateLogic(float elapsed)
 
 void LevelManager::updateVisual(float elapsed)
 {
-    if (mDebugDrawOnly) return;
-    CL_Rectf camPos = getAbsoluteCameraPos();
+    if (mCamera.getDrawDebugOnly()) return;
+    CL_Rectf camPos = mCamera.getAbsoluteCameraPos();
 
     try
     {
-    BOOST_FOREACH(const ObjectStorage &storage, mObjectsByIndexViewer)
-    {
-        boost::shared_ptr<Object> it = storage.getCppObject();
-        if (!it->getAlwaysDraw())
+        BOOST_FOREACH(const ObjectStorage &storage, mObjectsByIndexViewer)
         {
-            CL_Rectf objRect = it->getRectangle();
-
-            if (mDrawDebugData) CL_Draw::box(appManager().getGraphic(),
-                    objRect.right - camPos.left, objRect.top - camPos.top,
-                    objRect.left - camPos.left, objRect.bottom - camPos.top,
-                    CL_Colorf::red);
-
-            // Check whether object is in camera space
-            if ( !(
-                   objRect.right  - camPos.left < 0                     || // <-
-                   objRect.left   - camPos.left > ScreenResolutionX     || // ->
-                   objRect.bottom - camPos.top  < 0                     || // up
-                   objRect.top    - camPos.top  > ScreenResolutionY        // down
-                  )
-                )
+            boost::shared_ptr<Object> it = storage.getCppObject();
+            if (!it->getAlwaysDraw())
             {
+                CL_Rectf objRect = it->getRectangle();
+
+                if (mCamera.getDrawDebugData()) CL_Draw::box(appManager().getGraphic(),
+                        objRect.right - camPos.left, objRect.top - camPos.top,
+                        objRect.left - camPos.left, objRect.bottom - camPos.top,
+                        CL_Colorf::red);
+
+                // TODO: Maybe there is method for checking in ClanLib?
+                // Check whether object is in camera space
+    /*            if ( !(*/
+                       //objRect.right  - camPos.left < 0                     || // <-
+                       //objRect.left   - camPos.left > ScreenResolutionX     || // ->
+                       //objRect.bottom - camPos.top  < 0                     || // up
+                       //objRect.top    - camPos.top  > ScreenResolutionY        // down
+                      //)
+                    //)
+                /*{*/
+                    CL_Pointf position = it->getPosition();
+                    it->updateVisual(position.x - camPos.left, position.y - camPos.top);
+                //}
+            }
+            else
+            {
+                CL_Rectf objRect = it->getRectangle();
+                if (mCamera.getDrawDebugData()) CL_Draw::box(appManager().getGraphic(), objRect, CL_Colorf::red);
                 CL_Pointf position = it->getPosition();
                 it->updateVisual(position.x - camPos.left, position.y - camPos.top);
             }
+            if (mDrawActions) drawActions();
         }
-        else
-        {
-            CL_Rectf objRect = it->getRectangle();
-            if (mDrawDebugData) CL_Draw::box(appManager().getGraphic(), objRect, CL_Colorf::red);
-            CL_Pointf position = it->getPosition();
-            it->updateVisual(position.x - camPos.left, position.y - camPos.top);
-        }
-        if (mDrawActions) drawActions();
-    }
     }
     catch(boost::python::error_already_set &e)
     {

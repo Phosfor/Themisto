@@ -77,6 +77,8 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
     CL_Rectf camViewport(CL_Pointf(cameraPosX, cameraPosY), CL_Sizef(ScreenResolutionX, ScreenResolutionY));
 
     worldManager().initWorld();
+
+    // TODO: Move this into level file
     worldManager().setWindPower(4);
 
     // START OF OBJECTS PARSING -------------------------------------------
@@ -131,7 +133,7 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
     levelManager().setLevelName(name);
     levelManager().initObjects();
     levelManager().init();
-    levelManager().setCamViewport(camViewport);
+    levelManager().getCamera().setCamViewport(camViewport);
     // END OF OBJECTS PARSING -------------------------------------------
 
     //mMutex.unlock();

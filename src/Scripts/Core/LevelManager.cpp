@@ -21,7 +21,7 @@
 BOOST_PYTHON_MODULE(LevelManager)
 {
     bp::class_<LevelManager, boost::noncopyable>("LevelManager", bp::no_init)
-        .def("SetCamViewport", &LevelManager::setCamViewport)
+        /*.def("SetCamViewport", &LevelManager::setCamViewport)
         .def("GetCamViewport", &LevelManager::getCamViewport)
 
         .def("TranslateCamera", &LevelManager::translateCamera)
@@ -31,7 +31,7 @@ BOOST_PYTHON_MODULE(LevelManager)
         .def("SetCameraSpeed", &LevelManager::setCamViewport)
 
         .def("GetDrawDebugData", &LevelManager::getDrawDebugData)
-        .def("SetDrawDebugData", &LevelManager::setDrawDebugData)
+        .def("SetDrawDebugData", &LevelManager::setDrawDebugData)*/
 
         .def("Init", &LevelManager::init)
         .def("initObjects", &LevelManager::initObjects)

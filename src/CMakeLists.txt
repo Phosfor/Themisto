@@ -20,6 +20,7 @@ set(Themisto_srcs
 
     # Objects
     World/Objects/TypesManager.cpp
+    World/Objects/Camera.cpp
     #World/Objects/Grass.cpp
     #World/Objects/LightColumn.cpp
     #World/Objects/PhysicObject.cpp
@@ -42,7 +43,7 @@ set(Themisto_srcs
 
     # States
     World/States/MenuState.cpp
-    World/States/EditorState.cpp
+    #World/States/EditorState.cpp
 
     # Physic
     Physic/PhysicRain.cpp
