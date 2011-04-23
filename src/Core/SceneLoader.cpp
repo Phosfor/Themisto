@@ -79,7 +79,7 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
     worldManager().initWorld();
 
     // TODO: Move this into level file
-    worldManager().setWindPower(4);
+    worldManager().setWindPower(1);
 
     // START OF OBJECTS PARSING -------------------------------------------
     levelManager().processScriptObjects();

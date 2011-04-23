@@ -65,6 +65,11 @@ CL_Colorf ColorRGB(float r, float g, float b)
     return CL_Colorf(r/255.0f, g/255.0f, b/255.0f);
 }
 
+CL_Rectf BoundingRect(CL_Rectf first, CL_Rectf second)
+{
+    return static_cast<CL_Rectf>(first.bounding_rect(second));
+}
+
 BOOST_PYTHON_MODULE(TypesConverters)
 {
     using namespace ScriptTypesConverters;
@@ -96,6 +101,8 @@ BOOST_PYTHON_MODULE(TypesConverters)
     // CL_Point [float] ---------------------------------------------------------------
     bp::class_<CL_Pointf>("CL_Pointf", bp::init<float, float>())
         .def(bp::init< CL_Vec2<float> >())
+        .def_readonly("x", &CL_Pointf::x)
+        .def_readonly("y", &CL_Pointf::y)
         .def(bp::self_ns::str(bp::self_ns::self));  // Export __str__
 
     // CL_Colorf [float] --------------------------------------------------------------
@@ -278,15 +285,16 @@ BOOST_PYTHON_MODULE(TypesConverters)
         .def(bp::self_ns::str(bp::self_ns::self));  // Export __str__
 
     // CL_Rectf [float] ---------------------------------------------------------------
+    bp::def("BoundingRect", &BoundingRect);
     bp::class_<CL_Rectf>("CL_Rectf", bp::init<float, float, float, float>())
         .def(bp::init< CL_Rectx<float> >())
         .def(bp::init< CL_Rectx<float> >())
         .def(bp::init< CL_Sizex<float> >())
 
-        .def_readonly("left", &CL_Rectf::left)
-        .def_readonly("top", &CL_Rectf::top)
-        .def_readonly("right", &CL_Rectf::right)
-        .def_readonly("bottom", &CL_Rectf::bottom)
+        .def_readonly("left", &CL_Rectx<float>::left)
+        .def_readonly("top", &CL_Rectx<float>::top)
+        .def_readonly("right", &CL_Rectx<float>::right)
+        .def_readonly("bottom", &CL_Rectx<float>::bottom)
 
         .def(bp::self_ns::str(bp::self_ns::self));  // Export __str__
 
@@ -309,6 +317,7 @@ BOOST_PYTHON_MODULE(TypesConverters)
         .def("HasAttribute", HasAttribute)
         .def("GetAttribute", GetAttribute)
         .def("GetElementsByTagName", &CL_DomElement::get_elements_by_tag_name)
+        .def("GetChildNodes", &CL_DomElement::get_child_nodes)
         .def("GetNodeName", &CL_DomElement::get_node_name);
 
     bp::class_<CL_StringRef8>("CL_DomString", bp::init<const std::string&>())
