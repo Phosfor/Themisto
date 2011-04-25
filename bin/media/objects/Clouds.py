@@ -28,8 +28,6 @@ class Clouds(Object):
         self.mWorldManagerHandle = Core.WorldManager.getInstance()
 
     def processClouds(self, windPower, curObject, firsTime):
-        curObject.x_speed = 0
-
         size = Core.ResourceManager.SectionNumChildren("Clouds")
         cloud = random.randint(0, size-1)
         curObject.image = Core.ResourceManager.getInstance().GetImage("Clouds", str(cloud))
@@ -49,7 +47,8 @@ class Clouds(Object):
             curObject.timeout = 0
 
         curObject.y_offset = random.randint(0, Core.Utils.ScreenResolutionY)
-        curObject.speed_koef = random.randint(5, 15)
+        #curObject.speed_koef = random.randint(10, 40)
+        curObject.x_speed = random.uniform(0.01, 0.1) * windPower
 
 
     def Init(self):
@@ -62,7 +61,7 @@ class Clouds(Object):
 
     def Update(self, elapsed):
         windPower = self.mWorldManagerHandle.GetWindPower()
-        newSpeed = windPower * elapsed / 1000 * 0.5
+        #newSpeed = windPower * elapsed / 1000 * 0.5
 
         for i in xrange(self.mMaxObjects-1):
             current = self.mClouds[i]
@@ -77,7 +76,7 @@ class Clouds(Object):
                         self.processClouds(windPower, current, False)
 
                 current.x += current.x_speed * elapsed
-                current.x_speed += current.speed_koef * newSpeed
+                #current.x_speed += current.speed_koef * newSpeed
 
     def UpdateVisual(self, newX, newY):
         for i in xrange(self.mMaxObjects-1):

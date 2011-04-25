@@ -22,6 +22,7 @@
                 <Fixed value="true" />
                 <ActualSize value="40" />
             </Object>
+            <Object name="Leaves" type="LeavesObject" maxLeaves="0.15" always_draw="true" z-index="0" />
             <Object name="Rain" type="RainObject" maxDrops="2.6" always_draw="true" z-index="2" />
             <Object name="Level" type="LevelObject" template="level_phys" z-index="1" />
 
