@@ -21,6 +21,7 @@
 
 #include <boost/serialization/singleton.hpp>
 #include <boost/foreach.hpp>
+#include <boost/python.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <ClanLib/core.h>
 
@@ -37,14 +38,27 @@ class State
         virtual std::string type() = 0;
 };
 
-typedef boost::shared_ptr<State> StatePtr;
-typedef std::deque<StatePtr> StateDeque;
+class StateStorage
+{
+    private:
+        boost::shared_ptr<State> mCppObject;
+        boost::python::object mPythonObject;
+
+    public:
+        StateStorage(boost::shared_ptr<State> cpp, boost::python::object python)
+            : mCppObject(cpp), mPythonObject(python) {}
+
+        boost::shared_ptr<State> getCppObject() const { return mCppObject; }
+        boost::python::object getPythonObject() const { return mPythonObject; }
+};
+
+typedef std::deque<StateStorage> StateDeque;
 
 class StateManager : public boost::serialization::singleton<StateManager>
 {
    private:
         StateDeque mStates;
-        StatePtr mActiveState;
+        StateStorage *mActiveState;
 
         bool mAdvanceState;
 
@@ -52,12 +66,12 @@ class StateManager : public boost::serialization::singleton<StateManager>
         StateManager();
         //~StateManager();
 
-        void push(State *state);
+        void push(boost::python::object newState);
         void update();
         void setAdvanceState(bool advance);
 
-        State *getActiveState();
-        State *pop();
+        StateStorage getActiveState();
+        StateStorage pop();
 };
 
 inline StateManager &stateManager() { return StateManager::get_mutable_instance(); }
