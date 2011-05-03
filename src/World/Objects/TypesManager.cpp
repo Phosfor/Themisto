@@ -18,18 +18,6 @@
 #include "World/Objects/TypesManager.hpp"
 
 #include "World/Objects/Object.hpp"
-/*#include "World/Objects/PhysicObject.hpp"
-#include "World/Objects/Level.hpp"
-#include "World/Objects/LightColumn.hpp"
-#include "World/Objects/Moon.hpp"
-#include "World/Objects/Player.hpp"
-#include "World/Objects/Birds.hpp"
-#include "World/Objects/Clouds.hpp"
-#include "World/Objects/Rain.hpp"
-#include "World/Objects/Foreground.hpp"
-#include "World/Objects/Empty.hpp"
-#include "World/Objects/Stars.hpp"
-#include "World/Objects/Leaves.hpp"*/
 
 boost::python::object TypesManager::empty_parser(CL_DomElement p)
 {

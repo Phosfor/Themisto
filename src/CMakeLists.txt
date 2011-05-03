@@ -21,21 +21,6 @@ set(Themisto_srcs
     # Objects
     World/Objects/TypesManager.cpp
     World/Objects/Camera.cpp
-    #World/Objects/Grass.cpp
-    #World/Objects/LightColumn.cpp
-    #World/Objects/PhysicObject.cpp
-    #World/Objects/Level.cpp
-    #World/Objects/Player.cpp
-    #World/Objects/Actor.cpp
-    #World/Objects/Moon.cpp
-    #World/Objects/Birds.cpp
-    #World/Objects/Clouds.cpp
-    #World/Objects/Rain.cpp
-    #World/Objects/Foreground.cpp
-    #World/Objects/Empty.cpp
-    #World/Objects/Sky.cpp
-    #World/Objects/Stars.cpp
-    #World/Objects/Leaves.cpp
 
     # Actions
     #World/Actions/TakeAction.cpp
@@ -94,6 +79,7 @@ set(Script_srcs
     Core/ResourceManager
     Core/WorldManager
     Core/LevelManager
+    Core/StateManager
 
     World/Objects/Object
     World/Objects/TypesManager
