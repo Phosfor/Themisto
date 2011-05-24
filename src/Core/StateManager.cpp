@@ -36,6 +36,7 @@ void StateManager::push(boost::python::object newState)
 
 void StateManager::update()
 {
+    if (mStates.empty()) return;
     if (!mActiveState->getCppObject()) this->pop();
 
     if (mAdvanceState)
