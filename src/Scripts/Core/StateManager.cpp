@@ -51,7 +51,7 @@ BOOST_PYTHON_MODULE(StateManager)
         .def("Update", &StateManager::update)
         .def("SetAdvanceState", &StateManager::setAdvanceState)
 
-        .def("GetActiveState", &StateManager::getActiveState)
+        //.def("GetActiveState", &StateManager::getActiveState)
         .def("Pop", &StateManager::pop);
 
     bp::def("getInstance", &stateManager, PYPOLICY_REFERENCE_EXISTING);

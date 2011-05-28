@@ -67,7 +67,13 @@ int Application::main(const std::vector<CL_String> &args)
         CL_Slot slotQuit = appManager().getWindow().sig_window_close().connect(Application::onWindowClose);
         CL_Slot slotInput = inputManager().getKeyboard().sig_key_up().connect(Application::onInput);
 
-        //stateManager().push(new MenuState);
+        LOG_NOFORMAT("\t---------- Loading python types ---------\n");
+        levelManager().processScriptObjects();
+        levelManager().processStateObjects();
+
+        // Ugly shit... Move to some file and run it
+        scriptsManager().runString("import Core.StateManager");
+        scriptsManager().runString("Core.StateManager.getInstance().Push(MenuState())");
 
         while (appManager().getRunning())
         {

@@ -82,7 +82,6 @@ void SceneLoader::_threadWrapper(const std::string &sceneName)
     worldManager().setWindPower(1);
 
     // START OF OBJECTS PARSING -------------------------------------------
-    levelManager().processScriptObjects();
     typesManager().dumpParsers();
 
     {

@@ -43,13 +43,23 @@ class StateStorage
     private:
         boost::shared_ptr<State> mCppObject;
         boost::python::object mPythonObject;
+        bool useable;
 
     public:
+        StateStorage() : useable(false) {};
         StateStorage(boost::shared_ptr<State> cpp, boost::python::object python)
-            : mCppObject(cpp), mPythonObject(python) {}
+            : mCppObject(cpp), mPythonObject(python), useable(true) {}
 
         boost::shared_ptr<State> getCppObject() const { return mCppObject; }
         boost::python::object getPythonObject() const { return mPythonObject; }
+
+        void setData(boost::shared_ptr<State> cpp, boost::python::object python)
+        {
+            mCppObject = cpp;
+            mPythonObject = python;
+        }
+
+        bool isUseable() { return useable; }
 };
 
 typedef std::deque<StateStorage> StateDeque;
@@ -57,8 +67,9 @@ typedef std::deque<StateStorage> StateDeque;
 class StateManager : public boost::serialization::singleton<StateManager>
 {
    private:
+        bool mStateChanged;
         StateDeque mStates;
-        StateStorage *mActiveState;
+        StateStorage mActiveState;
 
         bool mAdvanceState;
 
@@ -70,8 +81,8 @@ class StateManager : public boost::serialization::singleton<StateManager>
         void update();
         void setAdvanceState(bool advance);
 
-        StateStorage getActiveState();
-        StateStorage pop();
+        //StateStorage &getActiveState();
+        void pop();
 };
 
 inline StateManager &stateManager() { return StateManager::get_mutable_instance(); }

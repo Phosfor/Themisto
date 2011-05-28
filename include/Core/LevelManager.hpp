@@ -217,8 +217,9 @@ class LevelManager : public boost::serialization::singleton<LevelManager>
         void updateVisual(float elapsed);
         void updateLogic(float elapsed);
 
-        // This function registers all available python-objects
+        // This functions register all available python-objects
         void processScriptObjects();
+        void processStateObjects();
 
         CL_Point mClickedPos;
         boost::python::object mActiveObject;

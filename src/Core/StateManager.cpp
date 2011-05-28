@@ -19,10 +19,11 @@
 
 void StateManager::push(boost::python::object newState)
 {
+    mStateChanged = true;
     try
     {
         boost::shared_ptr<State> cpp =
-            boost::python::extract< boost::shared_ptr<State> >(boost::python::incref(newState.ptr()));
+            boost::python::extract<boost::shared_ptr<State>>(boost::python::incref(newState.ptr()));
 
         StateStorage storage(cpp, newState);
         mStates.push_back(storage);
@@ -36,13 +37,13 @@ void StateManager::push(boost::python::object newState)
 
 void StateManager::update()
 {
-    if (mStates.empty()) return;
-    if (!mActiveState->getCppObject()) this->pop();
+    if (mStates.empty() && !mStateChanged) return;
+    if (!mActiveState.isUseable()) this->pop();
 
     if (mAdvanceState)
     {
-        mActiveState->getCppObject()->shutdown();
-        LOG_META(cl_format(" Exiting from '%1' game state.", mActiveState->getCppObject()->type()));
+        mActiveState.getCppObject()->shutdown();
+        LOG_META(cl_format(" Exiting from '%1' game state.", mActiveState.getCppObject()->type()));
         setAdvanceState(false);
 
         /*TODO: Remove all entities, etc. */
@@ -51,11 +52,19 @@ void StateManager::update()
     }
     else
     {
-        mActiveState->getCppObject()->update();
+        try
+        {
+            mActiveState.getCppObject()->update();
+        }
+        catch(boost::python::error_already_set &e)
+        {
+            LOG("Something bad has been happened with script system when updating state...");
+            PyErr_Print();
+        }
     }
 }
 
-StateManager::StateManager(): mAdvanceState(false) { }
+StateManager::StateManager(): mStateChanged(false), mAdvanceState(false) { }
 
 /*
 StateManager::~StateManager()
@@ -73,21 +82,19 @@ void StateManager::setAdvanceState(bool advance)
     mAdvanceState = advance;
 }
 
-StateStorage StateManager::pop()
+void StateManager::pop()
 {
     if (mStates.empty()) LOG_META("There aren't any states now. Maybe, you didn't push one.");
 
-    mActiveState = &mStates.front(); // Store pointer for next state to use
+    mActiveState = mStates.front(); // Store pointer for next state to use
     mStates.pop_front();            // And remove it from list
 
-    LOG_META(cl_format(" Activating '%1' game state.", mActiveState->getCppObject()->type()));
-    mActiveState->getCppObject()->init();
-
-    return *mActiveState;
+    LOG_META(cl_format(" Activating '%1' game state.", mActiveState.getCppObject()->type()));
+    mActiveState.getCppObject()->init();
 }
 
-StateStorage StateManager::getActiveState()
+/*StateStorage &StateManager::getActiveState()
 {
-    if (mActiveState->getCppObject() == NULL) LOG_META("There is no active state. Maybe, you didn't push one.");
+    if (!mActiveState.isUseable()) LOG_META("There is no active state. Maybe, you didn't push one.");
     return *mActiveState;
-}
+}*/
