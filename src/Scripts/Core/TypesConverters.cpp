@@ -336,4 +336,17 @@ BOOST_PYTHON_MODULE(TypesConverters)
 
         .def("GetDrawDebugData", &Camera::getDrawDebugData)
         .def("SetDrawDebugData", &Camera::setDrawDebugData);
+
+    // Used for CL_Slot && CL_Signal (Input)
+    bp::class_<CL_InputEvent>("CL_InputEvent")
+        .def_readonly("Id", &CL_InputEvent::id)
+        .def_readonly("Str", &CL_InputEvent::str)
+        .def_readonly("Alt", &CL_InputEvent::alt)
+        .def_readonly("Ctrl", &CL_InputEvent::ctrl)
+        .def_readonly("Shift", &CL_InputEvent::shift);
+
+    bp::class_<CL_InputState>("CL_InputState");
+
+    bp::class_<CL_String8>("CL_String8")
+        .def("CStr", &CL_String8::c_str);
 }

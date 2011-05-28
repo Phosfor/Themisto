@@ -18,13 +18,41 @@
 #include "Core/ScriptsManager.hpp"
 #include "Core/InputManager.hpp"
 
+void KeyDownWrapper(const CL_InputEvent &e1, const CL_InputState &e2, bp::object user_data)
+{
+    try
+    {
+        user_data(e1, e2);
+    }
+    catch(boost::python::error_already_set &e)
+    {
+        LOG("KeyDownWrapper failed...");
+        PyErr_Print();
+    }
+}
+void ConnectKeyDown(bp::object func)
+{
+    try
+    {
+        CL_Slot temp = inputManager().getKeyboard().sig_key_down().connect(&KeyDownWrapper, func);
+        inputManager().getKeyDownSlots().push_back(temp);
+    }
+    catch(boost::python::error_already_set &e)
+    {
+        LOG("ConnectKeyDown failed...");
+        PyErr_Print();
+    }
+}
+
 BOOST_PYTHON_MODULE(InputManager)
 {
     bp::class_<InputManager, boost::noncopyable>("InputManager", bp::no_init)
         .def("GetInput", &InputManager::getInput, PYPOLICY_REFERENCE_EXISTING)
         .def("GetKeyboard", &InputManager::getKeyboard, PYPOLICY_REFERENCE_EXISTING)
         .def("GetMouse", &InputManager::getMouse, PYPOLICY_REFERENCE_EXISTING)
-        .def("GetJoystick", &InputManager::getJoystick, PYPOLICY_REFERENCE_EXISTING);
+        .def("GetJoystick", &InputManager::getJoystick, PYPOLICY_REFERENCE_EXISTING)
+        .def("ConnectKeyDown", &ConnectKeyDown)
+        .staticmethod("ConnectKeyDown");
 
     bp::def("getInstance", &inputManager, PYPOLICY_REFERENCE_EXISTING);
 }

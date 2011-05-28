@@ -90,7 +90,16 @@ void StateManager::pop()
     mStates.pop_front();            // And remove it from list
 
     LOG_META(cl_format(" Activating '%1' game state.", mActiveState.getCppObject()->type()));
-    mActiveState.getCppObject()->init();
+
+    try
+    {
+        mActiveState.getCppObject()->init();
+    }
+    catch(boost::python::error_already_set &e)
+    {
+        LOG("Failed when initing current state...");
+        PyErr_Print();
+    }
 }
 
 /*StateStorage &StateManager::getActiveState()

@@ -60,3 +60,8 @@ void InputManager::setMousePos(int x, int y)
 {
     mMouse->set_position(x, y);
 }
+
+std::vector<CL_Slot> &InputManager::getKeyDownSlots()
+{
+    return mKeyDownSlots;
+}
