@@ -21,6 +21,7 @@
 BOOST_PYTHON_MODULE(WorldManager)
 {
     bp::class_<WorldManager, boost::noncopyable>("WorldManager", bp::no_init)
+        .def("Update", &WorldManager::update)
         .def("GetAbsTime", &WorldManager::getAbsTime)
         .def("SetWorldTime", &WorldManager::setWorldTime)
 

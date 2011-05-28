@@ -17,6 +17,12 @@
 
 #include "Core/ScriptsManager.hpp"
 #include "Core/LevelManager.hpp"
+#include "Core/SceneLoader.hpp"
+
+void LoadScene(const std::string &name)
+{
+    sceneLoader().loadScene(name);
+}
 
 BOOST_PYTHON_MODULE(LevelManager)
 {
@@ -35,4 +41,5 @@ BOOST_PYTHON_MODULE(LevelManager)
         .def("UpdateLogic", &LevelManager::updateLogic);
 
     bp::def("getInstance", &levelManager, PYPOLICY_REFERENCE_EXISTING);
+    bp::def("LoadScene", &LoadScene);
 }
