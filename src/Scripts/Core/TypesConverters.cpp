@@ -331,8 +331,8 @@ BOOST_PYTHON_MODULE(TypesConverters)
         .def("Translate", &Camera::translate)
         .def("GetAbsolutePos", &Camera::getAbsolutePos)
 
-        .def("GetSpeed", &Camera::getViewport)
-        .def("SetSpeed", &Camera::setViewport)
+        .def("GetSpeed", &Camera::getSpeed)
+        .def("SetSpeed", &Camera::setSpeed)
 
         .def("GetDrawDebugData", &Camera::getDrawDebugData)
         .def("SetDrawDebugData", &Camera::setDrawDebugData);

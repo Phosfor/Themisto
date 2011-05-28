@@ -51,8 +51,19 @@ BOOST_PYTHON_MODULE(InputManager)
         .def("GetKeyboard", &InputManager::getKeyboard, PYPOLICY_REFERENCE_EXISTING)
         .def("GetMouse", &InputManager::getMouse, PYPOLICY_REFERENCE_EXISTING)
         .def("GetJoystick", &InputManager::getJoystick, PYPOLICY_REFERENCE_EXISTING)
+
         .def("ConnectKeyDown", &ConnectKeyDown)
-        .staticmethod("ConnectKeyDown");
+        .staticmethod("ConnectKeyDown")
+
+        .def("IsKeyPressed", &InputManager::keyPressed);
 
     bp::def("getInstance", &inputManager, PYPOLICY_REFERENCE_EXISTING);
+
+    // Keys
+    bp::scope().attr("CL_KEY_D") = CL_KEY_D;
+    bp::scope().attr("CL_KEY_CONTROL") = CL_KEY_CONTROL;
+    bp::scope().attr("CL_KEY_RIGHT") = CL_KEY_RIGHT;
+    bp::scope().attr("CL_KEY_LEFT") = CL_KEY_LEFT;
+    bp::scope().attr("CL_KEY_UP") = CL_KEY_UP;
+    bp::scope().attr("CL_KEY_DOWN") = CL_KEY_DOWN;
 }
