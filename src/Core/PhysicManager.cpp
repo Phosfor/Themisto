@@ -101,3 +101,19 @@ void PhysicManager::update(float _elapsed)
     mAccomulated = elapsed - (acc - mTimeStep);
 }
 
+boost::shared_ptr<DebugDraw> &PhysicManager::getDebugDraw()
+{
+    return mDebugDraw;
+}
+
+void PhysicManager::SetDebugDraw(boost::shared_ptr<DebugDraw> &handle)
+{
+    mDebugDraw = handle;
+}
+
+void PhysicManager::init()
+{
+    mDebugDraw = boost::shared_ptr<DebugDraw>(new DebugDraw);
+    mDebugDraw->SetFlags(b2DebugDraw::e_shapeBit);
+    mWorld->SetDebugDraw(mDebugDraw.get());
+}

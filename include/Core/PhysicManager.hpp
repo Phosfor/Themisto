@@ -24,6 +24,7 @@
 #include "Core/Utils.hpp"
 #include "Core/ApplicationManager.hpp"
 #include "Core/LevelManager.hpp"
+#include "Debug/DebugDraw.hpp"
 
 class PhysicObject;
 class PhysicManager;
@@ -52,6 +53,7 @@ class PhysicManager : public boost::serialization::singleton<PhysicManager>
         LevelManager *mLevelManager;
         ContactListener* mContactListener;
 
+        boost::shared_ptr<DebugDraw> mDebugDraw;
 
     public:
         float32 mTimeStep;
@@ -72,7 +74,9 @@ class PhysicManager : public boost::serialization::singleton<PhysicManager>
         void update(float elapsed);
         void disposeScene();
 
-
+        void init();
+        boost::shared_ptr<DebugDraw> &getDebugDraw();
+        void SetDebugDraw(boost::shared_ptr<DebugDraw> &handle);
 };
 
 inline PhysicManager &physicManager() { return PhysicManager::get_mutable_instance(); }

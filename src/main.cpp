@@ -63,6 +63,7 @@ int Application::main(const std::vector<CL_String> &args)
 
         resourceManager().loadFonts();
         resourceManager().loadTextures();
+        physicManager().init();
 
         CL_Slot slotQuit = appManager().getWindow().sig_window_close().connect(Application::onWindowClose);
         CL_Slot slotInput = inputManager().getKeyboard().sig_key_up().connect(Application::onInput);

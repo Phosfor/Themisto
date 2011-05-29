@@ -332,7 +332,7 @@ void wrap_world() {
         .add_property("Destructionboost::python::Listener", boost::python::object(), &b2World::SetDestructionListener)
         .add_property("ContactFilter", boost::python::object(), &b2World::SetContactFilter)
         .add_property("Contactboost::python::Listener", boost::python::object(), &b2World::SetContactListener)
-        .add_property("DebugDraw", boost::python::object(), &b2World::SetDebugDraw)
+        .def("DebugDraw", &b2World::SetDebugDraw)
         .add_property("Bodies", &get_bodies)
         .add_property("Joints", &get_joints)
         .add_property("Contactboost::python::List", make_function(&b2World::GetContactList, boost::python::return_internal_reference<>()))

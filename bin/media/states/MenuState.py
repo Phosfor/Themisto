@@ -4,12 +4,14 @@ import Core.WorldManager
 import Core.ResourceManager
 import Core.LevelManager
 import Core.InputManager
+import Core.PhysicManager
 import Core.StateManager
 import World.Objects.TypesManager
 
 from Core.InputManager import *
 
 import Core.Utils
+from Physic.Physic import *
 
 class MenuState(Core.StateManager.State):
     def __init__(self):
@@ -18,8 +20,11 @@ class MenuState(Core.StateManager.State):
         self.worldHandle = Core.WorldManager.getInstance()
         self.inputHandle = Core.InputManager.getInstance()
         self.levelHandle = Core.LevelManager.getInstance()
+        self.physicHandle = Core.PhysicManager.getInstance()
 
         self.mDrawDebug = False
+        self.mDetailedOutput = False
+        self.mShowConsole = False
 
     def OnKeyDown(self, InputEvent, InputState):
         keyId = InputEvent.Id
@@ -42,14 +47,25 @@ class MenuState(Core.StateManager.State):
                 self.mCamera.Translate(0, -cameraSpeed)
 
     def Init(self):
-        print 'Init of MenuState...'
+        # Init physic Drag&Drop
+        self.mDnD = DebugDragAndDrop()
+        self.mDnD.Init()
+
+        # Load level data
         Core.LevelManager.LoadScene('NewObjects.xml')
 
+        # Init state main attributes global
+        self.mGC = Core.ApplicationManager.getInstance().GetGraphic()
         self.mCamera = self.levelHandle.GetCamera()
+        self.mPhysicWorld = self.physicHandle.GetWorld()
+
         self.inputHandle.ConnectKeyDown(self.OnKeyDown)
 
     def Update(self):
         self.worldHandle.Update()
+
+        if self.mDrawDebug:
+            self.mPhysicWorld.DrawDebugData()
 
     def Shutdown(self):
         print 'Shutdown...'

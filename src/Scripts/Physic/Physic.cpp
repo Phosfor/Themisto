@@ -25,6 +25,9 @@
 #include "Core/ScriptsManager.hpp"
 #include "Physic/Body.hpp"
 
+#include "Debug/DebugInstruments.hpp"
+#include "Debug/DebugDraw.hpp"
+
 // Wrappers
 #include "Scripts/Physic/b2Vertex.hpp"
 #include "Scripts/Physic/Convert.hpp"
@@ -52,6 +55,21 @@ BOOST_PYTHON_MODULE(Physic)
         .add_property("LowerBound", &b2AABB::lowerBound)
         .add_property("UpperBound", &b2AABB::upperBound)
         .def("Combine", &b2AABB::Combine);
+
+    // Debug Drag&Drop
+    bp::class_<DebugDragAndDrop>("DebugDragAndDrop")
+        .def("Init", &DebugDragAndDrop::init);
+
+    // Debug draw bits
+    bp::scope().attr("SHAPE_BIT") = uint32(b2DebugDraw::e_shapeBit);
+    bp::scope().attr("JOINT_BIT") = uint32(b2DebugDraw::e_jointBit);
+    bp::scope().attr("AABB_BIT") = uint32(b2DebugDraw::e_aabbBit);
+    bp::scope().attr("PAIR_BIT") = uint32(b2DebugDraw::e_pairBit);
+    bp::scope().attr("CENTER_OF_MASS_BIT") = uint32(b2DebugDraw::e_centerOfMassBit);
+
+    // Debug Draw
+    bp::class_<DebugDraw>("DebugDraw")
+        .def("SetFlags", &b2DebugDraw::SetFlags);
 
     wrap_body_type();
     wrap_joint_type();

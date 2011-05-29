@@ -80,6 +80,7 @@ set(Script_srcs
     Core/WorldManager
     Core/LevelManager
     Core/StateManager
+    Core/PhysicManager
 
     World/Objects/Object
     World/Objects/TypesManager
