@@ -32,8 +32,11 @@ class Clouds(Object):
         cloud = random.randint(0, size-1)
         curObject.image = Core.ResourceManager.getInstance().GetImage("Clouds", str(cloud))
         color = ColorRGB(42, 72, 85)
-        color.SetAlpha(1.1)
+        color.SetAlpha(random.uniform(0.9, 1.1))
         curObject.image.SetColor(color)
+
+        scaleK = random.uniform(1.0, 2.0)
+        curObject.image.SetScale(scaleK, scaleK)
 
         if not firsTime:
             if windPower < 0:

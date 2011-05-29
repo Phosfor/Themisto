@@ -14,7 +14,7 @@
                  <Radius value="7" />
                  <StartAngle value="-90" />
             </Object>
-            <Object name="Clouds" type="CloudsObject" maxClouds="0.5" z-index="-3"  always_draw="true" />
+            <Object name="Clouds" type="CloudsObject" maxClouds="0.2" z-index="-3"  always_draw="true" />
             <Object name="Foreground" type="ForegroundObject"  always_draw="true" z-index="-2">
                 <Visual>
                    <Texture section="Foreground" name="test" />

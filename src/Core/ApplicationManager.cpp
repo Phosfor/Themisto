@@ -16,6 +16,7 @@
 */
 
 #include "Core/ApplicationManager.hpp"
+#include "Core/LogManager.hpp"
 #include <boost/cstdint.hpp>
 
 ApplicationManager::~ApplicationManager()
