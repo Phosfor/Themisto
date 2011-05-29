@@ -18,21 +18,24 @@
 #include "Core/ScriptsManager.hpp"
 #include "Core/SoundManager.hpp"
 
+BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(PlaySoundBufferOverloads, CL_SoundBuffer::play, 0, 1);
+
 BOOST_PYTHON_MODULE(SoundManager)
 {
+    bp::class_<CL_SoundBuffer>("CL_SoundBuffer")
+        .def("SetVolume", &CL_SoundBuffer::set_volume)
+        .def("GetVolume", &CL_SoundBuffer::get_volume)
+        .def("Play", &CL_SoundBuffer::play, PlaySoundBufferOverloads());
+
+    bp::class_<CL_SoundBuffer_Session>("CL_SoundBuffer_Session");
+
     bp::class_<SoundObject>("SoundObject")
         .def("GetBuffer", &SoundObject::getBuffer, PYPOLICY_REFERENCE_EXISTING)
         .def("GetSession", &SoundObject::getSession, PYPOLICY_REFERENCE_EXISTING);
 
     bp::class_<SoundManager, boost::noncopyable>("SoundManager", bp::no_init)
-        .def("GetFps", &ApplicationManager::getFps)
-        .def("GetElapsed", &ApplicationManager::getElapsed)
-
-        .def("GetRunning", &ApplicationManager::getRunning)
-        .def("SetRunning", &ApplicationManager::setRunning)
-
-        .def("GetGraphic", &ApplicationManager::getGraphic, PYPOLICY_REFERENCE_EXISTING)
-        .def("GetWindow", &ApplicationManager::getWindow, PYPOLICY_REFERENCE_EXISTING);
+        .def("GetSoundObject", &SoundManager::getSoundObject, PYPOLICY_REFERENCE_EXISTING)
+        .def("AddSoundObject", &SoundManager::addSoundObject, PYPOLICY_REFERENCE_EXISTING);
 
     bp::def("getInstance", &soundManager, PYPOLICY_REFERENCE_EXISTING);
 }

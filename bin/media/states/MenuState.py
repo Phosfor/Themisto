@@ -6,6 +6,7 @@ import Core.LevelManager
 import Core.InputManager
 import Core.PhysicManager
 import Core.StateManager
+import Core.SoundManager
 import World.Objects.TypesManager
 
 from Core.InputManager import *
@@ -20,6 +21,7 @@ class MenuState(Core.StateManager.State):
         self.worldHandle = Core.WorldManager.getInstance()
         self.inputHandle = Core.InputManager.getInstance()
         self.levelHandle = Core.LevelManager.getInstance()
+        self.soundHandle = Core.SoundManager.getInstance()
         self.physicHandle = Core.PhysicManager.getInstance()
 
         self.mDrawDebug = False
@@ -60,6 +62,11 @@ class MenuState(Core.StateManager.State):
         self.mPhysicWorld = self.physicHandle.GetWorld()
 
         self.inputHandle.ConnectKeyDown(self.OnKeyDown)
+
+        # Add raining sound
+        raining = self.soundHandle.AddSoundObject('BgRaining', 'Rain.wav')
+        raining.GetBuffer().SetVolume(0.2)
+        raining.GetBuffer().Play(True)
 
     def Update(self):
         self.worldHandle.Update()

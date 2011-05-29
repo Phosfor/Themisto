@@ -34,7 +34,7 @@ struct SoundObject
         void loadSound(const std::string &fileName)
         {
             mFileName = fileName;
-            mBuffer = CL_SoundBuffer(fileName);
+            mBuffer = CL_SoundBuffer("media/sounds/" + fileName);
             mSession = mBuffer.prepare();
         }
 
