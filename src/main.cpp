@@ -33,6 +33,8 @@ int Application::main(const std::vector<CL_String> &args)
     LOG("Sound handle is initialized");
     CL_SetupVorbis vorbisHandle;
     LOG("Vorbis module is initialized");
+    CL_SoundOutput output(44100);
+    LOG("Sound output is configured");
 
     try
     {

@@ -30,9 +30,9 @@
 
 namespace bp = boost::python;
 
-#define PYPOLICY_RETURN_THIS  bp::return_internal_reference<1, bp::with_custodian_and_ward<1, 2> >()
-#define PYPOLICY_RETURN_NEW    bp::return_value_policy <bp::manage_new_object>()
-#define PYPOLICY_REFERENCE_EXISTING  bp::return_value_policy <bp::reference_existing_object>()
+#define PYPOLICY_RETURN_THIS bp::return_internal_reference<1, bp::with_custodian_and_ward<1, 2> >()
+#define PYPOLICY_RETURN_NEW bp::return_value_policy <bp::manage_new_object>()
+#define PYPOLICY_REFERENCE_EXISTING bp::return_value_policy <bp::reference_existing_object>()
 
 class ScriptsManager : public boost::serialization::singleton<ScriptsManager>
 {

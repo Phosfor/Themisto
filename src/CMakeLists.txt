@@ -81,6 +81,7 @@ set(Script_srcs
     Core/LevelManager
     Core/StateManager
     Core/PhysicManager
+    Core/SoundManager
 
     World/Objects/Object
     World/Objects/TypesManager

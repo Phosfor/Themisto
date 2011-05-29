@@ -34,16 +34,14 @@
 
 #include "Core/LogManager.hpp"
 #include "Core/ConfigManager.hpp"
+#include "Core/PhysicManager.hpp"
 #include "Core/ResourceManager.hpp"
 #include "Core/StateManager.hpp"
 #include "Core/GuiManager.hpp"
-#include "Core/Utils.hpp"
 #include "Core/InputManager.hpp"
+#include "Core/SoundManager.hpp"
 #include "Core/ScriptsManager.hpp"
-#include "World/Objects/TypesManager.hpp"
-
-#include "World/States/MenuState.hpp"
-//#include "World/States/EditorState.hpp"
+#include "Core/Utils.hpp"
 
 // This is wrapper to make the Main function crossplatform
 class Application

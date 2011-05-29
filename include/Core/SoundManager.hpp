@@ -17,13 +17,66 @@
 
 #pragma once
 
+#include <map>
+
 #include <ClanLib/display.h>
 #include <ClanLib/core.h>
+#include <ClanLib/sound.h>
+
+struct SoundObject
+{
+    private:
+        std::string mFileName;
+        CL_SoundBuffer mBuffer;
+        CL_SoundBuffer_Session mSession;
+
+    public:
+        void loadSound(const std::string &fileName)
+        {
+            mFileName = fileName;
+            mBuffer = CL_SoundBuffer(fileName);
+            mSession = mBuffer.prepare();
+        }
+
+        CL_SoundBuffer &getBuffer()
+        {
+            return mBuffer;
+        }
+
+        CL_SoundBuffer_Session &getSession()
+        {
+            return mSession;
+        }
+};
 
 class SoundManager : public boost::serialization::singleton<SoundManager>
 {
     private:
-        CL_SoundOutput mOutput;
+        std::map<std::string, SoundObject> mSounds;
+
+    public:
+        SoundObject &getSoundObject(const std::string &name)
+        {
+            if (mSounds.find(name) == mSounds.end()) 
+            {
+                LOG("There isn't sound in base with name: " + name);
+            }
+            return mSounds[name];
+        }
+
+        SoundObject &addSoundObject(const std::string &name, const std::string &filename)
+        {
+            if (mSounds.find(name) != mSounds.end())
+            {
+                LOG("There is already sound in base with name: " + name);
+            }
+
+            SoundObject newSound;
+            newSound.loadSound(filename);
+
+            mSounds[name] = newSound;
+            return mSounds[name];
+        }
 };
 
 inline SoundManager &soundManager() { return SoundManager::get_mutable_instance(); }

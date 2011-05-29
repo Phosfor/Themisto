@@ -46,8 +46,8 @@ class ResourceManager : public boost::serialization::singleton<ResourceManager>
         CL_DomElement textureXmlRoot;
 
         // Section => (name => location)
-        std::map< CL_String, std::map<CL_String, CL_String> > texturesStorage;
-        std::map< CL_String, CL_Texture > mTexturesData; // Stores copy of the texture in memory
+        std::map<CL_String, std::map<CL_String, CL_String>> texturesStorage;
+        std::map<CL_String, CL_Texture> mTexturesData; // Stores copy of the texture in memory
 
     public:
         ResourceManager();

@@ -36,7 +36,7 @@ class TemplatesProcessor
 {
     private:
         std::map<std::string, DocumentPtr> mFileToDocument;
-        std::list< std::pair<std::string, std::string> > mIncludeChain;
+        std::list<std::pair<std::string, std::string>> mIncludeChain;
 
         void processTag(CL_DomElement* tag, DocumentPtr baseDocument, const std::string& baseFile);
 

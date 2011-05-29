@@ -32,14 +32,14 @@ class Body
         std::string mName;
         b2Body* mBody;
         std::map<std::string, std::string> mProperties;
-        std::list< boost::shared_ptr<Impact> > mAppliedImpacts;
+        std::list<boost::shared_ptr<Impact>> mAppliedImpacts;
 
     public:
         Body();
         ~Body();
 
-        CL_Signal_v1< boost::shared_ptr<Impact> > mImpactApplied;
-        CL_Signal_v1< boost::shared_ptr<Impact> > mImpactCanceled;
+        CL_Signal_v1<boost::shared_ptr<Impact>> mImpactApplied;
+        CL_Signal_v1<boost::shared_ptr<Impact>> mImpactCanceled;
         CL_Signal_v2<std::string, std::string> mPropertyChanged;
 
         std::string getProperty(const std::string &name);
