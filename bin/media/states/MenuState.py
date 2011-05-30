@@ -6,6 +6,7 @@ import Core.LevelManager
 import Core.InputManager
 import Core.PhysicManager
 import Core.StateManager
+import Core.GuiManager
 import Core.SoundManager
 import World.Objects.TypesManager
 
@@ -22,6 +23,8 @@ class MenuState(Core.StateManager.State):
         self.inputHandle = Core.InputManager.getInstance()
         self.levelHandle = Core.LevelManager.getInstance()
         self.soundHandle = Core.SoundManager.getInstance()
+        self.guiHandle = Core.GuiManager.getInstance()
+        self.appHandle = Core.ApplicationManager.getInstance()
         self.physicHandle = Core.PhysicManager.getInstance()
 
         self.mDrawDebug = False
@@ -48,6 +51,14 @@ class MenuState(Core.StateManager.State):
             elif keyId == CL_KEY_DOWN:
                 self.mCamera.Translate(0, -cameraSpeed)
 
+    def InitGui(self):
+        handle = self.guiHandle.GetHandle()
+
+        # Load css for current widgets
+        #path = CL_String8(Core.Utils.getInstance().GetMediaFolder() + '/local.css').CStr()
+        handle.SetCssDocument(CL_String8('test'))
+        clientArea = appHandle.GetGraphic().GetCliprect()
+
     def Init(self):
         # Init physic Drag&Drop
         self.mDnD = DebugDragAndDrop()
@@ -64,9 +75,12 @@ class MenuState(Core.StateManager.State):
         self.inputHandle.ConnectKeyDown(self.OnKeyDown)
 
         # Add raining sound
-        raining = self.soundHandle.AddSoundObject('BgRaining', 'Rain.wav')
-        raining.GetBuffer().SetVolume(0.2)
-        raining.GetBuffer().Play(True)
+        raining = self.soundHandle.AddSoundObject('BgRaining', 'Rain.wav').GetBuffer()
+        raining.SetVolume(0.2)
+        raining.Play(True)
+
+        # Init game gui
+        self.InitGui()
 
     def Update(self):
         self.worldHandle.Update()

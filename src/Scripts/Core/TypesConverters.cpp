@@ -60,6 +60,9 @@ void (CL_Image::*SetColor)(const CL_Colorf&) = &CL_Image::set_color;
 void (CL_Sprite::*SpriteDraw_1)(CL_GraphicContext&, float, float) = &CL_Sprite::draw;
 void (CL_Sprite::*SetColorSprite)(const CL_Colorf&) = &CL_Sprite::set_color;
 
+// CL_GUI:
+void (CL_GUIManager::*SetCss)(const CL_String&) = &CL_GUIManager::set_css_document;
+
 CL_Colorf ColorRGB(float r, float g, float b)
 {
     return CL_Colorf(r/255.0f, g/255.0f, b/255.0f);
@@ -347,6 +350,25 @@ BOOST_PYTHON_MODULE(TypesConverters)
 
     bp::class_<CL_InputState>("CL_InputState");
 
-    bp::class_<CL_String8>("CL_String8")
+    bp::class_<CL_String8>("CL_String8", bp::init<const std::string &>())
         .def("CStr", &CL_String8::c_str);
+
+    // CLANGUI ===================================================================
+    bp::class_<CL_GUIManager>("CL_GUIManager")
+        .def("SetCssDocument", SetCss);
+
+    bp::class_<CL_GUIComponent, boost::noncopyable>("CL_GUIComponent", bp::init<CL_GUIComponent*>());
+
+    bp::class_<CL_Label, boost::noncopyable>("CL_Label", bp::init<CL_GUIComponent*>())
+        .def("SetGeometry", &CL_Label::set_geometry)
+        .def("SetClassName", &CL_Label::set_class_name)
+        .def("SetText", &CL_Label::set_text)
+        .def("SetVisible", &CL_Label::set_visible);
+
+    bp::class_<CL_Slider, boost::noncopyable>("CL_Slider", bp::init<CL_GUIComponent*>())
+        .def("SetGeometry", &CL_Slider::set_geometry)
+        .def("SetHorizontal", &CL_Slider::set_horizontal)
+        .def("SetVisible", &CL_Slider::set_visible)
+        .def("SetPosition", &CL_Slider::set_position)
+        .def("SetRanges", &CL_Slider::set_ranges);
 }
