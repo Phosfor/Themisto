@@ -20,6 +20,10 @@
 #include <ClanLib/display.h>
 #include <ClanLib/core.h>
 
+#include <boost/python/module.hpp>
+#include <boost/python/def.hpp>
+#include <boost/python/to_python_converter.hpp>
+
 #include "Core/ScriptsManager.hpp"
 #include "Core/LevelManager.hpp"
 #include "Core/LogManager.hpp"
@@ -48,6 +52,43 @@ namespace ScriptTypesConverters
       static PyObject* convert(const std::pair<T1, T2>& pair) {
         return bp::incref(bp::make_tuple(pair.first, pair.second).ptr());
       }
+    };
+
+    // CL_String8 → Python string --------------------------------------
+    struct cl_string8_to_python_str
+    {
+        static PyObject* convert(CL_String8 const& s)
+        {
+            return boost::python::incref(boost::python::object(s.c_str()).ptr());
+        }
+    };
+
+    // Python string → CL_String8 --------------------------------------
+    struct cl_string8_from_python_str
+    {
+        cl_string8_from_python_str()
+        {
+            bp::converter::registry::push_back(
+                &convertible,
+                &construct,
+                boost::python::type_id<CL_String8>()
+            );
+        }
+
+        static void* convertible(PyObject* obj_ptr)
+        {
+            if (!PyString_Check(obj_ptr)) return 0;
+            return obj_ptr;
+        }
+
+        static void construct(PyObject* obj_ptr, bp::converter::rvalue_from_python_stage1_data* data)
+        {
+            const char* value = PyString_AsString(obj_ptr);
+            if (value == 0) bp::throw_error_already_set();
+            void* storage = ((bp::converter::rvalue_from_python_storage<CL_String8>*)data)->storage.bytes;
+            new (storage) CL_String8(value);
+            data->convertible = storage;
+        }
     };
 
     // Default functions arguments stuff ------------------------------

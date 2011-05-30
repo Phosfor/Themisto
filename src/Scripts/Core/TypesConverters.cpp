@@ -82,13 +82,17 @@ BOOST_PYTHON_MODULE(TypesConverters)
     ////////////////////////////// TYPES CONVERTERS /////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////////////////
     // std::vector
-    bp::to_python_converter<std::vector<std::string>, VecToList<std::string> >();
-    bp::to_python_converter< std::vector<int>, VecToList<int> >();
-    bp::to_python_converter< std::vector<float>, VecToList<float> >();
+    bp::to_python_converter<std::vector<std::string>, VecToList<std::string>>();
+    bp::to_python_converter<std::vector<int>, VecToList<int>>();
+    bp::to_python_converter<std::vector<float>, VecToList<float>>();
 
     // std::pair
-    bp::to_python_converter< std::pair<int, int>, PairToTuple<int, int> >();
-    bp::to_python_converter< std::pair<std::string, std::string>, PairToTuple<std::string, std::string> >();
+    bp::to_python_converter<std::pair<int, int>, PairToTuple<int, int>>();
+    bp::to_python_converter<std::pair<std::string, std::string>, PairToTuple<std::string, std::string>>();
+
+    // CL_String8
+    bp::to_python_converter<CL_String8, cl_string8_to_python_str>();
+    cl_string8_from_python_str();
 
 
     /////////////////////////////////////////////////////////////////////////////////////
