@@ -27,7 +27,7 @@ set(Themisto_srcs
     World/Actions/TestAction.cpp
 
     # States
-    World/States/MenuState.cpp
+    #World/States/MenuState.cpp
     #World/States/EditorState.cpp
 
     # Physic
@@ -160,29 +160,29 @@ target_link_libraries(DebugConsole
 # ----------------------------------------------------
 # Executable for the DebugVisualisator
 # ----------------------------------------------------
-set(DebugVisualisator_srcs
-    Debug/Visualisator/main.cpp
-    Debug/Visualisator/Client.cpp
+#set(DebugVisualisator_srcs
+    #Debug/Visualisator/main.cpp
+    #Debug/Visualisator/Client.cpp
 
-    Core/GuiManager.cpp
-    Core/ConfigManager.cpp
-)
+    #Core/GuiManager.cpp
+    #Core/ConfigManager.cpp
+#)
 
-add_executable(DebugVisualisator
-    ${DebugVisualisator_srcs}
-)
+#add_executable(DebugVisualisator
+    #${DebugVisualisator_srcs}
+#)
 
-target_link_libraries(DebugVisualisator
-    ${X11_LIBRARIES}
-    ${FREETYPE_LIBRARIES}
-    ${FREEIMAGE_LIBRARY}
-    ${FREETYPE_LIBRARIES}
-    ${OPENGL_LIBRARIES}
-    ${ZLIB_LIBRARIES}
-    ${PNG_LIBRARIES}
-    ${JPEG_LIBRARIES}
-    ${ClanLib_LIBRARIES}
-    ${READLINE_LIBRARIES}
-    fontconfig
-    pthread
-)
+#target_link_libraries(DebugVisualisator
+    #${X11_LIBRARIES}
+    #${FREETYPE_LIBRARIES}
+    #${FREEIMAGE_LIBRARY}
+    #${FREETYPE_LIBRARIES}
+    #${OPENGL_LIBRARIES}
+    #${ZLIB_LIBRARIES}
+    #${PNG_LIBRARIES}
+    #${JPEG_LIBRARIES}
+    #${ClanLib_LIBRARIES}
+    #${READLINE_LIBRARIES}
+    #fontconfig
+    #pthread
+#)

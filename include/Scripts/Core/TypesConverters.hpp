@@ -91,6 +91,43 @@ namespace ScriptTypesConverters
         }
     };
 
+    // CL_StringRef8 → Python string --------------------------------------
+    struct cl_stringref8_to_python_str
+    {
+        static PyObject* convert(CL_StringRef8 const& s)
+        {
+            return boost::python::incref(boost::python::object(s.c_str()).ptr());
+        }
+    };
+
+    // Python string → CL_StringRef8 --------------------------------------
+    struct cl_stringref8_from_python_str
+    {
+        cl_stringref8_from_python_str()
+        {
+            bp::converter::registry::push_back(
+                &convertible,
+                &construct,
+                boost::python::type_id<CL_StringRef8>()
+            );
+        }
+
+        static void* convertible(PyObject* obj_ptr)
+        {
+            if (!PyString_Check(obj_ptr)) return 0;
+            return obj_ptr;
+        }
+
+        static void construct(PyObject* obj_ptr, bp::converter::rvalue_from_python_stage1_data* data)
+        {
+            const char* value = PyString_AsString(obj_ptr);
+            if (value == 0) bp::throw_error_already_set();
+            void* storage = ((bp::converter::rvalue_from_python_storage<CL_StringRef8>*)data)->storage.bytes;
+            new (storage) CL_StringRef8(value);
+            data->convertible = storage;
+        }
+    };
+
     // Default functions arguments stuff ------------------------------
     BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(GetMinimumSizeOverloads, CL_DisplayWindow::get_minimum_size, 0, 1);
     BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(SetAlignmentImageOverloads, CL_Image::set_alignment, 1, 3);

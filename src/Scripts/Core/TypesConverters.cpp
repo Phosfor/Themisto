@@ -94,6 +94,10 @@ BOOST_PYTHON_MODULE(TypesConverters)
     bp::to_python_converter<CL_String8, cl_string8_to_python_str>();
     cl_string8_from_python_str();
 
+    // CL_StringRef8
+    bp::to_python_converter<CL_StringRef8, cl_stringref8_to_python_str>();
+    cl_stringref8_from_python_str();
+
 
     /////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////// EXPORTING CLASSES ////////////////////////////////////
@@ -290,6 +294,9 @@ BOOST_PYTHON_MODULE(TypesConverters)
         .def_readonly("right", &CL_Rect::right)
         .def_readonly("bottom", &CL_Rect::bottom)
 
+        .def("GetHeight", &CL_Rectx<int>::get_height)
+        .def("GetWidth", &CL_Rectx<int>::get_width)
+
         .def(bp::self_ns::str(bp::self_ns::self));  // Export __str__
 
     // CL_Rectf [float] ---------------------------------------------------------------
@@ -304,6 +311,9 @@ BOOST_PYTHON_MODULE(TypesConverters)
         .def_readonly("right", &CL_Rectx<float>::right)
         .def_readonly("bottom", &CL_Rectx<float>::bottom)
 
+        .def("GetHeight", &CL_Rectx<float>::get_height)
+        .def("GetWidth", &CL_Rectx<float>::get_width)
+
         .def(bp::self_ns::str(bp::self_ns::self));  // Export __str__
 
     bp::class_<CL_DisplayWindow>("CL_DisplayWindow")
@@ -311,7 +321,8 @@ BOOST_PYTHON_MODULE(TypesConverters)
 
     bp::class_<CL_GraphicContext>("CL_GraphicContext")
         .def("SetPen", &CL_GraphicContext::set_pen)
-        .def("ResetPen", &CL_GraphicContext::reset_pen);
+        .def("ResetPen", &CL_GraphicContext::reset_pen)
+        .def("GetCliprect", &CL_GraphicContext::get_cliprect);
 
     bp::class_<CL_DomNodeList>("CL_DomNodeList")
         .def("Item", &CL_DomNodeList::item)
@@ -368,6 +379,11 @@ BOOST_PYTHON_MODULE(TypesConverters)
         .def("SetClassName", &CL_Label::set_class_name)
         .def("SetText", &CL_Label::set_text)
         .def("SetVisible", &CL_Label::set_visible);
+
+    bp::class_<CL_LineEdit, boost::noncopyable>("CL_LineEdit", bp::init<CL_GUIComponent*>())
+        .def("SetGeometry", &CL_LineEdit::set_geometry)
+        .def("SetClassName", &CL_LineEdit::set_class_name)
+        .def("SetVisible", &CL_LineEdit::set_visible);
 
     bp::class_<CL_Slider, boost::noncopyable>("CL_Slider", bp::init<CL_GUIComponent*>())
         .def("SetGeometry", &CL_Slider::set_geometry)

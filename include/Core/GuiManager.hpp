@@ -23,6 +23,7 @@
 #include <ClanLib/gui.h>
 #include <ClanLib/core.h>
 #include <boost/serialization/singleton.hpp>
+#include <boost/shared_array.hpp>
 
 class GuiManager : public boost::serialization::singleton<GuiManager>
 {
@@ -31,6 +32,8 @@ class GuiManager : public boost::serialization::singleton<GuiManager>
         CL_GUIWindowManagerTexture *mWm;
         CL_GUIComponent *mWrapper;
 
+        boost::shared_array<CL_GUIComponent> mComponents;
+
         std::string mThemeName;
 
         void initGuiWrapper(float width, float height);
@@ -38,9 +41,9 @@ class GuiManager : public boost::serialization::singleton<GuiManager>
     public:
         ~GuiManager();
 
-        CL_GUIManager &getHandle();
-        CL_GUIWindowManagerTexture &getWM();
-        CL_GUIComponent &getWrapper();
+        CL_GUIManager *getHandle();
+        CL_GUIWindowManagerTexture *getWM();
+        CL_GUIComponent *getWrapper();
 
         std::string getThemeName();
         void setThemeName(const std::string &name);

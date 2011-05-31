@@ -19,18 +19,6 @@ class MenuState(Core.StateManager.State):
     def __init__(self):
         super(MenuState, self).__init__()
 
-        self.worldHandle = Core.WorldManager.getInstance()
-        self.inputHandle = Core.InputManager.getInstance()
-        self.levelHandle = Core.LevelManager.getInstance()
-        self.soundHandle = Core.SoundManager.getInstance()
-        self.guiHandle = Core.GuiManager.getInstance()
-        self.appHandle = Core.ApplicationManager.getInstance()
-        self.physicHandle = Core.PhysicManager.getInstance()
-
-        self.mDrawDebug = False
-        self.mDetailedOutput = False
-        self.mShowConsole = False
-
     def OnKeyDown(self, InputEvent, InputState):
         keyId = InputEvent.Id
 
@@ -53,13 +41,35 @@ class MenuState(Core.StateManager.State):
 
     def InitGui(self):
         handle = self.guiHandle.GetHandle()
+        wrapper = self.guiHandle.GetWrapper()
+        clientArea = self.appHandle.GetGraphic().GetCliprect()
 
         # Load css for current widgets
-        #path = CL_String8(Core.Utils.getInstance().GetMediaFolder() + '/local.css').CStr()
-        handle.SetCssDocument(CL_String8('test'))
-        clientArea = appHandle.GetGraphic().GetCliprect()
+        handle.SetCssDocument(Core.Utils.getInstance().GetMediaFolder() + '/local.css');
+
+        self.mConsoleLabel = CL_Label(wrapper)
+        self.mConsoleLabel.SetClassName('console-label')
+        self.mConsoleLabel.SetText('>')
+        self.mConsoleLabel.SetVisible(True, True)
+
+        self.mConsole = CL_LineEdit(wrapper)
+        self.mConsole.SetGeometry(CL_Recti(30, clientArea.GetHeight()-30, clientArea.GetWidth() + 30, clientArea.GetHeight()))
+        self.mConsole.SetVisible(True, True)
+        self.mConsole.SetClassName('console-edit')
 
     def Init(self):
+        self.worldHandle = Core.WorldManager.getInstance()
+        self.inputHandle = Core.InputManager.getInstance()
+        self.levelHandle = Core.LevelManager.getInstance()
+        self.soundHandle = Core.SoundManager.getInstance()
+        self.guiHandle = Core.GuiManager.getInstance()
+        self.appHandle = Core.ApplicationManager.getInstance()
+        self.physicHandle = Core.PhysicManager.getInstance()
+
+        self.mDrawDebug = False
+        self.mDetailedOutput = False
+        self.mShowConsole = False
+
         # Init physic Drag&Drop
         self.mDnD = DebugDragAndDrop()
         self.mDnD.Init()

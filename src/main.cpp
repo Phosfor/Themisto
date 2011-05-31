@@ -59,8 +59,8 @@ int Application::main(const std::vector<CL_String> &args)
         guiManager().initGui(appManager().getWindow(), "media/gui_basic/");
         LOG("The gui has been initialized!");
 
-        CL_GUIManager gui = guiManager().getHandle();
-        CL_GUIWindowManagerTexture wm = guiManager().getWM();
+        CL_GUIManager *gui = guiManager().getHandle();
+        CL_GUIWindowManagerTexture *wm = guiManager().getWM();
         CL_GraphicContext gc = appManager().getGraphic();
 
         resourceManager().loadFonts();
@@ -83,8 +83,8 @@ int Application::main(const std::vector<CL_String> &args)
             appManager().frameStarted();
             stateManager().update();
 
-            wm.process();
-            wm.draw_windows(gc);
+            wm->process();
+            wm->draw_windows(gc);
 
             appManager().getWindow().flip(1);
             CL_KeepAlive::process(0);

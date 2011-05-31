@@ -24,6 +24,7 @@ BOOST_PYTHON_MODULE(GuiManager)
         .def("GetHandle", &GuiManager::getHandle, PYPOLICY_REFERENCE_EXISTING)
         .def("GetWM", &GuiManager::getWM, PYPOLICY_REFERENCE_EXISTING)
         .def("GetWrapper", &GuiManager::getWrapper, PYPOLICY_REFERENCE_EXISTING);
+        //.def("GetWrapper", &GuiManager::getWrapper, bp::return_value_policy<bp::manage_new_object>());
 
     bp::def("getInstance", &guiManager, PYPOLICY_REFERENCE_EXISTING);
 }

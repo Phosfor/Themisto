@@ -19,9 +19,9 @@
 
 GuiManager::~GuiManager()
 {
-    delete mWm;
-    delete mWrapper;
-    delete mGuiManager;
+    //delete mWrapper;
+    //delete mWm;
+    //delete mGuiManager;
 }
 
 void GuiManager::setThemeName(const std::string &name)
@@ -34,19 +34,19 @@ std::string GuiManager::getThemeName()
     return mThemeName;
 }
 
-CL_GUIManager &GuiManager::getHandle()
+CL_GUIManager *GuiManager::getHandle()
 {
-    return *mGuiManager;
+    return mGuiManager;
 }
 
-CL_GUIWindowManagerTexture &GuiManager::getWM()
+CL_GUIWindowManagerTexture *GuiManager::getWM()
 {
-    return *mWm;
+    return mWm;
 }
 
-CL_GUIComponent &GuiManager::getWrapper()
+    CL_GUIComponent *GuiManager::getWrapper()
 {
-    return *mWrapper;
+    return mWrapper;
 }
 
 void GuiManager::initGuiWrapper(float width, float height)
@@ -55,6 +55,8 @@ void GuiManager::initGuiWrapper(float width, float height)
     desc.set_size(CL_Size(width, height), false);
     desc.set_position(CL_Rect(0, 0, width, height), false);
     mWrapper = new CL_GUIComponent(mGuiManager, desc);
+
+    //mWrapperShared = boost::shared_ptr<CL_GUIComponent>(new CL_GUIComponent(mGuiManager, desc));
 }
 
 void GuiManager::initGui(CL_DisplayWindow &window, const std::string &theme)

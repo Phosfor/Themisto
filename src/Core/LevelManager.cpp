@@ -197,7 +197,7 @@ void LevelManager::init()
     mMousePressedSlots = inputManager().getMouse().sig_key_down().connect(&levelManager(), &LevelManager::mousePressed);
 
     // Yep, maybe we don't need this
-    guiManager().getHandle().set_css_document(utils().getMediaFolder() + "/local.css");
+    guiManager().getHandle()->set_css_document(utils().getMediaFolder() + "/local.css");
 
     try
     {
