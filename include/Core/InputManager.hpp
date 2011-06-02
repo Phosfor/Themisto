@@ -36,7 +36,7 @@ class InputManager : public boost::serialization::singleton<InputManager>
         CL_InputDevice *mMouse;
         CL_InputDevice *mJoystick;
 
-        std::vector<CL_Slot> mKeyDownSlots;
+        std::vector<CL_Slot> mSlots;
 
     public:
         void initInput();
@@ -46,7 +46,7 @@ class InputManager : public boost::serialization::singleton<InputManager>
         CL_InputDevice &getMouse();
         CL_InputDevice &getJoystick();
 
-        std::vector<CL_Slot> &getKeyDownSlots();
+        std::vector<CL_Slot> &getSlots();
 
         // Could be used with mouse buttons too
         bool keyPressed(int code);

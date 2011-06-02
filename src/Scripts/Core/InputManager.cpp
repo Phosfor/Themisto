@@ -35,7 +35,7 @@ void ConnectKeyDown(bp::object func)
     try
     {
         CL_Slot temp = inputManager().getKeyboard().sig_key_down().connect(&KeyDownWrapper, func);
-        inputManager().getKeyDownSlots().push_back(temp);
+        inputManager().getSlots().push_back(temp);
     }
     catch(boost::python::error_already_set &e)
     {

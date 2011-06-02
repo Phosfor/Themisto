@@ -107,8 +107,8 @@ class Stars(Object):
     def ParseStars(node):
         maxStars = 0
 
-        if node.HasAttribute(CL_DomString("maxStars")):
-            maxStars = float(node.GetAttribute(CL_DomString("maxStars")).CStr())
+        if node.HasAttribute("maxStars"):
+            maxStars = float(node.GetAttribute("maxStars"))
 
         area = Core.Utils.Pixels2Meters(Core.Utils.ScreenResolutionX) * \
               Core.Utils.Pixels2Meters(Core.Utils.ScreenResolutionY)

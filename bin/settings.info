@@ -14,7 +14,7 @@ window
 application
 {
     version "0.1"
-    game_speed "3000"
+    game_speed "300"
     resolution_koef "100"
 
     debug "true"

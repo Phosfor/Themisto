@@ -140,8 +140,8 @@ class Rain(Object):
     def ParseRain(node):
         maxDrops = 0
 
-        if node.HasAttribute(CL_DomString("maxDrops")):
-            maxDrops = float(node.GetAttribute(CL_DomString("maxDrops")).CStr())
+        if node.HasAttribute("maxDrops"):
+            maxDrops = float(node.GetAttribute("maxDrops"))
 
         area = Core.Utils.Pixels2Meters(Core.Utils.ScreenResolutionX) * \
               Core.Utils.Pixels2Meters(Core.Utils.ScreenResolutionY)

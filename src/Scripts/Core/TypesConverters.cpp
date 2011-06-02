@@ -62,6 +62,7 @@ void (CL_Sprite::*SetColorSprite)(const CL_Colorf&) = &CL_Sprite::set_color;
 
 // CL_GUI:
 void (CL_GUIManager::*SetCss)(const CL_String&) = &CL_GUIManager::set_css_document;
+void (CL_LineEdit::*SetTextLineEdit)(const CL_StringRef&) = &CL_LineEdit::set_text;
 
 CL_Colorf ColorRGB(float r, float g, float b)
 {
@@ -71,6 +72,32 @@ CL_Colorf ColorRGB(float r, float g, float b)
 CL_Rectf BoundingRect(CL_Rectf first, CL_Rectf second)
 {
     return static_cast<CL_Rectf>(first.bounding_rect(second));
+}
+
+void LineEditEnterPressedWrapper(bp::object user_data)
+{
+    try
+    {
+        user_data();
+    }
+    catch(boost::python::error_already_set &e)
+    {
+        LOG("LineEditEnterPressedWrapper failed...");
+        PyErr_Print();
+    }
+}
+
+void ConnectLineEditEnterPressed(bp::object func, CL_LineEdit &widget)
+{
+    try
+    {
+        widget.func_enter_pressed().set(&LineEditEnterPressedWrapper, func);
+    }
+    catch(boost::python::error_already_set &e)
+    {
+        LOG("ConnectLineEditEnterPressed failed...");
+        PyErr_Print();
+    }
 }
 
 BOOST_PYTHON_MODULE(TypesConverters)
@@ -88,7 +115,7 @@ BOOST_PYTHON_MODULE(TypesConverters)
 
     // std::pair
     bp::to_python_converter<std::pair<int, int>, PairToTuple<int, int>>();
-    bp::to_python_converter<std::pair<std::string, std::string>, PairToTuple<std::string, std::string>>();
+    bp::to_python_converter<stdh:pair<std::string, std::string>, PairToTuple<std::string, std::string>>();
 
     // CL_String8
     bp::to_python_converter<CL_String8, cl_string8_to_python_str>();
@@ -97,6 +124,10 @@ BOOST_PYTHON_MODULE(TypesConverters)
     // CL_StringRef8
     bp::to_python_converter<CL_StringRef8, cl_stringref8_to_python_str>();
     cl_stringref8_from_python_str();
+
+    // CL_DomString
+   /*bp::to_python_converter<CL_DomString, cl_domstring_to_python_str>();
+    cl_domstring_from_python_str();*/
 
 
     /////////////////////////////////////////////////////////////////////////////////////
@@ -339,8 +370,8 @@ BOOST_PYTHON_MODULE(TypesConverters)
         .def("GetChildNodes", &CL_DomElement::get_child_nodes)
         .def("GetNodeName", &CL_DomElement::get_node_name);
 
-    bp::class_<CL_StringRef8>("CL_DomString", bp::init<const std::string&>())
-        .def("CStr", &CL_StringRef8::c_str);
+    /*bp::class_<CL_StringRef8>("CL_StringRef8", bp::init<const std::string&>())
+        .def("CStr", &CL_StringRef8::c_str);*/
 
     bp::class_<Camera>("Camera", bp::init<CL_Size>())
         .def("SetViewport", &Camera::setViewport)
@@ -365,12 +396,14 @@ BOOST_PYTHON_MODULE(TypesConverters)
 
     bp::class_<CL_InputState>("CL_InputState");
 
-    bp::class_<CL_String8>("CL_String8", bp::init<const std::string &>())
-        .def("CStr", &CL_String8::c_str);
+    /*bp::class_<CL_String8>("CL_String8", bp::init<const std::string &>())
+        .def("CStr", &CL_String8::c_str);*/
 
     // CLANGUI ===================================================================
     bp::class_<CL_GUIManager>("CL_GUIManager")
-        .def("SetCssDocument", SetCss);
+        .def("SetCssDocument", SetCss)
+        .def("LineEditEnterPressed", &ConnectLineEditEnterPressed)
+        .staticmethod("LineEditEnterPressed");
 
     bp::class_<CL_GUIComponent, boost::noncopyable>("CL_GUIComponent", bp::init<CL_GUIComponent*>());
 
@@ -383,7 +416,10 @@ BOOST_PYTHON_MODULE(TypesConverters)
     bp::class_<CL_LineEdit, boost::noncopyable>("CL_LineEdit", bp::init<CL_GUIComponent*>())
         .def("SetGeometry", &CL_LineEdit::set_geometry)
         .def("SetClassName", &CL_LineEdit::set_class_name)
-        .def("SetVisible", &CL_LineEdit::set_visible);
+        .def("SetVisible", &CL_LineEdit::set_visible)
+        .def("SetFocus", &CL_LineEdit::set_focus)
+        .def("SetText", SetTextLineEdit)
+        .def("GetText", &CL_LineEdit::get_text);
 
     bp::class_<CL_Slider, boost::noncopyable>("CL_Slider", bp::init<CL_GUIComponent*>())
         .def("SetGeometry", &CL_Slider::set_geometry)

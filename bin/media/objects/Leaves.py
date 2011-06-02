@@ -46,7 +46,7 @@ class Leaves(Object):
         angle = random.randint(1, 360)
         curObject.image.SetAngle(CL_Angle.FromDegrees(angle))
 
-        scale = random.uniform(0.5, 1.2)
+        scale = random.uniform(0.5, 0.9)
         curObject.image.SetScale(scale, scale)
 
         color = ColorRGB(17, 30, 35)
@@ -137,8 +137,8 @@ class Leaves(Object):
     def ParseLeaves(node):
         maxLeaves = 0
 
-        if node.HasAttribute(CL_DomString("maxLeaves")):
-            maxLeaves = float(node.GetAttribute(CL_DomString("maxLeaves")).CStr())
+        if node.HasAttribute("maxLeaves"):
+            maxLeaves = float(node.GetAttribute("maxLeaves"))
 
         area = Core.Utils.Pixels2Meters(Core.Utils.ScreenResolutionX) * \
               Core.Utils.Pixels2Meters(Core.Utils.ScreenResolutionY)

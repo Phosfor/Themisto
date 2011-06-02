@@ -39,6 +39,25 @@ class MenuState(Core.StateManager.State):
             elif keyId == CL_KEY_DOWN:
                 self.mCamera.Translate(0, -cameraSpeed)
 
+        # Process input for game console (96 == '~')
+        if keyId == 96:
+            self.mShowConsole = not self.mShowConsole
+
+            if self.mShowConsole:
+                self.mConsoleLabel.SetVisible(True, True)
+                self.mConsole.SetVisible(True, True)
+                self.mConsole.SetFocus(True)
+            else:
+                self.mConsoleLabel.SetVisible(False, False)
+                self.mConsole.SetVisible(False, False)
+                self.mConsole.SetText('')
+                self.mConsole.SetFocus(False)
+
+    def ProcessConsole(self):
+        command = self.mConsole.GetText()
+        Core.LogManager.LOG('> ' + command + '\n')
+        self.mConsole.SetText('')
+
     def InitGui(self):
         handle = self.guiHandle.GetHandle()
         wrapper = self.guiHandle.GetWrapper()
@@ -47,15 +66,20 @@ class MenuState(Core.StateManager.State):
         # Load css for current widgets
         handle.SetCssDocument(Core.Utils.getInstance().GetMediaFolder() + '/local.css');
 
+        # Consloe additional input symbol
         self.mConsoleLabel = CL_Label(wrapper)
+        self.mConsoleLabel.SetGeometry(CL_Recti(0, clientArea.GetHeight()-55, clientArea.GetWidth(), clientArea.GetHeight()))
         self.mConsoleLabel.SetClassName('console-label')
         self.mConsoleLabel.SetText('>')
-        self.mConsoleLabel.SetVisible(True, True)
+        self.mConsoleLabel.SetVisible(False, False)
 
+        # Console input area
         self.mConsole = CL_LineEdit(wrapper)
         self.mConsole.SetGeometry(CL_Recti(30, clientArea.GetHeight()-30, clientArea.GetWidth() + 30, clientArea.GetHeight()))
-        self.mConsole.SetVisible(True, True)
+        self.mConsole.SetVisible(False, False)
         self.mConsole.SetClassName('console-edit')
+
+        handle.LineEditEnterPressed(self.ProcessConsole, self.mConsole)
 
     def Init(self):
         self.worldHandle = Core.WorldManager.getInstance()

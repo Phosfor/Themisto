@@ -73,7 +73,7 @@ class Foreground(Object):
     def ParseForeground(node):
         obj = Foreground()
         # Parse visuals -----------------------------------
-        VisualTags = node.GetElementsByTagName(CL_DomString("Visual"))
+        VisualTags = node.GetElementsByTagName("Visual")
         if VisualTags.GetLength() == 1:
             section = name = None
             width = height = -1.0
@@ -81,21 +81,21 @@ class Foreground(Object):
             childList = VisualTags.Item(0).GetChildNodes()
             for i in xrange(childList.GetLength()):
                 tag2 = childList.Item(i).ToElement()
-                if tag2.GetNodeName().CStr() == "Size":
-                    width = float(tag2.GetAttribute(CL_DomString("width")).CStr())
-                    height = float(tag2.GetAttribute(CL_DomString("height")).CStr())
-                elif tag2.GetNodeName().CStr() == "Texture":
-                    section = str(tag2.GetAttribute(CL_DomString("section")).CStr())
-                    name = str(tag2.GetAttribute(CL_DomString("name")).CStr())
+                if tag2.GetNodeName() == "Size":
+                    width = float(tag2.GetAttribute("width"))
+                    height = float(tag2.GetAttribute("height"))
+                elif tag2.GetNodeName() == "Texture":
+                    section = str(tag2.GetAttribute("section"))
+                    name = str(tag2.GetAttribute("name"))
             obj.SetVisual(name, section, width, height)
         else:
             Core.LOG('Error: only one `Visual` tag may be in Foreground object!')
 
         # Parse additional ---------------------------------
         fixed = True;
-        fixedElement = node.GetElementsByTagName(CL_DomString("Fixed")).Item(0).ToElement()
-        if fixedElement.HasAttribute(CL_DomString("value")):
-            fixed = fixedElement.GetAttribute(CL_DomString("value")).CStr() == "true"
+        fixedElement = node.GetElementsByTagName("Fixed").Item(0).ToElement()
+        if fixedElement.HasAttribute("value"):
+            fixed = fixedElement.GetAttribute("value") == "true"
         obj.SetFixed(fixed)
 
         return obj

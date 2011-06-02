@@ -124,7 +124,7 @@ class LightColumn(Object):
         light = LightColumn()
 
         # Parse visual settings --------------------------------------
-        VisualTags = node.GetElementsByTagName(CL_DomString("Visual"))
+        VisualTags = node.GetElementsByTagName("Visual")
         name = section = None
         width = height = -1
         x = y = 0.0
@@ -132,21 +132,21 @@ class LightColumn(Object):
         childList = VisualTags.Item(0).GetChildNodes()
         for i in xrange(childList.GetLength()):
             tag2 = childList.Item(i).ToElement()
-            if tag2.GetNodeName().CStr() == "Size":
-                width = float(tag2.GetAttribute(CL_DomString("width")).CStr())
-                height = float(tag2.GetAttribute(CL_DomString("height")).CStr())
-            if tag2.GetNodeName().CStr() == "Texture":
-                section = str(tag2.GetAttribute(CL_DomString("section")).CStr())
-                name = str(tag2.GetAttribute(CL_DomString("name")).CStr())
-            if tag2.GetNodeName().CStr() == "Position":
-                x = float(tag2.GetAttribute(CL_DomString("x")).CStr())
-                y = float(tag2.GetAttribute(CL_DomString("y")).CStr())
+            if tag2.GetNodeName() == "Size":
+                width = float(tag2.GetAttribute("width"))
+                height = float(tag2.GetAttribute("height"))
+            if tag2.GetNodeName() == "Texture":
+                section = str(tag2.GetAttribute("section"))
+                name = str(tag2.GetAttribute("name"))
+            if tag2.GetNodeName() == "Position":
+                x = float(tag2.GetAttribute("x"))
+                y = float(tag2.GetAttribute("y"))
 
         light.SetPosition(CL_Pointf(x, y))
         light.SetVisual(name, section, width, height)
 
         # Parse lighting ------------------------------------------
-        lightTags = node.GetElementsByTagName(CL_DomString("Lighting"))
+        lightTags = node.GetElementsByTagName("Lighting")
 
         # Iterate through each lighting
         for i in xrange(lightTags.GetLength()):
@@ -160,21 +160,21 @@ class LightColumn(Object):
             for j in xrange(handleChildren.GetLength()):
                 child = handleChildren.Item(j).ToElement()
 
-                if child.GetNodeName().CStr() == "Size":
-                    width = float(child.GetAttribute(CL_DomString("width")).CStr())
-                    height = float(child.GetAttribute(CL_DomString("height")).CStr())
-                if child.GetNodeName().CStr() == "Texture":
-                    section = str(child.GetAttribute(CL_DomString("section")).CStr())
-                    name = str(child.GetAttribute(CL_DomString("name")).CStr())
-                if child.GetNodeName().CStr() == "Position":
-                    x = float(child.GetAttribute(CL_DomString("x")).CStr())
-                    y = float(child.GetAttribute(CL_DomString("y")).CStr())
+                if child.GetNodeName() == "Size":
+                    width = float(child.GetAttribute("width"))
+                    height = float(child.GetAttribute("height"))
+                if child.GetNodeName() == "Texture":
+                    section = str(child.GetAttribute("section"))
+                    name = str(child.GetAttribute("name"))
+                if child.GetNodeName() == "Position":
+                    x = float(child.GetAttribute("x"))
+                    y = float(child.GetAttribute("y"))
 
             light.SetLightingPos(CL_Pointf(x, y))
             light.AddLightning(name, section, width, height)
 
         # Parse bugs ------------------------------------------------
-        bugTags = node.GetElementsByTagName(CL_DomString("Bug"))
+        bugTags = node.GetElementsByTagName("Bug")
 
         # Iterate through each lighting
         for i in xrange(bugTags.GetLength()):
@@ -191,20 +191,20 @@ class LightColumn(Object):
             for j in xrange(handleChildren.GetLength()):
                 child = handleChildren.Item(j).ToElement()
 
-                if child.GetNodeName().CStr() == "Bounding":
-                    bounding = float(child.GetAttribute(CL_DomString("value")).CStr())
-                if child.GetNodeName().CStr() == "Texture":
-                    section = str(child.GetAttribute(CL_DomString("section")).CStr())
-                    name = str(child.GetAttribute(CL_DomString("name")).CStr())
-                if child.GetNodeName().CStr() == "Position":
-                    x = float(child.GetAttribute(CL_DomString("x")).CStr())
-                    y = float(child.GetAttribute(CL_DomString("y")).CStr())
-                if child.GetNodeName().CStr() == "Koef":
-                    a = float(child.GetAttribute(CL_DomString("a")).CStr())
-                    b = float(child.GetAttribute(CL_DomString("b")).CStr())
-                if child.GetNodeName().CStr() == "TextureScale":
-                    scaleX = float(child.GetAttribute(CL_DomString("x")).CStr())
-                    scaleY = float(child.GetAttribute(CL_DomString("y")).CStr())
+                if child.GetNodeName() == "Bounding":
+                    bounding = float(child.GetAttribute("value"))
+                if child.GetNodeName() == "Texture":
+                    section = str(child.GetAttribute("section"))
+                    name = str(child.GetAttribute("name"))
+                if child.GetNodeName() == "Position":
+                    x = float(child.GetAttribute("x"))
+                    y = float(child.GetAttribute("y"))
+                if child.GetNodeName() == "Koef":
+                    a = float(child.GetAttribute("a"))
+                    b = float(child.GetAttribute("b"))
+                if child.GetNodeName() == "TextureScale":
+                    scaleX = float(child.GetAttribute("x"))
+                    scaleY = float(child.GetAttribute("y"))
 
             bug = LightBug()
             bugImage = Core.ResourceManager.getInstance().GetSprite(section, name)

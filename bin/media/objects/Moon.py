@@ -112,7 +112,7 @@ class Moon(Object):
     def ParseMoon(node):
         moonHandle = Moon()
 
-        VisualTags = node.GetElementsByTagName(CL_DomString("Visual"))
+        VisualTags = node.GetElementsByTagName("Visual")
         name = section = None
         width = height = -1
 
@@ -120,12 +120,12 @@ class Moon(Object):
         childList = VisualTags.Item(0).GetChildNodes()
         for i in xrange(childList.GetLength()):
             tag2 = childList.Item(i).ToElement()
-            if tag2.GetNodeName().CStr() == "Size":
-                width = int(tag2.GetAttribute(CL_DomString("width")).CStr())
-                height = int(tag2.GetAttribute(CL_DomString("height")).CStr())
-            if tag2.GetNodeName().CStr() == "Texture":
-                section = str(tag2.GetAttribute(CL_DomString("section")).CStr())
-                name = str(tag2.GetAttribute(CL_DomString("name")).CStr())
+            if tag2.GetNodeName() == "Size":
+                width = int(tag2.GetAttribute("width"))
+                height = int(tag2.GetAttribute("height"))
+            if tag2.GetNodeName() == "Texture":
+                section = str(tag2.GetAttribute("section"))
+                name = str(tag2.GetAttribute("name"))
 
         moonHandle.SetVisual(name, section, width, height)
 
@@ -133,13 +133,13 @@ class Moon(Object):
         radius = Core.Utils.Meters2Pixels(7)
         angle = Core.Utils.Deg2Rad(-90)
 
-        radiusElement = node.GetElementsByTagName(CL_DomString("Radius")).Item(0).ToElement()
-        if radiusElement.HasAttribute(CL_DomString("value")):
-            radius = Core.Utils.Meters2Pixels(float(radiusElement.GetAttribute(CL_DomString("value")).CStr()))
+        radiusElement = node.GetElementsByTagName("Radius").Item(0).ToElement()
+        if radiusElement.HasAttribute("value"):
+            radius = Core.Utils.Meters2Pixels(float(radiusElement.GetAttribute("value")))
 
-        angleElement = node.GetElementsByTagName(CL_DomString("StartAngle")).Item(0).ToElement()
-        if angleElement.HasAttribute(CL_DomString("value")):
-            angle = Core.Utils.Deg2Rad(float(angleElement.GetAttribute(CL_DomString("value")).CStr()))
+        angleElement = node.GetElementsByTagName("StartAngle").Item(0).ToElement()
+        if angleElement.HasAttribute("value"):
+            angle = Core.Utils.Deg2Rad(float(angleElement.GetAttribute("value")))
 
         moonHandle.SetOrbitRadius(radius)
         moonHandle.SetMoonAngle(angle)

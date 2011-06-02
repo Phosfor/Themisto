@@ -103,8 +103,8 @@ class Clouds(Object):
     def ParseClouds(node):
         maxClouds = 0
 
-        if node.HasAttribute(CL_DomString("maxClouds")):
-            maxClouds = float(node.GetAttribute(CL_DomString("maxClouds")).CStr())
+        if node.HasAttribute("maxClouds"):
+            maxClouds = float(node.GetAttribute("maxClouds"))
 
         area = Core.Utils.Pixels2Meters(Core.Utils.ScreenResolutionX) * \
               Core.Utils.Pixels2Meters(Core.Utils.ScreenResolutionY)
