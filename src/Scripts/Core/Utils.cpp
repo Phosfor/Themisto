@@ -19,6 +19,11 @@
 #include "Core/LogManager.hpp"
 #include "Core/Utils.hpp"
 
+void runPyCode(const std::string &code)
+{
+    scriptsManager().runString(code);
+}
+
 BOOST_PYTHON_MODULE(Utils)
 {
     bp::def("Meters2Pixels", Meters2Pixels);
@@ -42,6 +47,8 @@ BOOST_PYTHON_MODULE(Utils)
     bp::scope().attr("GAME_VERSION") = GAME_VERSION;
     bp::scope().attr("ScreenResolutionX") = ScreenResolutionX;
     bp::scope().attr("ScreenResolutionY") = ScreenResolutionY;
+
+    bp::def("RunPythonCode", &runPyCode);
 
     // Exporting Utils singleeton
     bp::class_<Utils, boost::noncopyable>("Utils", bp::no_init)

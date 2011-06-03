@@ -115,7 +115,7 @@ BOOST_PYTHON_MODULE(TypesConverters)
 
     // std::pair
     bp::to_python_converter<std::pair<int, int>, PairToTuple<int, int>>();
-    bp::to_python_converter<stdh:pair<std::string, std::string>, PairToTuple<std::string, std::string>>();
+    //bp::to_python_converter<std:pair<std::string, std::string>, PairToTuple<std::string, std::string>>();
 
     // CL_String8
     bp::to_python_converter<CL_String8, cl_string8_to_python_str>();

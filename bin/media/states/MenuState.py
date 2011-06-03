@@ -55,7 +55,8 @@ class MenuState(Core.StateManager.State):
 
     def ProcessConsole(self):
         command = self.mConsole.GetText()
-        Core.LogManager.LOG('> ' + command + '\n')
+        Core.LogManager.LOG('> ' + command)
+        Core.Utils.RunPythonCode(command)
         self.mConsole.SetText('')
 
     def InitGui(self):
