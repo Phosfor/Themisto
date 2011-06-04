@@ -29,6 +29,7 @@
 
 #include "Core/LogManager.hpp"
 #include "Core/ConfigManager.hpp"
+#include <boost/python/stl_iterator.hpp>
 
 class Utils : public boost::serialization::singleton<Utils>
 {
@@ -53,6 +54,16 @@ class Utils : public boost::serialization::singleton<Utils>
         std::string floatToStr(float p);
         std::string vectorToStr(b2Vec2 p);
         std::string boolToStr(bool p);
+
+        template<typename T>
+        std::vector<T> python_to_vector(boost::python::object o) {
+            std::vector<T> temp;
+            boost::python::stl_input_iterator<T> begin(o);
+            boost::python::stl_input_iterator<T> end;
+            temp.clear();
+            temp.insert(temp.end(), begin, end);
+            return temp;
+        }
 };
 
 /////////////////////////////////////////////////////////////////////////

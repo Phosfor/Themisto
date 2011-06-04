@@ -67,7 +67,7 @@ class MenuState(Core.StateManager.State):
         # Load css for current widgets
         handle.SetCssDocument(Core.Utils.getInstance().GetMediaFolder() + '/local.css');
 
-        # Consloe additional input symbol
+        # Console additional input symbol
         self.mConsoleLabel = CL_Label(wrapper)
         self.mConsoleLabel.SetGeometry(CL_Recti(0, clientArea.GetHeight()-55, clientArea.GetWidth(), clientArea.GetHeight()))
         self.mConsoleLabel.SetClassName('console-label')

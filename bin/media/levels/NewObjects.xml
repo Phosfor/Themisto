@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <ThemistoLevel version="0.1" authors="Wincode team" name="First level">
-    <World cameraPosX="1750" cameraPosY="0">
+    <!--<World cameraPosX="1750" cameraPosY="0">-->
+    <World cameraPosX="0" cameraPosY="0">
         <Wind power="2" />
         <Camera startPosX="0" startPosY="0" mode="free" />
         <Objects>
@@ -25,6 +26,14 @@
             <Object name="Leaves" type="LeavesObject" maxLeaves="0.15" always_draw="true" z-index="0" />
             <Object name="Rain" type="RainObject" maxDrops="2.6" always_draw="true" z-index="2" />
             <Object name="Level" type="LevelObject" template="level_phys" z-index="1" />
+
+            <Object name="Mill" type="AnimatedDecorationObject">
+                 <Visual>
+                    <Texture section="Mill" />
+                    <Size width="350" height="350" />
+                    <Position x="100" y="0" />
+                 </Visual>
+            </Object>
 
             <Object name="Lamp" type="LightColumnObject">
                  <Visual>

@@ -16,6 +16,7 @@
 */
 
 #include "Scripts/Core/TypesConverters.hpp"
+#include <boost/python/suite/indexing/vector_indexing_suite.hpp>
 
 // Pointer to functions for processing overloaded functions
 
@@ -129,7 +130,6 @@ BOOST_PYTHON_MODULE(TypesConverters)
    /*bp::to_python_converter<CL_DomString, cl_domstring_to_python_str>();
     cl_domstring_from_python_str();*/
 
-
     /////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////// EXPORTING CLASSES ////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////////////////
@@ -205,7 +205,8 @@ BOOST_PYTHON_MODULE(TypesConverters)
         .def("GetColor", &CL_Sprite::get_color)
         .def("SetColor", SetColorSprite)
         .def("GetWidth", &CL_Sprite::get_width)
-        .def("GetHeight", &CL_Sprite::get_height);
+        .def("GetHeight", &CL_Sprite::get_height)
+        .def("Update", &CL_Sprite::update);
 
     // CL_Origin ---------------------------------------------------------------------
     bp::enum_<CL_Origin>("CL_Origin")

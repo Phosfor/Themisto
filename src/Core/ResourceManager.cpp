@@ -46,8 +46,9 @@ CL_Image ResourceManager::getImage(const std::string &section, const std::string
     return CL_Image(appManager().getGraphic(), temp, CL_Rectf(0, 0, temp.get_width(), temp.get_height()));
 }
 
-CL_Sprite ResourceManager::getSprite(const std::string &section, const std::vector<std::string> &names)
+CL_Sprite ResourceManager::getSprite(const std::string &section, bp::object names_py)
 {
+    std::vector<std::string> names = utils().python_to_vector<std::string>(names_py);
     CL_SpriteDescription desc;
 
     BOOST_FOREACH(std::string name, names)

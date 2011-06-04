@@ -18,7 +18,7 @@
 #include "Core/ScriptsManager.hpp"
 #include "Core/ResourceManager.hpp"
 
-CL_Sprite (ResourceManager::*getSprite1)(const std::string &, const std::vector<std::string> &) = &ResourceManager::getSprite;
+CL_Sprite (ResourceManager::*getSprite1)(const std::string &, bp::object) = &ResourceManager::getSprite;
 CL_Sprite (ResourceManager::*getSprite2)(const std::string &, const std::string &) = &ResourceManager::getSprite;
 
 int sectionNumChildren(const std::string &section)

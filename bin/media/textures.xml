@@ -22,6 +22,29 @@
         <texture name="7" file="clouds/7.png" />
     </section>
 
+    <section name="Mill">
+        <texture name="0" file="mill/0.png" />
+        <texture name="1" file="mill/1.png" />
+        <texture name="2" file="mill/2.png" />
+        <texture name="3" file="mill/3.png" />
+        <texture name="4" file="mill/4.png" />
+        <texture name="5" file="mill/5.png" />
+        <texture name="6" file="mill/6.png" />
+        <texture name="7" file="mill/7.png" />
+        <texture name="8" file="mill/8.png" />
+        <texture name="9" file="mill/9.png" />
+        <texture name="10" file="mill/10.png" />
+        <texture name="11" file="mill/11.png" />
+        <texture name="12" file="mill/12.png" />
+        <texture name="13" file="mill/13.png" />
+        <texture name="14" file="mill/14.png" />
+        <texture name="15" file="mill/15.png" />
+        <texture name="16" file="mill/16.png" />
+        <texture name="17" file="mill/17.png" />
+        <texture name="18" file="mill/18.png" />
+        <texture name="19" file="mill/19.png" />
+    </section>
+
     <section name="Leaves">
         <texture name="0" file="leaves/0.png" />
         <texture name="1" file="leaves/1.png" />

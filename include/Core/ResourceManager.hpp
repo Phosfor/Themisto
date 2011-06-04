@@ -32,6 +32,7 @@
 #include "Core/ApplicationManager.hpp"
 #include "Core/ConfigManager.hpp"
 #include "Core/LogManager.hpp"
+#include "Core/ScriptsManager.hpp"
 #include "Core/GuiManager.hpp"
 #include "Core/Utils.hpp"
 
@@ -57,7 +58,8 @@ class ResourceManager : public boost::serialization::singleton<ResourceManager>
 
         std::string getImagePath(const std::string &section, const std::string &name);
         CL_Image getImage(const std::string &section, const std::string &name);
-        CL_Sprite getSprite(const std::string &section, const std::vector<std::string> &names);
+        CL_Sprite getSprite(const std::string &section, boost::python::object names);
+        //CL_Sprite getSprite(const std::string &section, const std::vector<std::string> &names);
         CL_Sprite getSprite(const std::string &section, const std::string &name);
         CL_DomNode sectionHandle(const std::string &section);
 };
