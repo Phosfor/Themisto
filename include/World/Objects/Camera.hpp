@@ -34,6 +34,9 @@ class Camera
         // Level image
         CL_Size mTextureSize;
 
+        CL_Signal_v1<int> mCameraMovedSignal;
+        std::vector<CL_Slot> mSlotsCameraMoved;
+
     public:
         Camera(CL_Size levelSize);
 
@@ -51,4 +54,7 @@ class Camera
 
         bool getDrawDebugOnly() const;
         void setDrawDebugOnly(bool draw);
+
+        void pushSlotCameraMoved(CL_Slot camMoved);
+        CL_Signal_v1<int> &getSignalCameraMoved();
 };

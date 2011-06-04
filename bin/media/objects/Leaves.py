@@ -21,6 +21,7 @@ class Leaves(Object):
         super(Leaves, self).__init__()
 
         self.mLeaves = []
+        self.mCamSpeedOffset = 0
 
         # Precalculated value
         self.mMaxObjects = int(maxObjects)
@@ -29,6 +30,9 @@ class Leaves(Object):
         self.mAppManagerHandle = Core.ApplicationManager.getInstance()
         self.mGC = self.mAppManagerHandle.GetGraphic()
         self.mWorldManagerHandle = Core.WorldManager.getInstance()
+
+    def cameraMoved(self, xOffset):
+        self.mCamSpeedOffset = xOffset;
 
     def processLeaves(self, windPower, curObject, firsTime):
         curObject.x_speed = curObject.y_speed = 0.0
@@ -67,6 +71,8 @@ class Leaves(Object):
 
     def Init(self):
         windPower = self.mWorldManagerHandle.GetWindPower()
+        self.mCamera = Core.LevelManager.getInstance().GetCamera()
+        self.mCamera.ConnectCameraMoved(self.cameraMoved)
 
         for i in xrange(self.mMaxObjects-1):
             self.mLeaves.append(LeafData())
@@ -84,15 +90,15 @@ class Leaves(Object):
             if current.timeout > 0:
                 current.timeout -= 1
             else:
-                if windPower > 0:
-                    if current.x > Core.Utils.ScreenResolutionX + current.image.GetWidth():
-                        self.processLeaves(windPower, current, False)
-                else:
-                    if current.x < -current.image.GetWidth():
-                        self.processLeaves(windPower, current, False)
+                if current.x > Core.Utils.ScreenResolutionX + current.image.GetWidth() \
+                   or current.x < -current.image.GetWidth():
+                    self.processLeaves(windPower, current, False)
 
-                current.x += current.x_speed * elapsed_
-                current.y += current.y_speed * elapsed_
+                if self.mCamSpeedOffset is not 0:
+                    current.x += self.mCamSpeedOffset/2
+                else:
+                    current.x += current.x_speed * elapsed_
+                    current.y += current.y_speed * elapsed_
 
                 # Process animation
                 y = current.k1 * math.sin(current.k2 * Core.Utils.Deg2Rad(current.x)) + current.y
@@ -114,6 +120,8 @@ class Leaves(Object):
 
                 current.x_speed = current.speed_koef * newSpeed1
                 current.y_speed = newSpeed2
+
+        self.mCamSpeedOffset = 0
 
     def UpdateVisual(self, newX, newY):
         for i in xrange(self.mMaxObjects-1):

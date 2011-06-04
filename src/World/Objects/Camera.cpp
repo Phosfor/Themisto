@@ -94,6 +94,7 @@ void Camera::translate(float x, float y)
             return;
     }
 
+    mCameraMovedSignal.invoke(x);
     mCameraViewport.translate(x, y);
 }
 
@@ -103,4 +104,14 @@ CL_Rectf Camera::getAbsolutePos() const
                     abs(mCameraViewport.top),
                     abs(mCameraViewport.left) + ScreenResolutionX,
                     abs(mCameraViewport.top) + ScreenResolutionY);
+}
+
+void Camera::pushSlotCameraMoved(CL_Slot camMoved)
+{
+    mSlotsCameraMoved.push_back(camMoved);
+}
+
+CL_Signal_v1<int> &Camera::getSignalCameraMoved()
+{
+    return mCameraMovedSignal;
 }

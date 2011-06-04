@@ -101,6 +101,36 @@ void ConnectLineEditEnterPressed(bp::object func, CL_LineEdit &widget)
     }
 }
 
+// Camera moving
+void CameraMovedWrapper(int xOffset, bp::object user_data)
+{
+    try
+    {
+        user_data(xOffset);
+    }
+    catch(boost::python::error_already_set &e)
+    {
+        LOG("CameraMovedWrapper failed...");
+        PyErr_Print();
+    }
+}
+
+void ConnectCameraMoved(bp::object func)
+{
+    Camera &cam = levelManager().getCamera();
+    try
+    {
+        CL_Signal_v1<int> &cameraMoved = cam.getSignalCameraMoved();
+        CL_Slot s = cameraMoved.connect(&CameraMovedWrapper, func);
+        cam.pushSlotCameraMoved(s);
+    }
+    catch(boost::python::error_already_set &e)
+    {
+        LOG("ConnectCameraMoved failed...");
+        PyErr_Print();
+    }
+}
+
 BOOST_PYTHON_MODULE(TypesConverters)
 {
     using namespace ScriptTypesConverters;
@@ -386,7 +416,9 @@ BOOST_PYTHON_MODULE(TypesConverters)
         .def("SetSpeed", &Camera::setSpeed)
 
         .def("GetDrawDebugData", &Camera::getDrawDebugData)
-        .def("SetDrawDebugData", &Camera::setDrawDebugData);
+        .def("SetDrawDebugData", &Camera::setDrawDebugData)
+        .def("ConnectCameraMoved", &ConnectCameraMoved)
+        .staticmethod("ConnectCameraMoved");
 
     // Used for CL_Slot && CL_Signal (Input)
     bp::class_<CL_InputEvent>("CL_InputEvent")
