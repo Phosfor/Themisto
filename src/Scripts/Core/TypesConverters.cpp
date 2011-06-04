@@ -206,7 +206,8 @@ BOOST_PYTHON_MODULE(TypesConverters)
         .def("SetColor", SetColorSprite)
         .def("GetWidth", &CL_Sprite::get_width)
         .def("GetHeight", &CL_Sprite::get_height)
-        .def("Update", &CL_Sprite::update);
+        .def("Update", &CL_Sprite::update)
+        .def("SetDelay", &CL_Sprite::set_delay);
 
     // CL_Origin ---------------------------------------------------------------------
     bp::enum_<CL_Origin>("CL_Origin")

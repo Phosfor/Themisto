@@ -22,7 +22,7 @@ class AnimatedDecoration(Object):
     def Init(self):
         pass
 
-    def SetVisual(self, section, texture, width, height):
+    def SetVisual(self, section, texture, width, height, delay):
         # Load animation
         size = Core.ResourceManager.SectionNumChildren(section)
         Names = []
@@ -39,6 +39,7 @@ class AnimatedDecoration(Object):
 
         self.mSprite.SetScale(koefX, koefY)
         self.mSprite.SetLinearFilter(True)
+        self.mSprite.SetDelay(delay)
 
         self.mBoundingBox = CL_Rectf(self.mPos.x, self.mPos.y, \
            self.mPos.x + self.mSprite.GetWidth() * koefX,      \
@@ -72,6 +73,7 @@ class AnimatedDecoration(Object):
         width = height = -1
         section = ''
         x = y = 0.0
+        delay = 60
 
         childList = VisualTags.Item(0).GetChildNodes()
         for i in xrange(childList.GetLength()):
@@ -84,9 +86,11 @@ class AnimatedDecoration(Object):
             if tag2.GetNodeName() == "Position":
                 x = float(tag2.GetAttribute("x"))
                 y = float(tag2.GetAttribute("y"))
+            if tag2.GetNodeName() == "Delay":
+                delay = int(tag2.GetAttribute("milliseconds"))
 
         obj.SetPosition(CL_Pointf(x, y))
-        obj.SetVisual(section, '', width, height)
+        obj.SetVisual(section, '', width, height, delay)
         return obj
 
 World.Objects.TypesManager.RegisterParser("AnimatedDecorationObject", AnimatedDecoration.ParseAnimatedDecoration)

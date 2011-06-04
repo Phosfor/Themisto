@@ -32,6 +32,7 @@
                     <Texture section="Mill" />
                     <Size width="350" height="350" />
                     <Position x="100" y="0" />
+                    <Delay milliseconds="35" />
                  </Visual>
             </Object>
 
