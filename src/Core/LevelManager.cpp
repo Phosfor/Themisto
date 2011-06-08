@@ -58,6 +58,7 @@ void LevelManager::processStateObjects()
     for ( bf::recursive_directory_iterator end, dir(utils().getMediaFolder() + "/states/");
            dir != end; ++dir )
     {
+        std::cout << dir->path() << std::endl;
         if (!bf::is_directory(dir->path()) && bf::extension(dir->path()) == ".py")
                 scriptsManager().runFile(dir->path().c_str());
     }

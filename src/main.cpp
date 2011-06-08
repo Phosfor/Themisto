@@ -74,9 +74,8 @@ int Application::main(const std::vector<CL_String> &args)
         levelManager().processScriptObjects();
         levelManager().processStateObjects();
 
-        // Ugly shit... Move to some file and run it
         scriptsManager().runString("import Core.StateManager");
-        scriptsManager().runString("Core.StateManager.getInstance().Push(MenuState())");
+        scriptsManager().runString("Core.StateManager.getInstance().Push(MainState())");
 
         while (appManager().getRunning())
         {
