@@ -37,30 +37,33 @@ LevelManager::~LevelManager()
 // our script namespace
 void LevelManager::processScriptObjects()
 {
-    LOG("Scanning object folder for new types");
+    LOG("Scanning object folder for new types...");
     namespace bf = boost::filesystem;
 
     bf::directory_iterator endIt;
     for ( bf::recursive_directory_iterator end, dir(utils().getMediaFolder() + "/objects/");
            dir != end; ++dir )
     {
-        if (!bf::is_directory(dir->path()) && bf::extension(dir->path()) == ".py")
-                scriptsManager().runFile(dir->path().c_str());
+        if (!bf::is_directory(dir->path()) && bf::extension(dir->path()) == ".py") {
+            LOG(dir->path().c_str());
+            scriptsManager().runFile(dir->path().c_str());
+        }
     }
 }
 
 void LevelManager::processStateObjects()
 {
-    LOG("Scanning state folder for new types");
+    LOG("Scanning state folder for new types...");
     namespace bf = boost::filesystem;
 
     bf::directory_iterator endIt;
     for ( bf::recursive_directory_iterator end, dir(utils().getMediaFolder() + "/states/");
            dir != end; ++dir )
     {
-        std::cout << dir->path() << std::endl;
-        if (!bf::is_directory(dir->path()) && bf::extension(dir->path()) == ".py")
-                scriptsManager().runFile(dir->path().c_str());
+        if (!bf::is_directory(dir->path()) && bf::extension(dir->path()) == ".py") {
+            LOG(dir->path().c_str());
+            scriptsManager().runFile(dir->path().c_str());
+        }
     }
 }
 
