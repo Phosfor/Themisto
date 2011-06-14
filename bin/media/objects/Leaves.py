@@ -32,7 +32,7 @@ class Leaves(Object):
         self.mWorldManagerHandle = Core.WorldManager.getInstance()
 
     def cameraMoved(self, xOffset):
-        self.mCamSpeedOffset = xOffset;
+        self.mCamSpeedOffset = xOffset
 
     def processLeaves(self, windPower, curObject, firsTime):
         curObject.x_speed = curObject.y_speed = 0.0

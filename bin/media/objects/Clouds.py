@@ -22,6 +22,7 @@ class Clouds(Object):
 
         # Precalculated value
         self.mMaxObjects = int(maxObjects)
+        self.mCamSpeedOffset = 0
 
         self.mAppManagerHandle = Core.ApplicationManager.getInstance()
         self.mGC = self.mAppManagerHandle.GetGraphic()
@@ -40,7 +41,7 @@ class Clouds(Object):
 
         if not firsTime:
             if windPower < 0:
-                curObject.x = Core.Utils.ScreenResolutionX + curObject.image.GetWidth()
+                curObject.x = Core.Utils.ScreenResolutionX - curObject.image.GetWidth()
             else:
                 curObject.x = 0 - curObject.image.GetWidth()
 
@@ -53,9 +54,14 @@ class Clouds(Object):
         #curObject.speed_koef = random.randint(10, 40)
         curObject.x_speed = random.uniform(0.01, 0.1) * windPower
 
+    def cameraMoved(self, xOffset):
+        self.mCamSpeedOffset = xOffset
 
     def Init(self):
         windPower = self.mWorldManagerHandle.GetWindPower()
+
+        self.mCamera = Core.LevelManager.getInstance().GetCamera()
+        self.mCamera.ConnectCameraMoved(self.cameraMoved)
 
         # Init first rain drops
         for i in xrange(self.mMaxObjects-1):
@@ -71,15 +77,15 @@ class Clouds(Object):
             if current.timeout > 0:
                 current.timeout -= 1
             else:
-                if windPower > 0:
-                    if current.x > Core.Utils.ScreenResolutionX + current.image.GetWidth():
-                        self.processClouds(windPower, current, False)
-                else:
-                    if current.x < -current.image.GetWidth():
-                        self.processClouds(windPower, current, False)
+                if current.x > Core.Utils.ScreenResolutionX + current.image.GetWidth() \
+                   or current.x + current.image.GetWidth() < -current.image.GetWidth():
+                    self.processClouds(windPower, current, False)
 
-                current.x += current.x_speed * elapsed
-                #current.x_speed += current.speed_koef * newSpeed
+                if self.mCamSpeedOffset is not 0:
+                    current.x += self.mCamSpeedOffset/2
+                else:
+                    current.x += current.x_speed * elapsed
+        self.mCamSpeedOffset = 0
 
     def UpdateVisual(self, newX, newY):
         for i in xrange(self.mMaxObjects-1):
